@@ -21,11 +21,11 @@ cd my-project
 
 Options:
 
-| Flag | Description |
-|------|-------------|
-| `--template` | Use a starter template (`basic`, `full`) |
-| `--typescript` | Enable TypeScript (default: `true`) |
-| `--git` | Initialize a git repository (default: `true`) |
+| Flag           | Description                                   |
+| -------------- | --------------------------------------------- |
+| `--template`   | Use a starter template (`basic`, `full`)      |
+| `--typescript` | Enable TypeScript (default: `true`)           |
+| `--git`        | Initialize a git repository (default: `true`) |
 
 ### `my-package dev`
 
@@ -37,11 +37,11 @@ npx my-package dev
 
 Options:
 
-| Flag | Description |
-|------|-------------|
-| `--port` | Server port (default: `3000`) |
+| Flag     | Description                         |
+| -------- | ----------------------------------- |
+| `--port` | Server port (default: `3000`)       |
 | `--host` | Bind to host (default: `localhost`) |
-| `--open` | Open in browser |
+| `--open` | Open in browser                     |
 
 ### `my-package build`
 
@@ -53,10 +53,10 @@ npx my-package build
 
 Options:
 
-| Flag | Description |
-|------|-------------|
+| Flag       | Description                        |
+| ---------- | ---------------------------------- |
 | `--outdir` | Output directory (default: `dist`) |
-| `--minify` | Minify output (default: `true`) |
+| `--minify` | Minify output (default: `true`)    |
 
 ### `my-package deploy`
 
@@ -74,9 +74,9 @@ Run `my-package deploy --dry-run` first to preview what will be deployed without
 
 These options are available for all commands:
 
-| Flag | Description |
-|------|-------------|
-| `--help` | Show help for a command |
-| `--version` | Show the installed version |
-| `--verbose` | Enable verbose output |
-| `--no-color` | Disable colored output |
+| Flag         | Description                |
+| ------------ | -------------------------- |
+| `--help`     | Show help for a command    |
+| `--version`  | Show the installed version |
+| `--verbose`  | Enable verbose output      |
+| `--no-color` | Disable colored output     |

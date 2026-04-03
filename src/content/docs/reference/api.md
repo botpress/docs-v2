@@ -14,11 +14,11 @@ function init(options: InitOptions): App
 
 ### Parameters
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `name` | `string` | Yes | Application name |
-| `debug` | `boolean` | No | Enable debug logging |
-| `port` | `number` | No | Server port (default: 3000) |
+| Parameter | Type      | Required | Description                 |
+| --------- | --------- | -------- | --------------------------- |
+| `name`    | `string`  | Yes      | Application name            |
+| `debug`   | `boolean` | No       | Enable debug logging        |
+| `port`    | `number`  | No       | Server port (default: 3000) |
 
 ### Returns
 
@@ -82,18 +82,20 @@ function use(plugin: Plugin): App
 
 ### Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `plugin` | `Plugin` | A plugin instance |
+| Parameter | Type     | Description       |
+| --------- | -------- | ----------------- |
+| `plugin`  | `Plugin` | A plugin instance |
 
 ### Example
 
 ```typescript
 import { analyticsPlugin } from 'my-package/plugins'
 
-app.use(analyticsPlugin({
-  trackingId: 'UA-XXXXX-X',
-}))
+app.use(
+  analyticsPlugin({
+    trackingId: 'UA-XXXXX-X',
+  })
+)
 ```
 
 :::caution

@@ -9,7 +9,14 @@
     "dev": "astro dev",
     "build": "astro build && npx pagefind --site dist",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check": "bun run check:format && bun run check:type",
+    "check:format": "bunx oxfmt --check \"**/*.{ts,tsx,md,mdx}\"",
+    "check:type": "bunx astro check",
+    "fix": "bun run fix:format",
+    "fix:format": "bunx oxfmt \"**/*.{ts,tsx,md,mdx}\"",
+    "lint": "bunx oxlint \"**/*.{ts,tsx}\"",
+    "prepare": "lefthook install"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.3",
@@ -31,6 +38,9 @@
     "@astrojs/check": "^0.9.8",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "lefthook": "^2.1.4",
+    "oxfmt": "^0.43.0",
+    "oxlint-tsgolint": "^0.19.0",
     "typescript": "^6.0.2"
   }
 }

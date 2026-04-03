@@ -50,12 +50,12 @@ If you encounter permission errors on macOS or Linux, try prefixing the command 
 
 ## System Requirements
 
-| Platform | Minimum Version | Recommended |
-|----------|----------------|-------------|
-| Node.js  | 18.0           | 22.x        |
-| macOS    | 12 (Monterey)  | 15 (Sequoia)|
-| Windows  | 10             | 11          |
-| Linux    | Ubuntu 20.04   | Ubuntu 24.04|
+| Platform | Minimum Version | Recommended  |
+| -------- | --------------- | ------------ |
+| Node.js  | 18.0            | 22.x         |
+| macOS    | 12 (Monterey)   | 15 (Sequoia) |
+| Windows  | 10              | 11           |
+| Linux    | Ubuntu 20.04    | Ubuntu 24.04 |
 
 ## Troubleshooting
 

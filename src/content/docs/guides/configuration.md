@@ -30,13 +30,13 @@ The application looks for a `config.json` file in the root of your project. Here
 
 You can also configure the application using environment variables. These take precedence over the config file:
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `APP_PORT` | Server port | `3000` |
-| `APP_DEBUG` | Enable debug mode | `false` |
-| `DB_HOST` | Database host | `localhost` |
-| `DB_PORT` | Database port | `5432` |
-| `DB_NAME` | Database name | — |
+| Variable    | Description       | Default     |
+| ----------- | ----------------- | ----------- |
+| `APP_PORT`  | Server port       | `3000`      |
+| `APP_DEBUG` | Enable debug mode | `false`     |
+| `DB_HOST`   | Database host     | `localhost` |
+| `DB_PORT`   | Database port     | `5432`      |
+| `DB_NAME`   | Database name     | —           |
 
 ## TypeScript Configuration
 

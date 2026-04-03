@@ -269,9 +269,7 @@ export default function SearchOverlay() {
 
           {showEmpty && (
             <div className="px-4 py-8 text-center">
-              <p className="text-sm text-stone-400 dark:text-stone-500">
-                No results found
-              </p>
+              <p className="text-sm text-stone-400 dark:text-stone-500">No results found</p>
             </div>
           )}
 

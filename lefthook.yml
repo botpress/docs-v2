@@ -1,0 +1,9 @@
+pre-commit:
+  parallel: true
+  commands:
+    format:
+      glob: "**/*.{ts,tsx,md,mdx}"
+      run: bunx oxfmt --check {staged_files}
+    lint:
+      glob: "**/*.{ts,tsx}"
+      run: bunx oxlint {staged_files}
