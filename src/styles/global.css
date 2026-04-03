@@ -1,0 +1,234 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Geist Variable', Geist, ui-sans-serif, system-ui, sans-serif;
+
+  --color-amber-50: oklch(0.966 0.014 60.6);
+  --color-amber-100: oklch(0.925 0.031 61.11);
+  --color-amber-200: oklch(0.848 0.072 64.54);
+  --color-amber-300: oklch(0.775 0.1 68.4);
+  --color-amber-400: oklch(0.686 0.088 68.87);
+  --color-amber-500: oklch(0.59 0.076 68.91);
+  --color-amber-600: oklch(0.503 0.065 67.92);
+  --color-amber-700: oklch(0.407 0.052 66.55);
+  --color-amber-800: oklch(0.321 0.041 68.38);
+  --color-amber-900: oklch(0.225 0.03 67.57);
+  --color-amber-950: oklch(0.178 0.023 67.15);
+  --color-blue-50: oklch(0.958 0.01 267.41);
+  --color-blue-100: oklch(0.922 0.018 269.11);
+  --color-blue-200: oklch(0.844 0.039 265.82);
+  --color-blue-300: oklch(0.768 0.06 263.66);
+  --color-blue-400: oklch(0.69 0.082 261.47);
+  --color-blue-500: oklch(0.604 0.084 260.35);
+  --color-blue-600: oklch(0.526 0.074 260.94);
+  --color-blue-700: oklch(0.451 0.063 260.35);
+  --color-blue-800: oklch(0.347 0.048 260.35);
+  --color-blue-900: oklch(0.242 0.034 259.57);
+  --color-blue-950: oklch(0.186 0.027 260.86);
+  --color-red-50: oklch(0.958 0.009 17.51);
+  --color-red-100: oklch(0.916 0.018 17.57);
+  --color-red-200: oklch(0.824 0.041 16.17);
+  --color-red-300: oklch(0.741 0.069 17.69);
+  --color-red-400: oklch(0.659 0.103 18.68);
+  --color-red-500: oklch(0.569 0.119 19.53);
+  --color-red-600: oklch(0.486 0.102 19.11);
+  --color-red-700: oklch(0.399 0.083 19.4);
+  --color-red-800: oklch(0.31 0.065 18.76);
+  --color-red-900: oklch(0.231 0.047 19.33);
+  --color-red-950: oklch(0.181 0.038 18.84);
+}
+
+:root {
+  --radius: 0.5rem;
+}
+
+@layer base {
+  html {
+    @apply font-sans antialiased;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: oklch(0.4 0 0 / 0.3) transparent;
+  }
+
+  .dark * {
+    scrollbar-color: oklch(0.6 0 0 / 0.3) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: oklch(0.4 0 0 / 0.3);
+    border-radius: 4px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.4 0 0 / 0.5);
+  }
+
+  .dark *::-webkit-scrollbar-thumb {
+    background: oklch(0.6 0 0 / 0.3);
+  }
+
+  .dark *::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.6 0 0 / 0.5);
+  }
+
+  @media screen and (max-width: 767px) {
+    input,
+    textarea,
+    select {
+      font-size: 16px !important;
+    }
+  }
+}
+
+/* Primary color active states for sidebar and TOC */
+.hc-nav-active {
+  color: var(--hc-primary);
+  background-color: rgba(var(--hc-primary-rgb), 0.1);
+}
+
+.dark .hc-nav-active {
+  color: var(--hc-primary-dark);
+  background-color: rgba(var(--hc-primary-dark-rgb), 0.15);
+}
+
+.hc-toc-active {
+  border-color: var(--hc-primary) !important;
+  color: var(--hc-primary) !important;
+}
+
+.dark .hc-toc-active {
+  border-color: var(--hc-primary-dark) !important;
+  color: var(--hc-primary-dark) !important;
+}
+
+/* Shiki code blocks */
+.prose pre.shiki {
+  @apply my-4 overflow-x-auto rounded-lg border border-stone-200 p-4 text-sm leading-relaxed dark:border-stone-700;
+}
+
+.prose pre.shiki code {
+  @apply bg-transparent p-0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
+.dark .shiki,
+.dark .shiki span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}
+
+/* Heading permalink anchors */
+.prose :is(h1, h2, h3, h4, h5, h6) {
+  scroll-margin-top: 5rem;
+}
+
+.prose .heading-anchor {
+  color: inherit !important;
+  text-decoration: none !important;
+  font-weight: inherit;
+}
+
+.prose .heading-anchor:hover {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+.prose .heading-anchor::after {
+  content: '';
+  display: inline-block;
+  width: 0.55em;
+  height: 0.55em;
+  margin-left: 0.375em;
+  vertical-align: middle;
+  opacity: 0;
+  background-color: oklch(0.553 0.013 58.07);
+  transition: opacity 150ms ease;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/%3E%3Cpath d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/%3E%3Cpath d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.dark .prose .heading-anchor::after {
+  background-color: oklch(0.7 0.013 58.07);
+}
+
+.prose :is(h1, h2, h3, h4, h5, h6):hover .heading-anchor::after {
+  opacity: 1;
+}
+
+/* Aside / callout blocks */
+.prose aside[data-aside-type] {
+  @apply my-3 rounded-r-md border-l-4 px-4 py-3;
+}
+
+.prose aside[data-aside-type] > *:first-child {
+  @apply mt-0;
+}
+
+.prose aside[data-aside-type] > *:last-child {
+  @apply mb-0;
+}
+
+.prose aside[data-aside-type] .aside-header {
+  @apply mb-2 flex items-center gap-2;
+}
+
+.prose aside[data-aside-type] .aside-header svg {
+  @apply h-4 w-4;
+}
+
+.prose aside[data-aside-type] .aside-header span {
+  @apply text-xs font-semibold uppercase tracking-wide;
+}
+
+.prose aside[data-aside-type='note'] {
+  @apply border-l-blue-500 bg-blue-50 dark:bg-blue-950/40;
+}
+
+.prose aside[data-aside-type='note'] .aside-header svg,
+.prose aside[data-aside-type='note'] .aside-header span {
+  @apply text-blue-500;
+}
+
+.prose aside[data-aside-type='tip'] {
+  @apply border-l-purple-500 bg-purple-50 dark:bg-purple-950/40;
+}
+
+.prose aside[data-aside-type='tip'] .aside-header svg,
+.prose aside[data-aside-type='tip'] .aside-header span {
+  @apply text-purple-500;
+}
+
+.prose aside[data-aside-type='caution'] {
+  @apply border-l-amber-500 bg-amber-50 dark:bg-amber-950/40;
+}
+
+.prose aside[data-aside-type='caution'] .aside-header svg,
+.prose aside[data-aside-type='caution'] .aside-header span {
+  @apply text-amber-500;
+}
+
+.prose aside[data-aside-type='danger'] {
+  @apply border-l-red-500 bg-red-50 dark:bg-red-950/40;
+}
+
+.prose aside[data-aside-type='danger'] .aside-header svg,
+.prose aside[data-aside-type='danger'] .aside-header span {
+  @apply text-red-500;
+}

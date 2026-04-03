@@ -1,0 +1,82 @@
+---
+title: CLI Reference
+description: Command-line interface documentation.
+order: 1
+---
+
+## Overview
+
+The CLI provides commands for managing your application from the terminal.
+
+## Commands
+
+### `my-package init`
+
+Scaffold a new project:
+
+```bash
+npx my-package init my-project
+cd my-project
+```
+
+Options:
+
+| Flag | Description |
+|------|-------------|
+| `--template` | Use a starter template (`basic`, `full`) |
+| `--typescript` | Enable TypeScript (default: `true`) |
+| `--git` | Initialize a git repository (default: `true`) |
+
+### `my-package dev`
+
+Start the development server with hot reloading:
+
+```bash
+npx my-package dev
+```
+
+Options:
+
+| Flag | Description |
+|------|-------------|
+| `--port` | Server port (default: `3000`) |
+| `--host` | Bind to host (default: `localhost`) |
+| `--open` | Open in browser |
+
+### `my-package build`
+
+Create a production build:
+
+```bash
+npx my-package build
+```
+
+Options:
+
+| Flag | Description |
+|------|-------------|
+| `--outdir` | Output directory (default: `dist`) |
+| `--minify` | Minify output (default: `true`) |
+
+### `my-package deploy`
+
+Deploy to production:
+
+```bash
+npx my-package deploy
+```
+
+:::tip
+Run `my-package deploy --dry-run` first to preview what will be deployed without making any changes.
+:::
+
+## Global Options
+
+These options are available for all commands:
+
+| Flag | Description |
+|------|-------------|
+| `--help` | Show help for a command |
+| `--version` | Show the installed version |
+| `--verbose` | Enable verbose output |
+| `--no-color` | Disable colored output |

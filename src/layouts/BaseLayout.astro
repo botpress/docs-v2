@@ -1,0 +1,55 @@
+---
+import { ClientRouter } from 'astro:transitions'
+import '@fontsource-variable/geist'
+import '../styles/global.css'
+import { siteConfig } from '../lib/site-config'
+
+interface Props {
+  title: string
+}
+
+const { title } = Astro.props
+
+const color = siteConfig.primaryColor
+const darkColor = siteConfig.darkModePrimaryColor
+
+function hexToRgb(hex: string): string {
+  const h = hex.replace('#', '')
+  const bigint = parseInt(h.length === 3 ? h.split('').map(c => c + c).join('') : h, 16)
+  return `${(bigint >> 16) & 255}, ${(bigint >> 8) & 255}, ${bigint & 255}`
+}
+
+const primaryRgb = hexToRgb(color)
+const darkPrimaryRgb = hexToRgb(darkColor)
+---
+
+<!doctype html>
+<html lang="en" transition:animate="none" style={`--hc-primary: ${color}; --hc-primary-rgb: ${primaryRgb}; --hc-primary-dark: ${darkColor}; --hc-primary-dark-rgb: ${darkPrimaryRgb};`}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <ClientRouter />
+    <script is:inline>
+      ;(function () {
+        function applyTheme() {
+          try {
+            var t = localStorage.getItem('hc-theme')
+            if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+              document.documentElement.classList.add('dark')
+            } else {
+              document.documentElement.classList.remove('dark')
+            }
+          } catch (_) {}
+        }
+        applyTheme()
+        document.addEventListener('astro:after-swap', applyTheme)
+      })()
+    </script>
+  </head>
+  <body class="min-h-dvh bg-stone-100 text-stone-900 antialiased dark:bg-stone-950 dark:text-stone-100">
+    <slot />
+  </body>
+</html>

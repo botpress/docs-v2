@@ -1,0 +1,50 @@
+---
+import BaseLayout from './BaseLayout.astro'
+import Sidebar from '../components/Sidebar.astro'
+import MobileSidebar from '../components/MobileSidebar.tsx'
+import SearchOverlay from '../components/SearchOverlay.tsx'
+import { getCollection } from 'astro:content'
+import { buildSidebarTree } from '../lib/sidebar-tree'
+import { siteConfig } from '../lib/site-config'
+import path from 'node:path'
+
+interface Props {
+  title: string
+  breadcrumbs?: { label: string; href?: string }[]
+}
+
+const { title, breadcrumbs } = Astro.props
+
+const entries = await getCollection('docs')
+const contentDir = path.resolve('./src/content/docs')
+const tree = buildSidebarTree(entries, contentDir)
+
+const navItems = [
+  { label: 'Home', href: '/', icon: 'home' as const },
+]
+
+const currentPath = Astro.url.pathname
+---
+
+<BaseLayout title={siteConfig.name ? `${title} – ${siteConfig.name}` : title}>
+  <div class="flex h-dvh flex-col overflow-hidden lg:flex-row lg:gap-1">
+    <MobileSidebar
+      client:load
+      navItems={navItems}
+      tree={tree}
+      currentPath={currentPath}
+      siteName={siteConfig.name}
+      breadcrumbs={breadcrumbs}
+    />
+
+    <div class="hidden lg:flex">
+      <Sidebar currentPath={currentPath} navItems={navItems} tree={tree} siteName={siteConfig.name} />
+    </div>
+
+    <main class="flex-1 overflow-y-auto rounded-md border border-stone-200 bg-white m-[calc(var(--spacing)*2)] dark:border-stone-800 dark:bg-stone-900">
+      <slot />
+    </main>
+
+    <SearchOverlay client:load />
+  </div>
+</BaseLayout>
