@@ -14,9 +14,12 @@ interface Props {
   navItems: NavItem[]
   tree: SidebarNode[]
   siteName?: string | null
+  siteLogo?: string | null
+  siteLogoDark?: string | null
 }
 
-const { currentPath, navItems, tree, siteName } = Astro.props
+const { currentPath, navItems, tree, siteName, siteLogo, siteLogoDark } = Astro.props
+const hasLogo = !!(siteLogo || siteLogoDark)
 
 function isActive(href: string): boolean {
   const norm = currentPath.endsWith('/') ? currentPath.slice(0, -1) : currentPath
@@ -28,8 +31,20 @@ function isActive(href: string): boolean {
 
 <aside class="flex h-full w-[268px] shrink-0 flex-col bg-stone-100 dark:bg-stone-950">
   <div class="flex h-13 items-center pl-[1.75rem] pr-4">
+    <img
+      src={siteLogo ?? siteLogoDark ?? undefined}
+      alt={siteName || 'Docs'}
+      class={`h-7 w-auto shrink-0 object-contain${siteLogoDark ? ' dark:hidden' : ''}`}
+      style={hasLogo ? undefined : { display: 'none' }}
+    />
+    <img
+      src={siteLogoDark ?? undefined}
+      alt={siteName || 'Docs'}
+      class={`h-7 w-auto shrink-0 object-contain${siteLogoDark ? ' hidden dark:block' : ' hidden'}`}
+    />
     <span
       class="text-sm font-semibold text-stone-900 dark:text-stone-100"
+      style={hasLogo ? { display: 'none' } : undefined}
     >{siteName || 'Docs'}</span>
   </div>
 

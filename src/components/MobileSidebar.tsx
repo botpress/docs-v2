@@ -20,6 +20,8 @@ interface Props {
   tree: SidebarNode[]
   currentPath: string
   siteName?: string | null
+  siteLogo?: string | null
+  siteLogoDark?: string | null
   breadcrumbs?: Breadcrumb[]
 }
 
@@ -45,8 +47,11 @@ export default function MobileSidebar({
   tree,
   currentPath,
   siteName,
+  siteLogo,
+  siteLogoDark,
   breadcrumbs,
 }: Props) {
+  const hasLogo = !!(siteLogo || siteLogoDark)
   const [open, setOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
 
@@ -77,8 +82,20 @@ export default function MobileSidebar({
       <div className="sticky top-0 z-40 lg:hidden">
         <div className="flex h-13 items-center justify-between px-[calc(var(--spacing)*4)]">
           <a href="/" className="flex items-center">
+            <img
+              src={siteLogo ?? siteLogoDark ?? undefined}
+              alt={siteName || 'Docs'}
+              className={`h-7 w-auto shrink-0 object-contain${siteLogoDark ? ' dark:hidden' : ''}`}
+              style={hasLogo ? undefined : { display: 'none' }}
+            />
+            <img
+              src={siteLogoDark ?? undefined}
+              alt={siteName || 'Docs'}
+              className={`h-7 w-auto shrink-0 object-contain${siteLogoDark ? ' hidden dark:block' : ' hidden'}`}
+            />
             <span
               className="text-sm font-semibold text-stone-900 dark:text-stone-100"
+              style={hasLogo ? { display: 'none' } : undefined}
             >
               {siteName || 'Docs'}
             </span>
@@ -193,8 +210,20 @@ export default function MobileSidebar({
           >
             <div className="flex h-16 items-center justify-between px-4 pl-[1.75rem]">
               <div className="flex items-center">
+                <img
+                  src={siteLogo ?? siteLogoDark ?? undefined}
+                  alt={siteName || 'Docs'}
+                  className={`h-7 w-auto shrink-0 object-contain${siteLogoDark ? ' dark:hidden' : ''}`}
+                  style={hasLogo ? undefined : { display: 'none' }}
+                />
+                <img
+                  src={siteLogoDark ?? undefined}
+                  alt={siteName || 'Docs'}
+                  className={`h-7 w-auto shrink-0 object-contain${siteLogoDark ? ' hidden dark:block' : ' hidden'}`}
+                />
                 <span
                   className="text-sm font-semibold text-stone-900 dark:text-stone-100"
+                  style={hasLogo ? { display: 'none' } : undefined}
                 >
                   {siteName || 'Docs'}
                 </span>
