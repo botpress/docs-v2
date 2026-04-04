@@ -15,6 +15,10 @@
     "strip": {
       "type": "boolean",
       "description": "When true, this folder name is stripped from URL slugs"
+    },
+    "root": {
+      "type": "boolean",
+      "description": "When true, promotes this category to a header tab. Only sidebar items within this folder are shown when the tab is active."
     }
   },
   "additionalProperties": false

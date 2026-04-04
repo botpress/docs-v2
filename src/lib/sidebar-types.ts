@@ -1,3 +1,16 @@
+export interface TabInfo {
+  slug: string
+  label: string
+  href: string
+}
+
+export interface SidebarTreeResult {
+  tabs: TabInfo[]
+  trees: Record<string, SidebarNode[]>
+  defaultTree: SidebarNode[]
+  slugToTab: Record<string, string>
+}
+
 export interface SidebarCategoryNode {
   type: 'category'
   label: string

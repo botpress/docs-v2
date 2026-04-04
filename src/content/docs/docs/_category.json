@@ -1,0 +1,6 @@
+{
+  "label": "Docs",
+  "root": true,
+  "strip": true,
+  "pages": ["getting-started", "guides", "reference", "test"]
+}

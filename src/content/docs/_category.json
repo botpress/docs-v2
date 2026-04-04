@@ -1,4 +1,4 @@
 {
-  "label": "Docs",
-  "pages": ["getting-started", "guides", "reference"]
+    "label": "test",
+    "pages": ["docs", "tutorial", "api-reference", "changelog"]
 }

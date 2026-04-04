@@ -13,13 +13,9 @@ interface Props {
   currentPath: string
   navItems: NavItem[]
   tree: SidebarNode[]
-  siteName?: string | null
-  siteLogo?: string | null
-  siteLogoDark?: string | null
 }
 
-const { currentPath, navItems, tree, siteName, siteLogo, siteLogoDark } = Astro.props
-const hasLogo = !!(siteLogo || siteLogoDark)
+const { currentPath, navItems, tree } = Astro.props
 
 function isActive(href: string): boolean {
   const norm = currentPath.endsWith('/') ? currentPath.slice(0, -1) : currentPath
@@ -30,25 +26,7 @@ function isActive(href: string): boolean {
 ---
 
 <aside class="flex h-full w-[268px] shrink-0 flex-col bg-stone-100 dark:bg-stone-950">
-  <div class="flex h-13 items-center pl-[1.75rem] pr-4">
-    <img
-      src={siteLogo ?? siteLogoDark ?? undefined}
-      alt={siteName || 'Docs'}
-      class={`h-7 w-auto shrink-0 object-contain${siteLogoDark ? ' dark:hidden' : ''}`}
-      style={hasLogo ? undefined : { display: 'none' }}
-    />
-    <img
-      src={siteLogoDark ?? undefined}
-      alt={siteName || 'Docs'}
-      class={`h-7 w-auto shrink-0 object-contain${siteLogoDark ? ' hidden dark:block' : ' hidden'}`}
-    />
-    <span
-      class="text-sm font-semibold text-stone-900 dark:text-stone-100"
-      style={hasLogo ? { display: 'none' } : undefined}
-    >{siteName || 'Docs'}</span>
-  </div>
-
-  <div class="px-3">
+  <div class="px-3 pt-2">
     <button
       type="button"
       class="relative flex h-9 w-full cursor-pointer items-center rounded-full border border-stone-200 bg-white pl-9 pr-3 text-sm text-stone-500 shadow-none transition-[color,box-shadow] hover:border-stone-300 dark:border-stone-800 dark:bg-white/5 dark:text-stone-400 dark:hover:border-stone-700"

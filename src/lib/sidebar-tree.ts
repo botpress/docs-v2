@@ -1,9 +1,9 @@
 import type { CollectionEntry } from 'astro:content'
 import fs from 'node:fs'
 import path from 'node:path'
-import type { SidebarNode, SidebarCategoryNode, SidebarArticleNode } from './sidebar-types'
+import type { SidebarNode, SidebarCategoryNode, SidebarArticleNode, SidebarTreeResult, TabInfo } from './sidebar-types'
 
-export type { SidebarNode, SidebarCategoryNode, SidebarArticleNode } from './sidebar-types'
+export type { SidebarNode, SidebarCategoryNode, SidebarArticleNode, SidebarTreeResult, TabInfo } from './sidebar-types'
 export { isPathActive, hasActiveChild } from './sidebar-types'
 
 export interface ArticleEntry {
@@ -15,6 +15,7 @@ interface CategoryMeta {
   label: string
   pages?: string[]
   strip?: boolean
+  root?: boolean
 }
 
 function readCategoryMeta(dirPath: string): CategoryMeta | null {
@@ -129,74 +130,159 @@ function findContentFile(dirPath: string, name: string): string | null {
   return null
 }
 
-/**
- * Builds a sidebar tree by scanning the filesystem for _category.json files.
- * Uses pages arrays for ordering, falling back to alphabetical directory listing.
- * Requires a title lookup map to resolve article titles from frontmatter/meta.
- */
-export function buildSidebarTree(titleMap: Map<string, string>, contentDir: string): SidebarNode[] {
-  function buildLevel(dirPath: string, slugPrefix: string[], isStripped: boolean): SidebarNode[] {
-    const meta = readCategoryMeta(dirPath)
-    const items = getOrderedItems(dirPath, meta)
-    const nodes: SidebarNode[] = []
+function buildLevel(
+  dirPath: string,
+  slugPrefix: string[],
+  isStripped: boolean,
+  titleMap: Map<string, string>
+): SidebarNode[] {
+  const meta = readCategoryMeta(dirPath)
+  const items = getOrderedItems(dirPath, meta)
+  const nodes: SidebarNode[] = []
 
-    for (const item of items) {
-      if (item === 'index') {
-        const file = findContentFile(dirPath, item)
-        if (!file) continue
-
-        const articleSlug = isStripped ? 'index' : slugPrefix.join('/') || 'index'
-        const title = titleMap.get(articleSlug) ?? titleFromSlug(item)
-        const articleNode: SidebarArticleNode = {
-          type: 'article',
-          title,
-          href: articleSlug === 'index' ? '/' : `/${articleSlug}`,
-          path: articleSlug,
-        }
-        nodes.push(articleNode)
-        continue
-      }
-
-      if (isDirectory(dirPath, item)) {
-        const subDirPath = path.join(dirPath, item)
-        const subMeta = readCategoryMeta(subDirPath)
-        const subStrip = subMeta?.strip ?? false
-
-        const childSlugPrefix = subStrip ? slugPrefix : [...slugPrefix, item]
-
-        const children = buildLevel(subDirPath, childSlugPrefix, subStrip)
-
-        const categoryNode: SidebarCategoryNode = {
-          type: 'category',
-          label: subMeta?.label || titleFromSlug(item),
-          slug: item,
-          path: [...slugPrefix, item].join('/') || item,
-          children,
-        }
-        nodes.push(categoryNode)
-        continue
-      }
-
+  for (const item of items) {
+    if (item === 'index') {
       const file = findContentFile(dirPath, item)
       if (!file) continue
 
-      const articleSlug = isStripped ? item : [...slugPrefix, item].join('/')
+      const articleSlug = isStripped ? 'index' : slugPrefix.join('/') || 'index'
       const title = titleMap.get(articleSlug) ?? titleFromSlug(item)
-
       const articleNode: SidebarArticleNode = {
         type: 'article',
         title,
-        href: `/${articleSlug}`,
+        href: articleSlug === 'index' ? '/' : `/${articleSlug}`,
         path: articleSlug,
       }
       nodes.push(articleNode)
+      continue
     }
 
-    return nodes
+    if (isDirectory(dirPath, item)) {
+      const subDirPath = path.join(dirPath, item)
+      const subMeta = readCategoryMeta(subDirPath)
+      const subStrip = subMeta?.strip ?? false
+
+      const childSlugPrefix = subStrip ? slugPrefix : [...slugPrefix, item]
+
+      const children = buildLevel(subDirPath, childSlugPrefix, subStrip, titleMap)
+
+      const categoryNode: SidebarCategoryNode = {
+        type: 'category',
+        label: subMeta?.label || titleFromSlug(item),
+        slug: item,
+        path: [...slugPrefix, item].join('/') || item,
+        children,
+      }
+      nodes.push(categoryNode)
+      continue
+    }
+
+    const file = findContentFile(dirPath, item)
+    if (!file) continue
+
+    const articleSlug = isStripped ? item : [...slugPrefix, item].join('/')
+    const title = titleMap.get(articleSlug) ?? titleFromSlug(item)
+
+    const articleNode: SidebarArticleNode = {
+      type: 'article',
+      title,
+      href: `/${articleSlug}`,
+      path: articleSlug,
+    }
+    nodes.push(articleNode)
   }
 
+  return nodes
+}
+
+function findFirstHref(nodes: SidebarNode[]): string | null {
+  for (const node of nodes) {
+    if (node.type === 'article') return node.href
+    if (node.type === 'category') {
+      const href = findFirstHref(node.children)
+      if (href) return href
+    }
+  }
+  return null
+}
+
+function collectSlugs(nodes: SidebarNode[]): string[] {
+  const slugs: string[] = []
+  for (const node of nodes) {
+    if (node.type === 'article') {
+      slugs.push(node.path)
+    } else {
+      slugs.push(...collectSlugs(node.children))
+    }
+  }
+  return slugs
+}
+
+/**
+ * Builds a sidebar tree by scanning the filesystem for _category.json files.
+ * Detects `root: true` categories and promotes them to header tabs.
+ * Returns a SidebarTreeResult with per-tab trees and slug-to-tab mapping.
+ */
+export function buildSidebarTree(titleMap: Map<string, string>, contentDir: string): SidebarTreeResult {
   const rootMeta = readCategoryMeta(contentDir)
   const rootStrip = rootMeta?.strip ?? false
+  const orderedItems = getOrderedItems(contentDir, rootMeta)
 
-  return buildLevel(contentDir, [], rootStrip)
+  const tabs: TabInfo[] = []
+  const trees: Record<string, SidebarNode[]> = {}
+  const slugToTab: Record<string, string> = {}
+
+  const hasRootFolders = orderedItems.some((item) => {
+    if (!isDirectory(contentDir, item)) return false
+    const meta = readCategoryMeta(path.join(contentDir, item))
+    return meta?.root === true
+  })
+
+  const defaultTree = buildLevel(contentDir, [], rootStrip, titleMap)
+
+  if (!hasRootFolders) {
+    return { tabs: [], trees: {}, defaultTree, slugToTab: {} }
+  }
+
+  for (const item of orderedItems) {
+    if (!isDirectory(contentDir, item)) continue
+
+    const subDirPath = path.join(contentDir, item)
+    const subMeta = readCategoryMeta(subDirPath)
+    if (!subMeta?.root) continue
+
+    const subStrip = subMeta.strip ?? false
+    const childSlugPrefix = subStrip ? [] : [item]
+
+    const tabTree = buildLevel(subDirPath, childSlugPrefix, subStrip, titleMap)
+    const firstHref = findFirstHref(tabTree) ?? '/'
+
+    tabs.push({
+      slug: item,
+      label: subMeta.label || titleFromSlug(item),
+      href: firstHref,
+    })
+
+    trees[item] = tabTree
+
+    for (const slug of collectSlugs(tabTree)) {
+      slugToTab[slug] = item
+    }
+  }
+
+  return { tabs, trees, defaultTree, slugToTab }
+}
+
+/**
+ * Determines the active tab slug from the current URL path.
+ */
+export function getActiveTab(pathname: string, slugToTab: Record<string, string>): string | null {
+  const normalized = pathname.replace(/^\/|\/$/g, '') || 'index'
+  if (slugToTab[normalized]) return slugToTab[normalized]
+
+  for (const [slug, tab] of Object.entries(slugToTab)) {
+    if (normalized.startsWith(slug + '/') || normalized === slug) return tab
+  }
+
+  return null
 }

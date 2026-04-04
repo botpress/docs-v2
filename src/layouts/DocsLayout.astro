@@ -1,10 +1,11 @@
 ---
 import BaseLayout from './BaseLayout.astro'
+import Header from '../components/Header.astro'
 import Sidebar from '../components/Sidebar.astro'
 import MobileSidebar from '../components/MobileSidebar.tsx'
 import SearchOverlay from '../components/SearchOverlay.tsx'
 import { getCollection } from 'astro:content'
-import { buildSidebarTree, normalizeCollectionEntries } from '../lib/sidebar-tree'
+import { buildSidebarTree, normalizeCollectionEntries, getActiveTab } from '../lib/sidebar-tree'
 import { siteConfig } from '../lib/site-config'
 import path from 'node:path'
 
@@ -25,33 +26,50 @@ for (const a of articles) {
   titleMap.set(a.slug, a.title)
 }
 
-const tree = buildSidebarTree(titleMap, contentDir)
-
-const navItems: { label: string; href: string; icon: 'home' }[] = []
+const result = buildSidebarTree(titleMap, contentDir)
 
 const currentPath = Astro.url.pathname
+const hasTabs = result.tabs.length > 0
+const activeTab = hasTabs ? getActiveTab(currentPath, result.slugToTab) : null
+const sidebarTree = hasTabs && activeTab ? (result.trees[activeTab] ?? result.defaultTree) : result.defaultTree
+
+const navItems: { label: string; href: string; icon: 'home' }[] = []
 ---
 
 <BaseLayout title={siteConfig.name ? `${title} – ${siteConfig.name}` : title}>
-  <div class="flex h-dvh flex-col overflow-hidden lg:flex-row lg:gap-1">
+  <div class="flex h-dvh flex-col overflow-hidden">
+    <Header
+      tabs={result.tabs}
+      activeTab={activeTab}
+      siteName={siteConfig.name}
+      siteLogo={siteConfig.logo}
+      siteLogoDark={siteConfig.logoDark}
+      navbarLinks={siteConfig.navbar.links}
+    />
+
     <MobileSidebar
       client:load
       navItems={navItems}
-      tree={tree}
+      tree={sidebarTree}
       currentPath={currentPath}
       siteName={siteConfig.name}
       siteLogo={siteConfig.logo}
       siteLogoDark={siteConfig.logoDark}
       breadcrumbs={breadcrumbs}
+      tabs={result.tabs}
+      activeTab={activeTab}
+      allTrees={hasTabs ? result.trees : undefined}
     />
 
-    <div class="hidden lg:flex">
-      <Sidebar currentPath={currentPath} navItems={navItems} tree={tree} siteName={siteConfig.name} siteLogo={siteConfig.logo} siteLogoDark={siteConfig.logoDark} />
-    </div>
+    <div class="flex flex-1 overflow-hidden">
+      <div class="hidden lg:flex">
+        <Sidebar currentPath={currentPath} navItems={navItems} tree={sidebarTree} />
+      </div>
 
-    <main class="flex-1 overflow-y-auto rounded-md border border-stone-200 bg-white m-[calc(var(--spacing)*2)] dark:border-stone-800 dark:bg-stone-900">
-      <slot />
-    </main>
+      <main class="flex-1 overflow-y-auto rounded-md border border-stone-200 bg-white mx-[calc(var(--spacing)*2)] mb-[calc(var(--spacing)*2)] dark:border-stone-800 dark:bg-stone-900">
+        <slot />
+      </main>
+    </div>
 
     <SearchOverlay client:load />
   </div>
