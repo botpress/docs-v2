@@ -3,7 +3,6 @@ export interface SidebarCategoryNode {
   label: string
   slug: string
   path: string
-  order: number
   children: SidebarNode[]
 }
 
@@ -12,7 +11,6 @@ export interface SidebarArticleNode {
   title: string
   href: string
   path: string
-  order: number
 }
 
 export type SidebarNode = SidebarCategoryNode | SidebarArticleNode

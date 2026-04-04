@@ -4,7 +4,7 @@ import Sidebar from '../components/Sidebar.astro'
 import MobileSidebar from '../components/MobileSidebar.tsx'
 import SearchOverlay from '../components/SearchOverlay.tsx'
 import { getCollection } from 'astro:content'
-import { buildSidebarTree } from '../lib/sidebar-tree'
+import { buildSidebarTree, normalizeCollectionEntries } from '../lib/sidebar-tree'
 import { siteConfig } from '../lib/site-config'
 import path from 'node:path'
 
@@ -17,11 +17,17 @@ const { title, breadcrumbs } = Astro.props
 
 const entries = await getCollection('docs')
 const contentDir = path.resolve('./src/content/docs')
-const tree = buildSidebarTree(entries, contentDir)
 
-const navItems = [
-  { label: 'Home', href: '/', icon: 'home' as const },
-]
+const articles = normalizeCollectionEntries(entries, contentDir)
+
+const titleMap = new Map<string, string>()
+for (const a of articles) {
+  titleMap.set(a.slug, a.title)
+}
+
+const tree = buildSidebarTree(titleMap, contentDir)
+
+const navItems: { label: string; href: string; icon: 'home' }[] = []
 
 const currentPath = Astro.url.pathname
 ---

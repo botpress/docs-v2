@@ -1,1 +1,4 @@
-{ "label": "Guides", "order": 1 }
+{
+  "label": "Guides",
+  "pages": ["configuration", "deployment", "how-tos"]
+}

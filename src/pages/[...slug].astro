@@ -1,0 +1,184 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro'
+import { getCollection, render } from 'astro:content'
+import { computeStrippedSlug } from '../lib/sidebar-tree'
+import path from 'node:path'
+
+export async function getStaticPaths() {
+  const entries = await getCollection('docs')
+  const contentDir = path.resolve('./src/content/docs')
+
+  return entries.map((entry) => {
+    const rawSlug = entry.id.replace(/\.(md|mdx)$/, '')
+    const strippedSlug = computeStrippedSlug(rawSlug, contentDir)
+    return {
+      params: { slug: strippedSlug },
+      props: { entry },
+    }
+  }).filter((p) => p.params.slug !== 'index')
+}
+
+const { entry } = Astro.props
+const { Content, headings } = await render(entry)
+const title = entry.data.title
+const useProse = entry.data.prose !== false
+const slug = Astro.params.slug as string
+const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3)
+
+const breadcrumbs: { label: string; href?: string }[] = []
+const pathSegments = slug.split('/')
+if (pathSegments.length > 1) {
+  for (const segment of pathSegments.slice(0, -1)) {
+    breadcrumbs.push({
+      label: segment
+        .split('-')
+        .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(' '),
+    })
+  }
+}
+breadcrumbs.push({ label: title })
+---
+
+<DocsLayout title={title} breadcrumbs={breadcrumbs}>
+  {useProse ? (
+    <div class="mx-auto flex w-full max-w-5xl gap-10 px-8 py-8 sm:px-8 sm:py-10 lg:px-16">
+      <article class="min-w-0 flex-1" data-pagefind-body>
+        {breadcrumbs.length > 1 && (
+          <nav class="mb-4 hidden items-center gap-1 text-sm text-stone-400 lg:flex dark:text-stone-500">
+            {breadcrumbs.map((crumb, i) => (
+              <>
+                {i > 0 && <span class="mx-0.5">/</span>}
+                {i < breadcrumbs.length - 1 ? (
+                  crumb.href ? (
+                    <a href={crumb.href} class="transition-colors hover:text-stone-600 dark:hover:text-stone-300">{crumb.label}</a>
+                  ) : (
+                    <span>{crumb.label}</span>
+                  )
+                ) : (
+                  <span class="text-stone-600 dark:text-stone-300">{crumb.label}</span>
+                )}
+              </>
+            ))}
+          </nav>
+        )}
+
+        <h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100">{title}</h1>
+
+        <div class="prose prose-stone mt-6 max-w-none prose-headings:text-stone-900 prose-headings:font-semibold prose-p:text-stone-600 prose-a:text-stone-900 prose-a:underline prose-a:underline-offset-2 prose-a:decoration-stone-300 hover:prose-a:decoration-stone-500 prose-strong:text-stone-800 prose-code:rounded prose-code:bg-stone-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-stone-700 prose-code:before:content-none prose-code:after:content-none prose-th:text-left prose-th:text-stone-700 prose-td:text-stone-600 dark:prose-headings:text-stone-100 dark:prose-p:text-stone-300 dark:prose-a:text-stone-100 dark:prose-a:decoration-stone-600 dark:hover:prose-a:decoration-stone-400 dark:prose-strong:text-stone-200 dark:prose-code:bg-stone-800 dark:prose-code:text-stone-300 dark:prose-th:text-stone-300 dark:prose-td:text-stone-400 dark:prose-li:text-stone-300 dark:prose-hr:border-stone-800">
+          <Content />
+        </div>
+      </article>
+
+      {tocHeadings.length > 0 && (
+        <aside class="hidden w-64 shrink-0 xl:block">
+          <div class="sticky top-10">
+            <h4 class="mb-3 text-xs font-medium text-stone-400 dark:text-stone-500">
+              On this page
+            </h4>
+            <ul id="toc-list" class="space-y-1.5 border-l border-stone-200 dark:border-stone-700">
+              {tocHeadings.map((heading) => (
+                <li>
+                  <a
+                    href={`#${heading.slug}`}
+                    data-toc-link={heading.slug}
+                    class:list={[
+                      '-ml-px block border-l border-transparent text-sm leading-snug transition-colors hover:border-stone-300 hover:text-stone-900 dark:hover:border-stone-600 dark:hover:text-stone-200',
+                      heading.depth === 3 ? 'py-0.5 pl-5 text-stone-400 dark:text-stone-500' : 'py-0.5 pl-3 text-stone-500 dark:text-stone-400',
+                    ]}
+                    data-depth={heading.depth}
+                  >
+                    {heading.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </aside>
+      )}
+    </div>
+  ) : (
+    <div data-pagefind-body>
+      <Content />
+    </div>
+  )}
+
+  <script>
+    function initTocHighlight() {
+      const tocLinks = document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]')
+      if (!tocLinks.length) return
+
+      const slugs = Array.from(tocLinks).map((link) => link.dataset.tocLink!)
+      const headingElements = slugs
+        .map((slug) => document.getElementById(slug))
+        .filter((el): el is HTMLElement => el !== null)
+
+      if (!headingElements.length) return
+
+      const scrollContainer = document.querySelector('main')
+      if (!scrollContainer) return
+
+      let activeSlug: string | null = null
+
+      const linkArray = Array.from(tocLinks)
+
+      function getParentH2Slug(slug: string): string | null {
+        const idx = linkArray.findIndex((l) => l.dataset.tocLink === slug)
+        if (idx === -1) return null
+        if (linkArray[idx]!.dataset.depth !== '3') return null
+        for (let i = idx - 1; i >= 0; i--) {
+          if (linkArray[i]!.dataset.depth === '2') return linkArray[i]!.dataset.tocLink!
+        }
+        return null
+      }
+
+      function setActive(slug: string | null) {
+        if (slug === activeSlug) return
+        activeSlug = slug
+
+        const parentSlug = slug ? getParentH2Slug(slug) : null
+
+        tocLinks.forEach((link) => {
+          const linkSlug = link.dataset.tocLink
+          const isActive = linkSlug === slug
+          const isActiveParent = linkSlug === parentSlug
+          const isH3 = link.dataset.depth === '3'
+
+          if (isActive || isActiveParent) {
+            link.classList.remove('border-transparent', 'text-stone-400', 'text-stone-500', 'dark:text-stone-400', 'dark:text-stone-500', 'hover:border-stone-300', 'dark:hover:border-stone-600')
+            link.classList.add('hc-toc-active')
+          } else {
+            link.classList.remove('hc-toc-active')
+            link.classList.add('border-transparent', 'hover:border-stone-300', 'dark:hover:border-stone-600')
+            link.classList.add(isH3 ? 'text-stone-400' : 'text-stone-500')
+            link.classList.add(isH3 ? 'dark:text-stone-500' : 'dark:text-stone-400')
+          }
+        })
+      }
+
+      function updateActiveHeading() {
+        const scrollTop = scrollContainer!.scrollTop
+        const offset = 100
+
+        let current: HTMLElement | null = null
+        for (const el of headingElements) {
+          if (el.offsetTop - scrollContainer!.offsetTop <= scrollTop + offset) {
+            current = el
+          } else {
+            break
+          }
+        }
+
+        setActive(current?.id ?? headingElements[0]!.id)
+      }
+
+      scrollContainer.addEventListener('scroll', () => {
+        requestAnimationFrame(updateActiveHeading)
+      }, { passive: true })
+
+      updateActiveHeading()
+    }
+
+    document.addEventListener('astro:page-load', initTocHighlight)
+  </script>
+</DocsLayout>

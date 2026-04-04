@@ -1,1 +1,5 @@
-{ "label": "Getting Started", "order": 0 }
+{
+  "label": "Getting Started",
+  "strip": true,
+  "pages": ["index", "quick-start", "installation", "test"]
+}

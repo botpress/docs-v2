@@ -1,74 +1,46 @@
 ---
 import DocsLayout from '../layouts/DocsLayout.astro'
-import { getCollection } from 'astro:content'
-import { buildSidebarTree } from '../lib/sidebar-tree'
-import { siteConfig } from '../lib/site-config'
+import { getCollection, render } from 'astro:content'
+import { computeStrippedSlug } from '../lib/sidebar-tree'
 import path from 'node:path'
 
-const entries = await getCollection('docs')
 const contentDir = path.resolve('./src/content/docs')
-const tree = buildSidebarTree(entries, contentDir)
+const entries = await getCollection('docs')
+
+const rootEntry = entries.find((e) => {
+  const stripped = computeStrippedSlug(e.id.replace(/\.(md|mdx)$/, ''), contentDir)
+  return stripped === 'index'
+})
+
+const title = rootEntry?.data.title ?? 'Home'
+const useProse = rootEntry ? rootEntry.data.prose !== false : true
+
+let Content: any = null
+let tocHeadings: { depth: number; slug: string; text: string }[] = []
+
+if (rootEntry) {
+  const rendered = await render(rootEntry)
+  Content = rendered.Content
+  tocHeadings = useProse ? rendered.headings.filter((h) => h.depth >= 2 && h.depth <= 3) : []
+}
 ---
 
-<DocsLayout title={siteConfig.name}>
-  <div class="flex h-full w-full items-start justify-center overflow-y-auto px-4 pt-8" data-hc-landing>
-    <div class="flex w-full max-w-[36rem] flex-col items-start py-12">
-      <h1 class="text-2xl font-medium text-stone-500 dark:text-stone-400">Welcome</h1>
-      <p class="text-2xl font-medium text-stone-900 dark:text-stone-100">How can we help you?</p>
-
-      <div class="mt-8 w-full">
-        <button
-          type="button"
-          class="relative flex h-12 w-full cursor-pointer items-center rounded-2xl border border-stone-200 bg-white pl-11 pr-4 text-sm text-stone-500 shadow-xs transition-[border-color] hover:border-stone-300 dark:border-stone-700 dark:bg-stone-800 dark:text-stone-400 dark:hover:border-stone-600"
-          data-hc-landing-search
-        >
-          <svg class="absolute top-1/2 left-4 size-4 -translate-y-1/2 text-stone-400 dark:text-stone-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8" />
-            <path d="m21 21-4.3-4.3" />
-          </svg>
-          Search docs...
-        </button>
+<DocsLayout title={title}>
+  {Content ? (
+    useProse ? (
+      <div class="mx-auto flex w-full max-w-5xl gap-10 px-8 py-8 sm:px-8 sm:py-10 lg:px-16" data-pagefind-body>
+        <article class="prose prose-stone mt-6 max-w-none min-w-0 flex-1 prose-headings:text-stone-900 prose-headings:font-semibold prose-p:text-stone-600 prose-a:text-stone-900 dark:prose-headings:text-stone-100 dark:prose-p:text-stone-300 dark:prose-a:text-stone-100">
+          <Content />
+        </article>
       </div>
-
-      <script>
-        document.querySelector('[data-hc-landing-search]')?.addEventListener('click', () => {
-          window.dispatchEvent(new CustomEvent('hc:open-search'))
-        })
-      </script>
-
-      {tree.length > 0 && (
-        <div class="mt-12 grid w-full gap-3 sm:grid-cols-2">
-          {tree.map((node) => {
-            if (node.type === 'category') {
-              const firstArticle = node.children.find((c) => c.type === 'article')
-              const href = firstArticle?.type === 'article' ? firstArticle.href : '#'
-              return (
-                <a
-                  href={href}
-                  class="group rounded-xl border border-stone-200 bg-white p-5 transition-colors hover:border-stone-300 dark:border-stone-800 dark:bg-stone-900 dark:hover:border-stone-700"
-                >
-                  <h3 class="text-sm font-semibold text-stone-900 transition-colors group-hover:text-stone-700 dark:text-stone-100 dark:group-hover:text-stone-200">
-                    {node.label}
-                  </h3>
-                  <p class="mt-1 text-xs text-stone-500 dark:text-stone-400">
-                    {node.children.filter((c) => c.type === 'article').length} articles
-                  </p>
-                </a>
-              )
-            }
-            return (
-              <a
-                href={node.href}
-                class="group rounded-xl border border-stone-200 bg-white p-5 transition-colors hover:border-stone-300 dark:border-stone-800 dark:bg-stone-900 dark:hover:border-stone-700"
-              >
-                <h3 class="text-sm font-semibold text-stone-900 transition-colors group-hover:text-stone-700 dark:text-stone-100 dark:group-hover:text-stone-200">
-                  {node.title}
-                </h3>
-              </a>
-            )
-          })}
-        </div>
-      )}
+    ) : (
+      <div data-pagefind-body>
+        <Content />
+      </div>
+    )
+  ) : (
+    <div class="flex h-full items-center justify-center" data-pagefind-body>
+      <p class="text-stone-500">No index page found</p>
     </div>
-  </div>
+  )}
 </DocsLayout>

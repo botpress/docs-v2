@@ -6,9 +6,15 @@ import type { SidebarNode, SidebarCategoryNode, SidebarArticleNode } from './sid
 export type { SidebarNode, SidebarCategoryNode, SidebarArticleNode } from './sidebar-types'
 export { isPathActive, hasActiveChild } from './sidebar-types'
 
+export interface ArticleEntry {
+  slug: string
+  title: string
+}
+
 interface CategoryMeta {
   label: string
-  order?: number
+  pages?: string[]
+  strip?: boolean
 }
 
 function readCategoryMeta(dirPath: string): CategoryMeta | null {
@@ -29,109 +35,168 @@ function titleFromSlug(slug: string): string {
 }
 
 /**
- * Builds a sidebar tree from Astro content collection entries.
- * Reads _category.json files for category labels and ordering.
- * This function uses Node.js APIs and must only be called at build time in .astro files.
+ * Compute a URL slug for a file, stripping segments whose _category.json has strip: true.
+ * `filePath` is the path relative to contentDir (e.g., "getting-started/quick-start").
+ *
+ * Handles Astro's glob loader behavior where index files get their `/index` suffix
+ * removed from the entry ID (e.g., "getting-started/index.mdx" → id "getting-started").
  */
-export function buildSidebarTree(entries: CollectionEntry<'docs'>[], contentDir: string): SidebarNode[] {
-  const categoryMap = new Map<string, SidebarCategoryNode>()
+export function computeStrippedSlug(filePath: string, contentDir: string): string {
+  const segments = filePath.split('/')
+  const result: string[] = []
 
-  function ensureCategory(categoryPath: string): SidebarCategoryNode {
-    if (categoryMap.has(categoryPath)) return categoryMap.get(categoryPath)!
+  let currentDir = contentDir
+  for (let i = 0; i < segments.length; i++) {
+    const segment = segments[i]!
+    const isLast = i === segments.length - 1
 
-    const segments = categoryPath.split('/')
-    const slug = segments[segments.length - 1]!
-    const dirPath = path.join(contentDir, categoryPath)
-    const meta = readCategoryMeta(dirPath)
-
-    const node: SidebarCategoryNode = {
-      type: 'category',
-      label: meta?.label || titleFromSlug(slug),
-      slug,
-      path: categoryPath,
-      order: meta?.order ?? 999,
-      children: [],
-    }
-
-    categoryMap.set(categoryPath, node)
-
-    if (segments.length > 1) {
-      const parentPath = segments.slice(0, -1).join('/')
-      const parent = ensureCategory(parentPath)
-      if (!parent.children.some((c) => c.type === 'category' && c.path === categoryPath)) {
-        parent.children.push(node)
-      }
-    }
-
-    return node
-  }
-
-  const topLevelPaths = new Set<string>()
-
-  for (const entry of entries) {
-    const id = entry.id
-    const segments = id.split('/')
-
-    if (segments.length === 1) {
-      const slug = segments[0]!.replace(/\.(md|mdx)$/, '')
-      const articleNode: SidebarArticleNode = {
-        type: 'article',
-        title: entry.data.title,
-        href: `/docs/${slug}`,
-        path: slug,
-        order: entry.data.order ?? 0,
-      }
-      topLevelPaths.add(slug)
-      categoryMap.set(`__article__${slug}`, articleNode as any)
+    if (isLast) {
+      const possibleDir = path.join(currentDir, segment)
+      try {
+        if (fs.statSync(possibleDir).isDirectory()) {
+          const meta = readCategoryMeta(possibleDir)
+          if (meta?.strip) {
+            result.push('index')
+            continue
+          }
+        }
+      } catch {}
+      result.push(segment)
     } else {
-      const fileName = segments[segments.length - 1]!
-      const articleSlug = fileName.replace(/\.(md|mdx)$/, '')
-      const categoryPath = segments.slice(0, -1).join('/')
-      const articlePath = `${categoryPath}/${articleSlug}`
+      currentDir = path.join(currentDir, segment)
+      const meta = readCategoryMeta(currentDir)
+      if (meta?.strip) continue
+      result.push(segment)
+    }
+  }
 
-      const category = ensureCategory(categoryPath)
-      topLevelPaths.add(segments[0]!)
+  return result.join('/')
+}
+
+/**
+ * Normalize content collection entries into ArticleEntry[].
+ */
+export function normalizeCollectionEntries(entries: CollectionEntry<'docs'>[], contentDir: string): ArticleEntry[] {
+  return entries.map((entry) => {
+    const rawSlug = entry.id.replace(/\.(md|mdx)$/, '')
+    return {
+      slug: computeStrippedSlug(rawSlug, contentDir),
+      title: entry.data.title,
+    }
+  })
+}
+
+/**
+ * List ordered items for a directory: uses the pages array from _category.json if present,
+ * otherwise lists directory contents alphabetically (excluding _ prefixed files).
+ */
+function getOrderedItems(dirPath: string, meta: CategoryMeta | null): string[] {
+  if (meta?.pages) return meta.pages
+
+  try {
+    const entries = fs.readdirSync(dirPath, { withFileTypes: true })
+    return entries
+      .filter((e) => !e.name.startsWith('_') && !e.name.startsWith('.'))
+      .map((e) => {
+        if (e.isDirectory()) return e.name
+        return e.name.replace(/\.(md|mdx)$/, '')
+      })
+      .filter((name, i, arr) => arr.indexOf(name) === i)
+      .sort()
+  } catch {
+    return []
+  }
+}
+
+/**
+ * Check if a name corresponds to a directory on disk.
+ */
+function isDirectory(dirPath: string, name: string): boolean {
+  try {
+    return fs.statSync(path.join(dirPath, name)).isDirectory()
+  } catch {
+    return false
+  }
+}
+
+/**
+ * Check if a name corresponds to a content file on disk (mdx, md, or tsx).
+ */
+function findContentFile(dirPath: string, name: string): string | null {
+  for (const ext of ['.mdx', '.md']) {
+    if (fs.existsSync(path.join(dirPath, name + ext))) return name + ext
+  }
+  return null
+}
+
+/**
+ * Builds a sidebar tree by scanning the filesystem for _category.json files.
+ * Uses pages arrays for ordering, falling back to alphabetical directory listing.
+ * Requires a title lookup map to resolve article titles from frontmatter/meta.
+ */
+export function buildSidebarTree(titleMap: Map<string, string>, contentDir: string): SidebarNode[] {
+  function buildLevel(dirPath: string, slugPrefix: string[], isStripped: boolean): SidebarNode[] {
+    const meta = readCategoryMeta(dirPath)
+    const items = getOrderedItems(dirPath, meta)
+    const nodes: SidebarNode[] = []
+
+    for (const item of items) {
+      if (item === 'index') {
+        const file = findContentFile(dirPath, item)
+        if (!file) continue
+
+        const articleSlug = isStripped ? 'index' : slugPrefix.join('/') || 'index'
+        const title = titleMap.get(articleSlug) ?? titleFromSlug(item)
+        const articleNode: SidebarArticleNode = {
+          type: 'article',
+          title,
+          href: articleSlug === 'index' ? '/' : `/${articleSlug}`,
+          path: articleSlug,
+        }
+        nodes.push(articleNode)
+        continue
+      }
+
+      if (isDirectory(dirPath, item)) {
+        const subDirPath = path.join(dirPath, item)
+        const subMeta = readCategoryMeta(subDirPath)
+        const subStrip = subMeta?.strip ?? false
+
+        const childSlugPrefix = subStrip ? slugPrefix : [...slugPrefix, item]
+
+        const children = buildLevel(subDirPath, childSlugPrefix, subStrip)
+
+        const categoryNode: SidebarCategoryNode = {
+          type: 'category',
+          label: subMeta?.label || titleFromSlug(item),
+          slug: item,
+          path: [...slugPrefix, item].join('/') || item,
+          children,
+        }
+        nodes.push(categoryNode)
+        continue
+      }
+
+      const file = findContentFile(dirPath, item)
+      if (!file) continue
+
+      const articleSlug = isStripped ? item : [...slugPrefix, item].join('/')
+      const title = titleMap.get(articleSlug) ?? titleFromSlug(item)
 
       const articleNode: SidebarArticleNode = {
         type: 'article',
-        title: entry.data.title,
-        href: `/docs/${articlePath}`,
-        path: articlePath,
-        order: entry.data.order ?? 0,
+        title,
+        href: `/${articleSlug}`,
+        path: articleSlug,
       }
-
-      category.children.push(articleNode)
+      nodes.push(articleNode)
     }
+
+    return nodes
   }
 
-  const sortNodes = (nodes: SidebarNode[]): SidebarNode[] => {
-    return nodes.sort((a, b) => {
-      const orderA = a.order
-      const orderB = b.order
-      if (orderA !== orderB) return orderA - orderB
-      const labelA = a.type === 'category' ? a.label : a.title
-      const labelB = b.type === 'category' ? b.label : b.title
-      return labelA.localeCompare(labelB)
-    })
-  }
+  const rootMeta = readCategoryMeta(contentDir)
+  const rootStrip = rootMeta?.strip ?? false
 
-  const sortRecursive = (nodes: SidebarNode[]): SidebarNode[] => {
-    for (const node of nodes) {
-      if (node.type === 'category') {
-        node.children = sortRecursive(node.children)
-      }
-    }
-    return sortNodes(nodes)
-  }
-
-  const topLevel: SidebarNode[] = []
-  for (const topPath of topLevelPaths) {
-    if (categoryMap.has(topPath)) {
-      topLevel.push(categoryMap.get(topPath)!)
-    } else if (categoryMap.has(`__article__${topPath}`)) {
-      topLevel.push(categoryMap.get(`__article__${topPath}`)!)
-    }
-  }
-
-  return sortRecursive(topLevel)
+  return buildLevel(contentDir, [], rootStrip)
 }
