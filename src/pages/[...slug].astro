@@ -1,7 +1,7 @@
 ---
 import DocsLayout from '../layouts/DocsLayout.astro'
 import { getCollection, render } from 'astro:content'
-import { computeStrippedSlug } from '../lib/sidebar-tree'
+import { computeStrippedSlug, buildBreadcrumbs } from '../lib/sidebar-tree'
 import path from 'node:path'
 
 export async function getStaticPaths() {
@@ -25,19 +25,8 @@ const useProse = entry.data.prose !== false
 const slug = Astro.params.slug as string
 const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3)
 
-const breadcrumbs: { label: string; href?: string }[] = []
-const pathSegments = slug.split('/')
-if (pathSegments.length > 1) {
-  for (const segment of pathSegments.slice(0, -1)) {
-    breadcrumbs.push({
-      label: segment
-        .split('-')
-        .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
-        .join(' '),
-    })
-  }
-}
-breadcrumbs.push({ label: title })
+const contentDir = path.resolve('./src/content/docs')
+const breadcrumbs = buildBreadcrumbs(entry.id, contentDir, title)
 ---
 
 <DocsLayout title={title} breadcrumbs={breadcrumbs}>

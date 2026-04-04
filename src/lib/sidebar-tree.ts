@@ -28,6 +28,42 @@ function readCategoryMeta(dirPath: string): CategoryMeta | null {
   }
 }
 
+/**
+ * Build breadcrumb labels from the original entry file path (before stripping).
+ * Walks each directory segment and reads _category.json for labels,
+ * skipping root categories so they don't appear in breadcrumbs.
+ */
+export function buildBreadcrumbs(
+  entryId: string,
+  contentDir: string,
+  pageTitle: string
+): { label: string; href?: string }[] {
+  const rawPath = entryId.replace(/\.(md|mdx)$/, '')
+  const segments = rawPath.split('/')
+  const crumbs: { label: string; href?: string }[] = []
+
+  let currentDir = contentDir
+  for (let i = 0; i < segments.length; i++) {
+    const segment = segments[i]!
+    const isLast = i === segments.length - 1
+
+    if (isLast) {
+      if (segment !== 'index') {
+        crumbs.push({ label: pageTitle })
+      } else {
+        crumbs.push({ label: pageTitle })
+      }
+    } else {
+      currentDir = path.join(currentDir, segment)
+      const meta = readCategoryMeta(currentDir)
+      if (meta?.root) continue
+      crumbs.push({ label: meta?.label || titleFromSlug(segment) })
+    }
+  }
+
+  return crumbs
+}
+
 function titleFromSlug(slug: string): string {
   return slug
     .split('-')
