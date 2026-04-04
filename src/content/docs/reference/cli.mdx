@@ -4,6 +4,8 @@ description: Command-line interface documentation.
 order: 1
 ---
 
+import { Tip } from '../../../components/Callout.tsx'
+
 ## Overview
 
 The CLI provides commands for managing your application from the terminal.
@@ -66,9 +68,7 @@ Deploy to production:
 npx my-package deploy
 ```
 
-:::tip
-Run `my-package deploy --dry-run` first to preview what will be deployed without making any changes.
-:::
+<Tip>Run `my-package deploy --dry-run` first to preview what will be deployed without making any changes.</Tip>
 
 ## Global Options
 

@@ -4,6 +4,8 @@ description: Learn how to configure the application for your needs.
 order: 0
 ---
 
+import { Tip, Danger } from '../../../components/Callout.tsx'
+
 ## Configuration File
 
 The application looks for a `config.json` file in the root of your project. Here's a complete example:
@@ -53,9 +55,7 @@ If you're using TypeScript, add the following to your `tsconfig.json`:
 }
 ```
 
-:::tip
-Use `strict: true` to catch potential issues early. It enables all strict type-checking options.
-:::
+<Tip>Use `strict: true` to catch potential issues early. It enables all strict type-checking options.</Tip>
 
 ## Feature Flags
 
@@ -76,6 +76,4 @@ if (features.isEnabled('analytics')) {
 - **darkMode** — Enable dark mode by default
 - **experimentalApi** — Enable experimental API endpoints
 
-:::danger
-Experimental features may change or be removed without notice. Do not rely on them in production.
-:::
+<Danger>Experimental features may change or be removed without notice. Do not rely on them in production.</Danger>

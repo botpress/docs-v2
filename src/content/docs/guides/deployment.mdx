@@ -4,6 +4,8 @@ description: Deploy your application to production.
 order: 1
 ---
 
+import { Note } from '../../../components/Callout.tsx'
+
 ## Build for Production
 
 Create an optimized production build:
@@ -59,9 +61,10 @@ docker build -t my-app .
 docker run -p 8080:80 my-app
 ```
 
-:::note
-Make sure to set environment variables in your deployment platform rather than committing `.env` files to your repository.
-:::
+<Note>
+  Make sure to set environment variables in your deployment platform rather than committing `.env` files to your
+  repository.
+</Note>
 
 ## CI/CD
 

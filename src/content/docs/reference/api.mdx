@@ -4,6 +4,8 @@ description: Complete API documentation for all public methods.
 order: 0
 ---
 
+import { Note, Warning } from '../../../components/Callout.tsx'
+
 ## `init(options)`
 
 Initialize the application with the given configuration.
@@ -44,9 +46,7 @@ Start the application server.
 async function start(): Promise<void>
 ```
 
-:::note
-This method is asynchronous. Make sure to `await` it or handle the promise.
-:::
+<Note>This method is asynchronous. Make sure to `await` it or handle the promise.</Note>
 
 ### Example
 
@@ -98,6 +98,7 @@ app.use(
 )
 ```
 
-:::caution
-Plugins must be registered before calling `app.start()`. Registering plugins after the server has started will throw an error.
-:::
+<Warning>
+  Plugins must be registered before calling `app.start()`. Registering plugins after the server has started will throw
+  an error.
+</Warning>

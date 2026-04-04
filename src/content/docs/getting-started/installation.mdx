@@ -4,6 +4,8 @@ description: Detailed installation instructions for all platforms.
 order: 1
 ---
 
+import { Tip, Warning } from '../../../components/Callout.tsx'
+
 ## Prerequisites
 
 Before installing, make sure you have the following:
@@ -44,9 +46,10 @@ You should see output like:
 my-package v1.0.0
 ```
 
-:::tip
-If you encounter permission errors on macOS or Linux, try prefixing the command with `sudo` or configure npm to use a different directory for global packages.
-:::
+<Tip>
+  If you encounter permission errors on macOS or Linux, try prefixing the command with `sudo` or configure npm to use a
+  different directory for global packages.
+</Tip>
 
 ## System Requirements
 
@@ -67,9 +70,9 @@ If the installation fails, try clearing your package manager cache:
 npm cache clean --force
 ```
 
-:::caution
-Clearing the cache will remove all cached packages. Your next install may take longer as packages are re-downloaded.
-:::
+<Warning>
+  Clearing the cache will remove all cached packages. Your next install may take longer as packages are re-downloaded.
+</Warning>
 
 ### Getting Help
 
