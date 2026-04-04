@@ -115,17 +115,17 @@
 }
 
 /* Shiki code blocks */
-.prose pre.shiki {
-  @apply my-4 overflow-x-auto rounded-lg border border-stone-200 p-4 text-sm leading-relaxed dark:border-stone-700;
+.prose pre.astro-code {
+  @apply my-4 overflow-x-auto rounded-2xl border border-stone-200 p-4 text-sm leading-relaxed dark:border-stone-700;
 }
 
-.prose pre.shiki code {
+.prose pre.astro-code code {
   @apply bg-transparent p-0;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 }
 
-.dark .shiki,
-.dark .shiki span {
+.dark .astro-code,
+.dark .astro-code span {
   color: var(--shiki-dark) !important;
   background-color: var(--shiki-dark-bg) !important;
 }
@@ -172,63 +172,3 @@
   opacity: 1;
 }
 
-/* Aside / callout blocks */
-.prose aside[data-aside-type] {
-  @apply my-3 rounded-r-md border-l-4 px-4 py-3;
-}
-
-.prose aside[data-aside-type] > *:first-child {
-  @apply mt-0;
-}
-
-.prose aside[data-aside-type] > *:last-child {
-  @apply mb-0;
-}
-
-.prose aside[data-aside-type] .aside-header {
-  @apply mb-2 flex items-center gap-2;
-}
-
-.prose aside[data-aside-type] .aside-header svg {
-  @apply h-4 w-4;
-}
-
-.prose aside[data-aside-type] .aside-header span {
-  @apply text-xs font-semibold uppercase tracking-wide;
-}
-
-.prose aside[data-aside-type='note'] {
-  @apply border-l-blue-500 bg-blue-50 dark:bg-blue-950/40;
-}
-
-.prose aside[data-aside-type='note'] .aside-header svg,
-.prose aside[data-aside-type='note'] .aside-header span {
-  @apply text-blue-500;
-}
-
-.prose aside[data-aside-type='tip'] {
-  @apply border-l-purple-500 bg-purple-50 dark:bg-purple-950/40;
-}
-
-.prose aside[data-aside-type='tip'] .aside-header svg,
-.prose aside[data-aside-type='tip'] .aside-header span {
-  @apply text-purple-500;
-}
-
-.prose aside[data-aside-type='caution'] {
-  @apply border-l-amber-500 bg-amber-50 dark:bg-amber-950/40;
-}
-
-.prose aside[data-aside-type='caution'] .aside-header svg,
-.prose aside[data-aside-type='caution'] .aside-header span {
-  @apply text-amber-500;
-}
-
-.prose aside[data-aside-type='danger'] {
-  @apply border-l-red-500 bg-red-50 dark:bg-red-950/40;
-}
-
-.prose aside[data-aside-type='danger'] .aside-header svg,
-.prose aside[data-aside-type='danger'] .aside-header span {
-  @apply text-red-500;
-}
