@@ -5,6 +5,9 @@
 @theme {
   --font-sans: 'Geist Variable', Geist, ui-sans-serif, system-ui, sans-serif;
 
+  --color-primary: var(--hc-primary);
+  --color-primary-dark: var(--hc-primary-dark);
+
   --color-amber-50: oklch(0.966 0.014 60.6);
   --color-amber-100: oklch(0.925 0.031 61.11);
   --color-amber-200: oklch(0.848 0.072 64.54);
