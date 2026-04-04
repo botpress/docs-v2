@@ -93,16 +93,14 @@ function ChildNode({
 }
 
 export default function SidebarTreeView({ nodes, currentPath, textSize = 'sm' }: Props) {
-  const firstCategoryMargin = textSize === 'base' ? 'mt-[1.5rem]' : 'mt-[2rem]'
-
   return (
     <>
       {nodes.map((node, index) => {
         if (node.type === 'category') {
           return (
-            <div key={node.path} className="mb-3">
+            <div key={node.path} className="mb-8">
               <h3
-                className={`mb-[.625rem] ${firstCategoryMargin} pl-4 pr-2 ${textSize === 'base' ? 'text-base' : 'text-sm'} font-semibold text-[rgb(22,27,30)] dark:text-[rgb(222,226,230)]`}
+                className={`mb-[.625rem] pl-4 pr-2 ${textSize === 'base' ? 'text-base' : 'text-sm'} font-semibold text-[rgb(22,27,30)] dark:text-[rgb(222,226,230)]`}
               >
                 {node.label}
               </h3>
@@ -121,13 +119,12 @@ export default function SidebarTreeView({ nodes, currentPath, textSize = 'sm' }:
         }
 
         const active = isPathActive(node.href, currentPath)
-        const isFirstNode = index === 0
 
         return (
           <a
             key={node.href}
             href={node.href}
-            className={`flex items-center rounded-md pl-4 pr-2 py-1.5 ${textSize === 'base' ? 'text-base' : 'text-sm'} transition-colors ${isFirstNode ? firstCategoryMargin : ''} ${
+            className={`flex items-center rounded-md pl-4 pr-2 py-1.5 ${textSize === 'base' ? 'text-base' : 'text-sm'} transition-colors ${
               active
                 ? 'hc-nav-active font-medium'
                 : 'text-stone-600 hover:bg-black/5 hover:text-stone-900 dark:text-stone-400 dark:hover:bg-white/5 dark:hover:text-stone-100'
