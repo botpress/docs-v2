@@ -1,0 +1,4 @@
+{
+  "label": "Manage your agent",
+  "pages": ["preview", "edit-appearance", "knowledge", "inspect", "monitor", "human-handoff", "control-access"]
+}

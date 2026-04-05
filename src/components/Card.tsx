@@ -1,19 +1,22 @@
 import { ArrowUpRight, ChevronRight } from 'lucide-react'
 import type { ReactNode } from 'react'
+import { Icon } from './Icon'
 
 interface CardProps {
   title?: string
-  icon?: ReactNode
+  icon?: ReactNode | string
   img?: string
   href?: string
   cta?: string
   horizontal?: boolean
+  external?: boolean
   children?: ReactNode
   className?: string
 }
 
-export function Card({ title, icon, img, href, cta, horizontal, children, className }: CardProps) {
-  const isExternal = href?.startsWith('http')
+export function Card({ title, icon, img, href, cta, horizontal, external, children, className }: CardProps) {
+  const isExternal = external || href?.startsWith('http')
+  const resolvedIcon = typeof icon === 'string' ? <Icon icon={icon} size={20} className="size-5" /> : icon
   const Component = href ? 'a' : 'div'
 
   return (
@@ -21,7 +24,7 @@ export function Card({ title, icon, img, href, cta, horizontal, children, classN
       href={href}
       {...(isExternal ? { target: '_blank', rel: 'noreferrer' } : {})}
       className={[
-        'group relative my-2 block w-full overflow-hidden rounded-xl border border-stone-950/10 bg-white font-normal ring-2 ring-transparent dark:border-white/10 dark:bg-stone-900',
+        'not-prose group relative my-2 block w-full overflow-hidden rounded-xl border border-stone-950/10 bg-white font-normal no-underline ring-2 ring-transparent dark:border-white/10 dark:bg-stone-900',
         href && 'cursor-pointer hover:border-primary dark:hover:border-primary-dark',
         href &&
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-dark',
@@ -41,8 +44,10 @@ export function Card({ title, icon, img, href, cta, horizontal, children, classN
           </div>
         )}
 
-        {icon && (
-          <div className="size-6 fill-stone-800 text-stone-800 dark:fill-stone-100 dark:text-stone-100">{icon}</div>
+        {resolvedIcon && (
+          <div className="size-6 fill-stone-800 text-stone-800 dark:fill-stone-100 dark:text-stone-100">
+            {resolvedIcon}
+          </div>
         )}
 
         <div className="min-w-0 flex-1">
@@ -50,7 +55,7 @@ export function Card({ title, icon, img, href, cta, horizontal, children, classN
             <h2
               className={[
                 'not-prose text-base font-semibold text-stone-800 dark:text-white',
-                icon && !horizontal && 'mt-4',
+                resolvedIcon && !horizontal && 'mt-4',
               ]
                 .filter(Boolean)
                 .join(' ')}

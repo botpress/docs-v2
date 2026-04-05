@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Info, Lightbulb, TriangleAlert, OctagonAlert, CircleCheck, NotebookPen } from 'lucide-react'
+import { Info as InfoIcon, Lightbulb, TriangleAlert, OctagonAlert, CircleCheck, NotebookPen } from 'lucide-react'
 
 type CalloutVariant = 'note' | 'info' | 'tip' | 'check' | 'warning' | 'danger' | 'goodtoknow'
 
@@ -13,13 +13,13 @@ const config: Record<
   }
 > = {
   note: {
-    icon: Info,
+    icon: InfoIcon,
     border: 'border-blue-200 dark:border-blue-900',
     bg: 'bg-blue-50 dark:bg-blue-600/20',
     text: 'text-blue-800 dark:text-blue-300',
   },
   info: {
-    icon: Info,
+    icon: InfoIcon,
     border: 'border-fuchsia-200/50 dark:border-purple-500/30',
     bg: 'bg-fuchsia-50/50 dark:bg-fuchsia-500/10',
     text: 'text-fuchsia-900 dark:text-fuchsia-200',
@@ -133,6 +133,14 @@ export function Danger({ title, children }: Omit<CalloutProps, 'variant'>) {
 export function GoodToKnow({ title, children }: Omit<CalloutProps, 'variant'>) {
   return (
     <Callout variant="goodtoknow" title={title}>
+      {children}
+    </Callout>
+  )
+}
+
+export function Info({ title, children }: Omit<CalloutProps, 'variant'>) {
+  return (
+    <Callout variant="info" title={title}>
       {children}
     </Callout>
   )
