@@ -181,4 +181,3 @@
 .prose :is(h1, h2, h3, h4, h5, h6):hover .heading-anchor::after {
   opacity: 1;
 }
-

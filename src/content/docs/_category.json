@@ -1,4 +1,4 @@
 {
-    "label": "test",
-    "pages": ["docs", "tutorial", "api-reference", "changelog"]
+  "label": "test",
+  "pages": ["docs", "tutorial", "api-reference", "changelog"]
 }

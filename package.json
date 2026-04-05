@@ -11,10 +11,10 @@
     "preview": "astro preview",
     "astro": "astro",
     "check": "bun run check:format && bun run check:type",
-    "check:format": "bunx oxfmt --check \"**/*.{ts,tsx,md,mdx}\"",
+    "check:format": "bunx oxfmt --check .",
     "check:type": "bunx astro check",
     "fix": "bun run fix:format",
-    "fix:format": "bunx oxfmt \"**/*.{ts,tsx,md,mdx}\"",
+    "fix:format": "bunx oxfmt .",
     "lint": "bunx oxlint \"**/*.{ts,tsx}\"",
     "prepare": "lefthook install"
   },
