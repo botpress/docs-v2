@@ -224,7 +224,7 @@ export default function SearchOverlay() {
                     key={result.id}
                     href={result.url}
                     onClick={() => close()}
-                    className={`group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors ${isSelected ? 'bg-stone-100 dark:bg-white/10' : 'hover:bg-stone-50 dark:hover:bg-white/5'}`}
+                    className={`group flex items-center gap-3 rounded-md px-3 py-2.5 transition-colors ${isSelected ? 'bg-stone-100 dark:bg-white/10' : 'hover:bg-stone-50 dark:hover:bg-white/5'}`}
                   >
                     <svg
                       className="h-4 w-4 shrink-0 text-stone-400 dark:text-stone-500"

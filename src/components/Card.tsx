@@ -21,7 +21,7 @@ export function Card({ title, icon, img, href, cta, horizontal, children, classN
       href={href}
       {...(isExternal ? { target: '_blank', rel: 'noreferrer' } : {})}
       className={[
-        'group relative my-2 block w-full overflow-hidden rounded-2xl border border-stone-950/10 bg-white font-normal ring-2 ring-transparent dark:border-white/10 dark:bg-stone-900',
+        'group relative my-2 block w-full overflow-hidden rounded-xl border border-stone-950/10 bg-white font-normal ring-2 ring-transparent dark:border-white/10 dark:bg-stone-900',
         href && 'cursor-pointer hover:border-primary dark:hover:border-primary-dark',
         href &&
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-dark',

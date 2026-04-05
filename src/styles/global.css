@@ -5,6 +5,13 @@
 @theme {
   --font-sans: 'Geist Variable', Geist, ui-sans-serif, system-ui, sans-serif;
 
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 14px);
+
   --color-primary: var(--hc-primary);
   --color-primary-dark: var(--hc-primary-dark);
 
@@ -44,7 +51,7 @@
 }
 
 :root {
-  --radius: 0.5rem;
+  --radius: 0.625rem;
 }
 
 @layer base {
@@ -119,7 +126,7 @@
 
 /* Shiki code blocks */
 .prose pre.astro-code {
-  @apply my-4 overflow-x-auto rounded-2xl border border-stone-200 p-4 text-sm leading-relaxed dark:border-stone-700;
+  @apply my-4 overflow-x-auto rounded-xl border border-stone-200 p-4 text-sm leading-relaxed dark:border-stone-700;
 }
 
 .prose pre.astro-code code {

@@ -66,7 +66,7 @@ const navItems: { label: string; href: string; icon: 'home' }[] = []
         <Sidebar currentPath={currentPath} navItems={navItems} tree={sidebarTree} />
       </div>
 
-      <main class="flex-1 overflow-y-auto rounded-md border border-stone-200 bg-white mx-[calc(var(--spacing)*2)] mb-[calc(var(--spacing)*2)] dark:border-stone-800 dark:bg-stone-900">
+      <main class="flex-1 overflow-y-auto rounded-xl border border-stone-200 bg-white mx-[calc(var(--spacing)*2)] mb-[calc(var(--spacing)*2)] dark:border-stone-800 dark:bg-stone-900">
         <slot />
       </main>
     </div>

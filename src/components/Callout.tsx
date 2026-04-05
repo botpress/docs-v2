@@ -69,7 +69,7 @@ function Callout({ variant = 'note', title, children }: CalloutProps) {
   return (
     <div
       role="alert"
-      className={`my-4 flex gap-3 overflow-hidden rounded-2xl border px-5 py-4 text-sm ${c.border} ${c.bg}`}
+      className={`my-4 flex gap-3 overflow-hidden rounded-xl border px-5 py-4 text-sm ${c.border} ${c.bg}`}
     >
       <Icon className={`mt-0.5 h-4 w-4 shrink-0 ${c.text}`} />
       <div

@@ -21,7 +21,7 @@ export default function HomePage() {
             <button
               type="button"
               onClick={openSearch}
-              className="flex cursor-pointer items-center gap-2 rounded-xl border border-primary bg-primary px-4 py-2 text-[0.9rem] font-medium leading-[130%] text-white transition-all hover:opacity-90 dark:border-primary-dark dark:bg-primary-dark"
+              className="flex cursor-pointer items-center gap-2 rounded-lg border border-primary bg-primary px-4 py-2 text-[0.9rem] font-medium leading-[130%] text-white transition-all hover:opacity-90 dark:border-primary-dark dark:bg-primary-dark"
             >
               <img
                 src="/homepage-assets/bolt-white-transparent-fill.svg"
@@ -34,7 +34,7 @@ export default function HomePage() {
               href="https://discord.gg/botpress"
               target="_blank"
               rel="noreferrer"
-              className="rounded-xl border border-[#626762] bg-[#fcfcfc] px-4 py-2 text-center text-[0.9rem] leading-[130%] transition-all dark:bg-[#1a1a1a]"
+              className="rounded-lg border border-[#626762] bg-[#fcfcfc] px-4 py-2 text-center text-[0.9rem] leading-[130%] transition-all dark:bg-[#1a1a1a]"
             >
               Get help
             </a>
