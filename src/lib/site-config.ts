@@ -12,6 +12,6 @@ export const siteConfig = {
   primaryColor: '#5054A8',
   darkModePrimaryColor: '#7B7FD1',
   navbar: {
-    links: [] as NavbarLink[],
+    links: [{ label: 'Dashboard', href: 'https://app.botpress.cloud', type: 'button', external: true }] as NavbarLink[],
   },
 } as const
