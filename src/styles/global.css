@@ -103,7 +103,7 @@
   }
 }
 
-/* Primary color active states for sidebar and TOC */
+/* Primary color active state for sidebar */
 .hc-nav-active {
   color: var(--hc-primary);
   background-color: rgba(var(--hc-primary-rgb), 0.1);
@@ -112,16 +112,6 @@
 .dark .hc-nav-active {
   color: var(--hc-primary-dark);
   background-color: rgba(var(--hc-primary-dark-rgb), 0.15);
-}
-
-.hc-toc-active {
-  border-color: var(--hc-primary) !important;
-  color: var(--hc-primary) !important;
-}
-
-.dark .hc-toc-active {
-  border-color: var(--hc-primary-dark) !important;
-  color: var(--hc-primary-dark) !important;
 }
 
 /* Shiki code blocks */

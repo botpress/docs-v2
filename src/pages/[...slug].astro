@@ -2,6 +2,7 @@
 import DocsLayout from '../layouts/DocsLayout.astro'
 import { getCollection, render } from 'astro:content'
 import { computeStrippedSlug, buildBreadcrumbs } from '../lib/sidebar-tree'
+import { ClerkTOC } from '../components/ClerkTOC'
 import path from 'node:path'
 
 export async function getStaticPaths() {
@@ -62,26 +63,7 @@ const breadcrumbs = buildBreadcrumbs(entry.id, contentDir, title)
       {tocHeadings.length > 0 && (
         <aside class="hidden w-64 shrink-0 xl:block">
           <div class="sticky top-10">
-            <h4 class="mb-3 text-xs font-medium text-stone-400 dark:text-stone-500">
-              On this page
-            </h4>
-            <ul id="toc-list" class="space-y-1.5 border-l border-stone-200 dark:border-stone-700">
-              {tocHeadings.map((heading) => (
-                <li>
-                  <a
-                    href={`#${heading.slug}`}
-                    data-toc-link={heading.slug}
-                    class:list={[
-                      '-ml-px block border-l border-transparent text-sm leading-snug transition-colors hover:border-stone-300 hover:text-stone-900 dark:hover:border-stone-600 dark:hover:text-stone-200',
-                      heading.depth === 3 ? 'py-0.5 pl-5 text-stone-400 dark:text-stone-500' : 'py-0.5 pl-3 text-stone-500 dark:text-stone-400',
-                    ]}
-                    data-depth={heading.depth}
-                  >
-                    {heading.text}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <ClerkTOC client:load headings={tocHeadings} />
           </div>
         </aside>
       )}
@@ -92,82 +74,4 @@ const breadcrumbs = buildBreadcrumbs(entry.id, contentDir, title)
     </div>
   )}
 
-  <script>
-    function initTocHighlight() {
-      const tocLinks = document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]')
-      if (!tocLinks.length) return
-
-      const slugs = Array.from(tocLinks).map((link) => link.dataset.tocLink!)
-      const headingElements = slugs
-        .map((slug) => document.getElementById(slug))
-        .filter((el): el is HTMLElement => el !== null)
-
-      if (!headingElements.length) return
-
-      const scrollContainer = document.querySelector('main')
-      if (!scrollContainer) return
-
-      let activeSlug: string | null = null
-
-      const linkArray = Array.from(tocLinks)
-
-      function getParentH2Slug(slug: string): string | null {
-        const idx = linkArray.findIndex((l) => l.dataset.tocLink === slug)
-        if (idx === -1) return null
-        if (linkArray[idx]!.dataset.depth !== '3') return null
-        for (let i = idx - 1; i >= 0; i--) {
-          if (linkArray[i]!.dataset.depth === '2') return linkArray[i]!.dataset.tocLink!
-        }
-        return null
-      }
-
-      function setActive(slug: string | null) {
-        if (slug === activeSlug) return
-        activeSlug = slug
-
-        const parentSlug = slug ? getParentH2Slug(slug) : null
-
-        tocLinks.forEach((link) => {
-          const linkSlug = link.dataset.tocLink
-          const isActive = linkSlug === slug
-          const isActiveParent = linkSlug === parentSlug
-          const isH3 = link.dataset.depth === '3'
-
-          if (isActive || isActiveParent) {
-            link.classList.remove('border-transparent', 'text-stone-400', 'text-stone-500', 'dark:text-stone-400', 'dark:text-stone-500', 'hover:border-stone-300', 'dark:hover:border-stone-600')
-            link.classList.add('hc-toc-active')
-          } else {
-            link.classList.remove('hc-toc-active')
-            link.classList.add('border-transparent', 'hover:border-stone-300', 'dark:hover:border-stone-600')
-            link.classList.add(isH3 ? 'text-stone-400' : 'text-stone-500')
-            link.classList.add(isH3 ? 'dark:text-stone-500' : 'dark:text-stone-400')
-          }
-        })
-      }
-
-      function updateActiveHeading() {
-        const scrollTop = scrollContainer!.scrollTop
-        const offset = 100
-
-        let current: HTMLElement | null = null
-        for (const el of headingElements) {
-          if (el.offsetTop - scrollContainer!.offsetTop <= scrollTop + offset) {
-            current = el
-          } else {
-            break
-          }
-        }
-
-        setActive(current?.id ?? headingElements[0]!.id)
-      }
-
-      scrollContainer.addEventListener('scroll', () => {
-        requestAnimationFrame(updateActiveHeading)
-      }, { passive: true })
-
-      updateActiveHeading()
-    }
-
-    document.addEventListener('astro:page-load', initTocHighlight)
-  </script>
 </DocsLayout>
