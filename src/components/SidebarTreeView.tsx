@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { SidebarNode, SidebarCategoryNode } from '../lib/sidebar-types'
-import { isPathActive } from '../lib/sidebar-types'
+import { isPathActive, hasActiveChild } from '../lib/sidebar-types'
 
 interface Props {
   nodes: SidebarNode[]
@@ -17,25 +17,57 @@ function NestedCategory({
   currentPath: string
   textSize?: 'sm' | 'base'
 }) {
-  const [expanded, setExpanded] = useState(true)
+  const selfActive = !!node.href && isPathActive(node.href, currentPath)
+  const childActive = hasActiveChild(node, currentPath)
+  const [expanded, setExpanded] = useState(selfActive || childActive)
+
+  const chevron = (
+    <svg
+      className="h-3 w-3 shrink-0 transition-transform duration-200 ease-out"
+      style={{ transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)' }}
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+    </svg>
+  )
+
+  const labelClass = `flex w-full items-center justify-between rounded-md pl-4 pr-2 py-1.5 ${textSize === 'base' ? 'text-base' : 'text-sm'} transition-colors`
 
   return (
     <li>
-      <button
-        onClick={() => setExpanded((v) => !v)}
-        className={`flex w-full cursor-pointer items-center justify-between rounded-md pl-4 pr-2 py-1.5 ${textSize === 'base' ? 'text-base' : 'text-sm'} text-stone-600 transition-colors hover:bg-black/5 hover:text-stone-900 dark:text-stone-400 dark:hover:bg-white/5 dark:hover:text-stone-100`}
-      >
-        <span>{node.label}</span>
-        <svg
-          className="h-3 w-3 shrink-0 transition-transform duration-200 ease-out"
-          style={{ transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)' }}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
+      {node.href ? (
+        <a
+          href={node.href}
+          onClick={() => setExpanded(true)}
+          className={`${labelClass} ${
+            selfActive
+              ? 'hc-nav-active font-medium'
+              : 'text-stone-600 hover:bg-black/5 hover:text-stone-900 dark:text-stone-400 dark:hover:bg-white/5 dark:hover:text-stone-100'
+          }`}
         >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
+          <span>{node.label}</span>
+          <span
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              setExpanded((v) => !v)
+            }}
+            className="cursor-pointer p-1 -m-1"
+          >
+            {chevron}
+          </span>
+        </a>
+      ) : (
+        <button
+          onClick={() => setExpanded((v) => !v)}
+          className={`${labelClass} cursor-pointer text-stone-600 hover:bg-black/5 hover:text-stone-900 dark:text-stone-400 dark:hover:bg-white/5 dark:hover:text-stone-100`}
+        >
+          <span>{node.label}</span>
+          {chevron}
+        </button>
+      )}
 
       <div
         className="grid transition-[grid-template-rows,opacity] duration-200 ease-out"

@@ -48,8 +48,12 @@ export function buildBreadcrumbs(
     const isLast = i === segments.length - 1
 
     if (isLast) {
-      if (segment !== 'index') {
-        crumbs.push({ label: pageTitle })
+      const possibleDir = path.join(currentDir, segment)
+      const isIndexPage = segment === 'index' || isDirectory(currentDir, segment)
+      if (isIndexPage) {
+        const dir = segment === 'index' ? currentDir : possibleDir
+        const meta = readCategoryMeta(dir)
+        crumbs.push({ label: meta?.label || titleFromSlug(segment) })
       } else {
         crumbs.push({ label: pageTitle })
       }
@@ -202,12 +206,24 @@ function buildLevel(
 
       const children = buildLevel(subDirPath, childSlugPrefix, subStrip, titleMap)
 
+      let categoryHref: string | undefined
+      const indexFile = findContentFile(subDirPath, 'index')
+      if (indexFile) {
+        const indexSlug = subStrip ? 'index' : childSlugPrefix.join('/') || 'index'
+        categoryHref = indexSlug === 'index' ? '/' : `/${indexSlug}`
+      }
+
+      const filteredChildren = children.filter(
+        (c) => !(c.type === 'article' && (c.href === categoryHref || c.path === 'index'))
+      )
+
       const categoryNode: SidebarCategoryNode = {
         type: 'category',
         label: subMeta?.label || titleFromSlug(item),
         slug: item,
         path: [...slugPrefix, item].join('/') || item,
-        children,
+        href: categoryHref,
+        children: filteredChildren,
       }
       nodes.push(categoryNode)
       continue
@@ -248,6 +264,10 @@ function collectSlugs(nodes: SidebarNode[]): string[] {
     if (node.type === 'article') {
       slugs.push(node.path)
     } else {
+      if (node.href) {
+        const catSlug = node.href.replace(/^\//, '') || 'index'
+        slugs.push(catSlug)
+      }
       slugs.push(...collectSlugs(node.children))
     }
   }

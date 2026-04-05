@@ -16,6 +16,7 @@ export interface SidebarCategoryNode {
   label: string
   slug: string
   path: string
+  href?: string
   children: SidebarNode[]
 }
 
