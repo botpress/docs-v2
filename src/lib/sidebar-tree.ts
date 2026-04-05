@@ -142,7 +142,7 @@ function getOrderedItems(dirPath: string, meta: CategoryMeta | null): string[] {
         if (e.isDirectory()) return e.name
         return e.name.replace(/\.(md|mdx)$/, '')
       })
-      .filter((name, i, arr) => arr.indexOf(name) === i)
+      .filter((name: string, i: number, arr: string[]) => arr.indexOf(name) === i)
       .sort()
   } catch {
     return []
