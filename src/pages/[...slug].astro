@@ -78,10 +78,6 @@ const breadcrumbs = buildBreadcrumbs(entry.id, contentDir, title)
     </div>
   ) : (
     <div data-pagefind-body>
-      <div class="flex justify-end px-8 pt-8 sm:px-8 sm:pt-10 lg:px-16">
-        <CopyMarkdownButton client:load markdownUrl={markdownUrl} />
-      </div>
-
       <Content />
     </div>
   )}
