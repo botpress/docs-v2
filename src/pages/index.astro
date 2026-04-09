@@ -1,5 +1,5 @@
 ---
-import CopyMarkdownButton from '../components/CopyMarkdownButton'
+import PageOptions from '../components/PageOptions'
 import DocsLayout from '../layouts/DocsLayout.astro'
 import { getCollection, render } from 'astro:content'
 import { toMarkdownPath } from '../lib/markdown-routes'
@@ -34,7 +34,7 @@ if (rootEntry) {
       <div class="mx-auto flex w-full max-w-5xl gap-10 px-8 py-8 sm:px-8 sm:py-10 lg:px-16" data-pagefind-body>
         <article class="min-w-0 flex-1">
           <div class="mb-4 flex justify-end">
-            <CopyMarkdownButton client:load markdownUrl={markdownUrl} />
+            <PageOptions client:load markdownUrl={markdownUrl} />
           </div>
 
           <div class="prose prose-stone mt-6 max-w-none prose-headings:text-stone-900 prose-headings:font-semibold prose-p:text-stone-600 prose-a:text-stone-900 dark:prose-headings:text-stone-100 dark:prose-p:text-stone-300 dark:prose-a:text-stone-100">
