@@ -5,6 +5,7 @@ import { getCollection, render } from 'astro:content'
 import { toMarkdownPath } from '../lib/markdown-routes'
 import { computeStrippedSlug, buildBreadcrumbs } from '../lib/sidebar-tree'
 import { ClerkTOC } from '../components/clerk-toc'
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator } from '../components/ui/breadcrumb'
 import path from 'node:path'
 
 export async function getStaticPaths() {
@@ -37,23 +38,19 @@ const breadcrumbs = buildBreadcrumbs(entry.id, contentDir, title)
     <div class="mx-auto flex w-full max-w-5xl gap-10 px-8 py-8 sm:px-8 sm:py-10 lg:px-16">
       <article class="min-w-0 flex-1" data-pagefind-body>
         <div class="mb-4 flex items-start justify-between gap-4">
-          {breadcrumbs.length > 1 ? (
-            <nav class="hidden min-w-0 flex-1 items-center gap-1 text-sm text-stone-400 lg:flex dark:text-stone-500">
-              {breadcrumbs.map((crumb, i) => (
-                <>
-                  {i > 0 && <span class="mx-0.5">/</span>}
-                  {i < breadcrumbs.length - 1 ? (
-                    crumb.href ? (
-                      <a href={crumb.href} class="truncate transition-colors hover:text-stone-600 dark:hover:text-stone-300">{crumb.label}</a>
-                    ) : (
-                      <span class="truncate">{crumb.label}</span>
-                    )
-                  ) : (
-                    <span class="truncate text-stone-600 dark:text-stone-300">{crumb.label}</span>
-                  )}
-                </>
-              ))}
-            </nav>
+          {breadcrumbs.length > 0 ? (
+            <Breadcrumb className="hidden min-w-0 flex-1 lg:flex">
+              <BreadcrumbList>
+                {breadcrumbs.map((crumb, i) => (
+                  <>
+                    {i > 0 && <BreadcrumbSeparator />}
+                    <BreadcrumbItem className="truncate">
+                      <BreadcrumbLink href={crumb.href}>{crumb.label}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                  </>
+                ))}
+              </BreadcrumbList>
+            </Breadcrumb>
           ) : (
             <div />
           )}
