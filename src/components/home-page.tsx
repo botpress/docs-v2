@@ -1,6 +1,6 @@
-import { Card } from './Card'
-import { Badge } from './Badge'
-import { WebchatCard, IntegrationsCard } from './LinkCard'
+import { Card } from './card'
+import { Badge } from './badge'
+import { WebchatCard, IntegrationsCard } from './link-card'
 
 export default function HomePage() {
   const openSearch = () => {

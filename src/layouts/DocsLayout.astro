@@ -1,9 +1,9 @@
 ---
 import BaseLayout from './BaseLayout.astro'
-import Header from '../components/Header.astro'
-import Sidebar from '../components/Sidebar.astro'
-import MobileSidebar from '../components/MobileSidebar.tsx'
-import SearchOverlay from '../components/SearchOverlay.tsx'
+import Header from '../components/header'
+import Sidebar from '../components/sidebar'
+import MobileSidebar from '../components/mobile-sidebar'
+import SearchOverlay from '../components/search-overlay'
 import { getCollection } from 'astro:content'
 import { buildSidebarTree, normalizeCollectionEntries, getActiveTab } from '../lib/sidebar-tree'
 import { siteConfig } from '../lib/site-config'
@@ -63,7 +63,7 @@ const navItems: { label: string; href: string; icon: 'home' }[] = []
 
     <div class="flex flex-1 overflow-hidden">
       <div class="hidden lg:flex">
-        <Sidebar currentPath={currentPath} navItems={navItems} tree={sidebarTree} />
+        <Sidebar client:load currentPath={currentPath} navItems={navItems} tree={sidebarTree} />
       </div>
 
       <main class="flex-1 overflow-y-auto rounded-xl border border-stone-200 bg-white mx-[calc(var(--spacing)*2)] mb-[calc(var(--spacing)*2)] dark:border-stone-800 dark:bg-stone-900">
