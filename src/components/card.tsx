@@ -1,6 +1,6 @@
 import { ArrowUpRight, ChevronRight } from 'lucide-react'
 import type { ReactNode } from 'react'
-import { Icon } from './Icon'
+import { Icon } from './icon'
 
 interface CardProps {
   title?: string
