@@ -25,9 +25,8 @@ export function Card({ title, icon, img, href, cta, horizontal, external, childr
       {...(isExternal ? { target: '_blank', rel: 'noreferrer' } : {})}
       className={[
         'not-prose group relative my-2 block w-full overflow-hidden rounded-xl border border-stone-950/10 bg-white font-normal no-underline ring-2 ring-transparent dark:border-white/10 dark:bg-stone-900',
-        href && 'cursor-pointer hover:border-primary dark:hover:border-primary-dark',
-        href &&
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-dark',
+        href && 'cursor-pointer hover:border-primary',
+        href && 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
         className,
       ]
         .filter(Boolean)
@@ -38,7 +37,7 @@ export function Card({ title, icon, img, href, cta, horizontal, external, childr
         {href && isExternal && (
           <div
             aria-hidden="true"
-            className="absolute top-5 right-5 text-stone-400 group-hover:text-primary dark:text-stone-500 dark:group-hover:text-primary-dark"
+            className="absolute top-5 right-5 text-stone-400 group-hover:text-primary dark:text-stone-500"
           >
             <ArrowUpRight className="size-4" />
           </div>
@@ -78,7 +77,7 @@ export function Card({ title, icon, img, href, cta, horizontal, external, childr
           )}
           {cta && (
             <div className="mt-8">
-              <span className="flex items-center gap-2 text-left text-sm font-medium text-stone-600 group-hover:text-primary dark:text-stone-400 dark:group-hover:text-primary-dark">
+              <span className="flex items-center gap-2 text-left text-sm font-medium text-stone-600 group-hover:text-primary dark:text-stone-400">
                 {cta}
                 <ChevronRight className="size-4" />
               </span>

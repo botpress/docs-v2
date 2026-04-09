@@ -21,7 +21,7 @@ export default function HomePage() {
             <button
               type="button"
               onClick={openSearch}
-              className="flex cursor-pointer items-center gap-2 rounded-lg border border-primary bg-primary px-4 py-2 text-[0.9rem] font-medium leading-[130%] text-white transition-all hover:opacity-90 dark:border-primary-dark dark:bg-primary-dark"
+              className="flex cursor-pointer items-center gap-2 rounded-lg border border-primary bg-primary px-4 py-2 text-[0.9rem] font-medium leading-[130%] text-white transition-all hover:opacity-90"
             >
               <img
                 src="/homepage-assets/bolt-white-transparent-fill.svg"

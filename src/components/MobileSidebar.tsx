@@ -303,7 +303,7 @@ export default function MobileSidebar({
                       href={item.href}
                       className={`flex items-center gap-2 rounded-md pl-4 pr-2 py-1.5 text-base transition-colors ${
                         isPathActive(item.href, currentPath)
-                          ? 'hc-nav-active font-medium'
+                          ? 'text-primary bg-primary/10 dark:bg-primary/15 font-medium'
                           : 'text-stone-600 hover:bg-black/5 dark:text-stone-400 dark:hover:bg-white/5'
                       }`}
                     >

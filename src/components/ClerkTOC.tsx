@@ -220,11 +220,11 @@ export function ClerkTOC({ headings }: { headings: TOCHeading[] }) {
               className="absolute transition-[clip-path] duration-200"
               style={{ width: svg.width, height: svg.height, clipPath }}
             >
-              <path d={svg.path} strokeWidth="1" fill="none" className="stroke-primary dark:stroke-primary-dark" />
+              <path d={svg.path} strokeWidth="1" fill="none" className="stroke-primary" />
             </svg>
             {hasActive && (
               <div
-                className="absolute size-1 rounded-full bg-primary transition-all duration-200 dark:bg-primary-dark"
+                className="absolute size-1 rounded-full bg-primary transition-all duration-200"
                 style={{
                   translate: `${lineX(edgeDepth) - 1}px calc(${isUp ? 'var(--toc-top)' : 'var(--toc-top) + var(--toc-height)'} - 1.5px)`,
                 }}
@@ -244,7 +244,7 @@ export function ClerkTOC({ headings }: { headings: TOCHeading[] }) {
                 href={`#${h.slug}`}
                 className={`relative block py-1.5 text-sm leading-snug transition-colors first:pt-0 last:pb-0 ${
                   activeSlugs.has(h.slug)
-                    ? 'text-primary dark:text-primary-dark'
+                    ? 'text-primary'
                     : 'text-stone-400 hover:text-stone-600 dark:text-stone-500 dark:hover:text-stone-300'
                 }`}
                 style={{ paddingLeft: textPad(h.depth) }}
