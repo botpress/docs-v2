@@ -72,14 +72,14 @@ function NestedCategory({
       )}
 
       <div
-        className="grid transition-[grid-template-rows,opacity] duration-200 ease-out"
+        className="grid pt-0.5 transition-[grid-template-rows,opacity] duration-200 ease-out"
         style={{
           gridTemplateRows: expanded ? '1fr' : '0fr',
           opacity: expanded ? 1 : 0,
         }}
       >
         <div className="overflow-hidden">
-          <ul className="relative space-y-0.5 before:absolute before:left-2.5 before:top-1 before:bottom-1 before:w-px before:bg-stone-300 dark:before:bg-stone-700">
+          <ul className="relative space-y-0.5 before:absolute before:left-2.5 before:top-0.5 before:bottom-1 before:w-px before:bg-stone-300 dark:before:bg-stone-700">
             {node.children.map((child) => (
               <ChildNode
                 key={child.type === 'article' ? child.href : child.path}
