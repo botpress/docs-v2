@@ -36,36 +36,59 @@ function readCategoryMeta(dirPath: string): CategoryMeta | null {
 export function buildBreadcrumbs(
   entryId: string,
   contentDir: string,
-  pageTitle: string
-): { label: string; href?: string }[] {
+  _pageTitle: string
+): { label: string; href: string }[] {
   const rawPath = entryId.replace(/\.(md|mdx)$/, '')
   const segments = rawPath.split('/')
-  const crumbs: { label: string; href?: string }[] = []
+  const crumbs: { label: string; href: string }[] = []
 
   let currentDir = contentDir
+  const slugParts: string[] = []
+
   for (let i = 0; i < segments.length; i++) {
     const segment = segments[i]!
     const isLast = i === segments.length - 1
 
-    if (isLast) {
-      const possibleDir = path.join(currentDir, segment)
-      const isIndexPage = segment === 'index' || isDirectory(currentDir, segment)
-      if (isIndexPage) {
-        const dir = segment === 'index' ? currentDir : possibleDir
-        const meta = readCategoryMeta(dir)
-        crumbs.push({ label: meta?.label || titleFromSlug(segment) })
-      } else {
-        crumbs.push({ label: pageTitle })
-      }
-    } else {
-      currentDir = path.join(currentDir, segment)
-      const meta = readCategoryMeta(currentDir)
-      if (meta?.root) continue
-      crumbs.push({ label: meta?.label || titleFromSlug(segment) })
+    if (isLast) break
+
+    currentDir = path.join(currentDir, segment)
+    const meta = readCategoryMeta(currentDir)
+    if (meta?.root) continue
+
+    if (!meta?.strip) {
+      slugParts.push(segment)
     }
+
+    const indexHref = findContentFile(currentDir, 'index')
+      ? '/' + slugParts.join('/')
+      : findFirstPageHref(currentDir, [...slugParts])
+
+    crumbs.push({
+      label: meta?.label || titleFromSlug(segment),
+      href: indexHref ?? '/' + slugParts.join('/'),
+    })
   }
 
   return crumbs
+}
+
+function findFirstPageHref(dirPath: string, slugPrefix: string[]): string | null {
+  const meta = readCategoryMeta(dirPath)
+  const items = getOrderedItems(dirPath, meta)
+
+  for (const item of items) {
+    if (item === 'index') continue
+    if (findContentFile(dirPath, item)) {
+      return '/' + [...slugPrefix, item].join('/')
+    }
+    if (isDirectory(dirPath, item)) {
+      const subMeta = readCategoryMeta(path.join(dirPath, item))
+      const childSlug = subMeta?.strip ? slugPrefix : [...slugPrefix, item]
+      const href = findFirstPageHref(path.join(dirPath, item), childSlug)
+      if (href) return href
+    }
+  }
+  return null
 }
 
 function titleFromSlug(slug: string): string {
