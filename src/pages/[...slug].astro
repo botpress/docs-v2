@@ -1,5 +1,5 @@
 ---
-import CopyMarkdownButton from '../components/CopyMarkdownButton'
+import PageOptions from '../components/PageOptions'
 import DocsLayout from '../layouts/DocsLayout.astro'
 import { getCollection, render } from 'astro:content'
 import { toMarkdownPath } from '../lib/markdown-routes'
@@ -58,7 +58,7 @@ const breadcrumbs = buildBreadcrumbs(entry.id, contentDir, title)
             <div />
           )}
 
-          <CopyMarkdownButton client:load markdownUrl={markdownUrl} />
+          <PageOptions client:load markdownUrl={markdownUrl} />
         </div>
 
         <h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100">{title}</h1>
