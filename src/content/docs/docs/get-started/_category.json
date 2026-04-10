@@ -1,5 +1,5 @@
 {
   "label": "Get Started",
   "strip": true,
-  "pages": ["quick-start", "configure-your-workspace", "manage-your-agent"]
+  "sidebarPages": ["index", "quick-start", "configure-your-workspace", "manage-your-agent"]
 }

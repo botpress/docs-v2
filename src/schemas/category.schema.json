@@ -7,10 +7,10 @@
       "type": "string",
       "description": "Display name for this category in the sidebar"
     },
-    "pages": {
+    "sidebarPages": {
       "type": "array",
       "items": { "type": "string" },
-      "description": "Ordered list of filenames (no extension) and subfolder names. When omitted, items are auto-discovered and sorted alphabetically."
+      "description": "Ordered list of filenames (no extension) and subfolder names to display in the sidebar. When omitted, items are auto-discovered and sorted alphabetically. Pages not listed are still routable, just hidden from the sidebar."
     },
     "strip": {
       "type": "boolean",

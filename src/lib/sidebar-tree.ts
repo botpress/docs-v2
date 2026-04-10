@@ -13,7 +13,7 @@ export interface ArticleEntry {
 
 interface CategoryMeta {
   label: string
-  pages?: string[]
+  sidebarPages?: string[]
   strip?: boolean
   root?: boolean
 }
@@ -151,11 +151,11 @@ export function normalizeCollectionEntries(entries: CollectionEntry<'docs'>[], c
 }
 
 /**
- * List ordered items for a directory: uses the pages array from _category.json if present,
+ * List ordered items for a directory: uses the sidebarPages array from _category.json if present,
  * otherwise lists directory contents alphabetically (excluding _ prefixed files).
  */
 function getOrderedItems(dirPath: string, meta: CategoryMeta | null): string[] {
-  if (meta?.pages) return meta.pages
+  if (meta?.sidebarPages) return meta.sidebarPages
 
   try {
     const entries = fs.readdirSync(dirPath, { withFileTypes: true })
@@ -229,16 +229,18 @@ function buildLevel(
 
       const children = buildLevel(subDirPath, childSlugPrefix, subStrip, titleMap)
 
+      const indexExplicitlyListed = subMeta?.sidebarPages?.includes('index')
+
       let categoryHref: string | undefined
       const indexFile = findContentFile(subDirPath, 'index')
-      if (indexFile) {
+      if (indexFile && !indexExplicitlyListed) {
         const indexSlug = subStrip ? 'index' : childSlugPrefix.join('/') || 'index'
         categoryHref = indexSlug === 'index' ? '/' : `/${indexSlug}`
       }
 
-      const filteredChildren = children.filter(
-        (c) => !(c.type === 'article' && (c.href === categoryHref || c.path === 'index'))
-      )
+      const filteredChildren = indexExplicitlyListed
+        ? children
+        : children.filter((c) => !(c.type === 'article' && (c.href === categoryHref || c.path === 'index')))
 
       const categoryNode: SidebarCategoryNode = {
         type: 'category',
@@ -281,19 +283,33 @@ function findFirstHref(nodes: SidebarNode[]): string | null {
   return null
 }
 
-function collectSlugs(nodes: SidebarNode[]): string[] {
+function collectAllContentSlugs(dirPath: string, slugPrefix: string[], isStripped: boolean): string[] {
   const slugs: string[] = []
-  for (const node of nodes) {
-    if (node.type === 'article') {
-      slugs.push(node.path)
-    } else {
-      if (node.href) {
-        const catSlug = node.href.replace(/^\//, '') || 'index'
-        slugs.push(catSlug)
+  try {
+    const entries = fs.readdirSync(dirPath, { withFileTypes: true })
+    for (const entry of entries) {
+      if (entry.name.startsWith('_') || entry.name.startsWith('.')) continue
+
+      if (entry.isDirectory()) {
+        const subDirPath = path.join(dirPath, entry.name)
+        const subMeta = readCategoryMeta(subDirPath)
+        const subStrip = subMeta?.strip ?? false
+        const childSlugPrefix = subStrip ? slugPrefix : [...slugPrefix, entry.name]
+        slugs.push(...collectAllContentSlugs(subDirPath, childSlugPrefix, subStrip))
+        continue
       }
-      slugs.push(...collectSlugs(node.children))
+
+      if (!entry.name.match(/\.(md|mdx)$/)) continue
+      const name = entry.name.replace(/\.(md|mdx)$/, '')
+
+      if (name === 'index') {
+        const slug = isStripped ? 'index' : slugPrefix.join('/') || 'index'
+        slugs.push(slug)
+      } else {
+        slugs.push(isStripped ? name : [...slugPrefix, name].join('/'))
+      }
     }
-  }
+  } catch {}
   return slugs
 }
 
@@ -344,7 +360,7 @@ export function buildSidebarTree(titleMap: Map<string, string>, contentDir: stri
 
     trees[item] = tabTree
 
-    for (const slug of collectSlugs(tabTree)) {
+    for (const slug of collectAllContentSlugs(subDirPath, childSlugPrefix, subStrip)) {
       slugToTab[slug] = item
     }
   }
