@@ -72,7 +72,7 @@ export default function PageOptions({ markdownUrl }: PageOptionsProps) {
       <ButtonGroup>
         <Button
           variant="secondary"
-          size="sm"
+          size="lg"
           onClick={copyMarkdown}
           aria-label={label}
           className="active:translate-y-0!"
@@ -83,7 +83,7 @@ export default function PageOptions({ markdownUrl }: PageOptionsProps) {
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
-              <Button variant="secondary" size="icon-sm" aria-label="More actions">
+              <Button variant="secondary" size="icon-lg" aria-label="More actions">
                 <ChevronDown className="size-3" />
               </Button>
             }
