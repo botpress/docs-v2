@@ -1,82 +1,95 @@
 ---
-import PageOptions from '../components/page-options'
-import DocsLayout from '../layouts/DocsLayout.astro'
-import { getCollection, render } from 'astro:content'
-import { toMarkdownPath } from '../lib/markdown-routes'
-import { computeStrippedSlug, buildBreadcrumbs } from '../lib/sidebar-tree'
-import { ClerkTOC } from '../components/clerk-toc'
-import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator } from '../components/ui/breadcrumb'
-import path from 'node:path'
+import PageOptions from "../components/page-options";
+import DocsLayout from "../layouts/DocsLayout.astro";
+import { getCollection, render } from "astro:content";
+import { toMarkdownPath } from "../lib/markdown-routes";
+import { computeStrippedSlug, buildBreadcrumbs } from "../lib/sidebar-tree";
+import { ClerkTOC } from "../components/clerk-toc";
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+} from "../components/ui/breadcrumb";
+import path from "node:path";
 
 export async function getStaticPaths() {
-  const entries = await getCollection('docs')
-  const contentDir = path.resolve('./src/content/docs')
+  const entries = await getCollection("docs");
+  const contentDir = path.resolve("./src/content/docs");
 
-  return entries.map((entry) => {
-    const rawSlug = entry.id.replace(/\.(md|mdx)$/, '')
-    const strippedSlug = computeStrippedSlug(rawSlug, contentDir)
-    return {
-      params: { slug: strippedSlug },
-      props: { entry },
-    }
-  }).filter((p) => p.params.slug !== 'index')
+  return entries
+    .map((entry) => {
+      const rawSlug = entry.id.replace(/\.(md|mdx)$/, "");
+      const strippedSlug = computeStrippedSlug(rawSlug, contentDir);
+      return {
+        params: { slug: strippedSlug },
+        props: { entry },
+      };
+    })
+    .filter((p) => p.params.slug !== "index");
 }
 
-const { entry } = Astro.props
-const { Content, headings } = await render(entry)
-const title = entry.data.title
-const useProse = entry.data.prose !== false
-const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3)
-const markdownUrl = toMarkdownPath(Astro.url.pathname)
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const title = entry.data.title;
+const useProse = entry.data.prose !== false;
+const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+const markdownUrl = toMarkdownPath(Astro.url.pathname);
 
-const contentDir = path.resolve('./src/content/docs')
-const breadcrumbs = buildBreadcrumbs(entry.id, contentDir, title)
+const contentDir = path.resolve("./src/content/docs");
+const breadcrumbs = buildBreadcrumbs(entry.id, contentDir, title);
 ---
 
 <DocsLayout title={title} breadcrumbs={breadcrumbs}>
-  {useProse ? (
-    <div class="mx-auto flex w-full max-w-5xl gap-10 px-8 py-8 sm:px-8 sm:py-10 lg:px-16">
-      <article class="min-w-0 flex-1" data-pagefind-body>
-        <div class="mb-4 flex items-start justify-between gap-4">
-          {breadcrumbs.length > 0 ? (
-            <Breadcrumb className="hidden min-w-0 flex-1 lg:flex">
-              <BreadcrumbList>
-                {breadcrumbs.map((crumb, i) => (
-                  <>
-                    {i > 0 && <BreadcrumbSeparator />}
-                    <BreadcrumbItem className="truncate">
-                      <BreadcrumbLink href={crumb.href}>{crumb.label}</BreadcrumbLink>
-                    </BreadcrumbItem>
-                  </>
-                ))}
-              </BreadcrumbList>
-            </Breadcrumb>
-          ) : (
-            <div />
-          )}
+  {
+    useProse ? (
+      <div class="flex w-full justify-center gap-10 px-8 py-8 sm:px-8 sm:py-10 lg:px-16">
+        <article class="min-w-0 max-w-[40rem] flex-1" data-pagefind-body>
+          <div class="flex items-start justify-between gap-4">
+            {breadcrumbs.length > 0 ? (
+              <Breadcrumb className="hidden min-w-0 flex-1 lg:flex">
+                <BreadcrumbList>
+                  {breadcrumbs.map((crumb, i) => (
+                    <>
+                      {i > 0 && <BreadcrumbSeparator />}
+                      <BreadcrumbItem className="truncate">
+                        <BreadcrumbLink href={crumb.href}>
+                          {crumb.label}
+                        </BreadcrumbLink>
+                      </BreadcrumbItem>
+                    </>
+                  ))}
+                </BreadcrumbList>
+              </Breadcrumb>
+            ) : (
+              <div />
+            )}
 
-          <PageOptions client:load markdownUrl={markdownUrl} />
-        </div>
-
-        <h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100">{title}</h1>
-
-        <div class="prose prose-stone mt-6 max-w-none prose-headings:text-stone-900 prose-headings:font-semibold prose-p:text-stone-600 prose-a:text-stone-900 prose-a:underline prose-a:underline-offset-2 prose-a:decoration-stone-300 hover:prose-a:decoration-stone-500 prose-strong:text-stone-800 prose-code:rounded-md prose-code:bg-stone-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-stone-700 prose-code:before:content-none prose-code:after:content-none prose-th:text-left prose-th:text-stone-700 prose-td:text-stone-600 dark:prose-headings:text-stone-100 dark:prose-p:text-stone-300 dark:prose-a:text-stone-100 dark:prose-a:decoration-stone-600 dark:hover:prose-a:decoration-stone-400 dark:prose-strong:text-stone-200 dark:prose-code:bg-stone-800 dark:prose-code:text-stone-300 dark:prose-th:text-stone-300 dark:prose-td:text-stone-400 dark:prose-li:text-stone-300 dark:prose-hr:border-stone-800">
-          <Content />
-        </div>
-      </article>
-
-      {tocHeadings.length > 0 && (
-        <aside class="hidden w-64 shrink-0 xl:block">
-          <div class="sticky top-10">
-            <ClerkTOC client:load headings={tocHeadings} />
+            <PageOptions client:load markdownUrl={markdownUrl} />
           </div>
-        </aside>
-      )}
-    </div>
-  ) : (
-    <div data-pagefind-body>
-      <Content />
-    </div>
-  )}
 
+          <h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100">
+            {title}
+          </h1>
+
+          <div class="prose prose-stone mt-6 max-w-none prose-headings:text-stone-900 prose-headings:font-semibold prose-p:text-stone-600 prose-a:text-stone-900 prose-a:underline prose-a:underline-offset-2 prose-a:decoration-stone-300 hover:prose-a:decoration-stone-500 prose-strong:text-stone-800 prose-code:rounded-md prose-code:bg-stone-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-stone-700 prose-code:before:content-none prose-code:after:content-none prose-th:text-left prose-th:text-stone-700 prose-td:text-stone-600 dark:prose-headings:text-stone-100 dark:prose-p:text-stone-300 dark:prose-a:text-stone-100 dark:prose-a:decoration-stone-600 dark:hover:prose-a:decoration-stone-400 dark:prose-strong:text-stone-200 dark:prose-code:bg-stone-800 dark:prose-code:text-stone-300 dark:prose-th:text-stone-300 dark:prose-td:text-stone-400 dark:prose-li:text-stone-300 dark:prose-hr:border-stone-800">
+            <Content />
+          </div>
+        </article>
+
+        <aside class="hidden w-64 shrink-0 xl:block">
+          {tocHeadings.length > 0 && (
+            <div class="sticky top-10">
+              <ClerkTOC client:load headings={tocHeadings} />
+            </div>
+          )}
+        </aside>
+      </div>
+    ) : (
+      <div data-pagefind-body>
+        <Content />
+      </div>
+    )
+  }
 </DocsLayout>
