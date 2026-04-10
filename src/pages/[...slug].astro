@@ -1,9 +1,17 @@
 ---
 import PageOptions from "../components/page-options";
+import PageNavigation from "../components/page-navigation";
 import DocsLayout from "../layouts/DocsLayout.astro";
 import { getCollection, render } from "astro:content";
 import { toMarkdownPath } from "../lib/markdown-routes";
-import { computeStrippedSlug, buildBreadcrumbs } from "../lib/sidebar-tree";
+import {
+  computeStrippedSlug,
+  buildBreadcrumbs,
+  normalizeCollectionEntries,
+  buildSidebarTree,
+  getActiveTab,
+  getAdjacentPages,
+} from "../lib/sidebar-tree";
 import { ClerkTOC } from "../components/clerk-toc";
 import {
   Breadcrumb,
@@ -39,6 +47,21 @@ const markdownUrl = toMarkdownPath(Astro.url.pathname);
 
 const contentDir = path.resolve("./src/content/docs");
 const breadcrumbs = buildBreadcrumbs(entry.id, contentDir, title);
+
+const entries = await getCollection("docs");
+const articles = normalizeCollectionEntries(entries, contentDir);
+const titleMap = new Map<string, string>();
+for (const a of articles) {
+  titleMap.set(a.slug, a.title);
+}
+const treeResult = buildSidebarTree(titleMap, contentDir);
+const currentPath = Astro.url.pathname;
+const hasTabs = treeResult.tabs.length > 0;
+const activeTab = hasTabs ? getActiveTab(currentPath, treeResult.slugToTab) : null;
+const sidebarTree = hasTabs && activeTab
+  ? (treeResult.trees[activeTab] ?? treeResult.defaultTree)
+  : treeResult.defaultTree;
+const { prev, next } = getAdjacentPages(sidebarTree, currentPath);
 ---
 
 <DocsLayout title={title} breadcrumbs={breadcrumbs}>
@@ -75,6 +98,10 @@ const breadcrumbs = buildBreadcrumbs(entry.id, contentDir, title);
 
           <div class="prose prose-stone mt-6 max-w-none prose-headings:text-stone-900 prose-headings:font-semibold prose-p:text-stone-600 prose-a:text-stone-900 prose-a:underline prose-a:underline-offset-2 prose-a:decoration-stone-300 hover:prose-a:decoration-stone-500 prose-strong:text-stone-800 prose-code:rounded-md prose-code:bg-stone-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-stone-700 prose-code:before:content-none prose-code:after:content-none prose-th:text-left prose-th:text-stone-700 prose-td:text-stone-600 dark:prose-headings:text-stone-100 dark:prose-p:text-stone-300 dark:prose-a:text-stone-100 dark:prose-a:decoration-stone-600 dark:hover:prose-a:decoration-stone-400 dark:prose-strong:text-stone-200 dark:prose-code:bg-stone-800 dark:prose-code:text-stone-300 dark:prose-th:text-stone-300 dark:prose-td:text-stone-400 dark:prose-li:text-stone-300 dark:prose-hr:border-stone-800">
             <Content />
+          </div>
+
+          <div class="not-prose">
+            <PageNavigation prev={prev} next={next} />
           </div>
         </article>
 
