@@ -78,7 +78,7 @@ const breadcrumbs = buildBreadcrumbs(entry.id, contentDir, title);
           </div>
         </article>
 
-        <aside class="hidden w-64 shrink-0 xl:block">
+        <aside class="hidden w-64 shrink-0 xl:block pl-10 ">
           {tocHeadings.length > 0 && (
             <div class="sticky top-10">
               <ClerkTOC client:load headings={tocHeadings} />
