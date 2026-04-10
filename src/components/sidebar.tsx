@@ -1,11 +1,12 @@
 import type { SidebarNode } from '../lib/sidebar-types'
 import SidebarTreeView from './sidebar-tree-view'
 import ThemeToggle from './theme-toggle'
+import { LUCIDE_NAV_ICONS } from '../lib/nav-icons'
 
 interface NavItem {
   label: string
   href: string
-  icon: 'home'
+  icon?: string
 }
 
 interface SidebarProps {
@@ -19,6 +20,19 @@ function isActive(currentPath: string, href: string): boolean {
   const normHref = href.endsWith('/') ? href.slice(0, -1) : href
   if (normHref === '' || normHref === '/') return norm === '' || norm === '/'
   return norm === normHref
+}
+
+function NavIcon({ icon }: { icon: string }) {
+  if (icon.startsWith('lucide:')) {
+    const Icon = LUCIDE_NAV_ICONS[icon.slice(7)]
+    return Icon ? <Icon className="h-4 w-4 shrink-0" /> : null
+  }
+  return (
+    <span
+      className="inline-flex h-4 w-4 shrink-0 items-center [&>svg]:h-full [&>svg]:w-full"
+      dangerouslySetInnerHTML={{ __html: icon }}
+    />
+  )
 }
 
 export default function Sidebar({ currentPath, navItems, tree }: SidebarProps) {
@@ -49,32 +63,19 @@ export default function Sidebar({ currentPath, navItems, tree }: SidebarProps) {
         </button>
       </div>
 
-      <nav className="px-3">
+      <nav className="px-3 mt-7">
         <ul className="space-y-0.5">
           {navItems.map((item) => (
             <li key={item.href}>
               <a
                 href={item.href}
-                className={`flex items-center gap-2 rounded-md pl-4 pr-2 py-1.5 text-sm transition-colors ${
+                className={`flex items-center gap-2 rounded-md px-2 mb-3 text-sm transition-colors ${
                   isActive(currentPath, item.href)
-                    ? 'text-primary bg-primary/10 dark:bg-primary/15 font-medium'
-                    : 'text-stone-600 hover:bg-black/5 dark:text-stone-400 dark:hover:bg-white/5'
+                    ? 'text-stone-900 dark:text-stone-100 font-medium'
+                    : 'text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100'
                 }`}
               >
-                {item.label === 'Home' && (
-                  <svg
-                    className="h-4 w-4"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
-                    <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                  </svg>
-                )}
+                {item.icon && <NavIcon icon={item.icon} />}
                 {item.label}
               </a>
             </li>

@@ -12,7 +12,6 @@ import {
 } from "../lib/sidebar-tree";
 import { siteConfig } from "../lib/site-config";
 import path from "node:path";
-
 interface Props {
   title: string;
   breadcrumbs?: { label: string; href?: string }[];
@@ -40,7 +39,18 @@ const sidebarTree =
     ? (result.trees[activeTab] ?? result.defaultTree)
     : result.defaultTree;
 
-const navItems: { label: string; href: string; icon: "home" }[] = [];
+const navItems: { label: string; href: string; icon?: string }[] = [
+  {
+    label: "Community Discord",
+    href: "https://discord.com/invite/botpress",
+    icon: `<svg class="h-4 w-4 bg-current" style="mask-image: url('https://d3gk2c5xim1je2.cloudfront.net/v7.1.0/brands/discord.svg'); mask-repeat: no-repeat; mask-position: center center;"></svg>`,
+  },
+  {
+    label: "News & Resources",
+    href: "https://botpress.com/blog",
+    icon: "lucide:newspaper",
+  },
+];
 ---
 
 <BaseLayout title={siteConfig.name ? `${title} – ${siteConfig.name}` : title}>
