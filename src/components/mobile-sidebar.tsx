@@ -3,6 +3,15 @@ import type { SidebarNode, TabInfo } from '../lib/sidebar-types'
 import { isPathActive } from '../lib/sidebar-types'
 import SidebarTreeView from './sidebar-tree-view'
 import ThemeToggle from './theme-toggle'
+import { ChevronDownIcon } from 'lucide-react'
+import { navigate } from 'astro:transitions/client'
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+} from './ui/dropdown-menu'
 
 interface NavItem {
   label: string
@@ -62,7 +71,6 @@ export default function MobileSidebar({
   const [open, setOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [selectedTab, setSelectedTab] = useState<string | null>(activeTab)
-  const [dropdownOpen, setDropdownOpen] = useState(false)
 
   const currentTree = useMemo(() => {
     if (!hasTabs || !allTrees || !selectedTab) return tree
@@ -140,7 +148,7 @@ export default function MobileSidebar({
           </button>
         </div>
 
-        <div className="flex items-center gap-1 px-[calc(var(--spacing)*4)] py-2">
+        <div className="flex items-center gap-1 px-[calc(var(--spacing)*4)] py-4">
           <button
             onClick={handleOpen}
             className="flex h-5 w-5 mr-4 shrink-0 items-center justify-center text-stone-600 dark:text-stone-400"
@@ -205,7 +213,7 @@ export default function MobileSidebar({
 
           <button
             onClick={handleClose}
-            className="absolute top-3 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white text-stone-500 shadow-md transition-colors hover:text-stone-700 dark:bg-stone-800 dark:text-stone-400 dark:hover:text-stone-200"
+            className="absolute top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white text-stone-500 shadow-md transition-colors hover:text-stone-700 dark:bg-stone-800 dark:text-stone-400 dark:hover:text-stone-200"
             style={{
               right: '1rem',
               opacity: open ? 1 : 0,
@@ -251,75 +259,60 @@ export default function MobileSidebar({
             </div>
 
             {hasTabs && (
-              <div className="relative px-4 pb-3">
-                <button
-                  type="button"
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className="flex w-full items-center justify-between rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm font-medium text-stone-700 transition-colors hover:border-stone-300 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200 dark:hover:border-stone-600"
-                >
-                  <span>{selectedTabLabel ?? 'Select section'}</span>
-                  <svg
-                    className={`h-4 w-4 text-stone-400 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="m6 9 6 6 6-6" />
-                  </svg>
-                </button>
-
-                {dropdownOpen && (
-                  <div className="absolute left-4 right-4 top-full z-20 mt-1 overflow-hidden rounded-lg border border-stone-200 bg-white shadow-lg dark:border-stone-700 dark:bg-stone-900">
-                    {tabs.map((tab) => (
-                      <button
-                        key={tab.slug}
-                        type="button"
-                        onClick={() => {
-                          setSelectedTab(tab.slug)
-                          setDropdownOpen(false)
-                        }}
-                        className={`flex w-full items-center px-3 py-2 text-left text-sm transition-colors ${
-                          tab.slug === selectedTab
-                            ? 'bg-stone-100 font-medium text-stone-900 dark:bg-stone-800 dark:text-stone-100'
-                            : 'text-stone-600 hover:bg-stone-50 dark:text-stone-400 dark:hover:bg-stone-800/50'
-                        }`}
-                      >
-                        {tab.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
+              <div className="px-4">
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="flex w-full items-center justify-between rounded-lg border border-stone-200 bg-white px-3 py-2 text-base font-medium text-stone-700 transition-colors hover:border-stone-300 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200 dark:hover:border-stone-600">
+                    <span>{selectedTabLabel ?? 'Select section'}</span>
+                    <ChevronDownIcon className="h-4 w-4 text-stone-400" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" sideOffset={4}>
+                    <DropdownMenuRadioGroup
+                      value={selectedTab ?? ''}
+                      onValueChange={(val) => {
+                        setSelectedTab(val)
+                        const tab = tabs.find((t) => t.slug === val)
+                        if (tab) navigate(tab.href)
+                      }}
+                    >
+                      {tabs.map((tab) => (
+                        <DropdownMenuRadioItem
+                          key={tab.slug}
+                          value={tab.slug}
+                          className="px-2 py-2 font-medium data-[checked]:text-primary"
+                        >
+                          {tab.label}
+                        </DropdownMenuRadioItem>
+                      ))}
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             )}
 
-            <div className="px-3 pt-3 py-1">
-              <ul className="space-y-0.5">
-                {navItems.map((item) => (
-                  <li key={item.href}>
-                    <a
-                      href={item.href}
-                      className={`flex items-center gap-2 rounded-md pl-4 pr-2 py-1.5 text-base transition-colors ${
-                        isPathActive(item.href, currentPath)
-                          ? 'text-primary bg-primary/10 dark:bg-primary/15 font-medium'
-                          : 'text-stone-600 hover:bg-black/5 dark:text-stone-400 dark:hover:bg-white/5'
-                      }`}
-                    >
-                      {ICONS[item.icon]}
-                      {item.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="relative flex-1 overflow-hidden">
-              <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-8 bg-gradient-to-b from-stone-50 from-30% to-transparent dark:from-stone-950" />
-              <div className="h-full overflow-y-auto px-3 pb-4">
-                <SidebarTreeView nodes={currentTree} currentPath={currentPath} textSize="base" />
+            {navItems.length > 0 && (
+              <div className="px-3 pt-3 py-1">
+                <ul className="space-y-0.5">
+                  {navItems.map((item) => (
+                    <li key={item.href}>
+                      <a
+                        href={item.href}
+                        className={`flex items-center gap-2 rounded-md pl-4 pr-2 py-1.5 text-base transition-colors ${
+                          isPathActive(item.href, currentPath)
+                            ? 'text-primary bg-primary/10 dark:bg-primary/15 font-medium'
+                            : 'text-stone-600 hover:bg-black/5 dark:text-stone-400 dark:hover:bg-white/5'
+                        }`}
+                      >
+                        {ICONS[item.icon]}
+                        {item.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
               </div>
+            )}
+
+            <div className="min-h-0 flex-1 overflow-y-auto px-3 py-4 mask-[linear-gradient(to_bottom,transparent,white_20px,white_calc(100%-12px),transparent)]">
+              <SidebarTreeView nodes={currentTree} currentPath={currentPath} textSize="base" />
             </div>
           </nav>
         </div>

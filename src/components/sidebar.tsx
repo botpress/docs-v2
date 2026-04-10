@@ -82,11 +82,11 @@ export default function Sidebar({ currentPath, navItems, tree }: SidebarProps) {
         </ul>
       </nav>
 
-      <div className="relative flex-1 overflow-hidden">
-        <div className="pointer-events-none absolute top-0 left-0 z-10 h-8 w-[calc(100%-8px)] bg-gradient-to-b from-stone-100 from-30% to-transparent dark:from-stone-950" />
-        <div className="h-full overflow-y-auto px-3 pt-6 pb-4" style={{ scrollbarGutter: 'stable' }}>
-          <SidebarTreeView nodes={tree} currentPath={currentPath} />
-        </div>
+      <div
+        className="min-h-0 flex-1 overflow-y-auto px-3 py-4 mask-[linear-gradient(to_bottom,transparent,white_20px,white_calc(100%-12px),transparent)]"
+        style={{ scrollbarGutter: 'stable' }}
+      >
+        <SidebarTreeView nodes={tree} currentPath={currentPath} />
       </div>
 
       <div className="border-t border-stone-200 px-4 py-3 dark:border-stone-800">
