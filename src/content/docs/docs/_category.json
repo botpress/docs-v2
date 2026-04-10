@@ -2,5 +2,5 @@
   "label": "Docs",
   "root": true,
   "strip": true,
-  "pages": ["get-started"]
+  "sidebarPages": ["get-started"]
 }

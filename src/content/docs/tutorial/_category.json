@@ -1,5 +1,5 @@
 {
   "label": "Tutorial",
   "root": true,
-  "pages": ["index"]
+  "sidebarPages": ["index"]
 }
