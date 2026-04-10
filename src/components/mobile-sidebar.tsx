@@ -4,6 +4,7 @@ import { isPathActive } from '../lib/sidebar-types'
 import SidebarTreeView from './sidebar-tree-view'
 import ThemeToggle from './theme-toggle'
 import { ChevronDownIcon } from 'lucide-react'
+import { LUCIDE_NAV_ICONS } from '../lib/nav-icons'
 import { navigate } from 'astro:transitions/client'
 import {
   DropdownMenu,
@@ -16,7 +17,7 @@ import {
 interface NavItem {
   label: string
   href: string
-  icon: 'home'
+  icon?: string
 }
 
 interface Breadcrumb {
@@ -37,21 +38,17 @@ interface Props {
   allTrees?: Record<string, SidebarNode[]>
 }
 
-const ICONS: Record<NavItem['icon'], React.ReactNode> = {
-  home: (
-    <svg
-      className="h-4 w-4"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
-      <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-    </svg>
-  ),
+function NavIcon({ icon }: { icon: string }) {
+  if (icon.startsWith('lucide:')) {
+    const Icon = LUCIDE_NAV_ICONS[icon.slice(7)]
+    return Icon ? <Icon className="h-4 w-4 shrink-0" /> : null
+  }
+  return (
+    <span
+      className="inline-flex h-4 w-4 shrink-0 items-center [&>svg]:h-full [&>svg]:w-full"
+      dangerouslySetInnerHTML={{ __html: icon }}
+    />
+  )
 }
 
 export default function MobileSidebar({
@@ -229,13 +226,13 @@ export default function MobileSidebar({
           </button>
 
           <nav
-            className="absolute inset-y-0 left-0 flex w-[85dvw] min-w-[19rem] max-w-[22rem] flex-col bg-stone-50 transition-transform ease-out dark:bg-stone-950"
+            className="absolute inset-y-0 left-0 flex w-[85dvw] min-w-[19rem] max-w-[22rem] px-2 flex-col bg-stone-50 transition-transform ease-out dark:bg-stone-950"
             style={{
               transform: open ? 'translateX(0)' : 'translateX(-100%)',
               transitionDuration: open ? '200ms' : '150ms',
             }}
           >
-            <div className="flex h-16 items-center justify-between px-4 pl-[1.75rem]">
+            <div className="flex items-center justify-between px-3 py-6">
               <div className="flex items-center">
                 <img
                   src={siteLogo ?? siteLogoDark ?? undefined}
@@ -259,7 +256,7 @@ export default function MobileSidebar({
             </div>
 
             {hasTabs && (
-              <div className="px-4">
+              <div className="px-3">
                 <DropdownMenu>
                   <DropdownMenuTrigger className="flex w-full items-center justify-between rounded-lg border border-stone-200 bg-white px-3 py-2 text-base font-medium text-stone-700 transition-colors hover:border-stone-300 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200 dark:hover:border-stone-600">
                     <span>{selectedTabLabel ?? 'Select section'}</span>
@@ -290,19 +287,19 @@ export default function MobileSidebar({
             )}
 
             {navItems.length > 0 && (
-              <div className="px-3 pt-3 py-1">
+              <div className="px-3 mt-7">
                 <ul className="space-y-0.5">
                   {navItems.map((item) => (
                     <li key={item.href}>
                       <a
                         href={item.href}
-                        className={`flex items-center gap-2 rounded-md pl-4 pr-2 py-1.5 text-base transition-colors ${
+                        className={`flex items-center gap-2 rounded-md px-2 mb-4   text-base transition-colors ${
                           isPathActive(item.href, currentPath)
                             ? 'text-primary bg-primary/10 dark:bg-primary/15 font-medium'
                             : 'text-stone-600 hover:bg-black/5 dark:text-stone-400 dark:hover:bg-white/5'
                         }`}
                       >
-                        {ICONS[item.icon]}
+                        {item.icon && <NavIcon icon={item.icon} />}
                         {item.label}
                       </a>
                     </li>
