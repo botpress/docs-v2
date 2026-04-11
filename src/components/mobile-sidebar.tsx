@@ -293,7 +293,7 @@ export default function MobileSidebar({
                     <li key={item.href}>
                       <a
                         href={item.href}
-                        className={`flex items-center gap-2 rounded-md px-2 mb-4   text-base transition-colors ${
+                        className={`flex items-center gap-2 rounded-md px-2 mb-4 text-base transition-colors ${
                           isPathActive(item.href, currentPath)
                             ? 'text-primary bg-primary/10 dark:bg-primary/15 font-medium'
                             : 'text-stone-600 hover:bg-black/5 dark:text-stone-400 dark:hover:bg-white/5'

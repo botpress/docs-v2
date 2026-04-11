@@ -38,7 +38,7 @@ function NavIcon({ icon }: { icon: string }) {
 export default function Sidebar({ currentPath, navItems, tree }: SidebarProps) {
   return (
     <aside className="flex h-full w-[268px] shrink-0 flex-col bg-stone-100 dark:bg-stone-950">
-      <div className="px-3 pt-2">
+      <div className="px-5 pt-2">
         <button
           type="button"
           className="relative flex h-9 w-full cursor-pointer items-center rounded-lg border border-stone-200 bg-white pl-9 pr-3 text-sm text-stone-500 shadow-none transition-[color,box-shadow] hover:border-stone-300 dark:border-stone-800 dark:bg-white/5 dark:text-stone-400 dark:hover:border-stone-700"
@@ -63,13 +63,14 @@ export default function Sidebar({ currentPath, navItems, tree }: SidebarProps) {
         </button>
       </div>
 
-      <nav className="px-3 mt-7">
+      <nav className="px-4 mt-7">
         <ul className="space-y-0.5">
           {navItems.map((item) => (
             <li key={item.href}>
               <a
+                target="_blank"
                 href={item.href}
-                className={`flex items-center gap-2 rounded-md px-2 mb-3 text-sm transition-colors ${
+                className={`flex items-center gap-2 rounded-md px-2 mb-4 text-sm transition-colors ${
                   isActive(currentPath, item.href)
                     ? 'text-stone-900 dark:text-stone-100 font-medium'
                     : 'text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100'
@@ -84,7 +85,7 @@ export default function Sidebar({ currentPath, navItems, tree }: SidebarProps) {
       </nav>
 
       <div
-        className="min-h-0 flex-1 overflow-y-auto px-3 py-4 mask-[linear-gradient(to_bottom,transparent,white_20px,white_calc(100%-12px),transparent)]"
+        className="min-h-0 flex-1 overflow-y-auto pl-4 pr-2 py-4 mask-[linear-gradient(to_bottom,transparent,white_20px,white_calc(100%-12px),transparent)]"
         style={{ scrollbarGutter: 'stable' }}
       >
         <SidebarTreeView nodes={tree} currentPath={currentPath} />

@@ -11,7 +11,7 @@ export default function HomePage() {
     <div className="w-full overflow-y-auto">
       <div className="mx-auto flex max-w-[68rem] flex-col flex-wrap gap-8 px-8 md:flex-row lg:px-16 mb-8 lg:mb-0">
         <div className="relative z-10 max-w-3xl pt-8 lg:pt-16 lg:pb-12">
-          <h1 className="block text-3xl font-medium tracking-tight text-stone-900 md:text-4xl dark:text-stone-50">
+          <h1 className="block font-heading text-3xl font-medium tracking-tight text-stone-900 md:text-4xl dark:text-stone-50">
             Documentation
           </h1>
           <div className="mx-auto mt-4 mb-8 text-md text-stone-500 md:text-lg dark:text-stone-400">
