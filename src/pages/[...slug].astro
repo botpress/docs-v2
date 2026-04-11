@@ -70,7 +70,7 @@ const { prev, next } = getAdjacentPages(sidebarTree, currentPath);
 <DocsLayout title={title} breadcrumbs={breadcrumbs}>
   {
     useProse ? (
-      <div class="flex w-full justify-center gap-10 px-8 py-8 sm:px-8 sm:py-10 lg:px-16">
+      <div class="flex w-full justify-center gap-10 px-8 pt-10 pb-8 sm:px-8 sm:pt-12 sm:pb-10 lg:px-16">
         <article class="min-w-0 max-w-[40rem] flex-1" data-pagefind-body>
           <div class="hidden items-start justify-between gap-4 lg:flex">
             {breadcrumbs.length > 0 ? (
@@ -95,7 +95,7 @@ const { prev, next } = getAdjacentPages(sidebarTree, currentPath);
             <PageOptions client:load markdownUrl={markdownUrl} />
           </div>
 
-          <h1 class="text-2xl font-semibold text-stone-900 lg:text-3xl dark:text-stone-100">
+          <h1 class="font-heading text-2xl font-semibold text-stone-900 lg:text-3xl dark:text-stone-100">
             {title}
           </h1>
 
