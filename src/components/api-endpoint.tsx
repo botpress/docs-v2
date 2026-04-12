@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import CodeExamples from './api/code-examples'
 import ResponseExamples from './api/response-examples'
 import ApiPlayground, { generateDefaultBody, DEFAULT_BASE_URL } from './api/playground'
@@ -42,21 +43,19 @@ function ParameterSection({ parameters, location }: { parameters: Parameter[]; l
     <div>
       <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">{labels[location] || location}</h2>
       <Separator className="my-3" />
-      <div className="rounded-lg border border-stone-200 px-4 dark:border-stone-700">
-        {filtered.map((param) => {
-          const schema = param.schema || { type: 'string' }
-          return (
-            <SchemaExplorer
-              key={param.name}
-              schema={{
-                type: 'object',
-                properties: { [param.name]: { ...schema, description: param.description } },
-                required: param.required ? [param.name] : [],
-              }}
-            />
-          )
-        })}
-      </div>
+      {filtered.map((param) => {
+        const schema = param.schema || { type: 'string' }
+        return (
+          <SchemaExplorer
+            key={param.name}
+            schema={{
+              type: 'object',
+              properties: { [param.name]: { ...schema, description: param.description } },
+              required: param.required ? [param.name] : [],
+            }}
+          />
+        )
+      })}
     </div>
   )
 }
@@ -78,68 +77,63 @@ function RequestBodySection({ body }: { body: NonNullable<Endpoint['requestBody'
       </div>
       <Separator className="my-3" />
       {body.description && <p className="mb-3 text-sm text-stone-600 dark:text-stone-400">{body.description}</p>}
-      <div className="rounded-lg border border-stone-200 px-4 dark:border-stone-700">
-        <SchemaExplorer schema={schema} required={schema.required} />
-      </div>
+      <SchemaExplorer schema={schema} required={schema.required} />
     </div>
   )
 }
 
 function ResponseSection({ responses }: { responses: NonNullable<Endpoint['responses']> }) {
-  return (
-    <div>
-      <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">Responses</h2>
-      <Separator className="my-3" />
-      <div className="space-y-3">
-        {Object.entries(responses).map(([status, resp]) => (
-          <ResponseStatusSection key={status} status={status} resp={resp} />
-        ))}
-      </div>
-    </div>
-  )
-}
+  const statuses = Object.keys(responses)
+  const defaultStatus = statuses.find((s) => s.startsWith('2')) || statuses[0] || ''
+  const [activeStatus, setActiveStatus] = useState(defaultStatus)
+  const resp = responses[activeStatus]
 
-function ResponseStatusSection({
-  status,
-  resp,
-}: {
-  status: string
-  resp: { description?: string; content?: Record<string, { schema?: import('./api/types').Schema }> }
-}) {
-  const contentTypes = Object.keys(resp.content || {})
+  const contentTypes = Object.keys(resp?.content || {})
   const [activeType, setActiveType] = useState(
     contentTypes.includes('application/json') ? 'application/json' : contentTypes[0] || ''
   )
-  const schema = resp.content?.[activeType]?.schema
-  const isSuccess = status.startsWith('2')
+  const schema = resp?.content?.[activeType]?.schema
+
+  const handleStatusChange = (status: string) => {
+    setActiveStatus(status)
+    const newResp = responses[status]
+    const newContentTypes = Object.keys(newResp?.content || {})
+    setActiveType(newContentTypes.includes('application/json') ? 'application/json' : newContentTypes[0] || '')
+  }
 
   return (
-    <details className="group rounded-lg border border-stone-200 dark:border-stone-700" open={isSuccess}>
-      <summary className="flex cursor-pointer items-center gap-2 px-4 py-3 text-sm font-medium text-stone-900 dark:text-stone-100">
-        <span
-          className={`inline-flex h-5 min-w-[2.5rem] items-center justify-center rounded text-xs font-bold ${
-            isSuccess
-              ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300'
-              : status === 'default' || status.startsWith('4') || status.startsWith('5')
-                ? 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300'
-                : 'bg-stone-100 text-stone-700 dark:bg-stone-800 dark:text-stone-300'
-          }`}
-        >
-          {status}
-        </span>
-        {resp.description && <span className="text-stone-600 dark:text-stone-400">{resp.description}</span>}
-        {contentTypes.length > 1 && (
-          <span className="ml-auto" onClick={(e) => e.stopPropagation()}>
-            <ContentTypeSwitcher types={contentTypes} value={activeType} onChange={setActiveType} />
-          </span>
+    <div>
+      <div className="flex items-center gap-3">
+        <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">Response</h2>
+        {statuses.length > 1 ? (
+          <Select
+            value={activeStatus}
+            onValueChange={(v) => {
+              if (v) handleStatusChange(v)
+            }}
+          >
+            <SelectTrigger size="sm" className="h-7 text-xs">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent align="start" alignItemWithTrigger={false} className="p-1">
+              {statuses.map((s) => (
+                <SelectItem key={s} value={s} className="px-1.5 py-1 pr-1.5">
+                  {s}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        ) : (
+          <code className="text-sm font-medium text-stone-600 dark:text-stone-400">{activeStatus}</code>
         )}
-      </summary>
-      {schema && (
-        <div className="border-t border-stone-200 px-4 dark:border-stone-700">
-          <SchemaExplorer schema={schema} required={schema.required} />
-        </div>
-      )}
-    </details>
+        {contentTypes.length > 1 && (
+          <ContentTypeSwitcher types={contentTypes} value={activeType} onChange={setActiveType} />
+        )}
+      </div>
+      <Separator className="my-3" />
+      {resp?.description && <p className="mb-3 text-sm text-stone-600 dark:text-stone-400">{resp.description}</p>}
+      {schema && <SchemaExplorer schema={schema} required={schema.required} />}
+    </div>
   )
 }
 
@@ -199,9 +193,9 @@ export default function APIEndpoint({ endpoint }: { endpoint: Endpoint }) {
             {endpoint.description && <p className="mt-4 text-stone-600 dark:text-stone-400">{endpoint.description}</p>}
           </div>
 
-          <AuthRequirements security={endpoint.security} securitySchemes={endpoint.securitySchemes} />
-
           <ApiPlayground endpoint={endpoint} state={requestState} onStateChange={handleStateChange} />
+
+          <AuthRequirements security={endpoint.security} securitySchemes={endpoint.securitySchemes} />
 
           {endpoint.parameters &&
             paramLocations.map((loc) => (

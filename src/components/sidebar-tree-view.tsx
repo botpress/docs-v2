@@ -13,7 +13,7 @@ const SIDEBAR_METHOD_COLORS: Record<string, string> = {
 function SidebarMethodBadge({ method }: { method: string }) {
   return (
     <span
-      className={`ml-auto shrink-0 rounded px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase leading-none ${SIDEBAR_METHOD_COLORS[method] || 'bg-stone-100 text-stone-700'}`}
+      className={`ml-auto shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none ${SIDEBAR_METHOD_COLORS[method] || 'bg-stone-100 text-stone-700'}`}
     >
       {method}
     </span>
