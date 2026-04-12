@@ -1,28 +1,53 @@
-import { useState } from 'react'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import { ChevronRight } from 'lucide-react'
-import PropertyRow from './property-row'
+import { Field } from '@/components/field'
+import { Expandable } from './expandable'
 import type { Schema } from './types'
 
 interface SchemaExplorerProps {
   schema: Schema
   required?: string[]
   depth?: number
+  parentPath?: string
 }
 
 const MAX_DEPTH = 6
+
+function schemaTypeLabel(schema: Schema): string {
+  if (schema.enum) return `enum<${schema.type || 'string'}>`
+  if (schema.oneOf || schema.anyOf) {
+    const variants = schema.oneOf || schema.anyOf || []
+    const labels = variants.map(schemaTypeLabel)
+    const unique = [...new Set(labels)]
+    return unique.join(' | ')
+  }
+  if (schema.type === 'array' && schema.items) return `${schemaTypeLabel(schema.items)}[]`
+  if (schema.nullable && schema.type) return `${schema.type} | null`
+  return schema.format || schema.type || 'any'
+}
+
+function constraintSuffix(schema: Schema): string[] {
+  const tags: string[] = []
+  if (schema.format) tags.push(schema.format)
+  if (schema.pattern) tags.push(`pattern: ${schema.pattern}`)
+  if (schema.minLength !== undefined) tags.push(`min length: ${schema.minLength}`)
+  if (schema.maxLength !== undefined) tags.push(`max length: ${schema.maxLength}`)
+  if (schema.minimum !== undefined) tags.push(`>= ${schema.minimum}`)
+  if (schema.maximum !== undefined) tags.push(`<= ${schema.maximum}`)
+  return tags
+}
 
 function SchemaNode({
   name,
   schema,
   isRequired,
   depth,
+  parentPath,
 }: {
   name: string
   schema: Schema
   isRequired: boolean
   depth: number
+  parentPath?: string
 }) {
   const hasNestedObject = schema.type === 'object' && schema.properties
   const hasArrayObject = schema.type === 'array' && schema.items?.type === 'object' && schema.items?.properties
@@ -31,94 +56,126 @@ function SchemaNode({
   const hasUnion = schema.oneOf || schema.anyOf
   const isExpandable = hasNestedObject || hasArrayObject || hasAdditionalProps || hasUnion
 
+  const typeLabel = schemaTypeLabel(schema)
+  const constraints = constraintSuffix(schema)
+
+  const description = (
+    <>
+      {schema.description}
+      {constraints.length > 0 && <span className="ml-1 text-xs text-stone-400">({constraints.join(', ')})</span>}
+      {schema.enum && (
+        <div className="mt-2 flex flex-wrap gap-1">
+          Available options:
+          {schema.enum.map((v, i) => (
+            <span key={v}>
+              <code className="rounded bg-stone-100 px-1.5 py-0.5 text-xs text-stone-600 dark:bg-stone-800 dark:text-stone-400">
+                "{v}"
+              </code>
+              {i < schema.enum!.length - 1 && ','}
+            </span>
+          ))}
+        </div>
+      )}
+    </>
+  )
+
+  const hasDescription = schema.description || constraints.length > 0 || schema.enum
+
+  const fullPath = parentPath ? `${parentPath}.${name}` : name
+
   if (!isExpandable) {
-    return <PropertyRow name={name} schema={schema} required={isRequired} />
+    return (
+      <Field
+        name={name}
+        type={typeLabel}
+        required={isRequired}
+        deprecated={schema.deprecated}
+        default={schema.default}
+        parentPath={parentPath}
+      >
+        {hasDescription ? description : undefined}
+      </Field>
+    )
   }
 
-  return <ExpandableProperty name={name} schema={schema} isRequired={isRequired} depth={depth} />
-}
-
-function ExpandableProperty({
-  name,
-  schema,
-  isRequired,
-  depth,
-}: {
-  name: string
-  schema: Schema
-  isRequired: boolean
-  depth: number
-}) {
-  const [open, setOpen] = useState(depth === 0)
-
-  const hasUnion = schema.oneOf || schema.anyOf
-  const hasNestedObject = schema.type === 'object' && schema.properties
-  const hasArrayObject = schema.type === 'array' && schema.items?.type === 'object' && schema.items?.properties
-  const hasAdditionalProps =
-    schema.type === 'object' && schema.additionalProperties && typeof schema.additionalProperties === 'object'
-
   return (
-    <Collapsible open={open} onOpenChange={setOpen}>
-      <div className="border-b border-stone-100 py-3 last:border-b-0 dark:border-stone-800/50">
-        <CollapsibleTrigger className="flex w-full cursor-pointer items-start gap-1 text-left">
-          <ChevronRight
-            className={`mt-0.5 h-4 w-4 shrink-0 text-stone-400 transition-transform duration-150 ${open ? 'rotate-90' : ''}`}
+    <Field
+      name={name}
+      type={typeLabel}
+      required={isRequired}
+      deprecated={schema.deprecated}
+      default={schema.default}
+      parentPath={parentPath}
+    >
+      {hasDescription ? description : undefined}
+      {hasUnion && <UnionSchema schema={schema} depth={depth} parentPath={fullPath} />}
+      {hasNestedObject && !hasUnion && (
+        <Expandable title={`${name} properties`}>
+          <SchemaExplorer schema={schema} required={schema.required} depth={depth + 1} parentPath={fullPath} />
+        </Expandable>
+      )}
+      {hasArrayObject && !hasUnion && (
+        <Expandable title={`${name} item properties`}>
+          <SchemaExplorer
+            schema={schema.items!}
+            required={schema.items!.required}
+            depth={depth + 1}
+            parentPath={fullPath}
           />
-          <div className="min-w-0 flex-1">
-            <PropertyRow name={name} schema={schema} required={isRequired} />
-          </div>
-        </CollapsibleTrigger>
-
-        <CollapsibleContent className="ml-5">
-          {hasUnion && <UnionSchema schema={schema} depth={depth} />}
-          {hasNestedObject && !hasUnion && (
-            <SchemaExplorer schema={schema} required={schema.required} depth={depth + 1} />
-          )}
-          {hasArrayObject && !hasUnion && (
-            <div className="mt-1 border-l-2 border-stone-200 pl-4 dark:border-stone-700">
-              <p className="py-2 text-xs font-medium text-stone-500 dark:text-stone-400">Array items:</p>
-              <SchemaExplorer schema={schema.items!} required={schema.items!.required} depth={depth + 1} />
-            </div>
-          )}
-          {hasAdditionalProps && !hasUnion && (
-            <AdditionalPropertiesSchema schema={schema.additionalProperties as Schema} depth={depth} />
-          )}
-        </CollapsibleContent>
-      </div>
-    </Collapsible>
+        </Expandable>
+      )}
+      {hasAdditionalProps && !hasUnion && (
+        <Expandable title={`${name} values`}>
+          <AdditionalPropertiesSchema
+            schema={schema.additionalProperties as Schema}
+            depth={depth}
+            parentPath={fullPath}
+          />
+        </Expandable>
+      )}
+    </Field>
   )
 }
 
-function UnionSchema({ schema, depth }: { schema: Schema; depth: number }) {
+function UnionSchema({ schema, depth, parentPath }: { schema: Schema; depth: number; parentPath?: string }) {
   const variants = schema.oneOf || schema.anyOf || []
-  const label = schema.oneOf ? 'oneOf' : 'anyOf'
 
   if (variants.length === 0) return null
 
   if (variants.length === 1) {
     const v = variants[0]!
     if (v.properties) {
-      return <SchemaExplorer schema={v} required={v.required} depth={depth + 1} />
+      return (
+        <Expandable title="properties">
+          <SchemaExplorer schema={v} required={v.required} depth={depth + 1} parentPath={parentPath} />
+        </Expandable>
+      )
     }
     return null
   }
 
   return (
-    <div className="mt-2">
+    <div className="mt-2 min-w-0">
       <Tabs defaultValue="0">
-        <TabsList variant="line" className="h-7 gap-0">
-          {variants.map((v, i) => (
-            <TabsTrigger key={i} value={String(i)} className="px-2 text-xs">
-              {v.title || `${label}[${i}]`}
-            </TabsTrigger>
-          ))}
-        </TabsList>
+        <div className="overflow-x-auto overflow-y-hidden">
+          <TabsList variant="line" className="h-7 gap-0 [&>*]:flex-none">
+            {variants.map((v, i) => (
+              <TabsTrigger key={i} value={String(i)} className="px-2 text-xs">
+                {v.title || `Option ${i + 1}`}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </div>
         {variants.map((v, i) => (
           <TabsContent key={i} value={String(i)} className="pt-1">
             {v.properties ? (
-              <SchemaExplorer schema={v} required={v.required} depth={depth + 1} />
+              <Expandable title={v.title || `Option ${i + 1} properties`}>
+                <SchemaExplorer schema={v} required={v.required} depth={depth + 1} parentPath={parentPath} />
+              </Expandable>
             ) : (
-              <PropertyRow name="value" schema={v} />
+              <Field name="value" type={schemaTypeLabel(v)} parentPath={parentPath}>
+                {v.description}
+              </Field>
             )}
           </TabsContent>
         ))}
@@ -127,22 +184,27 @@ function UnionSchema({ schema, depth }: { schema: Schema; depth: number }) {
   )
 }
 
-function AdditionalPropertiesSchema({ schema, depth }: { schema: Schema; depth: number }) {
+function AdditionalPropertiesSchema({
+  schema,
+  depth,
+  parentPath,
+}: {
+  schema: Schema
+  depth: number
+  parentPath?: string
+}) {
+  if (schema.properties) {
+    return <SchemaExplorer schema={schema} required={schema.required} depth={depth + 1} parentPath={parentPath} />
+  }
   return (
-    <div className="mt-1 border-l-2 border-stone-200 pl-4 dark:border-stone-700">
-      <div className="py-2">
-        <code className="text-xs text-stone-500 dark:text-stone-400">[key: string]</code>
-      </div>
-      {schema.properties ? (
-        <SchemaExplorer schema={schema} required={schema.required} depth={depth + 1} />
-      ) : (
-        <PropertyRow name="value" schema={schema} />
-      )}
-    </div>
+    <Field name="[key: string]" type={schemaTypeLabel(schema)} parentPath={parentPath}>
+      {schema.description}
+    </Field>
   )
 }
 
-export default function SchemaExplorer({ schema, required = [], depth = 0 }: SchemaExplorerProps) {
+export default function SchemaExplorer({ schema, required, depth = 0, parentPath }: SchemaExplorerProps) {
+  const requiredFields = required ?? schema.required ?? []
   if (depth > MAX_DEPTH) {
     return <p className="py-2 text-xs italic text-stone-400">Schema too deeply nested to display.</p>
   }
@@ -155,23 +217,30 @@ export default function SchemaExplorer({ schema, required = [], depth = 0 }: Sch
   const hasAdditionalProps = schema.additionalProperties && typeof schema.additionalProperties === 'object'
 
   if (schema.oneOf || schema.anyOf) {
-    return <UnionSchema schema={schema} depth={depth} />
+    return <UnionSchema schema={schema} depth={depth} parentPath={parentPath} />
   }
 
   return (
-    <div className={depth > 0 ? 'border-l-2 border-stone-200 pl-4 dark:border-stone-700' : ''}>
+    <div>
       {entries.map(([propName, propSchema]) => (
         <SchemaNode
           key={propName}
           name={propName}
           schema={propSchema}
-          isRequired={required.includes(propName)}
+          isRequired={requiredFields.includes(propName)}
           depth={depth}
+          parentPath={parentPath}
         />
       ))}
       {hasAdditionalProps && (
-        <AdditionalPropertiesSchema schema={schema.additionalProperties as Schema} depth={depth} />
+        <AdditionalPropertiesSchema
+          schema={schema.additionalProperties as Schema}
+          depth={depth}
+          parentPath={parentPath}
+        />
       )}
     </div>
   )
 }
+
+export { schemaTypeLabel }
