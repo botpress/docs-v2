@@ -3,17 +3,17 @@ import type { SidebarNode, SidebarCategoryNode, SidebarArticleNode } from '../li
 import { isPathActive, hasActiveChild } from '../lib/sidebar-types'
 
 const SIDEBAR_METHOD_COLORS: Record<string, string> = {
-  GET: 'text-emerald-600 dark:text-emerald-400',
-  POST: 'text-blue-600 dark:text-blue-400',
-  PUT: 'text-amber-600 dark:text-amber-400',
-  PATCH: 'text-orange-600 dark:text-orange-400',
-  DELETE: 'text-red-600 dark:text-red-400',
+  GET: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300',
+  POST: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
+  PUT: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
+  PATCH: 'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300',
+  DELETE: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
 }
 
 function SidebarMethodBadge({ method }: { method: string }) {
   return (
     <span
-      className={`ml-auto shrink-0 font-mono text-[10px] font-semibold leading-none ${SIDEBAR_METHOD_COLORS[method] || 'text-stone-400'}`}
+      className={`ml-auto shrink-0 rounded px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase leading-none ${SIDEBAR_METHOD_COLORS[method] || 'bg-stone-100 text-stone-700'}`}
     >
       {method}
     </span>

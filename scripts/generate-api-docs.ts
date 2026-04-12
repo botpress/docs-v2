@@ -33,6 +33,7 @@ interface OperationData {
   requestBody?: any
   responses?: Record<string, any>
   security?: any[]
+  securitySchemes?: Record<string, any>
   deprecated?: boolean
   experimental?: boolean
 }
@@ -164,6 +165,9 @@ function extractOperation(
     responses[status] = resolved
   }
 
+  const security = op.security ?? spec.security
+  const securitySchemes = spec.components?.securitySchemes
+
   return {
     method: method.toUpperCase(),
     path: apiPath,
@@ -174,7 +178,8 @@ function extractOperation(
     parameters: params.length > 0 ? params : undefined,
     requestBody: requestBody || undefined,
     responses: Object.keys(responses).length > 0 ? responses : undefined,
-    security: op.security,
+    security: security || undefined,
+    securitySchemes: securitySchemes || undefined,
     deprecated: op.deprecated,
     experimental: op['x-experimental'] || false,
     hidden: op['x-hidden'] || false,
@@ -195,7 +200,7 @@ prose: false
 
 import APIEndpoint from '@/components/api-endpoint'
 
-<APIEndpoint endpoint={${dataJson}} />
+<APIEndpoint client:load endpoint={${dataJson}} />
 `
 }
 

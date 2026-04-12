@@ -8,6 +8,7 @@ prose: false
 import APIEndpoint from '@/components/api-endpoint'
 
 <APIEndpoint
+  client:load
   endpoint={{
     method: 'DELETE',
     path: '/v1/admin/bots/{id}',
@@ -40,6 +41,8 @@ import APIEndpoint from '@/components/api-endpoint'
         },
       },
     },
+    security: [{ BearerAuth: [] }],
+    securitySchemes: { BearerAuth: { type: 'http', scheme: 'bearer' } },
     experimental: false,
   }}
 />

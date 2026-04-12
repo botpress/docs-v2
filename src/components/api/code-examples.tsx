@@ -1,14 +1,7 @@
 import { useState, useMemo } from 'react'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from './ui/tabs'
-
-interface RequestState {
-  baseUrl: string
-  pathParams: Record<string, string>
-  queryParams: Record<string, string>
-  headers: Record<string, string>
-  body: string
-  token: string
-}
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import HighlightedCode from './highlighted-code'
+import type { RequestState } from './types'
 
 interface CodeExamplesProps {
   method: string
@@ -45,10 +38,7 @@ function generateCurl(
 ): string {
   const lines: string[] = [`curl -X ${method} \\`, `  '${url}'`]
 
-  if (token) {
-    lines.push(`  -H 'Authorization: Bearer ${token}'`)
-  }
-
+  if (token) lines.push(`  -H 'Authorization: Bearer ${token}'`)
   for (const [key, value] of Object.entries(headers)) {
     if (!value) continue
     lines.push(`  -H '${key}: ${value}'`)
@@ -131,6 +121,12 @@ function generatePython(
   return lines.join('\n')
 }
 
+const LANG_MAP: Record<string, 'bash' | 'javascript' | 'python'> = {
+  curl: 'bash',
+  javascript: 'javascript',
+  python: 'python',
+}
+
 export default function CodeExamples({ method, path, state }: CodeExamplesProps) {
   const [activeTab, setActiveTab] = useState('curl')
 
@@ -151,8 +147,9 @@ export default function CodeExamples({ method, path, state }: CodeExamplesProps)
   return (
     <div className="rounded-lg border border-stone-200 bg-stone-50 dark:border-stone-700 dark:bg-stone-800/50">
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <div className="border-b border-stone-200 px-3 pt-2 dark:border-stone-700">
-          <TabsList variant="line" className="h-8 gap-0">
+        <div className="flex items-center justify-between border-b border-stone-200 px-3 pt-2 dark:border-stone-700">
+          <span className="text-xs font-medium text-stone-500 dark:text-stone-400">Request</span>
+          <TabsList variant="line" className="h-7 gap-0">
             <TabsTrigger value="curl" className="px-2.5 text-xs">
               curl
             </TabsTrigger>
@@ -168,9 +165,9 @@ export default function CodeExamples({ method, path, state }: CodeExamplesProps)
         {(['curl', 'javascript', 'python'] as const).map((lang) => (
           <TabsContent key={lang} value={lang} className="p-0">
             <div className="relative">
-              <pre className="overflow-x-auto p-4 text-xs leading-relaxed text-stone-800 dark:text-stone-200">
-                <code>{examples[lang]}</code>
-              </pre>
+              <div className="p-4">
+                <HighlightedCode code={examples[lang]} language={LANG_MAP[lang]} />
+              </div>
               <button
                 type="button"
                 onClick={() => navigator.clipboard.writeText(examples[lang])}
@@ -191,4 +188,3 @@ export default function CodeExamples({ method, path, state }: CodeExamplesProps)
 }
 
 export { buildUrl }
-export type { RequestState }
