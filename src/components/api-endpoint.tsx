@@ -1,60 +1,13 @@
 import { useState, useCallback, useMemo } from 'react'
-import CodeExamples, { type RequestState } from './api-examples'
-import ApiPlayground, { generateDefaultBody, DEFAULT_BASE_URL } from './api-playground'
-
-interface Schema {
-  type?: string
-  properties?: Record<string, Schema>
-  items?: Schema
-  required?: string[]
-  description?: string
-  enum?: string[]
-  default?: any
-  format?: string
-  example?: any
-  oneOf?: Schema[]
-  anyOf?: Schema[]
-  nullable?: boolean
-  minLength?: number
-  maxLength?: number
-  minimum?: number
-  maximum?: number
-  pattern?: string
-  title?: string
-  deprecated?: boolean
-}
-
-interface Parameter {
-  name: string
-  in: string
-  required?: boolean
-  description?: string
-  schema?: Schema
-}
-
-interface Endpoint {
-  method: string
-  path: string
-  operationId?: string
-  summary?: string
-  description?: string
-  deprecated?: boolean
-  experimental?: boolean
-  parameters?: Parameter[]
-  requestBody?: {
-    required?: boolean
-    description?: string
-    content?: Record<string, { schema?: Schema }>
-  }
-  responses?: Record<
-    string,
-    {
-      description?: string
-      content?: Record<string, { schema?: Schema }>
-    }
-  >
-  security?: Record<string, string[]>[]
-}
+import { Badge } from '@/components/ui/badge'
+import { Separator } from '@/components/ui/separator'
+import CodeExamples from './api/code-examples'
+import ResponseExamples from './api/response-examples'
+import ApiPlayground, { generateDefaultBody, DEFAULT_BASE_URL } from './api/playground'
+import SchemaExplorer from './api/schema-explorer'
+import AuthRequirements from './api/auth-requirements'
+import ContentTypeSwitcher from './api/content-type-switcher'
+import type { Endpoint, RequestState, Parameter } from './api/types'
 
 const METHOD_COLORS: Record<string, string> = {
   GET: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300',
@@ -74,73 +27,7 @@ function MethodBadge({ method }: { method: string }) {
   )
 }
 
-function schemaTypeLabel(schema: Schema): string {
-  if (schema.enum) return 'enum'
-  if (schema.oneOf) return schema.oneOf.map(schemaTypeLabel).join(' | ')
-  if (schema.anyOf) return schema.anyOf.map(schemaTypeLabel).join(' | ')
-  if (schema.type === 'array' && schema.items) return `${schemaTypeLabel(schema.items)}[]`
-  return schema.format || schema.type || 'any'
-}
-
-function SchemaProperties({
-  schema,
-  required = [],
-  depth = 0,
-}: {
-  schema: Schema
-  required?: string[]
-  depth?: number
-}) {
-  if (!schema.properties || depth > 4) return null
-
-  return (
-    <div className={depth > 0 ? 'border-l-2 border-stone-200 pl-4 dark:border-stone-700' : ''}>
-      {Object.entries(schema.properties).map(([name, prop]) => {
-        const isRequired = required.includes(name)
-        const hasNested = prop.type === 'object' && prop.properties
-        const hasArrayNested = prop.type === 'array' && prop.items?.type === 'object' && prop.items?.properties
-
-        return (
-          <div key={name} className="border-b border-stone-100 py-3 last:border-b-0 dark:border-stone-800">
-            <div className="flex items-baseline gap-2">
-              <code className="text-sm font-medium text-stone-900 dark:text-stone-100">{name}</code>
-              <span className="text-xs text-stone-500 dark:text-stone-400">{schemaTypeLabel(prop)}</span>
-              {isRequired && <span className="text-xs font-medium text-red-600 dark:text-red-400">required</span>}
-              {prop.deprecated && (
-                <span className="text-xs font-medium text-amber-600 dark:text-amber-400">deprecated</span>
-              )}
-            </div>
-            {prop.description && <p className="mt-1 text-sm text-stone-600 dark:text-stone-400">{prop.description}</p>}
-            {prop.enum && (
-              <div className="mt-1 flex flex-wrap gap-1">
-                {prop.enum.map((v) => (
-                  <code
-                    key={v}
-                    className="rounded bg-stone-100 px-1.5 py-0.5 text-xs text-stone-600 dark:bg-stone-800 dark:text-stone-400"
-                  >
-                    {v}
-                  </code>
-                ))}
-              </div>
-            )}
-            {prop.default !== undefined && (
-              <p className="mt-1 text-xs text-stone-500 dark:text-stone-500">
-                Default:{' '}
-                <code className="rounded bg-stone-100 px-1 dark:bg-stone-800">{JSON.stringify(prop.default)}</code>
-              </p>
-            )}
-            {hasNested && <SchemaProperties schema={prop} required={prop.required} depth={depth + 1} />}
-            {hasArrayNested && (
-              <SchemaProperties schema={prop.items!} required={prop.items!.required} depth={depth + 1} />
-            )}
-          </div>
-        )
-      })}
-    </div>
-  )
-}
-
-function ParameterTable({ parameters, location }: { parameters: Parameter[]; location: string }) {
+function ParameterSection({ parameters, location }: { parameters: Parameter[]; location: string }) {
   const filtered = parameters.filter((p) => p.in === location)
   if (filtered.length === 0) return null
 
@@ -153,59 +40,46 @@ function ParameterTable({ parameters, location }: { parameters: Parameter[]; loc
 
   return (
     <div>
-      <h3 className="mb-3 text-sm font-semibold text-stone-900 dark:text-stone-100">{labels[location] || location}</h3>
-      <div className="rounded-lg border border-stone-200 dark:border-stone-700">
-        {filtered.map((param, i) => (
-          <div
-            key={param.name}
-            className={`px-4 py-3 ${i < filtered.length - 1 ? 'border-b border-stone-200 dark:border-stone-700' : ''}`}
-          >
-            <div className="flex items-baseline gap-2">
-              <code className="text-sm font-medium text-stone-900 dark:text-stone-100">{param.name}</code>
-              <span className="text-xs text-stone-500 dark:text-stone-400">
-                {param.schema ? schemaTypeLabel(param.schema) : 'string'}
-              </span>
-              {param.required && <span className="text-xs font-medium text-red-600 dark:text-red-400">required</span>}
-            </div>
-            {param.description && (
-              <p className="mt-1 text-sm text-stone-600 dark:text-stone-400">{param.description}</p>
-            )}
-            {param.schema?.enum && (
-              <div className="mt-1 flex flex-wrap gap-1">
-                {param.schema.enum.map((v) => (
-                  <code
-                    key={v}
-                    className="rounded bg-stone-100 px-1.5 py-0.5 text-xs text-stone-600 dark:bg-stone-800 dark:text-stone-400"
-                  >
-                    {v}
-                  </code>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
+      <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">{labels[location] || location}</h2>
+      <Separator className="my-3" />
+      <div className="rounded-lg border border-stone-200 px-4 dark:border-stone-700">
+        {filtered.map((param) => {
+          const schema = param.schema || { type: 'string' }
+          return (
+            <SchemaExplorer
+              key={param.name}
+              schema={{
+                type: 'object',
+                properties: { [param.name]: { ...schema, description: param.description } },
+                required: param.required ? [param.name] : [],
+              }}
+            />
+          )
+        })}
       </div>
     </div>
   )
 }
 
-function RequestBody({ body }: { body: NonNullable<Endpoint['requestBody']> }) {
-  const contentType = Object.keys(body.content || {})[0]
-  const schema = body.content?.[contentType!]?.schema
+function RequestBodySection({ body }: { body: NonNullable<Endpoint['requestBody']> }) {
+  const contentTypes = Object.keys(body.content || {})
+  const [activeType, setActiveType] = useState(
+    contentTypes.includes('application/json') ? 'application/json' : contentTypes[0] || ''
+  )
+  const schema = body.content?.[activeType]?.schema
   if (!schema) return null
 
   return (
     <div>
-      <h3 className="mb-1 text-sm font-semibold text-stone-900 dark:text-stone-100">Request body</h3>
+      <div className="flex items-center gap-3">
+        <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">Request body</h2>
+        <ContentTypeSwitcher types={contentTypes} value={activeType} onChange={setActiveType} />
+        {body.required && <Badge variant="required">required</Badge>}
+      </div>
+      <Separator className="my-3" />
       {body.description && <p className="mb-3 text-sm text-stone-600 dark:text-stone-400">{body.description}</p>}
-      {contentType && (
-        <p className="mb-3 text-xs text-stone-500 dark:text-stone-500">
-          Content type: <code className="rounded bg-stone-100 px-1 dark:bg-stone-800">{contentType}</code>
-          {body.required && <span className="ml-2 font-medium text-red-600 dark:text-red-400">required</span>}
-        </p>
-      )}
       <div className="rounded-lg border border-stone-200 px-4 dark:border-stone-700">
-        <SchemaProperties schema={schema} required={schema.required} />
+        <SchemaExplorer schema={schema} required={schema.required} />
       </div>
     </div>
   )
@@ -214,43 +88,58 @@ function RequestBody({ body }: { body: NonNullable<Endpoint['requestBody']> }) {
 function ResponseSection({ responses }: { responses: NonNullable<Endpoint['responses']> }) {
   return (
     <div>
-      <h3 className="mb-3 text-sm font-semibold text-stone-900 dark:text-stone-100">Responses</h3>
+      <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">Responses</h2>
+      <Separator className="my-3" />
       <div className="space-y-3">
-        {Object.entries(responses).map(([status, resp]) => {
-          const contentType = Object.keys(resp.content || {})[0]
-          const schema = resp.content?.[contentType!]?.schema
-          const isSuccess = status.startsWith('2')
-
-          return (
-            <details
-              key={status}
-              className="group rounded-lg border border-stone-200 dark:border-stone-700"
-              open={isSuccess}
-            >
-              <summary className="flex cursor-pointer items-center gap-2 px-4 py-3 text-sm font-medium text-stone-900 dark:text-stone-100">
-                <span
-                  className={`inline-flex h-5 min-w-[2.5rem] items-center justify-center rounded text-xs font-bold ${
-                    isSuccess
-                      ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300'
-                      : status === 'default' || status.startsWith('4') || status.startsWith('5')
-                        ? 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300'
-                        : 'bg-stone-100 text-stone-700 dark:bg-stone-800 dark:text-stone-300'
-                  }`}
-                >
-                  {status}
-                </span>
-                {resp.description && <span className="text-stone-600 dark:text-stone-400">{resp.description}</span>}
-              </summary>
-              {schema?.properties && (
-                <div className="border-t border-stone-200 px-4 dark:border-stone-700">
-                  <SchemaProperties schema={schema} required={schema.required} />
-                </div>
-              )}
-            </details>
-          )
-        })}
+        {Object.entries(responses).map(([status, resp]) => (
+          <ResponseStatusSection key={status} status={status} resp={resp} />
+        ))}
       </div>
     </div>
+  )
+}
+
+function ResponseStatusSection({
+  status,
+  resp,
+}: {
+  status: string
+  resp: { description?: string; content?: Record<string, { schema?: import('./api/types').Schema }> }
+}) {
+  const contentTypes = Object.keys(resp.content || {})
+  const [activeType, setActiveType] = useState(
+    contentTypes.includes('application/json') ? 'application/json' : contentTypes[0] || ''
+  )
+  const schema = resp.content?.[activeType]?.schema
+  const isSuccess = status.startsWith('2')
+
+  return (
+    <details className="group rounded-lg border border-stone-200 dark:border-stone-700" open={isSuccess}>
+      <summary className="flex cursor-pointer items-center gap-2 px-4 py-3 text-sm font-medium text-stone-900 dark:text-stone-100">
+        <span
+          className={`inline-flex h-5 min-w-[2.5rem] items-center justify-center rounded text-xs font-bold ${
+            isSuccess
+              ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300'
+              : status === 'default' || status.startsWith('4') || status.startsWith('5')
+                ? 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300'
+                : 'bg-stone-100 text-stone-700 dark:bg-stone-800 dark:text-stone-300'
+          }`}
+        >
+          {status}
+        </span>
+        {resp.description && <span className="text-stone-600 dark:text-stone-400">{resp.description}</span>}
+        {contentTypes.length > 1 && (
+          <span className="ml-auto" onClick={(e) => e.stopPropagation()}>
+            <ContentTypeSwitcher types={contentTypes} value={activeType} onChange={setActiveType} />
+          </span>
+        )}
+      </summary>
+      {schema && (
+        <div className="border-t border-stone-200 px-4 dark:border-stone-700">
+          <SchemaExplorer schema={schema} required={schema.required} />
+        </div>
+      )}
+    </details>
   )
 }
 
@@ -289,9 +178,8 @@ export default function APIEndpoint({ endpoint }: { endpoint: Endpoint }) {
   }, [])
 
   return (
-    <div className="not-prose @container">
-      <div className="flex flex-col gap-x-8 gap-y-6 px-8 pt-12 pb-8 sm:px-8 sm:pt-14 sm:pb-10 lg:px-12 @4xl:flex-row @4xl:items-start">
-        {/* Left column: docs content */}
+    <div className="not-prose @container mt-6">
+      <div className="flex flex-col gap-x-8 gap-y-6 xl:flex-row xl:items-start">
         <div className="min-w-0 flex-1 space-y-8">
           <div>
             <div className="flex items-center gap-3">
@@ -311,19 +199,23 @@ export default function APIEndpoint({ endpoint }: { endpoint: Endpoint }) {
             {endpoint.description && <p className="mt-4 text-stone-600 dark:text-stone-400">{endpoint.description}</p>}
           </div>
 
+          <AuthRequirements security={endpoint.security} securitySchemes={endpoint.securitySchemes} />
+
           <ApiPlayground endpoint={endpoint} state={requestState} onStateChange={handleStateChange} />
 
           {endpoint.parameters &&
-            paramLocations.map((loc) => <ParameterTable key={loc} parameters={endpoint.parameters!} location={loc} />)}
+            paramLocations.map((loc) => (
+              <ParameterSection key={loc} parameters={endpoint.parameters!} location={loc} />
+            ))}
 
-          {endpoint.requestBody && <RequestBody body={endpoint.requestBody} />}
+          {endpoint.requestBody && <RequestBodySection body={endpoint.requestBody} />}
 
           {endpoint.responses && <ResponseSection responses={endpoint.responses} />}
         </div>
 
-        {/* Right column: sticky code examples */}
-        <div className="group/examples @4xl:sticky @4xl:top-4 @4xl:w-[400px] @4xl:shrink-0">
+        <div className="group/examples space-y-4 xl:sticky xl:top-6 xl:max-h-[calc(100vh-6rem)] xl:w-[400px] xl:shrink-0 xl:self-start xl:overflow-y-auto">
           <CodeExamples method={endpoint.method} path={endpoint.path} state={requestState} />
+          {endpoint.responses && <ResponseExamples responses={endpoint.responses} />}
         </div>
       </div>
     </div>

@@ -8,6 +8,7 @@ prose: false
 import APIEndpoint from '@/components/api-endpoint'
 
 <APIEndpoint
+  client:load
   endpoint={{
     method: 'GET',
     path: '/v1/admin/workspaces/{id}/audit-records',
@@ -174,6 +175,8 @@ import APIEndpoint from '@/components/api-endpoint'
         },
       },
     },
+    security: [{ BearerAuth: [] }],
+    securitySchemes: { BearerAuth: { type: 'http', scheme: 'bearer' } },
     experimental: false,
   }}
 />

@@ -123,7 +123,40 @@ const { prev, next } = getAdjacentPages(sidebarTree, currentPath);
         </aside>
       </div>
     ) : (
-      <div data-pagefind-body>
+      <div class="w-full px-8 pt-10 pb-8 sm:px-8 sm:pt-12 sm:pb-10 lg:px-16" data-pagefind-body>
+        <div class="xl:pr-[calc(400px+2rem)]">
+          <div class="hidden items-start justify-between gap-4 lg:flex">
+            {breadcrumbs.length > 0 ? (
+              <Breadcrumb className="min-w-0 flex-1">
+                <BreadcrumbList>
+                  {breadcrumbs.map((crumb, i) => (
+                    <>
+                      {i > 0 && <BreadcrumbSeparator />}
+                      <BreadcrumbItem className="truncate">
+                        <BreadcrumbLink href={crumb.href}>
+                          {crumb.label}
+                        </BreadcrumbLink>
+                      </BreadcrumbItem>
+                    </>
+                  ))}
+                </BreadcrumbList>
+              </Breadcrumb>
+            ) : (
+              <div />
+            )}
+
+            <PageOptions client:load markdownUrl={markdownUrl} />
+          </div>
+
+          <h1 class="font-heading text-2xl font-semibold text-stone-900 lg:text-3xl dark:text-stone-100">
+            {title}
+          </h1>
+
+          <div class="mt-3 lg:hidden">
+            <PageOptions client:load markdownUrl={markdownUrl} />
+          </div>
+        </div>
+
         <Content />
       </div>
     )
