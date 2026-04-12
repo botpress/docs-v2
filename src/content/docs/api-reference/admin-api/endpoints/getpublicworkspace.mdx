@@ -1,0 +1,82 @@
+---
+title: 'getPublicWorkspace'
+description: 'Get workspace public details'
+method: 'GET'
+prose: false
+---
+
+import APIEndpoint from '@/components/api-endpoint'
+
+<APIEndpoint
+  endpoint={{
+    method: 'GET',
+    path: '/v1/admin/workspaces/{id}/public',
+    operationId: 'getPublicWorkspace',
+    description: 'Get workspace public details',
+    tags: [],
+    parameters: [
+      { name: 'id', in: 'path', description: 'Workspace ID', required: true, schema: { type: 'string' } },
+      {
+        name: 'x-multiple-integrations',
+        in: 'header',
+        description:
+          'Whether the client supports bots with multiple instances of the same integration. Set to "true" to receive integration instances keyed by their alias instead of their id. This header will be removed in the future, and the API will always return multiple instances keyed by alias.',
+        required: false,
+        schema: { type: 'string' },
+      },
+    ],
+    responses: {
+      '200': {
+        description: 'Success',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                id: { type: 'string' },
+                name: { type: 'string' },
+                createdAt: { type: 'string' },
+                updatedAt: { type: 'string' },
+                about: { default: '', type: 'string' },
+                profilePicture: { default: '', type: 'string' },
+                contactEmail: { default: '', type: 'string' },
+                website: { default: '', type: 'string' },
+                socialAccounts: { default: [], type: 'array', items: { type: 'string' } },
+                handle: { default: '', type: 'string' },
+              },
+              required: ['id', 'name', 'createdAt', 'updatedAt'],
+              title: 'getPublicWorkspaceResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+      default: {
+        description: 'Success',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                id: { type: 'string' },
+                name: { type: 'string' },
+                createdAt: { type: 'string' },
+                updatedAt: { type: 'string' },
+                about: { default: '', type: 'string' },
+                profilePicture: { default: '', type: 'string' },
+                contactEmail: { default: '', type: 'string' },
+                website: { default: '', type: 'string' },
+                socialAccounts: { default: [], type: 'array', items: { type: 'string' } },
+                handle: { default: '', type: 'string' },
+              },
+              required: ['id', 'name', 'createdAt', 'updatedAt'],
+              title: 'getPublicWorkspaceResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+    },
+    experimental: false,
+  }}
+/>

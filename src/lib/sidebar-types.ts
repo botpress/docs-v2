@@ -25,6 +25,7 @@ export interface SidebarArticleNode {
   title: string
   href: string
   path: string
+  method?: string
 }
 
 export type SidebarNode = SidebarCategoryNode | SidebarArticleNode

@@ -1,0 +1,115 @@
+---
+title: 'getOrCreateConversation'
+description: 'Get or create a new [Conversation](#schema_conversation)'
+method: 'POST'
+prose: false
+---
+
+import APIEndpoint from '@/components/api-endpoint'
+
+<APIEndpoint
+  endpoint={{
+    method: 'POST',
+    path: '/conversations/get-or-create',
+    operationId: 'getOrCreateConversation',
+    summary: 'Get Or Create Conversation',
+    description: 'Get or create a new [Conversation](#schema_conversation)',
+    tags: ['Endpoints'],
+    parameters: [
+      {
+        name: 'x-user-key',
+        in: 'header',
+        description: 'Authentication Key',
+        required: true,
+        schema: { type: 'string' },
+      },
+    ],
+    requestBody: {
+      description: 'Conversation data',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              id: { type: 'string', description: 'Identifier of the [Conversation](#schema_conversation)' },
+            },
+            required: ['id'],
+            title: 'getOrCreateConversationBody',
+            additionalProperties: false,
+          },
+        },
+      },
+    },
+    responses: {
+      '201': {
+        description: 'Returns a [Conversation](#schema_conversation)',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                conversation: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'string', description: 'Identifier of the [Conversation](#schema_conversation)' },
+                    createdAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Creation date of the [Conversation](#schema_conversation) in ISO 8601 format',
+                    },
+                    updatedAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Updating date of the [Conversation](#schema_conversation) in ISO 8601 format',
+                    },
+                  },
+                  required: ['id', 'createdAt', 'updatedAt'],
+                  additionalProperties: false,
+                  'x-readme-ref-name': 'Conversation',
+                },
+              },
+              required: ['conversation'],
+              title: 'getOrCreateConversationResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+      default: {
+        description: 'Returns a [Conversation](#schema_conversation)',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                conversation: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'string', description: 'Identifier of the [Conversation](#schema_conversation)' },
+                    createdAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Creation date of the [Conversation](#schema_conversation) in ISO 8601 format',
+                    },
+                    updatedAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Updating date of the [Conversation](#schema_conversation) in ISO 8601 format',
+                    },
+                  },
+                  required: ['id', 'createdAt', 'updatedAt'],
+                  additionalProperties: false,
+                  'x-readme-ref-name': 'Conversation',
+                },
+              },
+              required: ['conversation'],
+              title: 'getOrCreateConversationResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+    },
+    experimental: false,
+  }}
+/>

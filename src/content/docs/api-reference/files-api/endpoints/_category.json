@@ -1,0 +1,15 @@
+{
+  "label": "Endpoints",
+  "sidebarPages": [
+    "listfiles",
+    "upsertfile",
+    "getfile",
+    "updatefilemetadata",
+    "deletefile",
+    "copyfile",
+    "searchfiles",
+    "listfilepassages",
+    "listfiletags",
+    "listfiletagvalues"
+  ]
+}

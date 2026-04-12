@@ -1,0 +1,177 @@
+---
+title: 'getConversation'
+description: 'Retrieves the [Conversation](#schema_conversation) object for a valid identifier.'
+method: 'GET'
+prose: false
+---
+
+import APIEndpoint from '@/components/api-endpoint'
+
+<APIEndpoint
+  endpoint={{
+    method: 'GET',
+    path: '/v1/chat/conversations/{id}',
+    operationId: 'getConversation',
+    description: 'Retrieves the [Conversation](#schema_conversation) object for a valid identifier.',
+    tags: [],
+    parameters: [
+      { name: 'id', in: 'path', description: 'Conversation id', required: true, schema: { type: 'string' } },
+      { name: 'x-bot-id', in: 'header', description: 'Bot id', required: true, schema: { type: 'string' } },
+      {
+        name: 'x-integration-id',
+        in: 'header',
+        description: 'Integration id',
+        required: false,
+        schema: { type: 'string' },
+      },
+      {
+        name: 'x-integration-alias',
+        in: 'header',
+        description: 'Integration alias',
+        required: false,
+        schema: { type: 'string' },
+      },
+    ],
+    responses: {
+      '200': {
+        description:
+          'Returns a [Conversation](#schema_conversation) object if a valid identifier was provided. Returns [an error](#errors) otherwise',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                conversation: {
+                  type: 'object',
+                  properties: {
+                    id: {
+                      type: 'string',
+                      minLength: 28,
+                      maxLength: 36,
+                      description: 'Id of the [Conversation](#schema_conversation)',
+                    },
+                    currentTaskId: {
+                      type: 'string',
+                      minLength: 28,
+                      maxLength: 36,
+                      deprecated: true,
+                      description: 'Unused. This field will be removed in the future.',
+                    },
+                    currentWorkflowId: {
+                      type: 'string',
+                      minLength: 28,
+                      maxLength: 36,
+                      description: 'Id of the current [Workflow](#schema_workflow)',
+                    },
+                    createdAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Creation date of the [Conversation](#schema_conversation) in ISO 8601 format',
+                    },
+                    updatedAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Updating date of the [Conversation](#schema_conversation) in ISO 8601 format',
+                    },
+                    channel: {
+                      type: 'string',
+                      description: 'Name of the channel where the [Conversation](#schema_conversation) is happening',
+                    },
+                    integration: {
+                      type: 'string',
+                      description: 'Name of the integration that created the [Conversation](#schema_conversation)',
+                    },
+                    tags: {
+                      type: 'object',
+                      additionalProperties: { type: 'string' },
+                      description:
+                        'Set of [Tags](/docs/developers/concepts/tags) that you can attach to a [Conversation](#schema_conversation). The set of [Tags](/docs/developers/concepts/tags) available on a [Conversation](#schema_conversation) is restricted by the list of [Tags](/docs/developers/concepts/tags) defined previously by the [Bot](#schema_bot). Individual keys can be unset by posting an empty value to them.',
+                    },
+                    messageCount: { type: 'number', description: 'Number of messages in the conversation' },
+                  },
+                  required: ['id', 'createdAt', 'updatedAt', 'channel', 'integration', 'tags', 'messageCount'],
+                  description:
+                    "The [Conversation](#schema_conversation) object represents an exchange of messages between one or more users. A [Conversation](#schema_conversation) is always linked to an integration's channels. For example, a Slack channel represents a conversation.",
+                  additionalProperties: false,
+                },
+              },
+              required: ['conversation'],
+              title: 'getConversationResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+      default: {
+        description:
+          'Returns a [Conversation](#schema_conversation) object if a valid identifier was provided. Returns [an error](#errors) otherwise',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                conversation: {
+                  type: 'object',
+                  properties: {
+                    id: {
+                      type: 'string',
+                      minLength: 28,
+                      maxLength: 36,
+                      description: 'Id of the [Conversation](#schema_conversation)',
+                    },
+                    currentTaskId: {
+                      type: 'string',
+                      minLength: 28,
+                      maxLength: 36,
+                      deprecated: true,
+                      description: 'Unused. This field will be removed in the future.',
+                    },
+                    currentWorkflowId: {
+                      type: 'string',
+                      minLength: 28,
+                      maxLength: 36,
+                      description: 'Id of the current [Workflow](#schema_workflow)',
+                    },
+                    createdAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Creation date of the [Conversation](#schema_conversation) in ISO 8601 format',
+                    },
+                    updatedAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Updating date of the [Conversation](#schema_conversation) in ISO 8601 format',
+                    },
+                    channel: {
+                      type: 'string',
+                      description: 'Name of the channel where the [Conversation](#schema_conversation) is happening',
+                    },
+                    integration: {
+                      type: 'string',
+                      description: 'Name of the integration that created the [Conversation](#schema_conversation)',
+                    },
+                    tags: {
+                      type: 'object',
+                      additionalProperties: { type: 'string' },
+                      description:
+                        'Set of [Tags](/docs/developers/concepts/tags) that you can attach to a [Conversation](#schema_conversation). The set of [Tags](/docs/developers/concepts/tags) available on a [Conversation](#schema_conversation) is restricted by the list of [Tags](/docs/developers/concepts/tags) defined previously by the [Bot](#schema_bot). Individual keys can be unset by posting an empty value to them.',
+                    },
+                    messageCount: { type: 'number', description: 'Number of messages in the conversation' },
+                  },
+                  required: ['id', 'createdAt', 'updatedAt', 'channel', 'integration', 'tags', 'messageCount'],
+                  description:
+                    "The [Conversation](#schema_conversation) object represents an exchange of messages between one or more users. A [Conversation](#schema_conversation) is always linked to an integration's channels. For example, a Slack channel represents a conversation.",
+                  additionalProperties: false,
+                },
+              },
+              required: ['conversation'],
+              title: 'getConversationResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+    },
+    experimental: false,
+  }}
+/>

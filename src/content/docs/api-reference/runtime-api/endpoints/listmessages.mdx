@@ -1,0 +1,273 @@
+---
+title: 'listMessages'
+description: 'Retrieves a list of [Message](#schema_message) you’ve previously created. The messages are returned in sorted order, with the most recent appearing first. The list can be filtered using [Tags](/docs/d'
+method: 'GET'
+prose: false
+---
+
+import APIEndpoint from '@/components/api-endpoint'
+
+<APIEndpoint
+  endpoint={{
+    method: 'GET',
+    path: '/v1/chat/messages',
+    operationId: 'listMessages',
+    description:
+      'Retrieves a list of [Message](#schema_message) you’ve previously created. The messages are returned in sorted order, with the most recent appearing first. The list can be filtered using [Tags](/docs/developers/concepts/tags).',
+    tags: [],
+    parameters: [
+      {
+        name: 'nextToken',
+        in: 'query',
+        description:
+          'Provide the `meta.nextToken` value provided in the last API response to retrieve the next page of results',
+        schema: { type: 'string' },
+      },
+      { name: 'conversationId', in: 'query', description: 'Conversation id', schema: { type: 'string' } },
+      {
+        name: 'tags',
+        in: 'query',
+        description: 'Filter by tags',
+        schema: { type: 'object', additionalProperties: { type: 'string' } },
+      },
+      {
+        name: 'afterDate',
+        in: 'query',
+        description: 'Date in ISO 8601 string with UTC timezone after which the message was created (inclusive)',
+        schema: { type: 'string' },
+      },
+      {
+        name: 'beforeDate',
+        in: 'query',
+        description: 'Date in ISO 8601 string with UTC timezone before which the message was created (inclusive)',
+        schema: { type: 'string' },
+      },
+      { name: 'x-bot-id', in: 'header', description: 'Bot id', required: true, schema: { type: 'string' } },
+      {
+        name: 'x-integration-id',
+        in: 'header',
+        description: 'Integration id',
+        required: false,
+        schema: { type: 'string' },
+      },
+      {
+        name: 'x-integration-alias',
+        in: 'header',
+        description: 'Integration alias',
+        required: false,
+        schema: { type: 'string' },
+      },
+    ],
+    responses: {
+      '200': {
+        description: 'Returns a list of [Message](#schema_message) objects.',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                messages: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: {
+                        type: 'string',
+                        minLength: 28,
+                        maxLength: 36,
+                        description: 'Id of the [Message](#schema_message)',
+                      },
+                      createdAt: {
+                        type: 'string',
+                        format: 'date-time',
+                        description: 'Creation date of the [Message](#schema_message) in ISO 8601 format',
+                      },
+                      updatedAt: {
+                        type: 'string',
+                        format: 'date-time',
+                        description: 'Update date of the [Message](#schema_message) in ISO 8601 format',
+                      },
+                      type: {
+                        type: 'string',
+                        maxLength: 200,
+                        description:
+                          'Type of the [Message](#schema_message) represents the resource type that the message is related to',
+                      },
+                      payload: {
+                        type: 'object',
+                        additionalProperties: true,
+                        description:
+                          'Payload is the content type of the message. Accepted payload options: Text, Image, Choice, Dropdown, Card, Carousel, File, Audio, Video, Location',
+                      },
+                      direction: {
+                        type: 'string',
+                        enum: ['incoming', 'outgoing'],
+                        description: 'Direction of the message (`incoming` or `outgoing`).',
+                      },
+                      userId: {
+                        type: 'string',
+                        minLength: 28,
+                        maxLength: 36,
+                        description: 'ID of the [User](#schema_user)',
+                      },
+                      conversationId: {
+                        type: 'string',
+                        minLength: 28,
+                        maxLength: 36,
+                        description: 'ID of the [Conversation](#schema_conversation)',
+                      },
+                      tags: {
+                        type: 'object',
+                        additionalProperties: { type: 'string' },
+                        description:
+                          'Set of [Tags](/docs/developers/concepts/tags) that you can attach to a [Conversation](#schema_conversation). The set of [Tags](/docs/developers/concepts/tags) available on a [Conversation](#schema_conversation) is restricted by the list of [Tags](/docs/developers/concepts/tags) defined previously by the [Bot](#schema_bot). Individual keys can be unset by posting an empty value to them.',
+                      },
+                      origin: {
+                        type: 'string',
+                        enum: ['synthetic'],
+                        description: 'Origin of the message (`synthetic`).',
+                      },
+                    },
+                    required: [
+                      'id',
+                      'createdAt',
+                      'updatedAt',
+                      'type',
+                      'payload',
+                      'direction',
+                      'userId',
+                      'conversationId',
+                      'tags',
+                    ],
+                    description:
+                      'The Message object represents a message in a [Conversation](#schema_conversation) for a specific [User](#schema_user).',
+                    additionalProperties: false,
+                  },
+                },
+                meta: {
+                  type: 'object',
+                  properties: {
+                    nextToken: {
+                      type: 'string',
+                      description:
+                        'The token to use to retrieve the next page of results, passed as a query string parameter (value should be URL-encoded) to this API endpoint.',
+                    },
+                  },
+                  additionalProperties: false,
+                },
+              },
+              required: ['messages', 'meta'],
+              title: 'listMessagesResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+      default: {
+        description: 'Returns a list of [Message](#schema_message) objects.',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                messages: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: {
+                        type: 'string',
+                        minLength: 28,
+                        maxLength: 36,
+                        description: 'Id of the [Message](#schema_message)',
+                      },
+                      createdAt: {
+                        type: 'string',
+                        format: 'date-time',
+                        description: 'Creation date of the [Message](#schema_message) in ISO 8601 format',
+                      },
+                      updatedAt: {
+                        type: 'string',
+                        format: 'date-time',
+                        description: 'Update date of the [Message](#schema_message) in ISO 8601 format',
+                      },
+                      type: {
+                        type: 'string',
+                        maxLength: 200,
+                        description:
+                          'Type of the [Message](#schema_message) represents the resource type that the message is related to',
+                      },
+                      payload: {
+                        type: 'object',
+                        additionalProperties: true,
+                        description:
+                          'Payload is the content type of the message. Accepted payload options: Text, Image, Choice, Dropdown, Card, Carousel, File, Audio, Video, Location',
+                      },
+                      direction: {
+                        type: 'string',
+                        enum: ['incoming', 'outgoing'],
+                        description: 'Direction of the message (`incoming` or `outgoing`).',
+                      },
+                      userId: {
+                        type: 'string',
+                        minLength: 28,
+                        maxLength: 36,
+                        description: 'ID of the [User](#schema_user)',
+                      },
+                      conversationId: {
+                        type: 'string',
+                        minLength: 28,
+                        maxLength: 36,
+                        description: 'ID of the [Conversation](#schema_conversation)',
+                      },
+                      tags: {
+                        type: 'object',
+                        additionalProperties: { type: 'string' },
+                        description:
+                          'Set of [Tags](/docs/developers/concepts/tags) that you can attach to a [Conversation](#schema_conversation). The set of [Tags](/docs/developers/concepts/tags) available on a [Conversation](#schema_conversation) is restricted by the list of [Tags](/docs/developers/concepts/tags) defined previously by the [Bot](#schema_bot). Individual keys can be unset by posting an empty value to them.',
+                      },
+                      origin: {
+                        type: 'string',
+                        enum: ['synthetic'],
+                        description: 'Origin of the message (`synthetic`).',
+                      },
+                    },
+                    required: [
+                      'id',
+                      'createdAt',
+                      'updatedAt',
+                      'type',
+                      'payload',
+                      'direction',
+                      'userId',
+                      'conversationId',
+                      'tags',
+                    ],
+                    description:
+                      'The Message object represents a message in a [Conversation](#schema_conversation) for a specific [User](#schema_user).',
+                    additionalProperties: false,
+                  },
+                },
+                meta: {
+                  type: 'object',
+                  properties: {
+                    nextToken: {
+                      type: 'string',
+                      description:
+                        'The token to use to retrieve the next page of results, passed as a query string parameter (value should be URL-encoded) to this API endpoint.',
+                    },
+                  },
+                  additionalProperties: false,
+                },
+              },
+              required: ['messages', 'meta'],
+              title: 'listMessagesResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+    },
+    experimental: false,
+  }}
+/>

@@ -1,0 +1,189 @@
+---
+title: 'updateUser'
+description: 'Update a [User](#schema_user) object by setting the values of the parameters passed. Any parameters not provided will be left unchanged.'
+method: 'PUT'
+prose: false
+---
+
+import APIEndpoint from '@/components/api-endpoint'
+
+<APIEndpoint
+  endpoint={{
+    method: 'PUT',
+    path: '/v1/chat/users/{id}',
+    operationId: 'updateUser',
+    description:
+      'Update a [User](#schema_user) object by setting the values of the parameters passed. Any parameters not provided will be left unchanged.',
+    tags: [],
+    parameters: [
+      { name: 'id', in: 'path', description: 'User ID', required: true, schema: { type: 'string' } },
+      { name: 'x-bot-id', in: 'header', description: 'Bot id', required: true, schema: { type: 'string' } },
+      {
+        name: 'x-integration-id',
+        in: 'header',
+        description: 'Integration id',
+        required: false,
+        schema: { type: 'string' },
+      },
+      {
+        name: 'x-integration-alias',
+        in: 'header',
+        description: 'Integration alias',
+        required: false,
+        schema: { type: 'string' },
+      },
+    ],
+    requestBody: {
+      description: 'User data',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              tags: {
+                type: 'object',
+                additionalProperties: { type: 'string', maxLength: 500 },
+                description: 'Tags for the [User](#schema_user)',
+              },
+              name: { type: 'string', maxLength: 200, nullable: true, description: 'Name of the user' },
+              pictureUrl: { type: 'string', maxLength: 40000, nullable: true, description: 'URI of the user picture' },
+              attributes: {
+                type: 'object',
+                additionalProperties: { type: 'string', maxLength: 200, nullable: true },
+                deprecated: true,
+                description: 'DEPRECATED - Use properties instead.',
+              },
+              properties: {
+                type: 'object',
+                additionalProperties: { type: 'string', maxLength: 200, nullable: true },
+                description:
+                  'EXPERIMENTAL - Optional shared properties that can be accessed and modified by both the bot and any of its integrations. Set individual properties to null to remove them.',
+              },
+            },
+            title: 'updateUserBody',
+            additionalProperties: false,
+          },
+        },
+      },
+    },
+    responses: {
+      '200': {
+        description:
+          'Returns an updated [User](#schema_user) object if a valid identifier was provided. Returns [an error](#errors) otherwise',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                user: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'string', minLength: 28, maxLength: 36, description: 'Id of the [User](#schema_user)' },
+                    createdAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Creation date of the [User](#schema_user) in ISO 8601 format',
+                    },
+                    updatedAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Updating date of the [User](#schema_user) in ISO 8601 format',
+                    },
+                    tags: {
+                      type: 'object',
+                      additionalProperties: { type: 'string' },
+                      description:
+                        'Set of [Tags](/docs/developers/concepts/tags) that you can attach to a [User](#schema_user). The set of [Tags](/docs/developers/concepts/tags) available on a [User](#schema_user) is restricted by the list of [Tags](/docs/developers/concepts/tags) defined previously by the [Bot](#schema_bot). Individual keys can be unset by posting an empty value to them.',
+                    },
+                    name: { type: 'string', maxLength: 200, description: 'Name of the [User](#schema_user)' },
+                    pictureUrl: {
+                      type: 'string',
+                      maxLength: 40000,
+                      description: 'Picture URL of the [User](#schema_user)',
+                    },
+                    properties: {
+                      type: 'object',
+                      additionalProperties: { type: 'string', maxLength: 200 },
+                      description: 'Optional properties',
+                    },
+                    attributes: {
+                      type: 'object',
+                      additionalProperties: { type: 'string', maxLength: 200 },
+                      description: 'Optional attributes',
+                    },
+                  },
+                  required: ['id', 'createdAt', 'updatedAt', 'tags'],
+                  description:
+                    'The user object represents someone interacting with the bot within a specific integration. The same person interacting with a bot in slack and messenger will be represented with two different users.',
+                  additionalProperties: false,
+                },
+              },
+              required: ['user'],
+              title: 'updateUserResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+      default: {
+        description:
+          'Returns an updated [User](#schema_user) object if a valid identifier was provided. Returns [an error](#errors) otherwise',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                user: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'string', minLength: 28, maxLength: 36, description: 'Id of the [User](#schema_user)' },
+                    createdAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Creation date of the [User](#schema_user) in ISO 8601 format',
+                    },
+                    updatedAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Updating date of the [User](#schema_user) in ISO 8601 format',
+                    },
+                    tags: {
+                      type: 'object',
+                      additionalProperties: { type: 'string' },
+                      description:
+                        'Set of [Tags](/docs/developers/concepts/tags) that you can attach to a [User](#schema_user). The set of [Tags](/docs/developers/concepts/tags) available on a [User](#schema_user) is restricted by the list of [Tags](/docs/developers/concepts/tags) defined previously by the [Bot](#schema_bot). Individual keys can be unset by posting an empty value to them.',
+                    },
+                    name: { type: 'string', maxLength: 200, description: 'Name of the [User](#schema_user)' },
+                    pictureUrl: {
+                      type: 'string',
+                      maxLength: 40000,
+                      description: 'Picture URL of the [User](#schema_user)',
+                    },
+                    properties: {
+                      type: 'object',
+                      additionalProperties: { type: 'string', maxLength: 200 },
+                      description: 'Optional properties',
+                    },
+                    attributes: {
+                      type: 'object',
+                      additionalProperties: { type: 'string', maxLength: 200 },
+                      description: 'Optional attributes',
+                    },
+                  },
+                  required: ['id', 'createdAt', 'updatedAt', 'tags'],
+                  description:
+                    'The user object represents someone interacting with the bot within a specific integration. The same person interacting with a bot in slack and messenger will be represented with two different users.',
+                  additionalProperties: false,
+                },
+              },
+              required: ['user'],
+              title: 'updateUserResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+    },
+    experimental: false,
+  }}
+/>

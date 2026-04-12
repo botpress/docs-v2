@@ -1,0 +1,86 @@
+---
+title: 'configureIntegration'
+description: 'An integration can call this endpoint to configure itself'
+method: 'POST'
+prose: false
+---
+
+import APIEndpoint from '@/components/api-endpoint'
+
+<APIEndpoint
+  endpoint={{
+    method: 'POST',
+    path: '/v1/chat/integrations/configure',
+    operationId: 'configureIntegration',
+    description: 'An integration can call this endpoint to configure itself',
+    tags: [],
+    parameters: [
+      { name: 'x-bot-id', in: 'header', description: 'Bot id', required: true, schema: { type: 'string' } },
+      {
+        name: 'x-integration-id',
+        in: 'header',
+        description: 'Integration id',
+        required: false,
+        schema: { type: 'string' },
+      },
+      {
+        name: 'x-integration-alias',
+        in: 'header',
+        description: 'Integration alias',
+        required: false,
+        schema: { type: 'string' },
+      },
+    ],
+    requestBody: {
+      description: 'Configuration of the integration',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              identifier: {
+                type: 'string',
+                maxLength: 200,
+                nullable: true,
+                description: 'Unique identifier of the integration that was installed on the bot',
+              },
+              scheduleRegisterCall: {
+                type: 'string',
+                enum: ['hourly', 'daily', 'weekly', 'bi-weekly', 'monthly', 'bi-monthly', 'quarterly', 'yearly'],
+                description: 'Recurring schedule on which `register()` will be called on the integration',
+              },
+              sandboxIdentifiers: {
+                type: 'object',
+                nullable: true,
+                description:
+                  '**EXPERIMENTAL** Sandbox identifiers for the integration. Setting this to null will remove all sandbox identifiers.           This is an experimental feature meant to be used by specific integrations.',
+                additionalProperties: false,
+              },
+            },
+            title: 'configureIntegrationBody',
+            additionalProperties: false,
+          },
+        },
+      },
+    },
+    responses: {
+      '200': {
+        description: 'Configuration of the integration',
+        content: {
+          'application/json': {
+            schema: { type: 'object', title: 'configureIntegrationResponse', additionalProperties: false },
+          },
+        },
+      },
+      default: {
+        description: 'Configuration of the integration',
+        content: {
+          'application/json': {
+            schema: { type: 'object', title: 'configureIntegrationResponse', additionalProperties: false },
+          },
+        },
+      },
+    },
+    experimental: false,
+  }}
+/>

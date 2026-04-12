@@ -1,0 +1,26 @@
+{
+  "label": "Endpoints",
+  "sidebarPages": [
+    "getconversation",
+    "deleteconversation",
+    "listconversations",
+    "createconversation",
+    "getorcreateconversation",
+    "listenconversation",
+    "listmessages",
+    "listparticipants",
+    "addparticipant",
+    "getparticipant",
+    "removeparticipant",
+    "getmessage",
+    "deletemessage",
+    "createmessage",
+    "getuser",
+    "updateuser",
+    "deleteuser",
+    "createuser",
+    "getorcreateuser",
+    "getevent",
+    "createevent"
+  ]
+}

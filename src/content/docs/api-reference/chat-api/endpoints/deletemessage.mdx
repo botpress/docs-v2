@@ -1,0 +1,48 @@
+---
+title: 'deleteMessage'
+description: 'Permanently deletes a [Message](#schema_message). It cannot be undone.'
+method: 'DELETE'
+prose: false
+---
+
+import APIEndpoint from '@/components/api-endpoint'
+
+<APIEndpoint
+  endpoint={{
+    method: 'DELETE',
+    path: '/messages/{id}',
+    operationId: 'deleteMessage',
+    summary: 'Delete Message',
+    description: 'Permanently deletes a [Message](#schema_message). It cannot be undone.',
+    tags: ['Endpoints'],
+    parameters: [
+      {
+        name: 'x-user-key',
+        in: 'header',
+        description: 'Authentication Key',
+        required: true,
+        schema: { type: 'string' },
+      },
+      { name: 'id', in: 'path', description: 'Message id', required: true, schema: { type: 'string' } },
+    ],
+    responses: {
+      '200': {
+        description: 'Returns the [Message](#schema_message) object that was deleted',
+        content: {
+          'application/json': {
+            schema: { type: 'object', title: 'deleteMessageResponse', additionalProperties: false },
+          },
+        },
+      },
+      default: {
+        description: 'Returns the [Message](#schema_message) object that was deleted',
+        content: {
+          'application/json': {
+            schema: { type: 'object', title: 'deleteMessageResponse', additionalProperties: false },
+          },
+        },
+      },
+    },
+    experimental: false,
+  }}
+/>

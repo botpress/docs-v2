@@ -16,6 +16,7 @@
     "fix": "bun run fix:format",
     "fix:format": "bunx oxfmt .",
     "lint": "bunx oxlint \"**/*.{ts,tsx}\"",
+    "generate:api": "bun scripts/generate-api-docs.ts",
     "prepare": "lefthook install"
   },
   "dependencies": {
@@ -45,6 +46,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.8",
+    "@botpress/api": "^1.86.0",
     "@types/node": "^25.5.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",

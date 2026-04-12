@@ -1,0 +1,423 @@
+---
+title: 'listIntegrations'
+description: 'List integrations, supports filtering and sorting capabilities'
+method: 'GET'
+prose: false
+---
+
+import APIEndpoint from '@/components/api-endpoint'
+
+<APIEndpoint
+  endpoint={{
+    method: 'GET',
+    path: '/v1/admin/integrations',
+    operationId: 'listIntegrations',
+    description: 'List integrations, supports filtering and sorting capabilities',
+    tags: [],
+    parameters: [
+      {
+        name: 'nextToken',
+        in: 'query',
+        description:
+          'Provide the `meta.nextToken` value provided in the last API response to retrieve the next page of results',
+        schema: { type: 'string' },
+      },
+      {
+        name: 'limit',
+        in: 'query',
+        description: 'Maximum number of results to return per page',
+        required: false,
+        schema: { type: 'number' },
+      },
+      { name: 'name', in: 'query', description: 'Integration Name', schema: { type: 'string' } },
+      {
+        name: 'version',
+        in: 'query',
+        description: 'Integration version. Either a semver version or tag "latest"',
+        schema: { type: 'string' },
+      },
+      {
+        name: 'interfaceId',
+        in: 'query',
+        description: 'Filter integrations by implemented interface ID',
+        schema: { type: 'string' },
+      },
+      {
+        name: 'interfaceName',
+        in: 'query',
+        description: 'Filter integrations by implemented interface name (strict match)',
+        schema: { type: 'string' },
+      },
+      {
+        name: 'installedByBotId',
+        in: 'query',
+        description: 'Bot ID. Required when filtering for installed integrations',
+        required: false,
+        schema: { type: 'string' },
+      },
+      {
+        name: 'verificationStatus',
+        in: 'query',
+        description: 'Filter integrations by verification status',
+        schema: { type: 'string', enum: ['unapproved', 'pending', 'approved', 'rejected'] },
+      },
+      {
+        name: 'search',
+        in: 'query',
+        description:
+          'Search integrations by name, description, actions, and interfaces. Responses include a matchedOn field indicating which fields matched the search.',
+        schema: { type: 'string' },
+      },
+      {
+        name: 'sortBy',
+        in: 'query',
+        description: 'Sort integrations by field',
+        schema: { type: 'string', enum: ['popularity', 'name', 'createdAt', 'updatedAt', 'installCount'] },
+      },
+      {
+        name: 'direction',
+        in: 'query',
+        description: 'Sort direction (asc or desc)',
+        schema: { type: 'string', enum: ['asc', 'desc'] },
+      },
+      {
+        name: 'visibility',
+        in: 'query',
+        description: 'Filter integrations by visibility (public, private)',
+        schema: { type: 'string', enum: ['public', 'private'] },
+      },
+      {
+        name: 'dev',
+        in: 'query',
+        description:
+          'If true, only dev integrations are returned. Otherwise, only production integrations are returned.',
+        required: false,
+        schema: { type: 'boolean' },
+      },
+      { name: 'x-workspace-id', in: 'header', description: 'Workspace ID', required: true, schema: { type: 'string' } },
+      {
+        name: 'x-multiple-integrations',
+        in: 'header',
+        description:
+          'Whether the client supports bots with multiple instances of the same integration. Set to "true" to receive integration instances keyed by their alias instead of their id. This header will be removed in the future, and the API will always return multiple instances keyed by alias.',
+        required: false,
+        schema: { type: 'string' },
+      },
+    ],
+    responses: {
+      '200': {
+        description: 'Success',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                integrations: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: {
+                        type: 'string',
+                        minLength: 28,
+                        maxLength: 36,
+                        description: 'ID of the [Integration](#schema_integration)',
+                      },
+                      name: {
+                        type: 'string',
+                        maxLength: 200,
+                        description: 'Name of the [Integration](#schema_integration)',
+                      },
+                      version: {
+                        type: 'string',
+                        maxLength: 200,
+                        description: 'Version of the [Integration](#schema_integration)',
+                      },
+                      createdAt: {
+                        type: 'string',
+                        format: 'date-time',
+                        description: 'Creation date of the [Integration](#schema_integration) in ISO 8601 format',
+                      },
+                      updatedAt: {
+                        type: 'string',
+                        format: 'date-time',
+                        description: 'Updating date of the [Integration](#schema_integration) in ISO 8601 format',
+                      },
+                      title: {
+                        type: 'string',
+                        minLength: 1,
+                        maxLength: 64,
+                        description: 'Title of the integration. This is the name that will be displayed in the UI',
+                      },
+                      description: {
+                        type: 'string',
+                        maxLength: 256,
+                        description:
+                          'Description of the integration. This is the description that will be displayed in the UI',
+                      },
+                      iconUrl: {
+                        type: 'string',
+                        description:
+                          'URL of the icon of the integration. This is the icon that will be displayed in the UI',
+                      },
+                      public: {
+                        type: 'boolean',
+                        description:
+                          '[DEPRECATED] Indicates whether the integration is public. Please use the "visibility" parameter instead.',
+                        deprecated: true,
+                      },
+                      visibility: {
+                        type: 'string',
+                        enum: ['public', 'private', 'unlisted'],
+                        description:
+                          "The integration's visibility. Public integrations are available to all and cannot be updated without creating a new version. Unlisted integrations behave identically to public integrations, but they are not listed in the integration hub. By default, integrations are private and only accessible to the workspace that created them.",
+                      },
+                      verificationStatus: {
+                        type: 'string',
+                        enum: ['unapproved', 'pending', 'approved', 'rejected'],
+                        description: 'Status of the integration version verification',
+                      },
+                      lifecycleStatus: {
+                        type: 'string',
+                        enum: ['published', 'deprecated'],
+                        description:
+                          'The lifecycle status of the integration. When an integration is deprecated, it can no longer be installed.',
+                      },
+                      matchedOn: {
+                        type: 'object',
+                        properties: {
+                          name: {
+                            type: 'boolean',
+                            description: 'Whether the integration name matched the search term',
+                          },
+                          title: {
+                            type: 'boolean',
+                            description: 'Whether the integration title matched the search term',
+                          },
+                          description: {
+                            type: 'boolean',
+                            description: 'Whether the integration description matched the search term',
+                          },
+                          actions: {
+                            type: 'array',
+                            items: { type: 'string' },
+                            description: 'Action names that matched the search term',
+                          },
+                          interfaces: {
+                            type: 'array',
+                            items: { type: 'string' },
+                            description: 'Interface names that matched the search term',
+                          },
+                        },
+                        description: 'Metadata about which fields matched the search criteria',
+                      },
+                      ownerWorkspace: {
+                        type: 'object',
+                        properties: {
+                          id: { type: 'string' },
+                          handle: { type: 'string', nullable: true },
+                          name: { type: 'string' },
+                        },
+                        required: ['id', 'handle', 'name'],
+                      },
+                      attributes: {
+                        type: 'object',
+                        additionalProperties: { type: 'string' },
+                        description: 'Optional key-value attributes from the integration definition',
+                      },
+                    },
+                    required: [
+                      'id',
+                      'name',
+                      'version',
+                      'createdAt',
+                      'updatedAt',
+                      'title',
+                      'description',
+                      'iconUrl',
+                      'public',
+                      'visibility',
+                      'verificationStatus',
+                      'lifecycleStatus',
+                    ],
+                  },
+                },
+                meta: {
+                  type: 'object',
+                  properties: {
+                    nextToken: {
+                      type: 'string',
+                      description:
+                        'The token to use to retrieve the next page of results, passed as a query string parameter (value should be URL-encoded) to this API endpoint.',
+                    },
+                  },
+                  additionalProperties: false,
+                },
+              },
+              required: ['integrations', 'meta'],
+              title: 'listIntegrationsResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+      default: {
+        description: 'Success',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                integrations: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: {
+                        type: 'string',
+                        minLength: 28,
+                        maxLength: 36,
+                        description: 'ID of the [Integration](#schema_integration)',
+                      },
+                      name: {
+                        type: 'string',
+                        maxLength: 200,
+                        description: 'Name of the [Integration](#schema_integration)',
+                      },
+                      version: {
+                        type: 'string',
+                        maxLength: 200,
+                        description: 'Version of the [Integration](#schema_integration)',
+                      },
+                      createdAt: {
+                        type: 'string',
+                        format: 'date-time',
+                        description: 'Creation date of the [Integration](#schema_integration) in ISO 8601 format',
+                      },
+                      updatedAt: {
+                        type: 'string',
+                        format: 'date-time',
+                        description: 'Updating date of the [Integration](#schema_integration) in ISO 8601 format',
+                      },
+                      title: {
+                        type: 'string',
+                        minLength: 1,
+                        maxLength: 64,
+                        description: 'Title of the integration. This is the name that will be displayed in the UI',
+                      },
+                      description: {
+                        type: 'string',
+                        maxLength: 256,
+                        description:
+                          'Description of the integration. This is the description that will be displayed in the UI',
+                      },
+                      iconUrl: {
+                        type: 'string',
+                        description:
+                          'URL of the icon of the integration. This is the icon that will be displayed in the UI',
+                      },
+                      public: {
+                        type: 'boolean',
+                        description:
+                          '[DEPRECATED] Indicates whether the integration is public. Please use the "visibility" parameter instead.',
+                        deprecated: true,
+                      },
+                      visibility: {
+                        type: 'string',
+                        enum: ['public', 'private', 'unlisted'],
+                        description:
+                          "The integration's visibility. Public integrations are available to all and cannot be updated without creating a new version. Unlisted integrations behave identically to public integrations, but they are not listed in the integration hub. By default, integrations are private and only accessible to the workspace that created them.",
+                      },
+                      verificationStatus: {
+                        type: 'string',
+                        enum: ['unapproved', 'pending', 'approved', 'rejected'],
+                        description: 'Status of the integration version verification',
+                      },
+                      lifecycleStatus: {
+                        type: 'string',
+                        enum: ['published', 'deprecated'],
+                        description:
+                          'The lifecycle status of the integration. When an integration is deprecated, it can no longer be installed.',
+                      },
+                      matchedOn: {
+                        type: 'object',
+                        properties: {
+                          name: {
+                            type: 'boolean',
+                            description: 'Whether the integration name matched the search term',
+                          },
+                          title: {
+                            type: 'boolean',
+                            description: 'Whether the integration title matched the search term',
+                          },
+                          description: {
+                            type: 'boolean',
+                            description: 'Whether the integration description matched the search term',
+                          },
+                          actions: {
+                            type: 'array',
+                            items: { type: 'string' },
+                            description: 'Action names that matched the search term',
+                          },
+                          interfaces: {
+                            type: 'array',
+                            items: { type: 'string' },
+                            description: 'Interface names that matched the search term',
+                          },
+                        },
+                        description: 'Metadata about which fields matched the search criteria',
+                      },
+                      ownerWorkspace: {
+                        type: 'object',
+                        properties: {
+                          id: { type: 'string' },
+                          handle: { type: 'string', nullable: true },
+                          name: { type: 'string' },
+                        },
+                        required: ['id', 'handle', 'name'],
+                      },
+                      attributes: {
+                        type: 'object',
+                        additionalProperties: { type: 'string' },
+                        description: 'Optional key-value attributes from the integration definition',
+                      },
+                    },
+                    required: [
+                      'id',
+                      'name',
+                      'version',
+                      'createdAt',
+                      'updatedAt',
+                      'title',
+                      'description',
+                      'iconUrl',
+                      'public',
+                      'visibility',
+                      'verificationStatus',
+                      'lifecycleStatus',
+                    ],
+                  },
+                },
+                meta: {
+                  type: 'object',
+                  properties: {
+                    nextToken: {
+                      type: 'string',
+                      description:
+                        'The token to use to retrieve the next page of results, passed as a query string parameter (value should be URL-encoded) to this API endpoint.',
+                    },
+                  },
+                  additionalProperties: false,
+                },
+              },
+              required: ['integrations', 'meta'],
+              title: 'listIntegrationsResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+    },
+    experimental: false,
+  }}
+/>

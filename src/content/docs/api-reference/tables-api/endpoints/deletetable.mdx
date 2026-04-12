@@ -1,0 +1,67 @@
+---
+title: 'deleteTable'
+description: 'Permanently deletes a table and all its associated data from the system. Use with caution, as this action cannot be undone.'
+method: 'DELETE'
+prose: false
+---
+
+import APIEndpoint from '@/components/api-endpoint'
+
+<APIEndpoint
+  endpoint={{
+    method: 'DELETE',
+    path: '/v1/tables/{table}',
+    operationId: 'deleteTable',
+    description:
+      'Permanently deletes a table and all its associated data from the system. Use with caution, as this action cannot be undone.',
+    tags: [],
+    parameters: [
+      {
+        name: 'table',
+        in: 'path',
+        description: "The table's name or unique identifier for targeting specific table operations.",
+        required: true,
+        schema: { type: 'string' },
+      },
+      { name: 'x-bot-id', in: 'header', description: 'Bot id', required: true, schema: { type: 'string' } },
+      {
+        name: 'x-integration-id',
+        in: 'header',
+        description: 'Integration id',
+        required: false,
+        schema: { type: 'string' },
+      },
+      {
+        name: 'x-integration-alias',
+        in: 'header',
+        description: 'Integration alias',
+        required: false,
+        schema: { type: 'string' },
+      },
+      {
+        name: 'x-integration-name',
+        in: 'header',
+        description: 'Integration name',
+        required: false,
+        schema: { type: 'string' },
+      },
+      { name: 'x-user-id', in: 'header', description: 'User Id', required: false, schema: { type: 'string' } },
+      { name: 'x-user-role', in: 'header', description: 'User Role', required: false, schema: { type: 'string' } },
+    ],
+    responses: {
+      '200': {
+        description: 'Confirmation that the table has been deleted.',
+        content: {
+          'application/json': { schema: { type: 'object', title: 'deleteTableResponse', additionalProperties: false } },
+        },
+      },
+      default: {
+        description: 'Confirmation that the table has been deleted.',
+        content: {
+          'application/json': { schema: { type: 'object', title: 'deleteTableResponse', additionalProperties: false } },
+        },
+      },
+    },
+    experimental: false,
+  }}
+/>

@@ -1,0 +1,124 @@
+---
+title: 'createEvent'
+description: 'Creates a custom [Event](#schema_event)'
+method: 'POST'
+prose: false
+---
+
+import APIEndpoint from '@/components/api-endpoint'
+
+<APIEndpoint
+  endpoint={{
+    method: 'POST',
+    path: '/events',
+    operationId: 'createEvent',
+    summary: 'Create Event',
+    description: 'Creates a custom [Event](#schema_event)',
+    tags: ['Endpoints'],
+    parameters: [
+      {
+        name: 'x-user-key',
+        in: 'header',
+        description: 'Authentication Key',
+        required: true,
+        schema: { type: 'string' },
+      },
+    ],
+    requestBody: {
+      description: 'Event data',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              payload: {
+                type: 'object',
+                additionalProperties: {},
+                description: 'Payload is the content of the custom event.',
+              },
+              conversationId: { type: 'string', description: 'ID of the [Conversation](#schema_conversation)' },
+            },
+            required: ['payload', 'conversationId'],
+            title: 'createEventBody',
+            additionalProperties: false,
+          },
+        },
+      },
+    },
+    responses: {
+      '201': {
+        description: 'Returns a [Event](#schema_event).',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                event: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'string', description: 'ID of the custom [Event](#schema_event).' },
+                    createdAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Creation date of the custom [Event](#schema_event) in ISO 8601 format',
+                    },
+                    payload: {
+                      type: 'object',
+                      additionalProperties: {},
+                      description: 'Payload is the content of the custom event.',
+                    },
+                    conversationId: { type: 'string', description: 'ID of the [Conversation](#schema_conversation).' },
+                    userId: { type: 'string', description: 'ID of the [User](#schema_user).' },
+                  },
+                  required: ['id', 'createdAt', 'payload', 'conversationId', 'userId'],
+                  additionalProperties: false,
+                  'x-readme-ref-name': 'Event',
+                },
+              },
+              required: ['event'],
+              title: 'createEventResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+      default: {
+        description: 'Returns a [Event](#schema_event).',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                event: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'string', description: 'ID of the custom [Event](#schema_event).' },
+                    createdAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Creation date of the custom [Event](#schema_event) in ISO 8601 format',
+                    },
+                    payload: {
+                      type: 'object',
+                      additionalProperties: {},
+                      description: 'Payload is the content of the custom event.',
+                    },
+                    conversationId: { type: 'string', description: 'ID of the [Conversation](#schema_conversation).' },
+                    userId: { type: 'string', description: 'ID of the [User](#schema_user).' },
+                  },
+                  required: ['id', 'createdAt', 'payload', 'conversationId', 'userId'],
+                  additionalProperties: false,
+                  'x-readme-ref-name': 'Event',
+                },
+              },
+              required: ['event'],
+              title: 'createEventResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+    },
+    experimental: false,
+  }}
+/>

@@ -12,6 +12,8 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# temp files from API docs generator
+.tmp-api-specs/
 
 # environment variables
 .env
