@@ -1,0 +1,43 @@
+---
+title: 'deleteUser'
+description: 'Permanently deletes a [User](#schema_user). It cannot be undone.'
+method: 'DELETE'
+prose: false
+---
+
+import APIEndpoint from '@/components/api-endpoint'
+
+<APIEndpoint
+  endpoint={{
+    method: 'DELETE',
+    path: '/users/me',
+    operationId: 'deleteUser',
+    summary: 'Delete User',
+    description: 'Permanently deletes a [User](#schema_user). It cannot be undone.',
+    tags: ['Endpoints'],
+    parameters: [
+      {
+        name: 'x-user-key',
+        in: 'header',
+        description: 'Authentication Key',
+        required: true,
+        schema: { type: 'string' },
+      },
+    ],
+    responses: {
+      '200': {
+        description: 'Returns the [User](#schema_user) object that was deleted',
+        content: {
+          'application/json': { schema: { type: 'object', title: 'deleteUserResponse', additionalProperties: false } },
+        },
+      },
+      default: {
+        description: 'Returns the [User](#schema_user) object that was deleted',
+        content: {
+          'application/json': { schema: { type: 'object', title: 'deleteUserResponse', additionalProperties: false } },
+        },
+      },
+    },
+    experimental: false,
+  }}
+/>

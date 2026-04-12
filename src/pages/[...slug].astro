@@ -51,10 +51,12 @@ const breadcrumbs = buildBreadcrumbs(entry.id, contentDir, title);
 const entries = await getCollection("docs");
 const articles = normalizeCollectionEntries(entries, contentDir);
 const titleMap = new Map<string, string>();
+const methodMap = new Map<string, string>();
 for (const a of articles) {
   titleMap.set(a.slug, a.title);
+  if (a.method) methodMap.set(a.slug, a.method);
 }
-const treeResult = buildSidebarTree(titleMap, contentDir);
+const treeResult = buildSidebarTree(titleMap, contentDir, methodMap);
 const currentPath = Astro.url.pathname;
 const hasTabs = treeResult.tabs.length > 0;
 const activeTab = hasTabs

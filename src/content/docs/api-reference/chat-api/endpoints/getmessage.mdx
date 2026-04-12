@@ -1,0 +1,410 @@
+---
+title: 'getMessage'
+description: 'Retrieves the [Message](#schema_message) object for a valid identifier.'
+method: 'GET'
+prose: false
+---
+
+import APIEndpoint from '@/components/api-endpoint'
+
+<APIEndpoint
+  endpoint={{
+    method: 'GET',
+    path: '/messages/{id}',
+    operationId: 'getMessage',
+    summary: 'Get Message',
+    description: 'Retrieves the [Message](#schema_message) object for a valid identifier.',
+    tags: ['Endpoints'],
+    parameters: [
+      {
+        name: 'x-user-key',
+        in: 'header',
+        description: 'Authentication Key',
+        required: true,
+        schema: { type: 'string' },
+      },
+      { name: 'id', in: 'path', description: 'ID of the Message', required: true, schema: { type: 'string' } },
+    ],
+    responses: {
+      '200': {
+        description: 'Returns a [Message](#schema_message) object if a valid identifier was provided',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                message: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'string', description: 'Identifier of the [Message](#schema_message)' },
+                    createdAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Creation date of the [Message](#schema_message) in ISO 8601 format',
+                    },
+                    payload: {
+                      oneOf: [
+                        {
+                          type: 'object',
+                          properties: {
+                            audioUrl: { type: 'string', minLength: 1 },
+                            type: { type: 'string', enum: ['audio'] },
+                          },
+                          required: ['audioUrl', 'type'],
+                        },
+                        {
+                          type: 'object',
+                          properties: {
+                            title: { type: 'string', minLength: 1 },
+                            subtitle: { type: 'string', minLength: 1 },
+                            imageUrl: { type: 'string', minLength: 1 },
+                            actions: {
+                              type: 'array',
+                              items: {
+                                type: 'object',
+                                properties: {
+                                  action: { type: 'string', enum: ['postback', 'url', 'say'] },
+                                  label: { type: 'string', minLength: 1 },
+                                  value: { type: 'string', minLength: 1 },
+                                },
+                                required: ['action', 'label', 'value'],
+                              },
+                            },
+                            type: { type: 'string', enum: ['card'] },
+                          },
+                          required: ['title', 'actions', 'type'],
+                        },
+                        {
+                          type: 'object',
+                          properties: {
+                            items: {
+                              type: 'array',
+                              items: {
+                                type: 'object',
+                                properties: {
+                                  title: { type: 'string', minLength: 1 },
+                                  subtitle: { type: 'string', minLength: 1 },
+                                  imageUrl: { type: 'string', minLength: 1 },
+                                  actions: {
+                                    type: 'array',
+                                    items: {
+                                      type: 'object',
+                                      properties: {
+                                        action: { type: 'string', enum: ['postback', 'url', 'say'] },
+                                        label: { type: 'string', minLength: 1 },
+                                        value: { type: 'string', minLength: 1 },
+                                      },
+                                      required: ['action', 'label', 'value'],
+                                    },
+                                  },
+                                },
+                                required: ['title', 'actions'],
+                              },
+                            },
+                            type: { type: 'string', enum: ['carousel'] },
+                          },
+                          required: ['items', 'type'],
+                        },
+                        {
+                          type: 'object',
+                          properties: {
+                            text: { type: 'string', minLength: 1 },
+                            options: {
+                              type: 'array',
+                              items: {
+                                type: 'object',
+                                properties: {
+                                  label: { type: 'string', minLength: 1 },
+                                  value: { type: 'string', minLength: 1 },
+                                },
+                                required: ['label', 'value'],
+                              },
+                            },
+                            type: { type: 'string', enum: ['choice'] },
+                          },
+                          required: ['text', 'options', 'type'],
+                        },
+                        {
+                          type: 'object',
+                          properties: {
+                            text: { type: 'string', minLength: 1 },
+                            options: {
+                              type: 'array',
+                              items: {
+                                type: 'object',
+                                properties: {
+                                  label: { type: 'string', minLength: 1 },
+                                  value: { type: 'string', minLength: 1 },
+                                },
+                                required: ['label', 'value'],
+                              },
+                            },
+                            type: { type: 'string', enum: ['dropdown'] },
+                          },
+                          required: ['text', 'options', 'type'],
+                        },
+                        {
+                          type: 'object',
+                          properties: {
+                            fileUrl: { type: 'string', minLength: 1 },
+                            title: { type: 'string', minLength: 1 },
+                            type: { type: 'string', enum: ['file'] },
+                          },
+                          required: ['fileUrl', 'type'],
+                        },
+                        {
+                          type: 'object',
+                          properties: {
+                            imageUrl: { type: 'string', minLength: 1 },
+                            type: { type: 'string', enum: ['image'] },
+                          },
+                          required: ['imageUrl', 'type'],
+                        },
+                        {
+                          type: 'object',
+                          properties: {
+                            latitude: { type: 'number' },
+                            longitude: { type: 'number' },
+                            address: { type: 'string' },
+                            title: { type: 'string' },
+                            type: { type: 'string', enum: ['location'] },
+                          },
+                          required: ['latitude', 'longitude', 'type'],
+                        },
+                        {
+                          type: 'object',
+                          properties: {
+                            markdown: { type: 'string', minLength: 1 },
+                            type: { type: 'string', enum: ['markdown'] },
+                          },
+                          required: ['markdown', 'type'],
+                        },
+                        {
+                          type: 'object',
+                          properties: {
+                            text: { type: 'string', minLength: 1 },
+                            type: { type: 'string', enum: ['text'] },
+                          },
+                          required: ['text', 'type'],
+                        },
+                        {
+                          type: 'object',
+                          properties: {
+                            videoUrl: { type: 'string', minLength: 1 },
+                            type: { type: 'string', enum: ['video'] },
+                          },
+                          required: ['videoUrl', 'type'],
+                        },
+                      ],
+                      description: 'Payload is the content type of the message.',
+                    },
+                    userId: { type: 'string', description: 'ID of the [User](#schema_user)' },
+                    conversationId: { type: 'string', description: 'ID of the [Conversation](#schema_conversation)' },
+                  },
+                  required: ['id', 'createdAt', 'payload', 'userId', 'conversationId'],
+                  description:
+                    'The Message object represents a message in a [Conversation](#schema_conversation) for a specific [User](#schema_user).',
+                  additionalProperties: false,
+                  'x-readme-ref-name': 'Message',
+                },
+              },
+              required: ['message'],
+              title: 'getMessageResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+      default: {
+        description: 'Returns a [Message](#schema_message) object if a valid identifier was provided',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                message: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'string', description: 'Identifier of the [Message](#schema_message)' },
+                    createdAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Creation date of the [Message](#schema_message) in ISO 8601 format',
+                    },
+                    payload: {
+                      oneOf: [
+                        {
+                          type: 'object',
+                          properties: {
+                            audioUrl: { type: 'string', minLength: 1 },
+                            type: { type: 'string', enum: ['audio'] },
+                          },
+                          required: ['audioUrl', 'type'],
+                        },
+                        {
+                          type: 'object',
+                          properties: {
+                            title: { type: 'string', minLength: 1 },
+                            subtitle: { type: 'string', minLength: 1 },
+                            imageUrl: { type: 'string', minLength: 1 },
+                            actions: {
+                              type: 'array',
+                              items: {
+                                type: 'object',
+                                properties: {
+                                  action: { type: 'string', enum: ['postback', 'url', 'say'] },
+                                  label: { type: 'string', minLength: 1 },
+                                  value: { type: 'string', minLength: 1 },
+                                },
+                                required: ['action', 'label', 'value'],
+                              },
+                            },
+                            type: { type: 'string', enum: ['card'] },
+                          },
+                          required: ['title', 'actions', 'type'],
+                        },
+                        {
+                          type: 'object',
+                          properties: {
+                            items: {
+                              type: 'array',
+                              items: {
+                                type: 'object',
+                                properties: {
+                                  title: { type: 'string', minLength: 1 },
+                                  subtitle: { type: 'string', minLength: 1 },
+                                  imageUrl: { type: 'string', minLength: 1 },
+                                  actions: {
+                                    type: 'array',
+                                    items: {
+                                      type: 'object',
+                                      properties: {
+                                        action: { type: 'string', enum: ['postback', 'url', 'say'] },
+                                        label: { type: 'string', minLength: 1 },
+                                        value: { type: 'string', minLength: 1 },
+                                      },
+                                      required: ['action', 'label', 'value'],
+                                    },
+                                  },
+                                },
+                                required: ['title', 'actions'],
+                              },
+                            },
+                            type: { type: 'string', enum: ['carousel'] },
+                          },
+                          required: ['items', 'type'],
+                        },
+                        {
+                          type: 'object',
+                          properties: {
+                            text: { type: 'string', minLength: 1 },
+                            options: {
+                              type: 'array',
+                              items: {
+                                type: 'object',
+                                properties: {
+                                  label: { type: 'string', minLength: 1 },
+                                  value: { type: 'string', minLength: 1 },
+                                },
+                                required: ['label', 'value'],
+                              },
+                            },
+                            type: { type: 'string', enum: ['choice'] },
+                          },
+                          required: ['text', 'options', 'type'],
+                        },
+                        {
+                          type: 'object',
+                          properties: {
+                            text: { type: 'string', minLength: 1 },
+                            options: {
+                              type: 'array',
+                              items: {
+                                type: 'object',
+                                properties: {
+                                  label: { type: 'string', minLength: 1 },
+                                  value: { type: 'string', minLength: 1 },
+                                },
+                                required: ['label', 'value'],
+                              },
+                            },
+                            type: { type: 'string', enum: ['dropdown'] },
+                          },
+                          required: ['text', 'options', 'type'],
+                        },
+                        {
+                          type: 'object',
+                          properties: {
+                            fileUrl: { type: 'string', minLength: 1 },
+                            title: { type: 'string', minLength: 1 },
+                            type: { type: 'string', enum: ['file'] },
+                          },
+                          required: ['fileUrl', 'type'],
+                        },
+                        {
+                          type: 'object',
+                          properties: {
+                            imageUrl: { type: 'string', minLength: 1 },
+                            type: { type: 'string', enum: ['image'] },
+                          },
+                          required: ['imageUrl', 'type'],
+                        },
+                        {
+                          type: 'object',
+                          properties: {
+                            latitude: { type: 'number' },
+                            longitude: { type: 'number' },
+                            address: { type: 'string' },
+                            title: { type: 'string' },
+                            type: { type: 'string', enum: ['location'] },
+                          },
+                          required: ['latitude', 'longitude', 'type'],
+                        },
+                        {
+                          type: 'object',
+                          properties: {
+                            markdown: { type: 'string', minLength: 1 },
+                            type: { type: 'string', enum: ['markdown'] },
+                          },
+                          required: ['markdown', 'type'],
+                        },
+                        {
+                          type: 'object',
+                          properties: {
+                            text: { type: 'string', minLength: 1 },
+                            type: { type: 'string', enum: ['text'] },
+                          },
+                          required: ['text', 'type'],
+                        },
+                        {
+                          type: 'object',
+                          properties: {
+                            videoUrl: { type: 'string', minLength: 1 },
+                            type: { type: 'string', enum: ['video'] },
+                          },
+                          required: ['videoUrl', 'type'],
+                        },
+                      ],
+                      description: 'Payload is the content type of the message.',
+                    },
+                    userId: { type: 'string', description: 'ID of the [User](#schema_user)' },
+                    conversationId: { type: 'string', description: 'ID of the [Conversation](#schema_conversation)' },
+                  },
+                  required: ['id', 'createdAt', 'payload', 'userId', 'conversationId'],
+                  description:
+                    'The Message object represents a message in a [Conversation](#schema_conversation) for a specific [User](#schema_user).',
+                  additionalProperties: false,
+                  'x-readme-ref-name': 'Message',
+                },
+              },
+              required: ['message'],
+              title: 'getMessageResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+    },
+    experimental: false,
+  }}
+/>

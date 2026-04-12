@@ -1,0 +1,55 @@
+---
+title: 'removeParticipant'
+description: 'Remove a [Participant](#schema_user) from a [Conversation](#schema_conversation).'
+method: 'DELETE'
+prose: false
+---
+
+import APIEndpoint from '@/components/api-endpoint'
+
+<APIEndpoint
+  endpoint={{
+    method: 'DELETE',
+    path: '/conversations/{conversationId}/participants/{userId}',
+    operationId: 'removeParticipant',
+    summary: 'Remove Participant',
+    description: 'Remove a [Participant](#schema_user) from a [Conversation](#schema_conversation).',
+    tags: ['Endpoints'],
+    parameters: [
+      {
+        name: 'x-user-key',
+        in: 'header',
+        description: 'Authentication Key',
+        required: true,
+        schema: { type: 'string' },
+      },
+      {
+        name: 'conversationId',
+        in: 'path',
+        description: 'Conversation id',
+        required: true,
+        schema: { type: 'string' },
+      },
+      { name: 'userId', in: 'path', description: 'User id', required: true, schema: { type: 'string' } },
+    ],
+    responses: {
+      '200': {
+        description: 'Returns an empty object',
+        content: {
+          'application/json': {
+            schema: { type: 'object', title: 'removeParticipantResponse', additionalProperties: false },
+          },
+        },
+      },
+      default: {
+        description: 'Returns an empty object',
+        content: {
+          'application/json': {
+            schema: { type: 'object', title: 'removeParticipantResponse', additionalProperties: false },
+          },
+        },
+      },
+    },
+    experimental: false,
+  }}
+/>

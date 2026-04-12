@@ -1,0 +1,109 @@
+---
+title: 'listFileTagValues'
+description: 'List available tags'
+method: 'GET'
+prose: false
+---
+
+import APIEndpoint from '@/components/api-endpoint'
+
+<APIEndpoint
+  endpoint={{
+    method: 'GET',
+    path: '/v1/files/tags/{tag}/values',
+    operationId: 'listFileTagValues',
+    description: 'List available tags',
+    tags: [],
+    parameters: [
+      {
+        name: 'nextToken',
+        in: 'query',
+        description:
+          'Provide the `meta.nextToken` value provided in the last API response to retrieve the next page of results',
+        schema: { type: 'string' },
+      },
+      { name: 'tag', in: 'path', description: 'Tag name', required: true, schema: { type: 'string' } },
+      { name: 'x-bot-id', in: 'header', description: 'Bot id', required: true, schema: { type: 'string' } },
+      {
+        name: 'x-integration-id',
+        in: 'header',
+        description: 'Integration id',
+        required: false,
+        schema: { type: 'string' },
+      },
+      {
+        name: 'x-integration-alias',
+        in: 'header',
+        description: 'Integration alias',
+        required: false,
+        schema: { type: 'string' },
+      },
+      {
+        name: 'x-integration-name',
+        in: 'header',
+        description: 'Integration name',
+        required: false,
+        schema: { type: 'string' },
+      },
+      { name: 'x-user-id', in: 'header', description: 'User Id', required: false, schema: { type: 'string' } },
+      { name: 'x-user-role', in: 'header', description: 'User Role', required: false, schema: { type: 'string' } },
+    ],
+    responses: {
+      '200': {
+        description: 'Returns the list of available values used for a given tag across all files of the bot.',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                values: { type: 'array', items: { type: 'string' } },
+                meta: {
+                  type: 'object',
+                  properties: {
+                    nextToken: {
+                      type: 'string',
+                      description:
+                        'The token to use to retrieve the next page of results, passed as a query string parameter (value should be URL-encoded) to this API endpoint.',
+                    },
+                  },
+                  additionalProperties: false,
+                },
+              },
+              required: ['values', 'meta'],
+              title: 'listFileTagValuesResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+      default: {
+        description: 'Returns the list of available values used for a given tag across all files of the bot.',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                values: { type: 'array', items: { type: 'string' } },
+                meta: {
+                  type: 'object',
+                  properties: {
+                    nextToken: {
+                      type: 'string',
+                      description:
+                        'The token to use to retrieve the next page of results, passed as a query string parameter (value should be URL-encoded) to this API endpoint.',
+                    },
+                  },
+                  additionalProperties: false,
+                },
+              },
+              required: ['values', 'meta'],
+              title: 'listFileTagValuesResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+    },
+    experimental: false,
+  }}
+/>

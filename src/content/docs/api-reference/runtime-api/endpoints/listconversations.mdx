@@ -1,0 +1,248 @@
+---
+title: 'listConversations'
+description: 'Retrieves a list of [Conversation](#schema_conversation) you’ve previously created. The conversations are returned in sorted order, with the most recent appearing first. The list can be filtered using'
+method: 'GET'
+prose: false
+---
+
+import APIEndpoint from '@/components/api-endpoint'
+
+<APIEndpoint
+  endpoint={{
+    method: 'GET',
+    path: '/v1/chat/conversations',
+    operationId: 'listConversations',
+    description:
+      'Retrieves a list of [Conversation](#schema_conversation) you’ve previously created. The conversations are returned in sorted order, with the most recent appearing first. The list can be filtered using [Tags](#tags).',
+    tags: [],
+    parameters: [
+      {
+        name: 'nextToken',
+        in: 'query',
+        description:
+          'Provide the `meta.nextToken` value provided in the last API response to retrieve the next page of results',
+        schema: { type: 'string' },
+      },
+      {
+        name: 'sortField',
+        in: 'query',
+        description: 'Sort results by this field',
+        schema: { type: 'string', enum: ['createdAt', 'updatedAt'] },
+      },
+      {
+        name: 'sortDirection',
+        in: 'query',
+        description: 'Sort results in this direction',
+        schema: { type: 'string', enum: ['asc', 'desc'] },
+      },
+      {
+        name: 'tags',
+        in: 'query',
+        description: 'Filter by tags',
+        schema: { type: 'object', additionalProperties: { type: 'string' } },
+      },
+      {
+        name: 'participantIds',
+        in: 'query',
+        description: 'Filter by participant ids',
+        schema: { type: 'array', items: { type: 'string' } },
+      },
+      { name: 'integrationName', in: 'query', description: 'Filter by integration name', schema: { type: 'string' } },
+      { name: 'channel', in: 'query', description: 'Filter by integration channel name', schema: { type: 'string' } },
+      {
+        name: 'afterDate',
+        in: 'query',
+        description: 'Date in ISO 8601 string with UTC timezone after which the conversation was created (inclusive)',
+        schema: { type: 'string' },
+      },
+      {
+        name: 'beforeDate',
+        in: 'query',
+        description: 'Date in ISO 8601 string with UTC timezone before which the conversation was created (inclusive)',
+        schema: { type: 'string' },
+      },
+      { name: 'x-bot-id', in: 'header', description: 'Bot id', required: true, schema: { type: 'string' } },
+      {
+        name: 'x-integration-id',
+        in: 'header',
+        description: 'Integration id',
+        required: false,
+        schema: { type: 'string' },
+      },
+      {
+        name: 'x-integration-alias',
+        in: 'header',
+        description: 'Integration alias',
+        required: false,
+        schema: { type: 'string' },
+      },
+    ],
+    responses: {
+      '200': {
+        description: 'Returns a list of [Conversation](#schema_conversation) objects',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                conversations: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: {
+                        type: 'string',
+                        minLength: 28,
+                        maxLength: 36,
+                        description: 'Id of the [Conversation](#schema_conversation)',
+                      },
+                      currentTaskId: {
+                        type: 'string',
+                        minLength: 28,
+                        maxLength: 36,
+                        deprecated: true,
+                        description: 'Unused. This field will be removed in the future.',
+                      },
+                      currentWorkflowId: {
+                        type: 'string',
+                        minLength: 28,
+                        maxLength: 36,
+                        description: 'Id of the current [Workflow](#schema_workflow)',
+                      },
+                      createdAt: {
+                        type: 'string',
+                        format: 'date-time',
+                        description: 'Creation date of the [Conversation](#schema_conversation) in ISO 8601 format',
+                      },
+                      updatedAt: {
+                        type: 'string',
+                        format: 'date-time',
+                        description: 'Updating date of the [Conversation](#schema_conversation) in ISO 8601 format',
+                      },
+                      channel: {
+                        type: 'string',
+                        description: 'Name of the channel where the [Conversation](#schema_conversation) is happening',
+                      },
+                      integration: {
+                        type: 'string',
+                        description: 'Name of the integration that created the [Conversation](#schema_conversation)',
+                      },
+                      tags: {
+                        type: 'object',
+                        additionalProperties: { type: 'string' },
+                        description:
+                          'Set of [Tags](/docs/developers/concepts/tags) that you can attach to a [Conversation](#schema_conversation). The set of [Tags](/docs/developers/concepts/tags) available on a [Conversation](#schema_conversation) is restricted by the list of [Tags](/docs/developers/concepts/tags) defined previously by the [Bot](#schema_bot). Individual keys can be unset by posting an empty value to them.',
+                      },
+                      messageCount: { type: 'number', description: 'Number of messages in the conversation' },
+                    },
+                    required: ['id', 'createdAt', 'updatedAt', 'channel', 'integration', 'tags', 'messageCount'],
+                    description:
+                      "The [Conversation](#schema_conversation) object represents an exchange of messages between one or more users. A [Conversation](#schema_conversation) is always linked to an integration's channels. For example, a Slack channel represents a conversation.",
+                    additionalProperties: false,
+                  },
+                },
+                meta: {
+                  type: 'object',
+                  properties: {
+                    nextToken: {
+                      type: 'string',
+                      description:
+                        'The token to use to retrieve the next page of results, passed as a query string parameter (value should be URL-encoded) to this API endpoint.',
+                    },
+                  },
+                  additionalProperties: false,
+                },
+              },
+              required: ['conversations', 'meta'],
+              title: 'listConversationsResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+      default: {
+        description: 'Returns a list of [Conversation](#schema_conversation) objects',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                conversations: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: {
+                        type: 'string',
+                        minLength: 28,
+                        maxLength: 36,
+                        description: 'Id of the [Conversation](#schema_conversation)',
+                      },
+                      currentTaskId: {
+                        type: 'string',
+                        minLength: 28,
+                        maxLength: 36,
+                        deprecated: true,
+                        description: 'Unused. This field will be removed in the future.',
+                      },
+                      currentWorkflowId: {
+                        type: 'string',
+                        minLength: 28,
+                        maxLength: 36,
+                        description: 'Id of the current [Workflow](#schema_workflow)',
+                      },
+                      createdAt: {
+                        type: 'string',
+                        format: 'date-time',
+                        description: 'Creation date of the [Conversation](#schema_conversation) in ISO 8601 format',
+                      },
+                      updatedAt: {
+                        type: 'string',
+                        format: 'date-time',
+                        description: 'Updating date of the [Conversation](#schema_conversation) in ISO 8601 format',
+                      },
+                      channel: {
+                        type: 'string',
+                        description: 'Name of the channel where the [Conversation](#schema_conversation) is happening',
+                      },
+                      integration: {
+                        type: 'string',
+                        description: 'Name of the integration that created the [Conversation](#schema_conversation)',
+                      },
+                      tags: {
+                        type: 'object',
+                        additionalProperties: { type: 'string' },
+                        description:
+                          'Set of [Tags](/docs/developers/concepts/tags) that you can attach to a [Conversation](#schema_conversation). The set of [Tags](/docs/developers/concepts/tags) available on a [Conversation](#schema_conversation) is restricted by the list of [Tags](/docs/developers/concepts/tags) defined previously by the [Bot](#schema_bot). Individual keys can be unset by posting an empty value to them.',
+                      },
+                      messageCount: { type: 'number', description: 'Number of messages in the conversation' },
+                    },
+                    required: ['id', 'createdAt', 'updatedAt', 'channel', 'integration', 'tags', 'messageCount'],
+                    description:
+                      "The [Conversation](#schema_conversation) object represents an exchange of messages between one or more users. A [Conversation](#schema_conversation) is always linked to an integration's channels. For example, a Slack channel represents a conversation.",
+                    additionalProperties: false,
+                  },
+                },
+                meta: {
+                  type: 'object',
+                  properties: {
+                    nextToken: {
+                      type: 'string',
+                      description:
+                        'The token to use to retrieve the next page of results, passed as a query string parameter (value should be URL-encoded) to this API endpoint.',
+                    },
+                  },
+                  additionalProperties: false,
+                },
+              },
+              required: ['conversations', 'meta'],
+              title: 'listConversationsResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+    },
+    experimental: false,
+  }}
+/>

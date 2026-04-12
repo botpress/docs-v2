@@ -1,0 +1,223 @@
+---
+title: 'listEvents'
+description: 'Retrieves a list of [Event](#schema_event) you’ve previously created. The events are returned in sorted order, with the most recent appearing first.'
+method: 'GET'
+prose: false
+---
+
+import APIEndpoint from '@/components/api-endpoint'
+
+<APIEndpoint
+  endpoint={{
+    method: 'GET',
+    path: '/v1/chat/events',
+    operationId: 'listEvents',
+    description:
+      'Retrieves a list of [Event](#schema_event) you’ve previously created. The events are returned in sorted order, with the most recent appearing first.',
+    tags: [],
+    parameters: [
+      {
+        name: 'nextToken',
+        in: 'query',
+        description:
+          'Provide the `meta.nextToken` value provided in the last API response to retrieve the next page of results',
+        schema: { type: 'string' },
+      },
+      { name: 'type', in: 'query', description: 'Filter by event type', schema: { type: 'string' } },
+      { name: 'conversationId', in: 'query', description: 'Filter by conversation id', schema: { type: 'string' } },
+      { name: 'userId', in: 'query', description: 'Filter by user id', schema: { type: 'string' } },
+      { name: 'messageId', in: 'query', description: 'Filter by message id', schema: { type: 'string' } },
+      { name: 'workflowId', in: 'query', description: 'Filter by workflow id', schema: { type: 'string' } },
+      {
+        name: 'status',
+        in: 'query',
+        description: 'Filter by status. Allowed values: pending, ignored, processed, failed.',
+        schema: { type: 'string', enum: ['pending', 'ignored', 'processed', 'failed', 'scheduled'] },
+      },
+      { name: 'x-bot-id', in: 'header', description: 'Bot id', required: true, schema: { type: 'string' } },
+      {
+        name: 'x-integration-id',
+        in: 'header',
+        description: 'Integration id',
+        required: false,
+        schema: { type: 'string' },
+      },
+      {
+        name: 'x-integration-alias',
+        in: 'header',
+        description: 'Integration alias',
+        required: false,
+        schema: { type: 'string' },
+      },
+    ],
+    responses: {
+      '200': {
+        description: 'Returns a list of [Event](#schema_event) objects',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                events: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: {
+                        type: 'string',
+                        minLength: 28,
+                        maxLength: 36,
+                        description: 'Id of the [Event](#schema_event)',
+                      },
+                      createdAt: {
+                        type: 'string',
+                        format: 'date-time',
+                        description: 'Creation date of the [Event](#schema_event) in ISO 8601 format',
+                      },
+                      type: { type: 'string', maxLength: 200, description: 'Type of the [Event](#schema_event).' },
+                      payload: {
+                        type: 'object',
+                        additionalProperties: true,
+                        description:
+                          'Payload is the content of the event defined by the integration installed on your bot or one of the default events created by our api.',
+                      },
+                      conversationId: {
+                        type: 'string',
+                        minLength: 28,
+                        maxLength: 36,
+                        description: 'ID of the [Conversation](#schema_conversation) to link the event to.',
+                      },
+                      userId: {
+                        type: 'string',
+                        minLength: 28,
+                        maxLength: 36,
+                        description: 'ID of the [User](#schema_user) to link the event to.',
+                      },
+                      messageId: {
+                        type: 'string',
+                        minLength: 28,
+                        maxLength: 36,
+                        description: 'ID of the [Message](#schema_message) to link the event to.',
+                      },
+                      status: {
+                        type: 'string',
+                        enum: ['pending', 'processed', 'ignored', 'failed', 'scheduled', 'canceled'],
+                      },
+                      failureReason: {
+                        type: 'string',
+                        maxLength: 2000,
+                        nullable: true,
+                        description: 'Reason why the event failed to be processed',
+                      },
+                    },
+                    required: ['id', 'createdAt', 'type', 'payload', 'status', 'failureReason'],
+                    description: 'The event object represents an action or an occurrence.',
+                    additionalProperties: false,
+                  },
+                },
+                meta: {
+                  type: 'object',
+                  properties: {
+                    nextToken: {
+                      type: 'string',
+                      description:
+                        'The token to use to retrieve the next page of results, passed as a query string parameter (value should be URL-encoded) to this API endpoint.',
+                    },
+                  },
+                  additionalProperties: false,
+                },
+              },
+              required: ['events', 'meta'],
+              title: 'listEventsResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+      default: {
+        description: 'Returns a list of [Event](#schema_event) objects',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                events: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: {
+                        type: 'string',
+                        minLength: 28,
+                        maxLength: 36,
+                        description: 'Id of the [Event](#schema_event)',
+                      },
+                      createdAt: {
+                        type: 'string',
+                        format: 'date-time',
+                        description: 'Creation date of the [Event](#schema_event) in ISO 8601 format',
+                      },
+                      type: { type: 'string', maxLength: 200, description: 'Type of the [Event](#schema_event).' },
+                      payload: {
+                        type: 'object',
+                        additionalProperties: true,
+                        description:
+                          'Payload is the content of the event defined by the integration installed on your bot or one of the default events created by our api.',
+                      },
+                      conversationId: {
+                        type: 'string',
+                        minLength: 28,
+                        maxLength: 36,
+                        description: 'ID of the [Conversation](#schema_conversation) to link the event to.',
+                      },
+                      userId: {
+                        type: 'string',
+                        minLength: 28,
+                        maxLength: 36,
+                        description: 'ID of the [User](#schema_user) to link the event to.',
+                      },
+                      messageId: {
+                        type: 'string',
+                        minLength: 28,
+                        maxLength: 36,
+                        description: 'ID of the [Message](#schema_message) to link the event to.',
+                      },
+                      status: {
+                        type: 'string',
+                        enum: ['pending', 'processed', 'ignored', 'failed', 'scheduled', 'canceled'],
+                      },
+                      failureReason: {
+                        type: 'string',
+                        maxLength: 2000,
+                        nullable: true,
+                        description: 'Reason why the event failed to be processed',
+                      },
+                    },
+                    required: ['id', 'createdAt', 'type', 'payload', 'status', 'failureReason'],
+                    description: 'The event object represents an action or an occurrence.',
+                    additionalProperties: false,
+                  },
+                },
+                meta: {
+                  type: 'object',
+                  properties: {
+                    nextToken: {
+                      type: 'string',
+                      description:
+                        'The token to use to retrieve the next page of results, passed as a query string parameter (value should be URL-encoded) to this API endpoint.',
+                    },
+                  },
+                  additionalProperties: false,
+                },
+              },
+              required: ['events', 'meta'],
+              title: 'listEventsResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+    },
+    experimental: false,
+  }}
+/>

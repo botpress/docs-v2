@@ -1,0 +1,102 @@
+---
+title: 'listBotIssueEvents'
+description: 'List Events for a Bot Issue'
+method: 'GET'
+prose: false
+---
+
+import APIEndpoint from '@/components/api-endpoint'
+
+<APIEndpoint
+  endpoint={{
+    method: 'GET',
+    path: '/v1/admin/bots/{id}/issues/{issueId}/events',
+    operationId: 'listBotIssueEvents',
+    description: 'List Events for a Bot Issue',
+    tags: [],
+    parameters: [
+      { name: 'id', in: 'path', description: 'Bot ID', required: true, schema: { type: 'string' } },
+      { name: 'issueId', in: 'path', description: 'Issue ID', required: true, schema: { type: 'string' } },
+      { name: 'x-workspace-id', in: 'header', description: 'Workspace ID', required: true, schema: { type: 'string' } },
+      {
+        name: 'x-multiple-integrations',
+        in: 'header',
+        description:
+          'Whether the client supports bots with multiple instances of the same integration. Set to "true" to receive integration instances keyed by their alias instead of their id. This header will be removed in the future, and the API will always return multiple instances keyed by alias.',
+        required: false,
+        schema: { type: 'string' },
+      },
+    ],
+    responses: {
+      '200': {
+        description: 'Success',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                issueEvents: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: { type: 'string' },
+                      createdAt: { type: 'string', format: 'date-time' },
+                      data: {
+                        type: 'object',
+                        additionalProperties: {
+                          type: 'object',
+                          properties: { raw: { type: 'string' }, pretty: { type: 'string' } },
+                          required: ['raw'],
+                        },
+                      },
+                    },
+                    required: ['id', 'createdAt', 'data'],
+                  },
+                },
+              },
+              required: ['issueEvents'],
+              title: 'listBotIssueEventsResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+      default: {
+        description: 'Success',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                issueEvents: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: { type: 'string' },
+                      createdAt: { type: 'string', format: 'date-time' },
+                      data: {
+                        type: 'object',
+                        additionalProperties: {
+                          type: 'object',
+                          properties: { raw: { type: 'string' }, pretty: { type: 'string' } },
+                          required: ['raw'],
+                        },
+                      },
+                    },
+                    required: ['id', 'createdAt', 'data'],
+                  },
+                },
+              },
+              required: ['issueEvents'],
+              title: 'listBotIssueEventsResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+    },
+    experimental: false,
+  }}
+/>

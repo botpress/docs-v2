@@ -1,0 +1,60 @@
+---
+title: 'deleteFile'
+description: 'Deletes a file.'
+method: 'DELETE'
+prose: false
+---
+
+import APIEndpoint from '@/components/api-endpoint'
+
+<APIEndpoint
+  endpoint={{
+    method: 'DELETE',
+    path: '/v1/files/{id}',
+    operationId: 'deleteFile',
+    description: 'Deletes a file.',
+    tags: [],
+    parameters: [
+      { name: 'id', in: 'path', description: 'File ID or Key', required: true, schema: { type: 'string' } },
+      { name: 'x-bot-id', in: 'header', description: 'Bot id', required: true, schema: { type: 'string' } },
+      {
+        name: 'x-integration-id',
+        in: 'header',
+        description: 'Integration id',
+        required: false,
+        schema: { type: 'string' },
+      },
+      {
+        name: 'x-integration-alias',
+        in: 'header',
+        description: 'Integration alias',
+        required: false,
+        schema: { type: 'string' },
+      },
+      {
+        name: 'x-integration-name',
+        in: 'header',
+        description: 'Integration name',
+        required: false,
+        schema: { type: 'string' },
+      },
+      { name: 'x-user-id', in: 'header', description: 'User Id', required: false, schema: { type: 'string' } },
+      { name: 'x-user-role', in: 'header', description: 'User Role', required: false, schema: { type: 'string' } },
+    ],
+    responses: {
+      '200': {
+        description: 'Empty response.',
+        content: {
+          'application/json': { schema: { type: 'object', title: 'deleteFileResponse', additionalProperties: false } },
+        },
+      },
+      default: {
+        description: 'Empty response.',
+        content: {
+          'application/json': { schema: { type: 'object', title: 'deleteFileResponse', additionalProperties: false } },
+        },
+      },
+    },
+    experimental: false,
+  }}
+/>

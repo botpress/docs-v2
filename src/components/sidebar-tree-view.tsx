@@ -1,6 +1,24 @@
 import { useState } from 'react'
-import type { SidebarNode, SidebarCategoryNode } from '../lib/sidebar-types'
+import type { SidebarNode, SidebarCategoryNode, SidebarArticleNode } from '../lib/sidebar-types'
 import { isPathActive, hasActiveChild } from '../lib/sidebar-types'
+
+const SIDEBAR_METHOD_COLORS: Record<string, string> = {
+  GET: 'text-emerald-600 dark:text-emerald-400',
+  POST: 'text-blue-600 dark:text-blue-400',
+  PUT: 'text-amber-600 dark:text-amber-400',
+  PATCH: 'text-orange-600 dark:text-orange-400',
+  DELETE: 'text-red-600 dark:text-red-400',
+}
+
+function SidebarMethodBadge({ method }: { method: string }) {
+  return (
+    <span
+      className={`ml-auto shrink-0 font-mono text-[10px] font-semibold leading-none ${SIDEBAR_METHOD_COLORS[method] || 'text-stone-400'}`}
+    >
+      {method}
+    </span>
+  )
+}
 
 interface Props {
   nodes: SidebarNode[]
@@ -123,7 +141,8 @@ function ChildNode({
             : 'text-stone-600 hover:bg-black/5 hover:text-stone-900 dark:text-stone-400 dark:hover:bg-white/5 dark:hover:text-stone-100'
         }`}
       >
-        {node.title}
+        <span className="min-w-0 truncate">{node.title}</span>
+        {node.method && <SidebarMethodBadge method={node.method} />}
       </a>
     </li>
   )
@@ -167,7 +186,8 @@ export default function SidebarTreeView({ nodes, currentPath, textSize = 'sm' }:
                 : 'text-stone-600 hover:bg-black/5 hover:text-stone-900 dark:text-stone-400 dark:hover:bg-white/5 dark:hover:text-stone-100'
             }`}
           >
-            {node.title}
+            <span className="min-w-0 truncate">{node.title}</span>
+            {node.method && <SidebarMethodBadge method={node.method} />}
           </a>
         )
       })}

@@ -1,0 +1,1063 @@
+---
+title: 'getIntegrationByName'
+description: 'Get integration'
+method: 'GET'
+prose: false
+---
+
+import APIEndpoint from '@/components/api-endpoint'
+
+<APIEndpoint
+  endpoint={{
+    method: 'GET',
+    path: '/v1/admin/integrations/{name}/{version}',
+    operationId: 'getIntegrationByName',
+    description: 'Get integration',
+    tags: [],
+    parameters: [
+      { name: 'name', in: 'path', description: 'Integration Name', required: true, schema: { type: 'string' } },
+      {
+        name: 'version',
+        in: 'path',
+        description:
+          'Integration version. Either a semver version, semver version range, or the constant string "latest"',
+        required: true,
+        schema: { type: 'string' },
+      },
+      { name: 'x-workspace-id', in: 'header', description: 'Workspace ID', required: true, schema: { type: 'string' } },
+      {
+        name: 'x-multiple-integrations',
+        in: 'header',
+        description:
+          'Whether the client supports bots with multiple instances of the same integration. Set to "true" to receive integration instances keyed by their alias instead of their id. This header will be removed in the future, and the API will always return multiple instances keyed by alias.',
+        required: false,
+        schema: { type: 'string' },
+      },
+    ],
+    responses: {
+      '200': {
+        description: 'Success',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                integration: {
+                  type: 'object',
+                  properties: {
+                    id: {
+                      type: 'string',
+                      minLength: 28,
+                      maxLength: 36,
+                      description: 'ID of the [Integration](#schema_integration)',
+                    },
+                    createdAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Creation date of the [Integration](#schema_integration) in ISO 8601 format',
+                    },
+                    updatedAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Updating date of the [Integration](#schema_integration) in ISO 8601 format',
+                    },
+                    identifier: {
+                      type: 'object',
+                      properties: {
+                        fallbackHandlerScript: {
+                          type: 'string',
+                          maxLength: 2000,
+                          description:
+                            "VRL Script of the [Integration](#schema_integration) to handle incoming requests for a request that doesn't have an identifier",
+                        },
+                        extractScript: {
+                          type: 'string',
+                          maxLength: 2000,
+                          description:
+                            'VRL Script of the [Integration](#schema_integration) to extract the identifier from an incoming webhook often use for OAuth',
+                        },
+                      },
+                      description: 'Global identifier configuration of the [Integration](#schema_integration)',
+                      additionalProperties: false,
+                    },
+                    sandbox: {
+                      type: 'object',
+                      properties: {
+                        identifierExtractScript: {
+                          type: 'string',
+                          maxLength: 2000,
+                          description:
+                            'VRL Script of the [Integration](#schema_integration) to extract the identifier from an incoming webhook used specifically for the sandbox',
+                        },
+                        messageExtractScript: {
+                          type: 'string',
+                          maxLength: 2000,
+                          description:
+                            'VRL Script of the [Integration](#schema_integration) to extract the message from an incoming webhook used specifically for the sandbox',
+                        },
+                      },
+                      additionalProperties: false,
+                    },
+                    maxExecutionTime: {
+                      type: 'number',
+                      description: 'Maximum execution time of the integration (in seconds).',
+                    },
+                    url: {
+                      type: 'string',
+                      maxLength: 2000,
+                      description: 'URL of the [Integration](#schema_integration)',
+                    },
+                    signingSecret: {
+                      type: 'string',
+                      maxLength: 2000,
+                      description:
+                        'Signing secret of the [Integration](#schema_integration). This field is only visible when creating a new integration or when rotating the signing secret of an existing integration.',
+                    },
+                    name: {
+                      type: 'string',
+                      maxLength: 200,
+                      description: 'Name of the [Integration](#schema_integration)',
+                    },
+                    version: {
+                      type: 'string',
+                      maxLength: 200,
+                      description: 'Version of the [Integration](#schema_integration)',
+                    },
+                    interfaces: {
+                      type: 'object',
+                      additionalProperties: {
+                        type: 'object',
+                        properties: {
+                          id: { type: 'string', minLength: 28, maxLength: 36, description: 'ID of the interface' },
+                          name: { type: 'string', maxLength: 200, description: 'Name of the interface' },
+                          version: { type: 'string', maxLength: 200, description: 'Version of the interface' },
+                          entities: {
+                            type: 'object',
+                            additionalProperties: {
+                              type: 'object',
+                              properties: { name: { type: 'string', maxLength: 200 } },
+                              required: ['name'],
+                              additionalProperties: false,
+                            },
+                          },
+                          actions: {
+                            type: 'object',
+                            additionalProperties: {
+                              type: 'object',
+                              properties: { name: { type: 'string', maxLength: 200 } },
+                              required: ['name'],
+                              additionalProperties: false,
+                            },
+                          },
+                          events: {
+                            type: 'object',
+                            additionalProperties: {
+                              type: 'object',
+                              properties: { name: { type: 'string', maxLength: 200 } },
+                              required: ['name'],
+                              additionalProperties: false,
+                            },
+                          },
+                          channels: {
+                            type: 'object',
+                            additionalProperties: {
+                              type: 'object',
+                              properties: { name: { type: 'string', maxLength: 200 } },
+                              required: ['name'],
+                              additionalProperties: false,
+                            },
+                          },
+                        },
+                        required: ['id', 'name', 'version', 'entities', 'actions', 'events', 'channels'],
+                        additionalProperties: false,
+                      },
+                    },
+                    configuration: {
+                      type: 'object',
+                      properties: {
+                        title: { type: 'string', maxLength: 64, description: 'Title of the configuration' },
+                        description: {
+                          type: 'string',
+                          maxLength: 256,
+                          description: 'Description of the configuration',
+                        },
+                        identifier: {
+                          type: 'object',
+                          properties: {
+                            linkTemplateScript: { type: 'string', maxLength: 2000 },
+                            required: { type: 'boolean' },
+                          },
+                          required: ['required'],
+                          description: 'Identifier configuration of the [Integration](#schema_integration)',
+                          additionalProperties: false,
+                        },
+                        schema: {
+                          type: 'object',
+                          additionalProperties: true,
+                          description:
+                            'Schema of the configuration in the `JSON schema` format. The configuration data is validated against this `JSON schema`.',
+                        },
+                      },
+                      required: ['identifier', 'schema'],
+                      description: 'Configuration definition',
+                      additionalProperties: false,
+                    },
+                    configurations: {
+                      type: 'object',
+                      additionalProperties: {
+                        type: 'object',
+                        properties: {
+                          title: { type: 'string', maxLength: 64, description: 'Title of the configuration' },
+                          description: {
+                            type: 'string',
+                            maxLength: 256,
+                            description: 'Description of the configuration',
+                          },
+                          identifier: {
+                            type: 'object',
+                            properties: {
+                              linkTemplateScript: { type: 'string', maxLength: 2000 },
+                              required: { type: 'boolean' },
+                            },
+                            required: ['required'],
+                            description: 'Identifier configuration of the [Integration](#schema_integration)',
+                            additionalProperties: false,
+                          },
+                          schema: {
+                            type: 'object',
+                            additionalProperties: true,
+                            description:
+                              'Schema of the configuration in the `JSON schema` format. The configuration data is validated against this `JSON schema`.',
+                          },
+                        },
+                        required: ['identifier', 'schema'],
+                        description: 'Configuration definition',
+                        additionalProperties: false,
+                      },
+                    },
+                    channels: {
+                      type: 'object',
+                      additionalProperties: {
+                        type: 'object',
+                        properties: {
+                          title: { type: 'string', maxLength: 64, description: 'Title of the channel' },
+                          description: { type: 'string', maxLength: 256, description: 'Description of the channel' },
+                          messages: {
+                            type: 'object',
+                            additionalProperties: {
+                              type: 'object',
+                              properties: { schema: { type: 'object', additionalProperties: true } },
+                              required: ['schema'],
+                              description: 'Message definition',
+                              additionalProperties: false,
+                            },
+                          },
+                          conversation: {
+                            type: 'object',
+                            properties: {
+                              tags: {
+                                type: 'object',
+                                additionalProperties: {
+                                  type: 'object',
+                                  properties: {
+                                    title: { type: 'string', maxLength: 64, description: 'Title of the tag' },
+                                    description: {
+                                      type: 'string',
+                                      maxLength: 256,
+                                      description: 'Description of the tag',
+                                    },
+                                  },
+                                  description: 'Definition of a tag that can be provided on the object',
+                                  additionalProperties: false,
+                                },
+                              },
+                              creation: {
+                                type: 'object',
+                                properties: {
+                                  enabled: { type: 'boolean', description: 'Enable conversation creation' },
+                                  requiredTags: {
+                                    type: 'array',
+                                    items: { type: 'string' },
+                                    description:
+                                      'The list of tags that are required to be specified when calling the API directly to create a conversation.',
+                                  },
+                                },
+                                required: ['enabled', 'requiredTags'],
+                                description:
+                                  'The conversation creation setting determines how to create a conversation through the API directly. The integration will have to implement the `createConversation` functionality to support this setting.',
+                                additionalProperties: false,
+                              },
+                            },
+                            required: ['tags', 'creation'],
+                            description: 'Conversation object configuration',
+                            additionalProperties: false,
+                          },
+                          message: {
+                            type: 'object',
+                            properties: {
+                              tags: {
+                                type: 'object',
+                                additionalProperties: {
+                                  type: 'object',
+                                  properties: {
+                                    title: { type: 'string', maxLength: 64, description: 'Title of the tag' },
+                                    description: {
+                                      type: 'string',
+                                      maxLength: 256,
+                                      description: 'Description of the tag',
+                                    },
+                                  },
+                                  description: 'Definition of a tag that can be provided on the object',
+                                  additionalProperties: false,
+                                },
+                              },
+                            },
+                            required: ['tags'],
+                            description: 'Message object configuration',
+                            additionalProperties: false,
+                          },
+                        },
+                        required: ['messages', 'conversation', 'message'],
+                        description: 'Channel definition',
+                        additionalProperties: false,
+                      },
+                    },
+                    states: {
+                      type: 'object',
+                      additionalProperties: {
+                        type: 'object',
+                        properties: {
+                          type: {
+                            type: 'string',
+                            enum: ['conversation', 'user', 'integration'],
+                            description: 'Type of the [State](#schema_state) (`conversation`, `user` or `integration`)',
+                          },
+                          schema: {
+                            type: 'object',
+                            additionalProperties: true,
+                            description:
+                              'Schema of the [State](#schema_state) in the `JSON schema` format. This `JSON schema` is going to be used for validating the state data.',
+                          },
+                        },
+                        required: ['type', 'schema'],
+                        description: 'State definition',
+                        additionalProperties: false,
+                      },
+                    },
+                    events: {
+                      type: 'object',
+                      additionalProperties: {
+                        type: 'object',
+                        properties: {
+                          title: { type: 'string', maxLength: 64, description: 'Title of the event' },
+                          description: { type: 'string', maxLength: 256, description: 'Description of the event' },
+                          schema: { type: 'object', additionalProperties: true },
+                          attributes: {
+                            type: 'object',
+                            additionalProperties: { type: 'string', maxLength: 200 },
+                            description: 'Optional attributes',
+                          },
+                        },
+                        required: ['schema'],
+                        description: 'Event Definition',
+                        additionalProperties: false,
+                      },
+                    },
+                    actions: {
+                      type: 'object',
+                      additionalProperties: {
+                        type: 'object',
+                        properties: {
+                          title: { type: 'string', maxLength: 64, description: 'Title of the action' },
+                          description: { type: 'string', maxLength: 256, description: 'Description of the action' },
+                          billable: { type: 'boolean' },
+                          cacheable: { type: 'boolean' },
+                          input: {
+                            type: 'object',
+                            properties: { schema: { type: 'object', additionalProperties: true } },
+                            required: ['schema'],
+                            additionalProperties: false,
+                          },
+                          output: {
+                            type: 'object',
+                            properties: { schema: { type: 'object', additionalProperties: true } },
+                            required: ['schema'],
+                            additionalProperties: false,
+                          },
+                          attributes: {
+                            type: 'object',
+                            additionalProperties: { type: 'string', maxLength: 200 },
+                            description: 'Optional attributes',
+                          },
+                        },
+                        required: ['input', 'output'],
+                        description: 'Action definition',
+                        additionalProperties: false,
+                      },
+                    },
+                    user: {
+                      type: 'object',
+                      properties: {
+                        tags: {
+                          type: 'object',
+                          additionalProperties: {
+                            type: 'object',
+                            properties: {
+                              title: { type: 'string', maxLength: 64, description: 'Title of the tag' },
+                              description: { type: 'string', maxLength: 256, description: 'Description of the tag' },
+                            },
+                            description: 'Definition of a tag that can be provided on the object',
+                            additionalProperties: false,
+                          },
+                        },
+                        creation: {
+                          type: 'object',
+                          properties: {
+                            enabled: { type: 'boolean', description: 'Enable user creation' },
+                            requiredTags: {
+                              type: 'array',
+                              items: { type: 'string' },
+                              description:
+                                'The list of tags that are required to be specified when calling the API directly to create a user.',
+                            },
+                          },
+                          required: ['enabled', 'requiredTags'],
+                          description:
+                            'The user creation setting determines how to create a user through the API directly. The integration will have to implement the `createUser` functionality to support this setting.',
+                          additionalProperties: false,
+                        },
+                      },
+                      required: ['tags', 'creation'],
+                      description: 'User object configuration',
+                      additionalProperties: false,
+                    },
+                    entities: {
+                      type: 'object',
+                      additionalProperties: {
+                        type: 'object',
+                        properties: {
+                          title: { type: 'string', maxLength: 64, description: 'Title of the entity' },
+                          description: { type: 'string', maxLength: 256, description: 'Description of the entity' },
+                          schema: { type: 'object', additionalProperties: true },
+                        },
+                        required: ['schema'],
+                        description: 'Entity definition',
+                        additionalProperties: false,
+                      },
+                    },
+                    attributes: {
+                      type: 'object',
+                      additionalProperties: { type: 'string', maxLength: 200 },
+                      description: 'Optional attributes',
+                    },
+                    dev: {
+                      type: 'boolean',
+                      description:
+                        'Indicates if the integration is a development integration; Dev integrations run locally',
+                    },
+                    title: {
+                      type: 'string',
+                      minLength: 1,
+                      maxLength: 64,
+                      description: 'Title of the integration. This is the name that will be displayed in the UI',
+                    },
+                    description: {
+                      type: 'string',
+                      maxLength: 256,
+                      description:
+                        'Description of the integration. This is the description that will be displayed in the UI',
+                    },
+                    iconUrl: {
+                      type: 'string',
+                      description:
+                        'URL of the icon of the integration. This is the icon that will be displayed in the UI',
+                    },
+                    readmeUrl: {
+                      type: 'string',
+                      description:
+                        'URL of the readme of the integration. This is the readme that will be displayed in the UI',
+                    },
+                    public: {
+                      type: 'boolean',
+                      description:
+                        '[DEPRECATED] Indicates whether the integration is public. Please use the "visibility" parameter instead.',
+                      deprecated: true,
+                    },
+                    visibility: {
+                      type: 'string',
+                      enum: ['public', 'private', 'unlisted'],
+                      description:
+                        "The integration's visibility. Public integrations are available to all and cannot be updated without creating a new version. Unlisted integrations behave identically to public integrations, but they are not listed in the integration hub. By default, integrations are private and only accessible to the workspace that created them.",
+                    },
+                    verificationStatus: {
+                      type: 'string',
+                      enum: ['unapproved', 'pending', 'approved', 'rejected'],
+                      description: 'Status of the integration version verification',
+                    },
+                    lifecycleStatus: {
+                      type: 'string',
+                      enum: ['published', 'deprecated'],
+                      description:
+                        'The lifecycle status of the integration. When an integration is deprecated, it can no longer be installed.',
+                    },
+                    secrets: {
+                      type: 'array',
+                      items: { type: 'string' },
+                      description:
+                        'Secrets are integration-wide values available in the code via environment variables formatted with a SECRET_ prefix followed by your secret name. A secret name must respect SCREAMING_SNAKE casing.',
+                    },
+                  },
+                  required: [
+                    'id',
+                    'createdAt',
+                    'updatedAt',
+                    'identifier',
+                    'url',
+                    'signingSecret',
+                    'name',
+                    'version',
+                    'interfaces',
+                    'configuration',
+                    'configurations',
+                    'channels',
+                    'states',
+                    'events',
+                    'actions',
+                    'user',
+                    'entities',
+                    'dev',
+                    'title',
+                    'description',
+                    'iconUrl',
+                    'readmeUrl',
+                    'public',
+                    'visibility',
+                    'verificationStatus',
+                    'lifecycleStatus',
+                    'secrets',
+                  ],
+                  additionalProperties: false,
+                },
+              },
+              required: ['integration'],
+              title: 'getIntegrationByNameResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+      default: {
+        description: 'Success',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                integration: {
+                  type: 'object',
+                  properties: {
+                    id: {
+                      type: 'string',
+                      minLength: 28,
+                      maxLength: 36,
+                      description: 'ID of the [Integration](#schema_integration)',
+                    },
+                    createdAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Creation date of the [Integration](#schema_integration) in ISO 8601 format',
+                    },
+                    updatedAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Updating date of the [Integration](#schema_integration) in ISO 8601 format',
+                    },
+                    identifier: {
+                      type: 'object',
+                      properties: {
+                        fallbackHandlerScript: {
+                          type: 'string',
+                          maxLength: 2000,
+                          description:
+                            "VRL Script of the [Integration](#schema_integration) to handle incoming requests for a request that doesn't have an identifier",
+                        },
+                        extractScript: {
+                          type: 'string',
+                          maxLength: 2000,
+                          description:
+                            'VRL Script of the [Integration](#schema_integration) to extract the identifier from an incoming webhook often use for OAuth',
+                        },
+                      },
+                      description: 'Global identifier configuration of the [Integration](#schema_integration)',
+                      additionalProperties: false,
+                    },
+                    sandbox: {
+                      type: 'object',
+                      properties: {
+                        identifierExtractScript: {
+                          type: 'string',
+                          maxLength: 2000,
+                          description:
+                            'VRL Script of the [Integration](#schema_integration) to extract the identifier from an incoming webhook used specifically for the sandbox',
+                        },
+                        messageExtractScript: {
+                          type: 'string',
+                          maxLength: 2000,
+                          description:
+                            'VRL Script of the [Integration](#schema_integration) to extract the message from an incoming webhook used specifically for the sandbox',
+                        },
+                      },
+                      additionalProperties: false,
+                    },
+                    maxExecutionTime: {
+                      type: 'number',
+                      description: 'Maximum execution time of the integration (in seconds).',
+                    },
+                    url: {
+                      type: 'string',
+                      maxLength: 2000,
+                      description: 'URL of the [Integration](#schema_integration)',
+                    },
+                    signingSecret: {
+                      type: 'string',
+                      maxLength: 2000,
+                      description:
+                        'Signing secret of the [Integration](#schema_integration). This field is only visible when creating a new integration or when rotating the signing secret of an existing integration.',
+                    },
+                    name: {
+                      type: 'string',
+                      maxLength: 200,
+                      description: 'Name of the [Integration](#schema_integration)',
+                    },
+                    version: {
+                      type: 'string',
+                      maxLength: 200,
+                      description: 'Version of the [Integration](#schema_integration)',
+                    },
+                    interfaces: {
+                      type: 'object',
+                      additionalProperties: {
+                        type: 'object',
+                        properties: {
+                          id: { type: 'string', minLength: 28, maxLength: 36, description: 'ID of the interface' },
+                          name: { type: 'string', maxLength: 200, description: 'Name of the interface' },
+                          version: { type: 'string', maxLength: 200, description: 'Version of the interface' },
+                          entities: {
+                            type: 'object',
+                            additionalProperties: {
+                              type: 'object',
+                              properties: { name: { type: 'string', maxLength: 200 } },
+                              required: ['name'],
+                              additionalProperties: false,
+                            },
+                          },
+                          actions: {
+                            type: 'object',
+                            additionalProperties: {
+                              type: 'object',
+                              properties: { name: { type: 'string', maxLength: 200 } },
+                              required: ['name'],
+                              additionalProperties: false,
+                            },
+                          },
+                          events: {
+                            type: 'object',
+                            additionalProperties: {
+                              type: 'object',
+                              properties: { name: { type: 'string', maxLength: 200 } },
+                              required: ['name'],
+                              additionalProperties: false,
+                            },
+                          },
+                          channels: {
+                            type: 'object',
+                            additionalProperties: {
+                              type: 'object',
+                              properties: { name: { type: 'string', maxLength: 200 } },
+                              required: ['name'],
+                              additionalProperties: false,
+                            },
+                          },
+                        },
+                        required: ['id', 'name', 'version', 'entities', 'actions', 'events', 'channels'],
+                        additionalProperties: false,
+                      },
+                    },
+                    configuration: {
+                      type: 'object',
+                      properties: {
+                        title: { type: 'string', maxLength: 64, description: 'Title of the configuration' },
+                        description: {
+                          type: 'string',
+                          maxLength: 256,
+                          description: 'Description of the configuration',
+                        },
+                        identifier: {
+                          type: 'object',
+                          properties: {
+                            linkTemplateScript: { type: 'string', maxLength: 2000 },
+                            required: { type: 'boolean' },
+                          },
+                          required: ['required'],
+                          description: 'Identifier configuration of the [Integration](#schema_integration)',
+                          additionalProperties: false,
+                        },
+                        schema: {
+                          type: 'object',
+                          additionalProperties: true,
+                          description:
+                            'Schema of the configuration in the `JSON schema` format. The configuration data is validated against this `JSON schema`.',
+                        },
+                      },
+                      required: ['identifier', 'schema'],
+                      description: 'Configuration definition',
+                      additionalProperties: false,
+                    },
+                    configurations: {
+                      type: 'object',
+                      additionalProperties: {
+                        type: 'object',
+                        properties: {
+                          title: { type: 'string', maxLength: 64, description: 'Title of the configuration' },
+                          description: {
+                            type: 'string',
+                            maxLength: 256,
+                            description: 'Description of the configuration',
+                          },
+                          identifier: {
+                            type: 'object',
+                            properties: {
+                              linkTemplateScript: { type: 'string', maxLength: 2000 },
+                              required: { type: 'boolean' },
+                            },
+                            required: ['required'],
+                            description: 'Identifier configuration of the [Integration](#schema_integration)',
+                            additionalProperties: false,
+                          },
+                          schema: {
+                            type: 'object',
+                            additionalProperties: true,
+                            description:
+                              'Schema of the configuration in the `JSON schema` format. The configuration data is validated against this `JSON schema`.',
+                          },
+                        },
+                        required: ['identifier', 'schema'],
+                        description: 'Configuration definition',
+                        additionalProperties: false,
+                      },
+                    },
+                    channels: {
+                      type: 'object',
+                      additionalProperties: {
+                        type: 'object',
+                        properties: {
+                          title: { type: 'string', maxLength: 64, description: 'Title of the channel' },
+                          description: { type: 'string', maxLength: 256, description: 'Description of the channel' },
+                          messages: {
+                            type: 'object',
+                            additionalProperties: {
+                              type: 'object',
+                              properties: { schema: { type: 'object', additionalProperties: true } },
+                              required: ['schema'],
+                              description: 'Message definition',
+                              additionalProperties: false,
+                            },
+                          },
+                          conversation: {
+                            type: 'object',
+                            properties: {
+                              tags: {
+                                type: 'object',
+                                additionalProperties: {
+                                  type: 'object',
+                                  properties: {
+                                    title: { type: 'string', maxLength: 64, description: 'Title of the tag' },
+                                    description: {
+                                      type: 'string',
+                                      maxLength: 256,
+                                      description: 'Description of the tag',
+                                    },
+                                  },
+                                  description: 'Definition of a tag that can be provided on the object',
+                                  additionalProperties: false,
+                                },
+                              },
+                              creation: {
+                                type: 'object',
+                                properties: {
+                                  enabled: { type: 'boolean', description: 'Enable conversation creation' },
+                                  requiredTags: {
+                                    type: 'array',
+                                    items: { type: 'string' },
+                                    description:
+                                      'The list of tags that are required to be specified when calling the API directly to create a conversation.',
+                                  },
+                                },
+                                required: ['enabled', 'requiredTags'],
+                                description:
+                                  'The conversation creation setting determines how to create a conversation through the API directly. The integration will have to implement the `createConversation` functionality to support this setting.',
+                                additionalProperties: false,
+                              },
+                            },
+                            required: ['tags', 'creation'],
+                            description: 'Conversation object configuration',
+                            additionalProperties: false,
+                          },
+                          message: {
+                            type: 'object',
+                            properties: {
+                              tags: {
+                                type: 'object',
+                                additionalProperties: {
+                                  type: 'object',
+                                  properties: {
+                                    title: { type: 'string', maxLength: 64, description: 'Title of the tag' },
+                                    description: {
+                                      type: 'string',
+                                      maxLength: 256,
+                                      description: 'Description of the tag',
+                                    },
+                                  },
+                                  description: 'Definition of a tag that can be provided on the object',
+                                  additionalProperties: false,
+                                },
+                              },
+                            },
+                            required: ['tags'],
+                            description: 'Message object configuration',
+                            additionalProperties: false,
+                          },
+                        },
+                        required: ['messages', 'conversation', 'message'],
+                        description: 'Channel definition',
+                        additionalProperties: false,
+                      },
+                    },
+                    states: {
+                      type: 'object',
+                      additionalProperties: {
+                        type: 'object',
+                        properties: {
+                          type: {
+                            type: 'string',
+                            enum: ['conversation', 'user', 'integration'],
+                            description: 'Type of the [State](#schema_state) (`conversation`, `user` or `integration`)',
+                          },
+                          schema: {
+                            type: 'object',
+                            additionalProperties: true,
+                            description:
+                              'Schema of the [State](#schema_state) in the `JSON schema` format. This `JSON schema` is going to be used for validating the state data.',
+                          },
+                        },
+                        required: ['type', 'schema'],
+                        description: 'State definition',
+                        additionalProperties: false,
+                      },
+                    },
+                    events: {
+                      type: 'object',
+                      additionalProperties: {
+                        type: 'object',
+                        properties: {
+                          title: { type: 'string', maxLength: 64, description: 'Title of the event' },
+                          description: { type: 'string', maxLength: 256, description: 'Description of the event' },
+                          schema: { type: 'object', additionalProperties: true },
+                          attributes: {
+                            type: 'object',
+                            additionalProperties: { type: 'string', maxLength: 200 },
+                            description: 'Optional attributes',
+                          },
+                        },
+                        required: ['schema'],
+                        description: 'Event Definition',
+                        additionalProperties: false,
+                      },
+                    },
+                    actions: {
+                      type: 'object',
+                      additionalProperties: {
+                        type: 'object',
+                        properties: {
+                          title: { type: 'string', maxLength: 64, description: 'Title of the action' },
+                          description: { type: 'string', maxLength: 256, description: 'Description of the action' },
+                          billable: { type: 'boolean' },
+                          cacheable: { type: 'boolean' },
+                          input: {
+                            type: 'object',
+                            properties: { schema: { type: 'object', additionalProperties: true } },
+                            required: ['schema'],
+                            additionalProperties: false,
+                          },
+                          output: {
+                            type: 'object',
+                            properties: { schema: { type: 'object', additionalProperties: true } },
+                            required: ['schema'],
+                            additionalProperties: false,
+                          },
+                          attributes: {
+                            type: 'object',
+                            additionalProperties: { type: 'string', maxLength: 200 },
+                            description: 'Optional attributes',
+                          },
+                        },
+                        required: ['input', 'output'],
+                        description: 'Action definition',
+                        additionalProperties: false,
+                      },
+                    },
+                    user: {
+                      type: 'object',
+                      properties: {
+                        tags: {
+                          type: 'object',
+                          additionalProperties: {
+                            type: 'object',
+                            properties: {
+                              title: { type: 'string', maxLength: 64, description: 'Title of the tag' },
+                              description: { type: 'string', maxLength: 256, description: 'Description of the tag' },
+                            },
+                            description: 'Definition of a tag that can be provided on the object',
+                            additionalProperties: false,
+                          },
+                        },
+                        creation: {
+                          type: 'object',
+                          properties: {
+                            enabled: { type: 'boolean', description: 'Enable user creation' },
+                            requiredTags: {
+                              type: 'array',
+                              items: { type: 'string' },
+                              description:
+                                'The list of tags that are required to be specified when calling the API directly to create a user.',
+                            },
+                          },
+                          required: ['enabled', 'requiredTags'],
+                          description:
+                            'The user creation setting determines how to create a user through the API directly. The integration will have to implement the `createUser` functionality to support this setting.',
+                          additionalProperties: false,
+                        },
+                      },
+                      required: ['tags', 'creation'],
+                      description: 'User object configuration',
+                      additionalProperties: false,
+                    },
+                    entities: {
+                      type: 'object',
+                      additionalProperties: {
+                        type: 'object',
+                        properties: {
+                          title: { type: 'string', maxLength: 64, description: 'Title of the entity' },
+                          description: { type: 'string', maxLength: 256, description: 'Description of the entity' },
+                          schema: { type: 'object', additionalProperties: true },
+                        },
+                        required: ['schema'],
+                        description: 'Entity definition',
+                        additionalProperties: false,
+                      },
+                    },
+                    attributes: {
+                      type: 'object',
+                      additionalProperties: { type: 'string', maxLength: 200 },
+                      description: 'Optional attributes',
+                    },
+                    dev: {
+                      type: 'boolean',
+                      description:
+                        'Indicates if the integration is a development integration; Dev integrations run locally',
+                    },
+                    title: {
+                      type: 'string',
+                      minLength: 1,
+                      maxLength: 64,
+                      description: 'Title of the integration. This is the name that will be displayed in the UI',
+                    },
+                    description: {
+                      type: 'string',
+                      maxLength: 256,
+                      description:
+                        'Description of the integration. This is the description that will be displayed in the UI',
+                    },
+                    iconUrl: {
+                      type: 'string',
+                      description:
+                        'URL of the icon of the integration. This is the icon that will be displayed in the UI',
+                    },
+                    readmeUrl: {
+                      type: 'string',
+                      description:
+                        'URL of the readme of the integration. This is the readme that will be displayed in the UI',
+                    },
+                    public: {
+                      type: 'boolean',
+                      description:
+                        '[DEPRECATED] Indicates whether the integration is public. Please use the "visibility" parameter instead.',
+                      deprecated: true,
+                    },
+                    visibility: {
+                      type: 'string',
+                      enum: ['public', 'private', 'unlisted'],
+                      description:
+                        "The integration's visibility. Public integrations are available to all and cannot be updated without creating a new version. Unlisted integrations behave identically to public integrations, but they are not listed in the integration hub. By default, integrations are private and only accessible to the workspace that created them.",
+                    },
+                    verificationStatus: {
+                      type: 'string',
+                      enum: ['unapproved', 'pending', 'approved', 'rejected'],
+                      description: 'Status of the integration version verification',
+                    },
+                    lifecycleStatus: {
+                      type: 'string',
+                      enum: ['published', 'deprecated'],
+                      description:
+                        'The lifecycle status of the integration. When an integration is deprecated, it can no longer be installed.',
+                    },
+                    secrets: {
+                      type: 'array',
+                      items: { type: 'string' },
+                      description:
+                        'Secrets are integration-wide values available in the code via environment variables formatted with a SECRET_ prefix followed by your secret name. A secret name must respect SCREAMING_SNAKE casing.',
+                    },
+                  },
+                  required: [
+                    'id',
+                    'createdAt',
+                    'updatedAt',
+                    'identifier',
+                    'url',
+                    'signingSecret',
+                    'name',
+                    'version',
+                    'interfaces',
+                    'configuration',
+                    'configurations',
+                    'channels',
+                    'states',
+                    'events',
+                    'actions',
+                    'user',
+                    'entities',
+                    'dev',
+                    'title',
+                    'description',
+                    'iconUrl',
+                    'readmeUrl',
+                    'public',
+                    'visibility',
+                    'verificationStatus',
+                    'lifecycleStatus',
+                    'secrets',
+                  ],
+                  additionalProperties: false,
+                },
+              },
+              required: ['integration'],
+              title: 'getIntegrationByNameResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+    },
+    experimental: false,
+  }}
+/>

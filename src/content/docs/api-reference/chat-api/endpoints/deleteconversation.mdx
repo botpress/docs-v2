@@ -1,0 +1,49 @@
+---
+title: 'deleteConversation'
+description: 'Permanently deletes a [Conversation](#schema_conversation). It cannot be undone. Also immediately deletes corresponding [Messages](#schema_message).'
+method: 'DELETE'
+prose: false
+---
+
+import APIEndpoint from '@/components/api-endpoint'
+
+<APIEndpoint
+  endpoint={{
+    method: 'DELETE',
+    path: '/conversations/{id}',
+    operationId: 'deleteConversation',
+    summary: 'Delete Conversation',
+    description:
+      'Permanently deletes a [Conversation](#schema_conversation). It cannot be undone. Also immediately deletes corresponding [Messages](#schema_message).',
+    tags: ['Endpoints'],
+    parameters: [
+      {
+        name: 'x-user-key',
+        in: 'header',
+        description: 'Authentication Key',
+        required: true,
+        schema: { type: 'string' },
+      },
+      { name: 'id', in: 'path', description: 'Conversation id', required: true, schema: { type: 'string' } },
+    ],
+    responses: {
+      '200': {
+        description: 'Returns the [Conversation](#schema_conversation) object that was deleted',
+        content: {
+          'application/json': {
+            schema: { type: 'object', title: 'deleteConversationResponse', additionalProperties: false },
+          },
+        },
+      },
+      default: {
+        description: 'Returns the [Conversation](#schema_conversation) object that was deleted',
+        content: {
+          'application/json': {
+            schema: { type: 'object', title: 'deleteConversationResponse', additionalProperties: false },
+          },
+        },
+      },
+    },
+    experimental: false,
+  }}
+/>

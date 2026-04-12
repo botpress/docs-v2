@@ -19,6 +19,7 @@ export interface AdjacentPages {
 export interface ArticleEntry {
   slug: string
   title: string
+  method?: string
 }
 
 interface CategoryMeta {
@@ -156,6 +157,7 @@ export function normalizeCollectionEntries(entries: CollectionEntry<'docs'>[], c
     return {
       slug: computeStrippedSlug(rawSlug, contentDir),
       title: entry.data.title,
+      method: (entry.data as any).method,
     }
   })
 }
@@ -207,7 +209,8 @@ function buildLevel(
   dirPath: string,
   slugPrefix: string[],
   isStripped: boolean,
-  titleMap: Map<string, string>
+  titleMap: Map<string, string>,
+  methodMap: Map<string, string>
 ): SidebarNode[] {
   const meta = readCategoryMeta(dirPath)
   const items = getOrderedItems(dirPath, meta)
@@ -225,6 +228,7 @@ function buildLevel(
         title,
         href: articleSlug === 'index' ? '/' : `/${articleSlug}`,
         path: articleSlug,
+        method: methodMap.get(articleSlug),
       }
       nodes.push(articleNode)
       continue
@@ -237,7 +241,7 @@ function buildLevel(
 
       const childSlugPrefix = subStrip ? slugPrefix : [...slugPrefix, item]
 
-      const children = buildLevel(subDirPath, childSlugPrefix, subStrip, titleMap)
+      const children = buildLevel(subDirPath, childSlugPrefix, subStrip, titleMap, methodMap)
 
       const indexExplicitlyListed = subMeta?.sidebarPages?.includes('index')
 
@@ -275,6 +279,7 @@ function buildLevel(
       title,
       href: `/${articleSlug}`,
       path: articleSlug,
+      method: methodMap.get(articleSlug),
     }
     nodes.push(articleNode)
   }
@@ -328,7 +333,12 @@ function collectAllContentSlugs(dirPath: string, slugPrefix: string[], isStrippe
  * Detects `root: true` categories and promotes them to header tabs.
  * Returns a SidebarTreeResult with per-tab trees and slug-to-tab mapping.
  */
-export function buildSidebarTree(titleMap: Map<string, string>, contentDir: string): SidebarTreeResult {
+export function buildSidebarTree(
+  titleMap: Map<string, string>,
+  contentDir: string,
+  methodMap?: Map<string, string>
+): SidebarTreeResult {
+  const _methodMap = methodMap ?? new Map()
   const rootMeta = readCategoryMeta(contentDir)
   const rootStrip = rootMeta?.strip ?? false
   const orderedItems = getOrderedItems(contentDir, rootMeta)
@@ -343,7 +353,7 @@ export function buildSidebarTree(titleMap: Map<string, string>, contentDir: stri
     return meta?.root === true
   })
 
-  const defaultTree = buildLevel(contentDir, [], rootStrip, titleMap)
+  const defaultTree = buildLevel(contentDir, [], rootStrip, titleMap, _methodMap)
 
   if (!hasRootFolders) {
     return { tabs: [], trees: {}, defaultTree, slugToTab: {} }
@@ -359,7 +369,7 @@ export function buildSidebarTree(titleMap: Map<string, string>, contentDir: stri
     const subStrip = subMeta.strip ?? false
     const childSlugPrefix = subStrip ? [] : [item]
 
-    const tabTree = buildLevel(subDirPath, childSlugPrefix, subStrip, titleMap)
+    const tabTree = buildLevel(subDirPath, childSlugPrefix, subStrip, titleMap, _methodMap)
     const firstHref = findFirstHref(tabTree) ?? '/'
 
     tabs.push({

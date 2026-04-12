@@ -1,0 +1,139 @@
+---
+title: 'getBotLogs'
+description: 'Get bot logs'
+method: 'GET'
+prose: false
+---
+
+import APIEndpoint from '@/components/api-endpoint'
+
+<APIEndpoint
+  endpoint={{
+    method: 'GET',
+    path: '/v1/admin/bots/{id}/logs',
+    operationId: 'getBotLogs',
+    description: 'Get bot logs',
+    tags: [],
+    parameters: [
+      { name: 'id', in: 'path', description: 'Bot ID', required: true, schema: { type: 'string' } },
+      {
+        name: 'timeStart',
+        in: 'query',
+        description: 'Beginning of the time range to get logs from',
+        required: true,
+        schema: { type: 'string' },
+      },
+      {
+        name: 'timeEnd',
+        in: 'query',
+        description: 'End of the time range to get logs from',
+        required: false,
+        schema: { type: 'string' },
+      },
+      { name: 'level', in: 'query', description: 'Filter by log level', required: false, schema: { type: 'string' } },
+      { name: 'userId', in: 'query', description: 'Filter by user ID', required: false, schema: { type: 'string' } },
+      {
+        name: 'workflowId',
+        in: 'query',
+        description: 'Filter by workflow ID',
+        required: false,
+        schema: { type: 'string' },
+      },
+      {
+        name: 'conversationId',
+        in: 'query',
+        description: 'Filter by conversation ID',
+        required: false,
+        schema: { type: 'string' },
+      },
+      {
+        name: 'messageContains',
+        in: 'query',
+        description: 'Filter logs where the message contains this substring',
+        required: false,
+        schema: { type: 'string' },
+      },
+      {
+        name: 'nextToken',
+        in: 'query',
+        description: 'Token to get the next page of logs',
+        required: false,
+        schema: { type: 'string' },
+      },
+      { name: 'x-workspace-id', in: 'header', description: 'Workspace ID', required: true, schema: { type: 'string' } },
+      {
+        name: 'x-multiple-integrations',
+        in: 'header',
+        description:
+          'Whether the client supports bots with multiple instances of the same integration. Set to "true" to receive integration instances keyed by their alias instead of their id. This header will be removed in the future, and the API will always return multiple instances keyed by alias.',
+        required: false,
+        schema: { type: 'string' },
+      },
+    ],
+    responses: {
+      '200': {
+        description: 'Success',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                logs: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      timestamp: { type: 'string' },
+                      level: { type: 'string' },
+                      message: { type: 'string' },
+                      workflowId: { type: 'string' },
+                      userId: { type: 'string' },
+                      conversationId: { type: 'string' },
+                    },
+                    required: ['timestamp', 'level', 'message'],
+                  },
+                },
+                nextToken: { type: 'string' },
+              },
+              required: ['logs'],
+              title: 'getBotLogsResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+      default: {
+        description: 'Success',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                logs: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      timestamp: { type: 'string' },
+                      level: { type: 'string' },
+                      message: { type: 'string' },
+                      workflowId: { type: 'string' },
+                      userId: { type: 'string' },
+                      conversationId: { type: 'string' },
+                    },
+                    required: ['timestamp', 'level', 'message'],
+                  },
+                },
+                nextToken: { type: 'string' },
+              },
+              required: ['logs'],
+              title: 'getBotLogsResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+    },
+    experimental: false,
+  }}
+/>

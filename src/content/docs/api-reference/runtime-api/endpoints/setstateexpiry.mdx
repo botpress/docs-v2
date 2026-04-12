@@ -1,0 +1,256 @@
+---
+title: 'setStateExpiry'
+description: 'Updates the [State](#schema_state) expiry.'
+method: 'POST'
+prose: false
+---
+
+import APIEndpoint from '@/components/api-endpoint'
+
+<APIEndpoint
+  endpoint={{
+    method: 'POST',
+    path: '/v1/chat/states/{type}/{id}/{name}/expiry',
+    operationId: 'setStateExpiry',
+    description: 'Updates the [State](#schema_state) expiry.',
+    tags: [],
+    parameters: [
+      {
+        name: 'type',
+        in: 'path',
+        description: 'Represents the resource type that the state is related to',
+        required: true,
+        schema: { type: 'string', enum: ['conversation', 'user', 'bot', 'integration', 'workflow'] },
+      },
+      {
+        name: 'id',
+        in: 'path',
+        description: 'Id of the State which will be either the botId, the userId or the conversationId',
+        required: true,
+        schema: { type: 'string' },
+      },
+      {
+        name: 'name',
+        in: 'path',
+        description: 'Name of the State which is declared inside the bot definition',
+        required: true,
+        schema: { type: 'string' },
+      },
+      { name: 'x-bot-id', in: 'header', description: 'Bot id', required: true, schema: { type: 'string' } },
+      {
+        name: 'x-integration-id',
+        in: 'header',
+        description: 'Integration id',
+        required: false,
+        schema: { type: 'string' },
+      },
+      {
+        name: 'x-integration-alias',
+        in: 'header',
+        description: 'Integration alias',
+        required: false,
+        schema: { type: 'string' },
+      },
+    ],
+    requestBody: {
+      description: 'State expiry',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              expiry: {
+                type: 'number',
+                minimum: 1,
+                maximum: 2592000000,
+                nullable: true,
+                description:
+                  "Expiry of the [State](#schema_state) in milliseconds. The state will expire if it is idle for the configured value. By default, a state doesn't expire.",
+              },
+            },
+            required: ['expiry'],
+            title: 'setStateExpiryBody',
+            additionalProperties: false,
+          },
+        },
+      },
+    },
+    responses: {
+      '200': {
+        description:
+          'Returns the updated [State](#schema_state) object if a valid identifier was provided. Returns an [an error](#errors) otherwise',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                state: {
+                  type: 'object',
+                  properties: {
+                    id: {
+                      type: 'string',
+                      minLength: 28,
+                      maxLength: 36,
+                      description: 'Id of the [State](#schema_state)',
+                    },
+                    createdAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Creation date of the [State](#schema_state) in ISO 8601 format',
+                    },
+                    updatedAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Updating date of the [State](#schema_state) in ISO 8601 format',
+                    },
+                    botId: {
+                      type: 'string',
+                      minLength: 28,
+                      maxLength: 36,
+                      description: 'Id of the [Bot](#schema_bot)',
+                    },
+                    conversationId: {
+                      type: 'string',
+                      minLength: 28,
+                      maxLength: 36,
+                      description: 'Id of the [Conversation](#schema_conversation)',
+                    },
+                    userId: {
+                      type: 'string',
+                      minLength: 28,
+                      maxLength: 36,
+                      description: 'Id of the [User](#schema_user)',
+                    },
+                    name: {
+                      type: 'string',
+                      maxLength: 200,
+                      description: 'Name of the [State](#schema_state) which is declared inside the bot definition',
+                    },
+                    type: {
+                      type: 'string',
+                      enum: ['conversation', 'user', 'bot', 'integration', 'workflow'],
+                      description:
+                        'Type of the [State](#schema_state) represents the resource type (`conversation`, `user`, `bot`, `integration` or `workflow`) that the state is related to',
+                    },
+                    payload: {
+                      type: 'object',
+                      additionalProperties: true,
+                      description: 'Payload is the content of the state defined by your bot.',
+                    },
+                    expiry: {
+                      type: 'number',
+                      minimum: 1,
+                      description:
+                        'Expiry of the state in milliseconds. The state will expire if it is idle for the configured value. Absent if no expiry is set.',
+                    },
+                    expiresAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description:
+                        'Expiration date of the ${ref.state} in ISO 8601 format. Absent if no expiry is set.',
+                    },
+                  },
+                  required: ['id', 'createdAt', 'updatedAt', 'botId', 'name', 'type', 'payload'],
+                  description:
+                    'The state object represents the current payload. A state is always linked to either a bot, a conversation or a user.',
+                  additionalProperties: false,
+                },
+              },
+              required: ['state'],
+              title: 'setStateExpiryResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+      default: {
+        description:
+          'Returns the updated [State](#schema_state) object if a valid identifier was provided. Returns an [an error](#errors) otherwise',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                state: {
+                  type: 'object',
+                  properties: {
+                    id: {
+                      type: 'string',
+                      minLength: 28,
+                      maxLength: 36,
+                      description: 'Id of the [State](#schema_state)',
+                    },
+                    createdAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Creation date of the [State](#schema_state) in ISO 8601 format',
+                    },
+                    updatedAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'Updating date of the [State](#schema_state) in ISO 8601 format',
+                    },
+                    botId: {
+                      type: 'string',
+                      minLength: 28,
+                      maxLength: 36,
+                      description: 'Id of the [Bot](#schema_bot)',
+                    },
+                    conversationId: {
+                      type: 'string',
+                      minLength: 28,
+                      maxLength: 36,
+                      description: 'Id of the [Conversation](#schema_conversation)',
+                    },
+                    userId: {
+                      type: 'string',
+                      minLength: 28,
+                      maxLength: 36,
+                      description: 'Id of the [User](#schema_user)',
+                    },
+                    name: {
+                      type: 'string',
+                      maxLength: 200,
+                      description: 'Name of the [State](#schema_state) which is declared inside the bot definition',
+                    },
+                    type: {
+                      type: 'string',
+                      enum: ['conversation', 'user', 'bot', 'integration', 'workflow'],
+                      description:
+                        'Type of the [State](#schema_state) represents the resource type (`conversation`, `user`, `bot`, `integration` or `workflow`) that the state is related to',
+                    },
+                    payload: {
+                      type: 'object',
+                      additionalProperties: true,
+                      description: 'Payload is the content of the state defined by your bot.',
+                    },
+                    expiry: {
+                      type: 'number',
+                      minimum: 1,
+                      description:
+                        'Expiry of the state in milliseconds. The state will expire if it is idle for the configured value. Absent if no expiry is set.',
+                    },
+                    expiresAt: {
+                      type: 'string',
+                      format: 'date-time',
+                      description:
+                        'Expiration date of the ${ref.state} in ISO 8601 format. Absent if no expiry is set.',
+                    },
+                  },
+                  required: ['id', 'createdAt', 'updatedAt', 'botId', 'name', 'type', 'payload'],
+                  description:
+                    'The state object represents the current payload. A state is always linked to either a bot, a conversation or a user.',
+                  additionalProperties: false,
+                },
+              },
+              required: ['state'],
+              title: 'setStateExpiryResponse',
+              additionalProperties: false,
+            },
+          },
+        },
+      },
+    },
+    experimental: false,
+  }}
+/>
