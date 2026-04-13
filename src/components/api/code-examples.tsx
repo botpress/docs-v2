@@ -145,7 +145,7 @@ export default function CodeExamples({ method, path, state }: CodeExamplesProps)
   )
 
   return (
-    <div className="rounded-lg border border-stone-200 bg-stone-50 dark:border-stone-700 dark:bg-stone-800/50">
+    <div className="min-h-0 overflow-hidden rounded-lg border border-stone-200 bg-stone-50 dark:border-stone-700 dark:bg-stone-800/50">
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <div className="flex items-center justify-between border-b border-stone-200 px-3 pt-2 dark:border-stone-700">
           <span className="text-xs font-medium text-stone-500 dark:text-stone-400">Request</span>
@@ -165,7 +165,7 @@ export default function CodeExamples({ method, path, state }: CodeExamplesProps)
         {(['curl', 'javascript', 'python'] as const).map((lang) => (
           <TabsContent key={lang} value={lang} className="p-0">
             <div className="relative">
-              <div className="p-4">
+              <div className="overflow-y-auto p-4">
                 <HighlightedCode code={examples[lang]} language={LANG_MAP[lang]} />
               </div>
               <button

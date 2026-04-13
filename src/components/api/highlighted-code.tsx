@@ -56,7 +56,7 @@ export default function HighlightedCode({ code, language, className }: Highlight
   return (
     <div
       ref={containerRef}
-      className={`overflow-x-auto text-xs leading-relaxed [&_pre]:!bg-transparent [&_pre]:!p-0 [&_code]:!bg-transparent ${className || ''}`}
+      className={`overflow-x-auto text-xs leading-relaxed [&_.shiki]:!bg-transparent [&_pre]:!bg-transparent [&_pre]:!p-0 [&_code]:!bg-transparent ${className || ''}`}
       dangerouslySetInnerHTML={{ __html: html }}
     />
   )
