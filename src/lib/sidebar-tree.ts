@@ -154,10 +154,15 @@ export function computeStrippedSlug(filePath: string, contentDir: string): strin
 export function normalizeCollectionEntries(entries: CollectionEntry<'docs'>[], contentDir: string): ArticleEntry[] {
   return entries.map((entry) => {
     const rawSlug = entry.id.replace(/\.(md|mdx)$/, '')
+    let method = (entry.data as any).method as string | undefined
+    if (!method && (entry.data as any).openapi) {
+      const parts = ((entry.data as any).openapi as string).trim().split(/\s+/)
+      if (parts.length >= 2) method = parts[1]!.toUpperCase()
+    }
     return {
       slug: computeStrippedSlug(rawSlug, contentDir),
       title: entry.data.title,
-      method: (entry.data as any).method,
+      method,
     }
   })
 }

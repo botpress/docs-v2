@@ -174,21 +174,10 @@ export default function SidebarTreeView({ nodes, currentPath, textSize = 'sm' }:
           )
         }
 
-        const active = isPathActive(node.href, currentPath)
-
         return (
-          <a
-            key={node.href}
-            href={node.href}
-            className={`flex items-center rounded-md pl-4 pr-2 py-1.5 ${textSize === 'base' ? 'text-base' : 'text-sm'} transition-colors ${
-              active
-                ? 'text-primary bg-primary/10 dark:bg-primary/15 font-medium'
-                : 'text-stone-600 hover:bg-black/5 hover:text-stone-900 dark:text-stone-400 dark:hover:bg-white/5 dark:hover:text-stone-100'
-            }`}
-          >
-            <span className="min-w-0 truncate">{node.title}</span>
-            {node.method && <SidebarMethodBadge method={node.method} />}
-          </a>
+          <ul key={node.href} className="mb-8 space-y-0.5">
+            <ChildNode node={node} currentPath={currentPath} textSize={textSize} />
+          </ul>
         )
       })}
     </>

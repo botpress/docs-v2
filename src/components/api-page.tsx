@@ -1,7 +1,15 @@
-import { useState, useCallback, useMemo } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb'
+import PageOptions from '@/components/page-options'
 import CodeExamples from './api/code-examples'
 import ResponseExamples from './api/response-examples'
 import ApiPlayground, { generateDefaultBody, DEFAULT_BASE_URL } from './api/playground'
@@ -137,7 +145,14 @@ function ResponseSection({ responses }: { responses: NonNullable<Endpoint['respo
   )
 }
 
-export default function APIEndpoint({ endpoint }: { endpoint: Endpoint }) {
+interface APIPageProps {
+  endpoint: Endpoint
+  title: string
+  breadcrumbs: { label: string; href?: string }[]
+  markdownUrl: string
+}
+
+export default function APIPage({ endpoint, title, breadcrumbs, markdownUrl }: APIPageProps) {
   const paramLocations = ['path', 'query', 'header', 'cookie']
 
   const bodySchema = useMemo(() => {
@@ -172,9 +187,39 @@ export default function APIEndpoint({ endpoint }: { endpoint: Endpoint }) {
   }, [])
 
   return (
-    <div className="not-prose @container mt-6">
-      <div className="flex flex-col gap-x-8 gap-y-6 xl:flex-row xl:items-start">
-        <div className="min-w-0 flex-1 space-y-8">
+    <div className="not-prose">
+      <div className="flex flex-col gap-x-10 gap-y-6 xl:flex-row xl:items-start">
+        <div className="min-w-0 w-full xl:w-[40rem] xl:shrink-0 space-y-8">
+          <div>
+            <div className="hidden items-start justify-between gap-4 lg:flex">
+              {breadcrumbs.length > 0 ? (
+                <Breadcrumb className="min-w-0 flex-1">
+                  <BreadcrumbList>
+                    {breadcrumbs.map((crumb, i) => (
+                      <React.Fragment key={crumb.label}>
+                        {i > 0 && <BreadcrumbSeparator />}
+                        <BreadcrumbItem className="truncate">
+                          <BreadcrumbLink href={crumb.href}>{crumb.label}</BreadcrumbLink>
+                        </BreadcrumbItem>
+                      </React.Fragment>
+                    ))}
+                  </BreadcrumbList>
+                </Breadcrumb>
+              ) : (
+                <div />
+              )}
+              <PageOptions markdownUrl={markdownUrl} />
+            </div>
+
+            <h1 className="font-heading text-2xl font-semibold text-stone-900 lg:text-3xl dark:text-stone-100">
+              {title}
+            </h1>
+
+            <div className="mt-3 lg:hidden">
+              <PageOptions markdownUrl={markdownUrl} />
+            </div>
+          </div>
+
           <div>
             <div className="flex items-center gap-3">
               <MethodBadge method={endpoint.method} />
@@ -207,10 +252,12 @@ export default function APIEndpoint({ endpoint }: { endpoint: Endpoint }) {
           {endpoint.responses && <ResponseSection responses={endpoint.responses} />}
         </div>
 
-        <div className="group/examples space-y-4 xl:sticky xl:top-6 xl:max-h-[calc(100vh-6rem)] xl:w-[400px] xl:shrink-0 xl:self-start xl:overflow-y-auto">
-          <CodeExamples method={endpoint.method} path={endpoint.path} state={requestState} />
-          {endpoint.responses && <ResponseExamples responses={endpoint.responses} />}
-        </div>
+        <aside className="hidden w-112 shrink-0 xl:block">
+          <div className="group/examples sticky top-10 space-y-4">
+            <CodeExamples method={endpoint.method} path={endpoint.path} state={requestState} />
+            {endpoint.responses && <ResponseExamples responses={endpoint.responses} />}
+          </div>
+        </aside>
       </div>
     </div>
   )

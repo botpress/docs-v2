@@ -22,22 +22,6 @@ const STATIC_APIS: { file: string; slug: string; label: string }[] = [
 
 const HTTP_METHODS = ['get', 'post', 'put', 'patch', 'delete'] as const
 
-interface OperationData {
-  method: string
-  path: string
-  operationId?: string
-  summary?: string
-  description?: string
-  tags?: string[]
-  parameters?: any[]
-  requestBody?: any
-  responses?: Record<string, any>
-  security?: any[]
-  securitySchemes?: Record<string, any>
-  deprecated?: boolean
-  experimental?: boolean
-}
-
 function postProcessSpec(spec: any): any {
   for (const apiPath of Object.keys(spec.paths || {})) {
     for (const verb of Object.keys(spec.paths[apiPath])) {
@@ -79,143 +63,42 @@ function slugify(str: string): string {
     .replace(/^-|-$/g, '')
 }
 
-function resolveRef(ref: string, spec: any): any {
-  if (!ref.startsWith('#/')) return undefined
-  const parts = ref.replace('#/', '').split('/')
-  let result = spec
-  for (const part of parts) {
-    result = result?.[part]
-    if (!result) return undefined
-  }
-  return result
+interface SlimOperation {
+  method: string
+  path: string
+  operationId?: string
+  description?: string
 }
 
-function resolveSchema(schema: any, spec: any, depth = 0): any {
-  if (!schema || depth > 5) return schema
-  if (schema.$ref) {
-    const resolved = resolveRef(schema.$ref, spec)
-    return resolveSchema(resolved, spec, depth + 1)
-  }
-  if (schema.allOf) {
-    const merged: any = {}
-    for (const sub of schema.allOf) {
-      const resolved = resolveSchema(sub, spec, depth + 1)
-      if (resolved?.properties) {
-        merged.properties = { ...merged.properties, ...resolved.properties }
-      }
-      if (resolved?.required) {
-        merged.required = [...(merged.required || []), ...resolved.required]
-      }
-    }
-    return { type: 'object', ...merged }
-  }
-  if (schema.properties) {
-    const props: Record<string, any> = {}
-    for (const [key, val] of Object.entries(schema.properties)) {
-      props[key] = resolveSchema(val as any, spec, depth + 1)
-    }
-    return { ...schema, properties: props }
-  }
-  if (schema.items) {
-    return { ...schema, items: resolveSchema(schema.items, spec, depth + 1) }
-  }
-  return schema
-}
-
-function extractOperation(
-  pathObj: any,
-  method: string,
-  apiPath: string,
-  spec: any
-): OperationData & { hidden?: boolean } {
-  const op = pathObj[method]
-  const params = [...(pathObj.parameters || []), ...(op.parameters || [])].map((p: any) => {
-    if (p.$ref) p = resolveRef(p.$ref, spec) || p
-    if (p.schema) p = { ...p, schema: resolveSchema(p.schema, spec) }
-    return p
-  })
-
-  let requestBody = op.requestBody
-  if (requestBody?.$ref) requestBody = resolveRef(requestBody.$ref, spec)
-  if (requestBody?.content) {
-    const resolved: any = { ...requestBody, content: {} }
-    for (const [ct, media] of Object.entries(requestBody.content as Record<string, any>)) {
-      resolved.content[ct] = {
-        ...media,
-        schema: media.schema ? resolveSchema(media.schema, spec) : undefined,
-      }
-    }
-    requestBody = resolved
-  }
-
-  const responses: Record<string, any> = {}
-  for (const [status, resp] of Object.entries(op.responses || {})) {
-    let resolved: any = resp
-    if ((resolved as any)?.$ref) resolved = resolveRef((resolved as any).$ref, spec) || resolved
-    if (resolved?.content) {
-      const resolvedContent: any = {}
-      for (const [ct, media] of Object.entries(resolved.content as Record<string, any>)) {
-        resolvedContent[ct] = {
-          ...media,
-          schema: media.schema ? resolveSchema(media.schema, spec) : undefined,
-        }
-      }
-      resolved = { ...resolved, content: resolvedContent }
-    }
-    responses[status] = resolved
-  }
-
-  const security = op.security ?? spec.security
-  const securitySchemes = spec.components?.securitySchemes
-
-  return {
-    method: method.toUpperCase(),
-    path: apiPath,
-    operationId: op.operationId,
-    summary: op.summary,
-    description: op.description,
-    tags: op.tags,
-    parameters: params.length > 0 ? params : undefined,
-    requestBody: requestBody || undefined,
-    responses: Object.keys(responses).length > 0 ? responses : undefined,
-    security: security || undefined,
-    securitySchemes: securitySchemes || undefined,
-    deprecated: op.deprecated,
-    experimental: op['x-experimental'] || false,
-    hidden: op['x-hidden'] || false,
-  }
-}
-
-function generateMdx(op: OperationData): string {
+function generateMdx(op: SlimOperation, specFile: string): string {
   const title = op.operationId || `${op.method} ${op.path}`
   const desc = op.description?.split('\n')[0]?.slice(0, 200) || ''
-  const dataJson = JSON.stringify(op)
 
   return `---
 title: "${title.replace(/"/g, '\\"')}"
 ${desc ? `description: "${desc.replace(/"/g, '\\"')}"` : ''}
-method: "${op.method}"
-prose: false
+openapi: ${specFile} ${op.method} ${op.path}
 ---
-
-import APIEndpoint from '@/components/api-endpoint'
-
-<APIEndpoint client:load endpoint={${dataJson}} />
 `
 }
 
-function processSpec(spec: any, slug: string, label: string) {
+function processSpec(spec: any, slug: string, label: string, specFile: string) {
   const apiDir = path.join(OUTPUT_DIR, slug)
-  const operations: { op: OperationData; filename: string }[] = []
+  const operations: { op: SlimOperation; filename: string }[] = []
 
   for (const [apiPath, pathObj] of Object.entries(spec.paths as Record<string, any>)) {
     for (const method of HTTP_METHODS) {
       if (!pathObj[method]) continue
-      const op = extractOperation(pathObj, method, apiPath, spec)
-      if ((op as any).hidden) continue
-      delete (op as any).hidden
-      const filename = slugify(op.operationId || `${method}-${apiPath.replace(/\//g, '-')}`)
-      operations.push({ op, filename })
+      const op = pathObj[method]
+      if (op['x-hidden']) continue
+      const slimOp: SlimOperation = {
+        method: method.toUpperCase(),
+        path: apiPath,
+        operationId: op.operationId,
+        description: op.description,
+      }
+      const filename = slugify(slimOp.operationId || `${method}-${apiPath.replace(/\//g, '-')}`)
+      operations.push({ op: slimOp, filename })
     }
   }
 
@@ -241,7 +124,7 @@ function processSpec(spec: any, slug: string, label: string) {
 
   for (const entry of operations) {
     const mdxPath = path.join(endpointsDir, `${entry.filename}.mdx`)
-    fs.writeFileSync(mdxPath, generateMdx(entry.op))
+    fs.writeFileSync(mdxPath, generateMdx(entry.op, specFile))
   }
 
   return operations.length
@@ -249,19 +132,22 @@ function processSpec(spec: any, slug: string, label: string) {
 
 function run() {
   fs.mkdirSync(TEMP_DIR, { recursive: true })
+  fs.mkdirSync(STATIC_SPECS_DIR, { recursive: true })
 
   let totalOps = 0
 
   for (const entry of PACKAGE_APIS) {
     const spec = exportSpec(entry)
-    const count = processSpec(spec, entry.slug, entry.label)
+    const specFile = `${entry.key}-openapi.json`
+    fs.writeFileSync(path.join(STATIC_SPECS_DIR, specFile), JSON.stringify(spec, null, 2))
+    const count = processSpec(spec, entry.slug, entry.label, specFile)
     console.log(`${entry.label}: ${count} endpoints (from @botpress/api)`)
     totalOps += count
   }
 
   for (const entry of STATIC_APIS) {
     const spec = loadStaticSpec(entry.file)
-    const count = processSpec(spec, entry.slug, entry.label)
+    const count = processSpec(spec, entry.slug, entry.label, entry.file)
     console.log(`${entry.label}: ${count} endpoints (from static file)`)
     totalOps += count
   }
