@@ -15,7 +15,7 @@
     "check:type": "bunx astro check",
     "fix": "bun run fix:format",
     "fix:format": "bunx oxfmt .",
-    "lint": "bunx oxlint \"**/*.{ts,tsx}\"",
+    "lint": "bunx oxlint src/ scripts/",
     "generate:api": "bun scripts/generate-api-docs.ts",
     "prepare": "lefthook install"
   },
