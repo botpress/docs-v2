@@ -2,7 +2,7 @@ import type { CollectionEntry } from 'astro:content'
 import fs from 'node:fs'
 import path from 'node:path'
 import type { SidebarNode, SidebarCategoryNode, SidebarArticleNode, SidebarTreeResult, TabInfo } from './sidebar-types'
-import type { ApiEntryData } from './api-loader'
+import type { ApiEntryData } from '@/astro/loaders/api-loader'
 
 export type { SidebarNode, SidebarCategoryNode, SidebarArticleNode, SidebarTreeResult, TabInfo } from './sidebar-types'
 export { isPathActive, hasActiveChild } from './sidebar-types'

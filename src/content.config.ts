@@ -2,7 +2,7 @@ import { defineCollection } from 'astro:content'
 import { z } from 'astro/zod'
 import { glob } from 'astro/loaders'
 import { runtimeApi, adminApi, tablesApi, filesApi } from '@botpress/api'
-import { apiLoader, type PackageApiSource, type StaticApiSource } from './lib/api-loader'
+import { apiLoader, type PackageApiSource, type StaticApiSource } from './astro/loaders/api-loader'
 
 const packageApis: PackageApiSource[] = [
   { api: adminApi, slug: 'admin-api', label: 'Admin API', key: 'admin' },
