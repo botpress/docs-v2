@@ -182,7 +182,15 @@ export function apiLoader(): Loader {
       try {
         for (const entry of PACKAGE_APIS) {
           const exportDir = path.join(tmpDir, entry.key)
-          entry.api.exportOpenapi(exportDir)
+
+          const origWrite = process.stdout.write
+          process.stdout.write = () => true
+          try {
+            entry.api.exportOpenapi(exportDir)
+          } finally {
+            process.stdout.write = origWrite
+          }
+
           const specPath = path.join(exportDir, 'openapi.json')
           const spec = postProcessSpec(JSON.parse(fs.readFileSync(specPath, 'utf-8')))
           await processSpec(spec, entry.slug, entry.label, store, parseData)

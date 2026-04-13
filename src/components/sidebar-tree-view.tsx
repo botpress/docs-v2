@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { SidebarNode, SidebarCategoryNode, SidebarArticleNode } from '../lib/sidebar-types'
+import type { SidebarNode, SidebarCategoryNode } from '../lib/sidebar-types'
 import { isPathActive, hasActiveChild } from '../lib/sidebar-types'
 
 const SIDEBAR_METHOD_COLORS: Record<string, string> = {
@@ -151,7 +151,7 @@ function ChildNode({
 export default function SidebarTreeView({ nodes, currentPath, textSize = 'sm' }: Props) {
   return (
     <>
-      {nodes.map((node, index) => {
+      {nodes.map((node) => {
         if (node.type === 'category') {
           return (
             <div key={node.path} className="mb-8">
