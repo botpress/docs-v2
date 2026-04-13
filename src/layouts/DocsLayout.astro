@@ -7,7 +7,8 @@ import SearchOverlay from "../components/search-overlay";
 import { getCollection } from "astro:content";
 import {
   buildSidebarTree,
-  normalizeCollectionEntries,
+  buildApiSidebarNodes,
+  buildApiSidebarData,
   getActiveTab,
 } from "../lib/sidebar-tree";
 import { siteConfig } from "../lib/site-config";
@@ -19,19 +20,14 @@ interface Props {
 
 const { title, breadcrumbs } = Astro.props;
 
-const entries = await getCollection("docs");
+const docsEntries = await getCollection("docs");
+const apiEntries = await getCollection("api");
 const contentDir = path.resolve("./src/content/docs");
 
-const articles = normalizeCollectionEntries(entries, contentDir);
+const { titleMap, methodMap } = buildApiSidebarData(docsEntries, apiEntries, contentDir);
+const apiNodes = buildApiSidebarNodes(apiEntries);
 
-const titleMap = new Map<string, string>();
-const methodMap = new Map<string, string>();
-for (const a of articles) {
-  titleMap.set(a.slug, a.title);
-  if (a.method) methodMap.set(a.slug, a.method);
-}
-
-const result = buildSidebarTree(titleMap, contentDir, methodMap);
+const result = buildSidebarTree(titleMap, contentDir, methodMap, apiNodes);
 
 const currentPath = Astro.url.pathname;
 const hasTabs = result.tabs.length > 0;

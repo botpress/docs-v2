@@ -15,13 +15,13 @@
     "check:type": "bunx astro check",
     "fix": "bun run fix:format",
     "fix:format": "bunx oxfmt .",
-    "lint": "bunx oxlint src/ scripts/",
-    "generate:api": "bun scripts/generate-api-docs.ts",
+    "lint": "bunx oxlint src/",
     "prepare": "lefthook install"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.3",
     "@astrojs/react": "^5.0.2",
+    "@botpress/api": "^1.86.0",
     "@astrojs/sitemap": "^3.7.2",
     "@base-ui/react": "^1.3.0",
     "@fontsource-variable/geist": "^5.2.8",
@@ -47,7 +47,6 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.8",
-    "@botpress/api": "^1.86.0",
     "@types/node": "^25.5.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",

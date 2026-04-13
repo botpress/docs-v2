@@ -2,6 +2,7 @@ import type { CollectionEntry } from 'astro:content'
 import fs from 'node:fs'
 import path from 'node:path'
 import type { SidebarNode, SidebarCategoryNode, SidebarArticleNode, SidebarTreeResult, TabInfo } from './sidebar-types'
+import { API_ORDER, type ApiEntryData } from './api-loader'
 
 export type { SidebarNode, SidebarCategoryNode, SidebarArticleNode, SidebarTreeResult, TabInfo } from './sidebar-types'
 export { isPathActive, hasActiveChild } from './sidebar-types'
@@ -154,15 +155,9 @@ export function computeStrippedSlug(filePath: string, contentDir: string): strin
 export function normalizeCollectionEntries(entries: CollectionEntry<'docs'>[], contentDir: string): ArticleEntry[] {
   return entries.map((entry) => {
     const rawSlug = entry.id.replace(/\.(md|mdx)$/, '')
-    let method = (entry.data as any).method as string | undefined
-    if (!method && (entry.data as any).openapi) {
-      const parts = ((entry.data as any).openapi as string).trim().split(/\s+/)
-      if (parts.length >= 2) method = parts[1]!.toUpperCase()
-    }
     return {
       slug: computeStrippedSlug(rawSlug, contentDir),
       title: entry.data.title,
-      method,
     }
   })
 }
@@ -215,7 +210,8 @@ function buildLevel(
   slugPrefix: string[],
   isStripped: boolean,
   titleMap: Map<string, string>,
-  methodMap: Map<string, string>
+  methodMap: Map<string, string>,
+  injectableNodes?: Map<string, SidebarNode>
 ): SidebarNode[] {
   const meta = readCategoryMeta(dirPath)
   const items = getOrderedItems(dirPath, meta)
@@ -261,32 +257,43 @@ function buildLevel(
         ? children
         : children.filter((c) => !(c.type === 'article' && (c.href === categoryHref || c.path === 'index')))
 
+      const mergedChildren = [...filteredChildren]
+      const injectable = injectableNodes?.get(item)
+      if (injectable && injectable.type === 'category') {
+        mergedChildren.push(...injectable.children)
+      }
+
       const categoryNode: SidebarCategoryNode = {
         type: 'category',
         label: subMeta?.label || titleFromSlug(item),
         slug: item,
         path: [...slugPrefix, item].join('/') || item,
         href: categoryHref,
-        children: filteredChildren,
+        children: mergedChildren,
       }
       nodes.push(categoryNode)
       continue
     }
 
     const file = findContentFile(dirPath, item)
-    if (!file) continue
+    if (file) {
+      const articleSlug = isStripped ? item : [...slugPrefix, item].join('/')
+      const title = titleMap.get(articleSlug) ?? titleFromSlug(item)
 
-    const articleSlug = isStripped ? item : [...slugPrefix, item].join('/')
-    const title = titleMap.get(articleSlug) ?? titleFromSlug(item)
-
-    const articleNode: SidebarArticleNode = {
-      type: 'article',
-      title,
-      href: `/${articleSlug}`,
-      path: articleSlug,
-      method: methodMap.get(articleSlug),
+      const articleNode: SidebarArticleNode = {
+        type: 'article',
+        title,
+        href: `/${articleSlug}`,
+        path: articleSlug,
+        method: methodMap.get(articleSlug),
+      }
+      nodes.push(articleNode)
+      continue
     }
-    nodes.push(articleNode)
+
+    if (injectableNodes?.has(item)) {
+      nodes.push(injectableNodes.get(item)!)
+    }
   }
 
   return nodes
@@ -337,11 +344,15 @@ function collectAllContentSlugs(dirPath: string, slugPrefix: string[], isStrippe
  * Builds a sidebar tree by scanning the filesystem for _category.json files.
  * Detects `root: true` categories and promotes them to header tabs.
  * Returns a SidebarTreeResult with per-tab trees and slug-to-tab mapping.
+ *
+ * `apiNodes` are injected into the `api-reference` tab tree (if it exists)
+ * after the filesystem-based tree is built.
  */
 export function buildSidebarTree(
   titleMap: Map<string, string>,
   contentDir: string,
-  methodMap?: Map<string, string>
+  methodMap?: Map<string, string>,
+  apiNodes?: SidebarCategoryNode[]
 ): SidebarTreeResult {
   const _methodMap = methodMap ?? new Map()
   const rootMeta = readCategoryMeta(contentDir)
@@ -374,7 +385,22 @@ export function buildSidebarTree(
     const subStrip = subMeta.strip ?? false
     const childSlugPrefix = subStrip ? [] : [item]
 
-    const tabTree = buildLevel(subDirPath, childSlugPrefix, subStrip, titleMap, _methodMap)
+    let injectableMap: Map<string, SidebarNode> | undefined
+    if (item === 'api-reference' && apiNodes?.length) {
+      injectableMap = new Map()
+      for (const node of apiNodes) {
+        injectableMap.set(node.slug, node)
+      }
+    }
+
+    const tabTree = buildLevel(subDirPath, childSlugPrefix, subStrip, titleMap, _methodMap, injectableMap)
+
+    if (injectableMap) {
+      for (const node of apiNodes!) {
+        collectSlugsFromNodes([node], slugToTab, item)
+      }
+    }
+
     const firstHref = findFirstHref(tabTree) ?? '/'
 
     tabs.push({
@@ -391,6 +417,16 @@ export function buildSidebarTree(
   }
 
   return { tabs, trees, defaultTree, slugToTab }
+}
+
+function collectSlugsFromNodes(nodes: SidebarNode[], slugToTab: Record<string, string>, tab: string) {
+  for (const node of nodes) {
+    if (node.type === 'article') {
+      slugToTab[node.path] = tab
+    } else {
+      collectSlugsFromNodes(node.children, slugToTab, tab)
+    }
+  }
 }
 
 function flattenTree(nodes: SidebarNode[]): AdjacentPage[] {
@@ -434,4 +470,82 @@ export function getActiveTab(pathname: string, slugToTab: Record<string, string>
   }
 
   return null
+}
+
+/**
+ * Build sidebar category nodes from API collection entries.
+ * Groups entries by apiSlug, sorts by sortOrder, and creates the
+ * API Name > Endpoints > [articles] structure.
+ */
+export function buildApiSidebarNodes(apiEntries: { id: string; data: ApiEntryData }[]): SidebarCategoryNode[] {
+  const grouped = new Map<string, { label: string; entries: { id: string; data: ApiEntryData }[] }>()
+
+  for (const entry of apiEntries) {
+    const { apiSlug, apiLabel } = entry.data
+    if (!grouped.has(apiSlug)) {
+      grouped.set(apiSlug, { label: apiLabel, entries: [] })
+    }
+    grouped.get(apiSlug)!.entries.push(entry)
+  }
+
+  for (const group of grouped.values()) {
+    group.entries.sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  }
+
+  const sortedSlugs = [...grouped.keys()].sort((a, b) => API_ORDER.indexOf(a) - API_ORDER.indexOf(b))
+
+  return sortedSlugs.map((apiSlug) => {
+    const { label, entries } = grouped.get(apiSlug)!
+
+    const articleNodes: SidebarArticleNode[] = entries.map((entry) => ({
+      type: 'article',
+      title: entry.data.title,
+      href: `/api-reference/${entry.id}`,
+      path: `api-reference/${entry.id}`,
+      method: entry.data.method,
+    }))
+
+    const endpointsCategory: SidebarCategoryNode = {
+      type: 'category',
+      label: 'Endpoints',
+      slug: 'endpoints',
+      path: `api-reference/${apiSlug}/endpoints`,
+      children: articleNodes,
+    }
+
+    return {
+      type: 'category' as const,
+      label,
+      slug: apiSlug,
+      path: `api-reference/${apiSlug}`,
+      children: [endpointsCategory],
+    }
+  })
+}
+
+/**
+ * Build unified titleMap, methodMap, and slugToTab data from both docs and API collections.
+ * This is the single entry point for pages and layouts to get sidebar data.
+ */
+export function buildApiSidebarData(
+  docsEntries: CollectionEntry<'docs'>[],
+  apiEntries: { id: string; data: ApiEntryData }[],
+  contentDir: string
+) {
+  const articles = normalizeCollectionEntries(docsEntries, contentDir)
+  const titleMap = new Map<string, string>()
+  const methodMap = new Map<string, string>()
+
+  for (const a of articles) {
+    titleMap.set(a.slug, a.title)
+    if (a.method) methodMap.set(a.slug, a.method)
+  }
+
+  for (const entry of apiEntries) {
+    const slug = `api-reference/${entry.id}`
+    titleMap.set(slug, entry.data.title)
+    methodMap.set(slug, entry.data.method)
+  }
+
+  return { titleMap, methodMap, articles }
 }
