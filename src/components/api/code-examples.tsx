@@ -38,10 +38,9 @@ function generateCurl(
 ): string {
   const lines: string[] = [`curl -X ${method} \\`, `  '${url}'`]
 
-  if (token) lines.push(`  -H 'Authorization: Bearer ${token}'`)
+  lines.push(`  -H 'Authorization: Bearer ${token || '<token>'}'`)
   for (const [key, value] of Object.entries(headers)) {
-    if (!value) continue
-    lines.push(`  -H '${key}: ${value}'`)
+    lines.push(`  -H '${key}: ${value || `<${key}>`}'`)
   }
 
   if (body && ['POST', 'PUT', 'PATCH'].includes(method)) {
@@ -62,18 +61,15 @@ function generateJavaScript(
   const opts: string[] = [`  method: '${method}'`]
   const hdrs: string[] = []
 
-  if (token) hdrs.push(`    Authorization: 'Bearer ${token}'`)
+  hdrs.push(`    Authorization: 'Bearer ${token || '<token>'}'`)
   for (const [key, value] of Object.entries(headers)) {
-    if (!value) continue
-    hdrs.push(`    '${key}': '${value}'`)
+    hdrs.push(`    '${key}': '${value || `<${key}>`}'`)
   }
   if (body && ['POST', 'PUT', 'PATCH'].includes(method)) {
     hdrs.push(`    'Content-Type': 'application/json'`)
   }
 
-  if (hdrs.length > 0) {
-    opts.push(`  headers: {\n${hdrs.join(',\n')}\n  }`)
-  }
+  opts.push(`  headers: {\n${hdrs.join(',\n')}\n  }`)
 
   if (body && ['POST', 'PUT', 'PATCH'].includes(method)) {
     opts.push(`  body: JSON.stringify(${body})`)
@@ -92,27 +88,20 @@ function generatePython(
   const lines: string[] = ['import requests', '']
 
   const hdrs: string[] = []
-  if (token) hdrs.push(`    "Authorization": "Bearer ${token}"`)
+  hdrs.push(`    "Authorization": "Bearer ${token || '<token>'}"`)
   for (const [key, value] of Object.entries(headers)) {
-    if (!value) continue
-    hdrs.push(`    "${key}": "${value}"`)
+    hdrs.push(`    "${key}": "${value || `<${key}>`}"`)
   }
 
-  if (hdrs.length > 0) {
-    lines.push(`headers = {\n${hdrs.join(',\n')}\n}`)
-  }
+  lines.push(`headers = {\n${hdrs.join(',\n')}\n}`)
 
   if (body && ['POST', 'PUT', 'PATCH'].includes(method)) {
     lines.push(`payload = ${body}`)
     lines.push('')
-    lines.push(
-      `response = requests.${method.toLowerCase()}(\n    "${url}",\n    headers=${hdrs.length > 0 ? 'headers' : '{}'},\n    json=payload\n)`
-    )
+    lines.push(`response = requests.${method.toLowerCase()}(\n    "${url}",\n    headers=headers,\n    json=payload\n)`)
   } else {
     lines.push('')
-    lines.push(
-      `response = requests.${method.toLowerCase()}(\n    "${url}"${hdrs.length > 0 ? ',\n    headers=headers' : ''}\n)`
-    )
+    lines.push(`response = requests.${method.toLowerCase()}(\n    "${url}",\n    headers=headers\n)`)
   }
 
   lines.push('')

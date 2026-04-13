@@ -153,7 +153,7 @@ interface APIPageProps {
 }
 
 export default function APIPage({ endpoint, title, breadcrumbs, markdownUrl }: APIPageProps) {
-  const paramLocations = ['path', 'query', 'header', 'cookie']
+  const paramLocations = ['header', 'path', 'query', 'cookie']
 
   const bodySchema = useMemo(() => {
     if (!['POST', 'PUT', 'PATCH'].includes(endpoint.method) || !endpoint.requestBody?.content) return undefined
@@ -169,7 +169,7 @@ export default function APIPage({ endpoint, title, breadcrumbs, markdownUrl }: A
     for (const p of endpoint.parameters || []) {
       if (p.in === 'path') pathParams[p.name] = p.schema?.example?.toString() || ''
       if (p.in === 'query') queryParams[p.name] = ''
-      if (p.in === 'header') headers[p.name] = p.schema?.example?.toString() || ''
+      if (p.in === 'header' && p.required) headers[p.name] = p.schema?.example?.toString() || ''
     }
 
     return {
