@@ -2,18 +2,17 @@
 import PageOptions from "../components/page-options";
 import PageNavigation from "../components/page-navigation";
 import DocsLayout from "../layouts/DocsLayout.astro";
-import APIPage from "../components/api-page";
 import { getCollection, render } from "astro:content";
 import { toMarkdownPath } from "../lib/markdown-routes";
 import {
   computeStrippedSlug,
   buildBreadcrumbs,
-  normalizeCollectionEntries,
   buildSidebarTree,
+  buildApiSidebarNodes,
+  buildApiSidebarData,
   getActiveTab,
   getAdjacentPages,
 } from "../lib/sidebar-tree";
-import { resolveOpenApi } from "../lib/resolve-openapi";
 import { ClerkTOC } from "../components/clerk-toc";
 import {
   Breadcrumb,
@@ -43,7 +42,6 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content, headings } = await render(entry);
 const title = entry.data.title;
-const isOpenAPI = !!entry.data.openapi;
 const useProse = entry.data.prose !== false;
 const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 const markdownUrl = toMarkdownPath(Astro.url.pathname);
@@ -51,15 +49,11 @@ const markdownUrl = toMarkdownPath(Astro.url.pathname);
 const contentDir = path.resolve("./src/content/docs");
 const breadcrumbs = buildBreadcrumbs(entry.id, contentDir, title);
 
-const entries = await getCollection("docs");
-const articles = normalizeCollectionEntries(entries, contentDir);
-const titleMap = new Map<string, string>();
-const methodMap = new Map<string, string>();
-for (const a of articles) {
-  titleMap.set(a.slug, a.title);
-  if (a.method) methodMap.set(a.slug, a.method);
-}
-const treeResult = buildSidebarTree(titleMap, contentDir, methodMap);
+const docsEntries = await getCollection("docs");
+const apiEntries = await getCollection("api");
+const { titleMap, methodMap } = buildApiSidebarData(docsEntries, apiEntries, contentDir);
+const apiNodes = buildApiSidebarNodes(apiEntries);
+const treeResult = buildSidebarTree(titleMap, contentDir, methodMap, apiNodes);
 const currentPath = Astro.url.pathname;
 const hasTabs = treeResult.tabs.length > 0;
 const activeTab = hasTabs
@@ -70,33 +64,12 @@ const sidebarTree =
     ? (treeResult.trees[activeTab] ?? treeResult.defaultTree)
     : treeResult.defaultTree;
 const { prev, next } = getAdjacentPages(sidebarTree, currentPath);
-
-let endpointData: any = undefined;
-if (isOpenAPI) {
-  endpointData = resolveOpenApi(entry.data.openapi!);
-}
 ---
 
 <DocsLayout title={title} breadcrumbs={breadcrumbs}>
-  {!useProse && !isOpenAPI ? (
+  {!useProse ? (
     <div class="w-full px-8 pt-10 pb-8 sm:px-8 sm:pt-12 sm:pb-10 lg:px-16" data-pagefind-body>
       <Content />
-    </div>
-  ) : isOpenAPI ? (
-    <div class="flex w-full justify-center px-8 pt-10 pb-8 sm:px-8 sm:pt-12 sm:pb-10 lg:px-16" data-pagefind-body>
-      <div class="min-w-0 flex-1" style="max-width: calc(40rem + 2.5rem + 28rem)">
-        <APIPage
-          client:load
-          endpoint={endpointData}
-          title={title}
-          breadcrumbs={breadcrumbs}
-          markdownUrl={markdownUrl}
-        />
-
-        <div class="max-w-[40rem] not-prose">
-          <PageNavigation prev={prev} next={next} />
-        </div>
-      </div>
     </div>
   ) : (
     <div class="flex w-full justify-center gap-10 px-8 pt-10 pb-8 sm:px-8 sm:pt-12 sm:pb-10 lg:px-16">
