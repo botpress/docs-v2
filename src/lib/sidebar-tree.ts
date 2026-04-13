@@ -2,7 +2,7 @@ import type { CollectionEntry } from 'astro:content'
 import fs from 'node:fs'
 import path from 'node:path'
 import type { SidebarNode, SidebarCategoryNode, SidebarArticleNode, SidebarTreeResult, TabInfo } from './sidebar-types'
-import { API_ORDER, type ApiEntryData } from './api-loader'
+import type { ApiEntryData } from './api-loader'
 
 export type { SidebarNode, SidebarCategoryNode, SidebarArticleNode, SidebarTreeResult, TabInfo } from './sidebar-types'
 export { isPathActive, hasActiveChild } from './sidebar-types'
@@ -492,9 +492,7 @@ export function buildApiSidebarNodes(apiEntries: { id: string; data: ApiEntryDat
     group.entries.sort((a, b) => a.data.sortOrder - b.data.sortOrder)
   }
 
-  const sortedSlugs = [...grouped.keys()].sort((a, b) => API_ORDER.indexOf(a) - API_ORDER.indexOf(b))
-
-  return sortedSlugs.map((apiSlug) => {
+  return [...grouped.keys()].map((apiSlug) => {
     const { label, entries } = grouped.get(apiSlug)!
 
     const articleNodes: SidebarArticleNode[] = entries.map((entry) => ({

@@ -1,23 +1,25 @@
-import { runtimeApi, adminApi, tablesApi, filesApi } from '@botpress/api'
+import SwaggerParser from '@apidevtools/swagger-parser'
 import fs from 'node:fs'
 import path from 'node:path'
 import os from 'node:os'
 import type { Loader } from 'astro/loaders'
+import type { Endpoint } from '@/components/api/types'
 
 const STATIC_SPECS_DIR = path.resolve('./public/api-specs')
 
-const PACKAGE_APIS: { api: { exportOpenapi: (dir: string) => void }; slug: string; label: string; key: string }[] = [
-  { api: adminApi, slug: 'admin-api', label: 'Admin API', key: 'admin' },
-  { api: filesApi, slug: 'files-api', label: 'Files API', key: 'files' },
-  { api: runtimeApi, slug: 'runtime-api', label: 'Runtime API', key: 'runtime' },
-  { api: tablesApi, slug: 'tables-api', label: 'Tables API', key: 'tables' },
-]
+export interface ApiSource {
+  slug: string
+  label: string
+}
 
-const STATIC_APIS: { file: string; slug: string; label: string }[] = [
-  { file: 'chat-openapi.json', slug: 'chat-api', label: 'Chat API' },
-]
+export interface PackageApiSource extends ApiSource {
+  api: { exportOpenapi: (dir: string) => void }
+  key: string
+}
 
-const API_ORDER = ['admin-api', 'chat-api', 'files-api', 'runtime-api', 'tables-api']
+export interface StaticApiSource extends ApiSource {
+  file: string
+}
 
 const HTTP_METHODS = ['get', 'post', 'put', 'patch', 'delete'] as const
 
@@ -28,7 +30,7 @@ function slugify(str: string): string {
     .replace(/^-|-$/g, '')
 }
 
-function postProcessSpec(spec: any): any {
+function tagFilterSpec(spec: any): any {
   for (const apiPath of Object.keys(spec.paths || {})) {
     for (const verb of Object.keys(spec.paths[apiPath])) {
       if (!HTTP_METHODS.includes(verb as any)) continue
@@ -49,98 +51,10 @@ function postProcessSpec(spec: any): any {
   return spec
 }
 
-function resolveRef(ref: string, spec: any): any {
-  if (!ref.startsWith('#/')) return undefined
-  const parts = ref.replace('#/', '').split('/')
-  let result = spec
-  for (const part of parts) {
-    result = result?.[part]
-    if (!result) return undefined
-  }
-  return result
-}
-
-function resolveSchema(schema: any, spec: any, depth = 0): any {
-  if (!schema || depth > 10) return schema
-  if (schema.$ref) {
-    const resolved = resolveRef(schema.$ref, spec)
-    return resolveSchema(resolved, spec, depth + 1)
-  }
-  if (schema.allOf) {
-    const merged: any = {}
-    for (const sub of schema.allOf) {
-      const resolved = resolveSchema(sub, spec, depth + 1)
-      if (resolved?.properties) {
-        merged.properties = { ...merged.properties, ...resolved.properties }
-      }
-      if (resolved?.required) {
-        merged.required = [...(merged.required || []), ...resolved.required]
-      }
-      if (resolved?.type) merged.type = resolved.type
-      if (resolved?.description && !merged.description) merged.description = resolved.description
-    }
-    return { type: 'object', ...merged }
-  }
-  if (schema.oneOf) {
-    return { ...schema, oneOf: schema.oneOf.map((s: any) => resolveSchema(s, spec, depth + 1)) }
-  }
-  if (schema.anyOf) {
-    return { ...schema, anyOf: schema.anyOf.map((s: any) => resolveSchema(s, spec, depth + 1)) }
-  }
-  if (schema.properties) {
-    const props: Record<string, any> = {}
-    for (const [key, val] of Object.entries(schema.properties)) {
-      props[key] = resolveSchema(val as any, spec, depth + 1)
-    }
-    return { ...schema, properties: props }
-  }
-  if (schema.items) {
-    return { ...schema, items: resolveSchema(schema.items, spec, depth + 1) }
-  }
-  if (schema.additionalProperties && typeof schema.additionalProperties === 'object') {
-    return { ...schema, additionalProperties: resolveSchema(schema.additionalProperties, spec, depth + 1) }
-  }
-  return schema
-}
-
-function extractEndpoint(pathObj: any, method: string, apiPath: string, spec: any) {
+function extractEndpoint(pathObj: any, method: string, apiPath: string, spec: any): Endpoint {
   const op = pathObj[method]
 
-  const params = [...(pathObj.parameters || []), ...(op.parameters || [])].map((p: any) => {
-    if (p.$ref) p = resolveRef(p.$ref, spec) || p
-    if (p.schema) p = { ...p, schema: resolveSchema(p.schema, spec) }
-    return p
-  })
-
-  let requestBody = op.requestBody
-  if (requestBody?.$ref) requestBody = resolveRef(requestBody.$ref, spec)
-  if (requestBody?.content) {
-    const resolved: any = { ...requestBody, content: {} }
-    for (const [ct, media] of Object.entries(requestBody.content as Record<string, any>)) {
-      resolved.content[ct] = {
-        ...media,
-        schema: media.schema ? resolveSchema(media.schema, spec) : undefined,
-      }
-    }
-    requestBody = resolved
-  }
-
-  const responses: Record<string, any> = {}
-  for (const [status, resp] of Object.entries(op.responses || {})) {
-    let resolved: any = resp
-    if (resolved?.$ref) resolved = resolveRef(resolved.$ref, spec) || resolved
-    if (resolved?.content) {
-      const resolvedContent: any = {}
-      for (const [ct, media] of Object.entries(resolved.content as Record<string, any>)) {
-        resolvedContent[ct] = {
-          ...media,
-          schema: media.schema ? resolveSchema(media.schema, spec) : undefined,
-        }
-      }
-      resolved = { ...resolved, content: resolvedContent }
-    }
-    responses[status] = resolved
-  }
+  const params = [...(pathObj.parameters || []), ...(op.parameters || [])]
 
   const security = op.security ?? spec.security
   const securitySchemes = spec.components?.securitySchemes
@@ -152,8 +66,8 @@ function extractEndpoint(pathObj: any, method: string, apiPath: string, spec: an
     summary: op.summary,
     description: op.description,
     parameters: params.length > 0 ? params : undefined,
-    requestBody: requestBody || undefined,
-    responses: Object.keys(responses).length > 0 ? responses : undefined,
+    requestBody: op.requestBody || undefined,
+    responses: op.responses && Object.keys(op.responses).length > 0 ? op.responses : undefined,
     security: security || undefined,
     securitySchemes: securitySchemes || undefined,
     deprecated: op.deprecated || false,
@@ -168,10 +82,15 @@ export interface ApiEntryData {
   apiSlug: string
   apiLabel: string
   sortOrder: number
-  endpoint: any
+  endpoint: Endpoint
 }
 
-export function apiLoader(): Loader {
+interface ApiLoaderOptions {
+  packageApis: PackageApiSource[]
+  staticApis: StaticApiSource[]
+}
+
+export function apiLoader({ packageApis, staticApis }: ApiLoaderOptions): Loader {
   return {
     name: 'api-loader',
     async load({ store, parseData }) {
@@ -180,7 +99,7 @@ export function apiLoader(): Loader {
       const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'api-specs-'))
 
       try {
-        for (const entry of PACKAGE_APIS) {
+        for (const entry of packageApis) {
           const exportDir = path.join(tmpDir, entry.key)
 
           const origWrite = process.stdout.write
@@ -192,13 +111,15 @@ export function apiLoader(): Loader {
           }
 
           const specPath = path.join(exportDir, 'openapi.json')
-          const spec = postProcessSpec(JSON.parse(fs.readFileSync(specPath, 'utf-8')))
+          const raw = tagFilterSpec(JSON.parse(fs.readFileSync(specPath, 'utf-8')))
+          const spec = await SwaggerParser.dereference(raw)
           await processSpec(spec, entry.slug, entry.label, store, parseData)
         }
 
-        for (const entry of STATIC_APIS) {
+        for (const entry of staticApis) {
           const specPath = path.join(STATIC_SPECS_DIR, entry.file)
-          const spec = JSON.parse(fs.readFileSync(specPath, 'utf-8'))
+          const raw = JSON.parse(fs.readFileSync(specPath, 'utf-8'))
+          const spec = await SwaggerParser.dereference(raw)
           await processSpec(spec, entry.slug, entry.label, store, parseData)
         }
       } finally {
@@ -242,5 +163,3 @@ async function processSpec(spec: any, apiSlug: string, apiLabel: string, store: 
     }
   }
 }
-
-export { API_ORDER }
