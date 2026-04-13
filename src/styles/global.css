@@ -188,6 +188,15 @@
   background-color: var(--shiki-dark-bg) !important;
 }
 
+.dark .shiki,
+.dark .shiki span {
+  color: var(--shiki-dark) !important;
+}
+
+.dark .shiki span {
+  background-color: transparent !important;
+}
+
 /* Heading permalink anchors */
 .prose :is(h1, h2, h3, h4, h5, h6) {
   font-family: var(--font-heading);

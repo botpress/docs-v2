@@ -188,7 +188,7 @@ export default function APIPage({ endpoint, title, breadcrumbs, markdownUrl }: A
 
   return (
     <div className="not-prose">
-      <div className="flex flex-col gap-x-10 gap-y-6 xl:flex-row xl:items-start">
+      <div className="flex flex-col gap-x-10 gap-y-6 xl:flex-row">
         <div className="min-w-0 w-full xl:w-[40rem] xl:shrink-0 space-y-8">
           <div>
             <div className="hidden items-start justify-between gap-4 lg:flex">
@@ -253,7 +253,10 @@ export default function APIPage({ endpoint, title, breadcrumbs, markdownUrl }: A
         </div>
 
         <aside className="hidden w-112 shrink-0 xl:block">
-          <div className="group/examples sticky top-10 space-y-4">
+          <div
+            className="group/examples sticky top-10 grid max-h-[calc(100vh-8rem)] gap-4"
+            style={{ gridTemplateRows: 'auto 1fr' }}
+          >
             <CodeExamples method={endpoint.method} path={endpoint.path} state={requestState} />
             {endpoint.responses && <ResponseExamples responses={endpoint.responses} />}
           </div>
