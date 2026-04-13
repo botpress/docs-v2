@@ -9,6 +9,7 @@ const docs = defineCollection({
     description: z.string().optional(),
     prose: z.boolean().default(true),
     method: z.string().optional(),
+    openapi: z.string().optional(),
   }),
 })
 

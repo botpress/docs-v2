@@ -2,6 +2,7 @@
 import PageOptions from "../components/page-options";
 import PageNavigation from "../components/page-navigation";
 import DocsLayout from "../layouts/DocsLayout.astro";
+import APIPage from "../components/api-page";
 import { getCollection, render } from "astro:content";
 import { toMarkdownPath } from "../lib/markdown-routes";
 import {
@@ -12,6 +13,7 @@ import {
   getActiveTab,
   getAdjacentPages,
 } from "../lib/sidebar-tree";
+import { resolveOpenApi } from "../lib/resolve-openapi";
 import { ClerkTOC } from "../components/clerk-toc";
 import {
   Breadcrumb,
@@ -41,6 +43,7 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content, headings } = await render(entry);
 const title = entry.data.title;
+const isOpenAPI = !!entry.data.openapi;
 const useProse = entry.data.prose !== false;
 const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 const markdownUrl = toMarkdownPath(Astro.url.pathname);
@@ -67,98 +70,84 @@ const sidebarTree =
     ? (treeResult.trees[activeTab] ?? treeResult.defaultTree)
     : treeResult.defaultTree;
 const { prev, next } = getAdjacentPages(sidebarTree, currentPath);
+
+let endpointData: any = undefined;
+if (isOpenAPI) {
+  endpointData = resolveOpenApi(entry.data.openapi!);
+}
 ---
 
 <DocsLayout title={title} breadcrumbs={breadcrumbs}>
-  {
-    useProse ? (
-      <div class="flex w-full justify-center gap-10 px-8 pt-10 pb-8 sm:px-8 sm:pt-12 sm:pb-10 lg:px-16">
-        <article class="min-w-0 max-w-[40rem] flex-1" data-pagefind-body>
-          <div class="hidden items-start justify-between gap-4 lg:flex">
-            {breadcrumbs.length > 0 ? (
-              <Breadcrumb className="min-w-0 flex-1">
-                <BreadcrumbList>
-                  {breadcrumbs.map((crumb, i) => (
-                    <>
-                      {i > 0 && <BreadcrumbSeparator />}
-                      <BreadcrumbItem className="truncate">
-                        <BreadcrumbLink href={crumb.href}>
-                          {crumb.label}
-                        </BreadcrumbLink>
-                      </BreadcrumbItem>
-                    </>
-                  ))}
-                </BreadcrumbList>
-              </Breadcrumb>
-            ) : (
-              <div />
-            )}
+  {!useProse && !isOpenAPI ? (
+    <div class="w-full px-8 pt-10 pb-8 sm:px-8 sm:pt-12 sm:pb-10 lg:px-16" data-pagefind-body>
+      <Content />
+    </div>
+  ) : isOpenAPI ? (
+    <div class="flex w-full justify-center px-8 pt-10 pb-8 sm:px-8 sm:pt-12 sm:pb-10 lg:px-16" data-pagefind-body>
+      <div class="min-w-0 flex-1" style="max-width: calc(40rem + 2.5rem + 28rem)">
+        <APIPage
+          client:load
+          endpoint={endpointData}
+          title={title}
+          breadcrumbs={breadcrumbs}
+          markdownUrl={markdownUrl}
+        />
 
-            <PageOptions client:load markdownUrl={markdownUrl} />
-          </div>
-
-          <h1 class="font-heading text-2xl font-semibold text-stone-900 lg:text-3xl dark:text-stone-100">
-            {title}
-          </h1>
-
-          <div class="mt-3 lg:hidden">
-            <PageOptions client:load markdownUrl={markdownUrl} />
-          </div>
-
-          <div class="prose prose-stone mt-6 max-w-none prose-headings:text-stone-900 prose-headings:font-semibold prose-p:text-stone-600 prose-a:text-stone-900 prose-a:underline prose-a:underline-offset-2 prose-a:decoration-stone-300 hover:prose-a:decoration-stone-500 prose-strong:text-stone-800 prose-code:rounded-md prose-code:bg-stone-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-stone-700 prose-code:before:content-none prose-code:after:content-none prose-th:text-left prose-th:text-stone-700 prose-td:text-stone-600 dark:prose-headings:text-stone-100 dark:prose-p:text-stone-300 dark:prose-a:text-stone-100 dark:prose-a:decoration-stone-600 dark:hover:prose-a:decoration-stone-400 dark:prose-strong:text-stone-200 dark:prose-code:bg-stone-800 dark:prose-code:text-stone-300 dark:prose-th:text-stone-300 dark:prose-td:text-stone-400 dark:prose-li:text-stone-300 dark:prose-hr:border-stone-800">
-            <Content />
-          </div>
-
-          <div class="not-prose">
-            <PageNavigation prev={prev} next={next} />
-          </div>
-        </article>
-
-        <aside class="hidden w-64 shrink-0 xl:block pl-10 ">
-          {tocHeadings.length > 0 && (
-            <div class="sticky top-10">
-              <ClerkTOC client:load headings={tocHeadings} />
-            </div>
-          )}
-        </aside>
+        <div class="max-w-[40rem] not-prose">
+          <PageNavigation prev={prev} next={next} />
+        </div>
       </div>
-    ) : (
-      <div class="w-full px-8 pt-10 pb-8 sm:px-8 sm:pt-12 sm:pb-10 lg:px-16" data-pagefind-body>
-        <div class="xl:pr-[calc(400px+2rem)]">
-          <div class="hidden items-start justify-between gap-4 lg:flex">
-            {breadcrumbs.length > 0 ? (
-              <Breadcrumb className="min-w-0 flex-1">
-                <BreadcrumbList>
-                  {breadcrumbs.map((crumb, i) => (
-                    <>
-                      {i > 0 && <BreadcrumbSeparator />}
-                      <BreadcrumbItem className="truncate">
-                        <BreadcrumbLink href={crumb.href}>
-                          {crumb.label}
-                        </BreadcrumbLink>
-                      </BreadcrumbItem>
-                    </>
-                  ))}
-                </BreadcrumbList>
-              </Breadcrumb>
-            ) : (
-              <div />
-            )}
+    </div>
+  ) : (
+    <div class="flex w-full justify-center gap-10 px-8 pt-10 pb-8 sm:px-8 sm:pt-12 sm:pb-10 lg:px-16">
+      <article class="min-w-0 max-w-[40rem] flex-1" data-pagefind-body>
+        <div class="hidden items-start justify-between gap-4 lg:flex">
+          {breadcrumbs.length > 0 ? (
+            <Breadcrumb className="min-w-0 flex-1">
+              <BreadcrumbList>
+                {breadcrumbs.map((crumb, i) => (
+                  <>
+                    {i > 0 && <BreadcrumbSeparator />}
+                    <BreadcrumbItem className="truncate">
+                      <BreadcrumbLink href={crumb.href}>
+                        {crumb.label}
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                  </>
+                ))}
+              </BreadcrumbList>
+            </Breadcrumb>
+          ) : (
+            <div />
+          )}
 
-            <PageOptions client:load markdownUrl={markdownUrl} />
-          </div>
-
-          <h1 class="font-heading text-2xl font-semibold text-stone-900 lg:text-3xl dark:text-stone-100">
-            {title}
-          </h1>
-
-          <div class="mt-3 lg:hidden">
-            <PageOptions client:load markdownUrl={markdownUrl} />
-          </div>
+          <PageOptions client:load markdownUrl={markdownUrl} />
         </div>
 
-        <Content />
-      </div>
-    )
-  }
+        <h1 class="font-heading text-2xl font-semibold text-stone-900 lg:text-3xl dark:text-stone-100">
+          {title}
+        </h1>
+
+        <div class="mt-3 lg:hidden">
+          <PageOptions client:load markdownUrl={markdownUrl} />
+        </div>
+
+        <div class="prose prose-stone mt-6 max-w-none prose-headings:text-stone-900 prose-headings:font-semibold prose-p:text-stone-600 prose-a:text-stone-900 prose-a:underline prose-a:underline-offset-2 prose-a:decoration-stone-300 hover:prose-a:decoration-stone-500 prose-strong:text-stone-800 prose-code:rounded-md prose-code:bg-stone-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-stone-700 prose-code:before:content-none prose-code:after:content-none prose-th:text-left prose-th:text-stone-700 prose-td:text-stone-600 dark:prose-headings:text-stone-100 dark:prose-p:text-stone-300 dark:prose-a:text-stone-100 dark:prose-a:decoration-stone-600 dark:hover:prose-a:decoration-stone-400 dark:prose-strong:text-stone-200 dark:prose-code:bg-stone-800 dark:prose-code:text-stone-300 dark:prose-th:text-stone-300 dark:prose-td:text-stone-400 dark:prose-li:text-stone-300 dark:prose-hr:border-stone-800">
+          <Content />
+        </div>
+
+        <div class="not-prose">
+          <PageNavigation prev={prev} next={next} />
+        </div>
+      </article>
+
+      {tocHeadings.length > 0 && (
+        <aside class="hidden w-64 shrink-0 xl:block pl-10">
+          <div class="sticky top-10">
+            <ClerkTOC client:load headings={tocHeadings} />
+          </div>
+        </aside>
+      )}
+    </div>
+  )}
 </DocsLayout>
