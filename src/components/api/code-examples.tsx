@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import HighlightedCode from './highlighted-code'
+import CopyButton from './copy-button'
 import type { RequestState } from './types'
 
 interface CodeExamplesProps {
@@ -310,7 +311,7 @@ export default function CodeExamples({ method, path, state }: CodeExamplesProps)
   const shikiLang = LANGUAGES.find((l) => l.key === activeLang)!.shiki
 
   return (
-    <div className="flex shrink-0 max-h-[calc(50vh-4rem)] flex-col rounded-lg border border-stone-200 bg-stone-50 dark:border-stone-700 dark:bg-stone-800/50">
+    <div className="group/code-card flex shrink-0 max-h-[calc(50vh-4rem)] flex-col rounded-lg border border-stone-200 bg-stone-50 dark:border-stone-700 dark:bg-stone-800/50">
       <div className="flex shrink-0 items-center justify-between border-b border-stone-200 px-3 py-2 dark:border-stone-700">
         <span className="text-xs font-medium text-stone-500 dark:text-stone-400">Request</span>
         <Select value={activeLang} onValueChange={(v) => setActiveLang(v as Lang)}>
@@ -331,17 +332,7 @@ export default function CodeExamples({ method, path, state }: CodeExamplesProps)
         <div className="p-4">
           <HighlightedCode code={code} language={shikiLang} />
         </div>
-        <button
-          type="button"
-          onClick={() => navigator.clipboard.writeText(code)}
-          className="absolute top-2 right-2 rounded-md border border-stone-200 bg-white p-1.5 text-stone-500 opacity-0 transition-opacity hover:text-stone-900 group-hover/examples:opacity-100 focus:opacity-100 dark:border-stone-600 dark:bg-stone-800 dark:text-stone-400 dark:hover:text-stone-200"
-          title="Copy to clipboard"
-        >
-          <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-          </svg>
-        </button>
+        <CopyButton text={code} />
       </div>
     </div>
   )

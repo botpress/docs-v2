@@ -1,6 +1,7 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import HighlightedCode from './highlighted-code'
+import CopyButton from './copy-button'
 import type { Schema, Endpoint } from './types'
 
 function generateSampleValue(schema: Schema | undefined, depth = 0): any {
@@ -79,7 +80,7 @@ export default function ResponseExamples({ responses }: ResponseExamplesProps) {
   const defaultTab = examples.find((e) => e.status.startsWith('2'))?.status || examples[0]!.status
 
   return (
-    <div className="min-h-0 overflow-y-auto rounded-lg border border-stone-200 bg-stone-50 dark:border-stone-700 dark:bg-stone-800/50">
+    <div className="group/code-card min-h-0 overflow-y-auto rounded-lg border border-stone-200 bg-stone-50 dark:border-stone-700 dark:bg-stone-800/50">
       <Tabs defaultValue={defaultTab}>
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-stone-200 bg-stone-50 px-3 pt-2 dark:border-stone-700 dark:bg-stone-800/50">
           <span className="text-xs font-medium text-stone-500 dark:text-stone-400">Response</span>
@@ -106,8 +107,11 @@ export default function ResponseExamples({ responses }: ResponseExamplesProps) {
 
         {examples.map((ex) => (
           <TabsContent key={ex.status} value={ex.status} className="p-0">
-            <div className="p-4">
-              <HighlightedCode code={ex.json} language="json" />
+            <div className="relative">
+              <div className="p-4">
+                <HighlightedCode code={ex.json} language="json" />
+              </div>
+              <CopyButton text={ex.json} />
             </div>
           </TabsContent>
         ))}
