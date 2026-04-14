@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import HighlightedCode from '@/components/api/highlighted-code'
 import CopyButton from '@/components/api/copy-button'
