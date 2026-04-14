@@ -253,10 +253,7 @@ export default function APIPage({ endpoint, title, breadcrumbs, markdownUrl }: A
         </div>
 
         <aside className="hidden w-112 shrink-0 xl:block">
-          <div
-            className="group/examples sticky top-10 grid max-h-[calc(100vh-8rem)] gap-4"
-            style={{ gridTemplateRows: 'auto 1fr' }}
-          >
+          <div className="group/examples sticky top-10 flex max-h-[calc(100vh-8rem)] flex-col gap-4">
             <CodeExamples method={endpoint.method} path={endpoint.path} state={requestState} />
             {endpoint.responses && <ResponseExamples responses={endpoint.responses} />}
           </div>
