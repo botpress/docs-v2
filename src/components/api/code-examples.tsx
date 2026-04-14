@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import HighlightedCode from '@/components/api/highlighted-code'
-import CopyButton from '@/components/api/copy-button'
+import HighlightedCode from './highlighted-code'
+import CopyButton from './copy-button'
 import type { RequestState } from './types'
 
 interface CodeExamplesProps {
@@ -316,7 +316,7 @@ export default function CodeExamples({ method, path, state }: CodeExamplesProps)
         <span className="text-xs font-medium text-stone-500 dark:text-stone-400">Request</span>
         <Select value={activeLang} onValueChange={(v) => setActiveLang(v as Lang)}>
           <SelectTrigger size="sm" className="h-7 text-xs">
-            <SelectValue />
+            <SelectValue placeholder="Language">{LANGUAGES.find((l) => l.key === activeLang)?.label}</SelectValue>
           </SelectTrigger>
           <SelectContent align="end" alignItemWithTrigger={false} className="p-1">
             {LANGUAGES.map((lang) => (
