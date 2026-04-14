@@ -1,6 +1,6 @@
 import { Separator } from '@/components/ui/separator'
 import { Field } from '@/components/field'
-import type { SecurityScheme } from './types'
+import type { SecurityScheme } from '@/components/api/types'
 
 interface AuthRequirementsProps {
   security?: Record<string, string[]>[]

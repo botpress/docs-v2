@@ -10,13 +10,13 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import PageOptions from '@/components/page-options'
-import CodeExamples from './api/code-examples'
-import ResponseExamples from './api/response-examples'
-import ApiPlayground, { generateDefaultBody, DEFAULT_BASE_URL } from './api/playground'
-import SchemaExplorer from './api/schema-explorer'
-import AuthRequirements from './api/auth-requirements'
-import ContentTypeSwitcher from './api/content-type-switcher'
-import type { Endpoint, RequestState, Parameter } from './api/types'
+import CodeExamples from '@/components/api/code-examples'
+import ResponseExamples from '@/components/api/response-examples'
+import ApiPlayground, { generateDefaultBody, DEFAULT_BASE_URL } from '@/components/api/playground'
+import SchemaExplorer from '@/components/api/schema-explorer'
+import AuthRequirements from '@/components/api/auth-requirements'
+import ContentTypeSwitcher from '@/components/api/content-type-switcher'
+import type { Endpoint, RequestState, Parameter } from '@/components/api/types'
 
 const METHOD_COLORS: Record<string, string> = {
   GET: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300',
