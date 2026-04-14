@@ -310,8 +310,8 @@ export default function CodeExamples({ method, path, state }: CodeExamplesProps)
   const shikiLang = LANGUAGES.find((l) => l.key === activeLang)!.shiki
 
   return (
-    <div className="min-h-0 overflow-hidden rounded-lg border border-stone-200 bg-stone-50 dark:border-stone-700 dark:bg-stone-800/50">
-      <div className="flex items-center justify-between border-b border-stone-200 px-3 py-2 dark:border-stone-700">
+    <div className="flex shrink-0 max-h-[calc(50vh-4rem)] flex-col rounded-lg border border-stone-200 bg-stone-50 dark:border-stone-700 dark:bg-stone-800/50">
+      <div className="flex shrink-0 items-center justify-between border-b border-stone-200 px-3 py-2 dark:border-stone-700">
         <span className="text-xs font-medium text-stone-500 dark:text-stone-400">Request</span>
         <Select value={activeLang} onValueChange={(v) => setActiveLang(v as Lang)}>
           <SelectTrigger size="sm" className="h-7 text-xs">
@@ -327,8 +327,8 @@ export default function CodeExamples({ method, path, state }: CodeExamplesProps)
         </Select>
       </div>
 
-      <div className="relative">
-        <div className="overflow-y-auto p-4">
+      <div className="relative min-h-0 flex-1 overflow-y-auto">
+        <div className="p-4">
           <HighlightedCode code={code} language={shikiLang} />
         </div>
         <button
