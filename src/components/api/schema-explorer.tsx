@@ -1,7 +1,7 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { Field } from '@/components/field'
-import { Expandable } from './expandable'
-import type { Schema } from './types'
+import { Expandable } from '@/components/api/expandable'
+import type { Schema } from '@/components/api/types'
 
 interface SchemaExplorerProps {
   schema: Schema

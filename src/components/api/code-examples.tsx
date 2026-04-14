@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import HighlightedCode from './highlighted-code'
-import CopyButton from './copy-button'
-import type { RequestState } from './types'
+import HighlightedCode from '@/components/api/highlighted-code'
+import CopyButton from '@/components/api/copy-button'
+import type { RequestState } from '@/components/api/types'
 
 interface CodeExamplesProps {
   method: string

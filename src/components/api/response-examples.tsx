@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import HighlightedCode from './highlighted-code'
-import CopyButton from './copy-button'
-import type { Schema, Endpoint } from './types'
+import HighlightedCode from '@/components/api/highlighted-code'
+import CopyButton from '@/components/api/copy-button'
+import type { Schema, Endpoint } from '@/components/api/types'
 
 function generateSampleValue(schema: Schema | undefined, depth = 0): any {
   if (!schema || depth > 5) return null
