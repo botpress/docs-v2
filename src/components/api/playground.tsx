@@ -2,11 +2,12 @@ import { useState, useCallback, useEffect, useMemo } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { Dialog, DialogBackdrop, DialogPopup, DialogClose, DialogPortal, DialogTitle } from '@/components/ui/dialog'
-import { ChevronRight, Play, X, Loader2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Spinner } from '@/components/ui/spinner'
+import { ChevronRight, Play, X } from 'lucide-react'
 import { buildUrl } from '@/components/api/code-examples'
 import CodeExamples from '@/components/api/code-examples'
 import HighlightedCode from '@/components/api/highlighted-code'
@@ -42,14 +43,6 @@ function generateDefaultBody(schema: Schema | undefined): string {
   }
 
   return JSON.stringify(obj, null, 2)
-}
-
-const METHOD_COLORS: Record<string, string> = {
-  GET: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300',
-  POST: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
-  PUT: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
-  PATCH: 'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300',
-  DELETE: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
 }
 
 interface PlaygroundResponse {
@@ -176,39 +169,52 @@ export default function ApiPlayground({ endpoint, state, onStateChange, open, on
         <DialogBackdrop />
         <DialogPopup className="flex flex-col">
           {/* Header bar */}
-          <div className="flex shrink-0 items-center justify-between gap-3 border-b border-stone-200 px-4 py-3 dark:border-stone-700">
-            <div className="flex min-w-0 items-center gap-3">
-              <span
-                className={`inline-flex shrink-0 items-center rounded-md px-2 py-0.5 text-xs font-bold uppercase tracking-wide ${METHOD_COLORS[endpoint.method] || 'bg-stone-100 text-stone-700'}`}
-              >
-                {endpoint.method}
-              </span>
-              <DialogTitle className="min-w-0 truncate text-sm font-medium text-stone-700 dark:text-stone-300">
-                <code>{endpoint.path}</code>
-              </DialogTitle>
-            </div>
+          <div className="flex shrink-0 items-center gap-3 border-b border-stone-200 px-4 py-3 dark:border-stone-700">
+            <DialogTitle className="sr-only">
+              {endpoint.method} {endpoint.path}
+            </DialogTitle>
+
+            {/* Method badge + endpoint name */}
             <div className="flex shrink-0 items-center gap-2">
-              <Button onClick={sendRequest} disabled={loading}>
-                {loading ? (
-                  <>
-                    <Loader2 className="size-4 animate-spin" data-icon="inline-start" />
-                    Sending...
-                  </>
-                ) : (
-                  <>
-                    <Play className="size-4" data-icon="inline-start" />
-                    Send
-                  </>
-                )}
-              </Button>
-              <DialogClose
-                render={
-                  <Button variant="ghost" size="icon-sm" title="Close playground">
-                    <X className="size-4" />
-                  </Button>
-                }
-              />
+              <Badge variant={endpoint.method.toLowerCase() as any}>{endpoint.method}</Badge>
+              <span className="text-sm font-medium text-stone-700 dark:text-stone-300">
+                {endpoint.operationId || endpoint.summary || endpoint.path}
+              </span>
             </div>
+
+            {/* Copyable endpoint path */}
+            <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-stone-200 bg-stone-50 px-3 py-1.5 dark:border-stone-700 dark:bg-stone-800/50">
+              <Badge variant={endpoint.method.toLowerCase() as any} className="text-[10px]">
+                {endpoint.method}
+              </Badge>
+              <code className="min-w-0 truncate text-sm font-medium text-stone-600 dark:text-stone-400">
+                {endpoint.path}
+              </code>
+            </div>
+
+            {/* Send button */}
+            <Button size="lg" onClick={sendRequest} disabled={loading}>
+              {loading ? (
+                <>
+                  <Spinner className="size-3.5" data-icon="inline-start" />
+                  Sending...
+                </>
+              ) : (
+                <>
+                  Send
+                  <Play className="size-3.5" data-icon="inline-end" />
+                </>
+              )}
+            </Button>
+
+            {/* Close */}
+            <DialogClose
+              render={
+                <Button variant="ghost" size="icon-sm" title="Close playground">
+                  <X className="size-4" />
+                </Button>
+              }
+            />
           </div>
 
           {/* Two-column layout */}
@@ -303,7 +309,7 @@ export default function ApiPlayground({ endpoint, state, onStateChange, open, on
               )}
 
               {response && (
-                <div className="group/code-card flex min-h-0 flex-col rounded-lg border border-stone-200 bg-stone-50 dark:border-stone-700 dark:bg-stone-800/50">
+                <div className="group/code-card flex min-h-0 flex-col rounded-xl border border-stone-200 bg-stone-50 dark:border-stone-700 dark:bg-stone-800/50">
                   <div className="flex shrink-0 items-center gap-2 border-b border-stone-200 px-3 py-2 dark:border-stone-700">
                     <span className="text-xs font-medium text-stone-500 dark:text-stone-400">Response</span>
                     <StatusBadge status={response.status} />
@@ -372,7 +378,7 @@ function ParamGroup({
   onChange: (values: Record<string, string>) => void
 }) {
   return (
-    <div className="space-y-3">
+    <div>
       {params.map((p) => (
         <ParamInput
           key={p.name}
@@ -395,20 +401,18 @@ function ParamInput({
   onChange: (value: string) => void
 }) {
   return (
-    <div className="grid grid-cols-[1fr_1fr] items-start gap-x-4 gap-y-0.5">
-      <div className="flex flex-col gap-1 pt-2">
-        <div className="flex items-center gap-2">
-          <code className="text-sm font-medium text-stone-700 dark:text-stone-300">{param.name}</code>
-          <Badge variant="info" className="text-xs">
-            {param.schema?.type || 'string'}
+    <div className="grid grid-cols-[1fr_1fr] items-start gap-x-4 border-b border-stone-100 py-4 last:border-b-0 dark:border-stone-800/50">
+      <div className="flex flex-col gap-1.5 pt-1">
+        <div className="flex flex-wrap items-center gap-2">
+          <code className="text-sm font-semibold">
+            <span className="text-primary">{param.name}</span>
+            {!param.required && <span className="text-stone-600 dark:text-stone-400">?</span>}
+          </code>
+          <Badge variant="info">
+            <code className="font-semibold">{param.schema?.type || 'string'}</code>
           </Badge>
-          {param.required && (
-            <Badge variant="required" className="text-xs">
-              required
-            </Badge>
-          )}
         </div>
-        {param.description && <p className="text-xs text-stone-400">{param.description}</p>}
+        {param.description && <p className="text-sm text-stone-600 dark:text-stone-400">{param.description}</p>}
       </div>
       <div className="pt-1">
         {param.schema?.enum ? (

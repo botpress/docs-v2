@@ -7,7 +7,7 @@ import { Steps, Step } from '@/components/steps'
 import { Icon } from '@/components/icon'
 import { Frame } from '@/components/frame'
 import { Card } from '@/components/card'
-import { Badge } from '@/components/badge'
+import { Badge } from '@/components/ui/badge'
 import { Tooltip } from '@/components/tooltip'
 
 If you want to allow a live agent to join your agent's conversations, you can configure this in the **<Icon icon="message-square-reply"/> Human Handoff** section of your bot's menu.
@@ -19,9 +19,7 @@ To get started using Human Handoff, you need to install and configure the offici
 <Card title="Configure HITL" href="/integrations/integration-guides/hitl/introduction" icon="plug" horizontal>
   Install and configure the official integration{' '}
   <Tooltip tip="This feature requires a Botpress Plus plan or higher.">
-    <Badge stroke color="blue">
-      Plus
-    </Badge>
+    <Badge variant="outline">Plus</Badge>
   </Tooltip>
 </Card>
 

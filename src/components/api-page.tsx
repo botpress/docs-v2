@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
+import { Button } from '@/components/ui/button'
+import { Play } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import {
   Breadcrumb,
@@ -18,39 +20,15 @@ import AuthRequirements from '@/components/api/auth-requirements'
 import ContentTypeSwitcher from '@/components/api/content-type-switcher'
 import type { Endpoint, RequestState, Parameter } from '@/components/api/types'
 
-const METHOD_COLORS: Record<string, string> = {
-  GET: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300',
-  POST: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
-  PUT: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
-  PATCH: 'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300',
-  DELETE: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
-}
-
-function MethodBadge({ method }: { method: string }) {
-  return (
-    <span
-      className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-bold uppercase tracking-wide ${METHOD_COLORS[method] || 'bg-stone-100 text-stone-700'}`}
-    >
-      {method}
-    </span>
-  )
-}
-
 function EndpointBar({ method, path, onTryIt }: { method: string; path: string; onTryIt: () => void }) {
   return (
     <div className="flex items-center gap-3 rounded-lg border border-stone-200 px-3 py-2 dark:border-stone-700">
-      <MethodBadge method={method} />
+      <Badge variant={method.toLowerCase() as any}>{method}</Badge>
       <code className="min-w-0 flex-1 truncate text-sm font-medium text-stone-700 dark:text-stone-300">{path}</code>
-      <button
-        type="button"
-        onClick={onTryIt}
-        className="inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-      >
+      <Button size="lg" onClick={onTryIt}>
         Try it
-        <svg className="size-3.5" fill="currentColor" viewBox="0 0 16 16">
-          <path d="M4.5 2.5l9 5.5-9 5.5z" />
-        </svg>
-      </button>
+        <Play className="size-3.5" data-icon="inline-end" />
+      </Button>
     </div>
   )
 }
