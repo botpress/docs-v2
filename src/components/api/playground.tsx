@@ -14,6 +14,7 @@ import CodeExamples from '@/components/api/code-examples'
 import HighlightedCode from '@/components/api/highlighted-code'
 import CopyButton from '@/components/api/copy-button'
 import type { Schema, Parameter, Endpoint, RequestState } from '@/components/api/types'
+import { badgeVariantForMethod } from '@/lib/utils'
 
 const STORAGE_KEY_TOKEN = 'bp-api-token'
 const DEFAULT_BASE_URL = 'https://api.botpress.cloud'
@@ -21,7 +22,7 @@ const DEFAULT_BASE_URL = 'https://api.botpress.cloud'
 function generateDefaultBody(schema: Schema | undefined): string {
   if (!schema?.properties) return '{}'
 
-  const obj: Record<string, any> = {}
+  const obj: Record<string, unknown> = {}
   for (const [key, prop] of Object.entries(schema.properties)) {
     if (prop.example !== undefined) {
       obj[key] = prop.example
@@ -72,7 +73,7 @@ function CopyableUrl({ method, path, state }: { method: string; path: string; st
 
   return (
     <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-stone-200 bg-stone-50 px-3 py-1.5 dark:border-stone-700 dark:bg-stone-800/50">
-      <Badge variant={method.toLowerCase() as any} className="text-[10px]">
+      <Badge variant={badgeVariantForMethod(method)} className="text-[10px]">
         {method}
       </Badge>
       <code className="min-w-0 truncate text-sm font-medium text-stone-600 dark:text-stone-400">{path}</code>
@@ -212,7 +213,7 @@ export default function ApiPlayground({ endpoint, state, onStateChange, open, on
 
             {/* Method badge + endpoint name */}
             <div className="flex shrink-0 items-center gap-2">
-              <Badge variant={endpoint.method.toLowerCase() as any}>{endpoint.method}</Badge>
+              <Badge variant={badgeVariantForMethod(endpoint.method)}>{endpoint.method}</Badge>
               <span className="text-sm font-medium text-stone-700 dark:text-stone-300">
                 {endpoint.operationId || endpoint.summary || endpoint.path}
               </span>

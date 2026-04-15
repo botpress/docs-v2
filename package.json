@@ -10,12 +10,13 @@
     "build": "astro build && npx pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
-    "check": "bun run check:format && bun run check:type",
+    "check": "bun run --parallel check:format check:lint check:type",
     "check:format": "bunx oxfmt --check .",
+    "check:lint": "bunx oxlint",
     "check:type": "bunx astro check",
-    "fix": "bun run fix:format",
+    "fix": "bun run --sequential fix:format fix:lint",
     "fix:format": "bunx oxfmt .",
-    "lint": "bunx oxlint src/",
+    "fix:lint": "bunx oxlint --fix",
     "prepare": "lefthook install"
   },
   "dependencies": {
@@ -53,6 +54,7 @@
     "@types/react-dom": "^19.2.3",
     "lefthook": "^2.1.4",
     "oxfmt": "^0.43.0",
+    "oxlint": "^1.60.0",
     "oxlint-tsgolint": "^0.19.0",
     "typescript": "^6.0.2"
   }
