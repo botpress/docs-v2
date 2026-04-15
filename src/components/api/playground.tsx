@@ -78,7 +78,7 @@ function CopyableUrl({ method, path, state }: { method: string; path: string; st
       <code className="min-w-0 truncate text-sm font-medium text-stone-600 dark:text-stone-400">{path}</code>
       <Button
         variant="ghost"
-        size="icon-xs"
+        size="icon-sm"
         onClick={() => copy(fullUrl)}
         className="ml-auto shrink-0"
         title="Copy full URL"
@@ -250,6 +250,11 @@ export default function ApiPlayground({ endpoint, state, onStateChange, open, on
           <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
             {/* Left: param sections (2/3 width) */}
             <div className="min-h-0 min-w-0 flex-[2] overflow-y-auto lg:border-r lg:border-stone-200 lg:dark:border-stone-700">
+              {endpoint.description && (
+                <p className="border-b border-stone-100 px-5 py-3.5 text-sm text-stone-600 dark:border-stone-800 dark:text-stone-400">
+                  {endpoint.description}
+                </p>
+              )}
               <div className={sectionCount > 1 ? 'divide-y divide-stone-100 dark:divide-stone-800' : ''}>
                 {/* Authorization */}
                 <ParamSection title="Authorization" defaultOpen badge={state.token ? 'set' : undefined}>
