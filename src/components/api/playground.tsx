@@ -1,4 +1,5 @@
-import { useState, useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
@@ -7,7 +8,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { Dialog, DialogBackdrop, DialogPopup, DialogClose, DialogPortal, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
-import { ChevronRight, Play, X } from 'lucide-react'
+import { Check, ChevronRight, Copy, Play, X } from 'lucide-react'
 import { buildUrl } from '@/components/api/code-examples'
 import CodeExamples from '@/components/api/code-examples'
 import HighlightedCode from '@/components/api/highlighted-code'
@@ -15,7 +16,6 @@ import CopyButton from '@/components/api/copy-button'
 import type { Schema, Parameter, Endpoint, RequestState } from '@/components/api/types'
 
 const STORAGE_KEY_TOKEN = 'bp-api-token'
-const STORAGE_KEY_BASE_URL = 'bp-api-base-url'
 const DEFAULT_BASE_URL = 'https://api.botpress.cloud'
 
 function generateDefaultBody(schema: Schema | undefined): string {
@@ -61,6 +61,29 @@ function StatusBadge({ status }: { status: number }) {
   )
 }
 
+function CopyableUrl({ method, path, state }: { method: string; path: string; state: RequestState }) {
+  const { copied, copy } = useCopyToClipboard()
+  const fullUrl = buildUrl(state.baseUrl, path, state.pathParams, state.queryParams)
+
+  return (
+    <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-stone-200 bg-stone-50 px-3 py-1.5 dark:border-stone-700 dark:bg-stone-800/50">
+      <Badge variant={method.toLowerCase() as any} className="text-[10px]">
+        {method}
+      </Badge>
+      <code className="min-w-0 truncate text-sm font-medium text-stone-600 dark:text-stone-400">{path}</code>
+      <Button
+        variant="ghost"
+        size="icon-xs"
+        onClick={() => copy(fullUrl)}
+        className="ml-auto shrink-0"
+        title="Copy full URL"
+      >
+        {copied ? <Check /> : <Copy />}
+      </Button>
+    </div>
+  )
+}
+
 interface PlaygroundProps {
   endpoint: Endpoint
   state: RequestState
@@ -77,12 +100,10 @@ export default function ApiPlayground({ endpoint, state, onStateChange, open, on
   useEffect(() => {
     try {
       const savedToken = localStorage.getItem(STORAGE_KEY_TOKEN)
-      const savedUrl = localStorage.getItem(STORAGE_KEY_BASE_URL)
-      if (savedToken || savedUrl) {
+      if (savedToken) {
         onStateChange({
           ...state,
-          token: savedToken || state.token,
-          baseUrl: savedUrl || state.baseUrl,
+          token: savedToken,
         })
       }
     } catch {}
@@ -95,7 +116,6 @@ export default function ApiPlayground({ endpoint, state, onStateChange, open, on
 
       try {
         if (patch.token !== undefined) localStorage.setItem(STORAGE_KEY_TOKEN, patch.token)
-        if (patch.baseUrl !== undefined) localStorage.setItem(STORAGE_KEY_BASE_URL, patch.baseUrl)
       } catch {}
     },
     [state, onStateChange]
@@ -183,14 +203,7 @@ export default function ApiPlayground({ endpoint, state, onStateChange, open, on
             </div>
 
             {/* Copyable endpoint path */}
-            <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-stone-200 bg-stone-50 px-3 py-1.5 dark:border-stone-700 dark:bg-stone-800/50">
-              <Badge variant={endpoint.method.toLowerCase() as any} className="text-[10px]">
-                {endpoint.method}
-              </Badge>
-              <code className="min-w-0 truncate text-sm font-medium text-stone-600 dark:text-stone-400">
-                {endpoint.path}
-              </code>
-            </div>
+            <CopyableUrl method={endpoint.method} path={endpoint.path} state={state} />
 
             {/* Send button */}
             <Button size="lg" onClick={sendRequest} disabled={loading}>
@@ -228,7 +241,6 @@ export default function ApiPlayground({ endpoint, state, onStateChange, open, on
                     <div className="grid grid-cols-[1fr_1fr] items-center gap-x-4">
                       <Label className="text-sm font-medium text-stone-700 dark:text-stone-300">Bearer token</Label>
                       <Input
-                        type="password"
                         value={state.token}
                         onChange={(e) => updateState({ token: (e.target as HTMLInputElement).value })}
                         placeholder="enter bearer token"
