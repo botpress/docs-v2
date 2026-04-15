@@ -36,6 +36,25 @@ function MethodBadge({ method }: { method: string }) {
   )
 }
 
+function EndpointBar({ method, path, onTryIt }: { method: string; path: string; onTryIt: () => void }) {
+  return (
+    <div className="flex items-center gap-3 rounded-lg border border-stone-200 px-3 py-2 dark:border-stone-700">
+      <MethodBadge method={method} />
+      <code className="min-w-0 flex-1 truncate text-sm font-medium text-stone-700 dark:text-stone-300">{path}</code>
+      <button
+        type="button"
+        onClick={onTryIt}
+        className="inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+      >
+        Try it
+        <svg className="size-3.5" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M4.5 2.5l9 5.5-9 5.5z" />
+        </svg>
+      </button>
+    </div>
+  )
+}
+
 function ParameterSection({ parameters, location }: { parameters: Parameter[]; location: string }) {
   const filtered = parameters.filter((p) => p.in === location)
   if (filtered.length === 0) return null
@@ -154,6 +173,7 @@ interface APIPageProps {
 
 export default function APIPage({ endpoint, title, breadcrumbs, markdownUrl }: APIPageProps) {
   const paramLocations = ['header', 'path', 'query', 'cookie']
+  const [playgroundOpen, setPlaygroundOpen] = useState(false)
 
   const bodySchema = useMemo(() => {
     if (!['POST', 'PUT', 'PATCH'].includes(endpoint.method) || !endpoint.requestBody?.content) return undefined
@@ -189,7 +209,9 @@ export default function APIPage({ endpoint, title, breadcrumbs, markdownUrl }: A
   return (
     <div className="not-prose">
       <div className="flex flex-col gap-x-10 gap-y-6 xl:flex-row">
+        {/* Left column: docs + endpoint bar */}
         <div className="min-w-0 w-full xl:w-[40rem] xl:shrink-0 space-y-8">
+          {/* Page header */}
           <div>
             <div className="hidden items-start justify-between gap-4 lg:flex">
               {breadcrumbs.length > 0 ? (
@@ -214,17 +236,16 @@ export default function APIPage({ endpoint, title, breadcrumbs, markdownUrl }: A
             <h1 className="font-heading text-2xl font-semibold text-stone-900 lg:text-3xl dark:text-stone-100">
               {title}
             </h1>
+            {endpoint.description && <p className="mt-3 text-stone-600 dark:text-stone-400">{endpoint.description}</p>}
 
             <div className="mt-3 lg:hidden">
               <PageOptions markdownUrl={markdownUrl} />
             </div>
           </div>
 
+          {/* Endpoint bar with Try it button */}
           <div>
-            <div className="flex items-center gap-3">
-              <MethodBadge method={endpoint.method} />
-              <code className="text-base font-medium text-stone-900 dark:text-stone-100">{endpoint.path}</code>
-            </div>
+            <EndpointBar method={endpoint.method} path={endpoint.path} onTryIt={() => setPlaygroundOpen(true)} />
             {endpoint.deprecated && (
               <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-800 dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-200">
                 This endpoint is deprecated.
@@ -235,10 +256,7 @@ export default function APIPage({ endpoint, title, breadcrumbs, markdownUrl }: A
                 This is an experimental endpoint and may change in future versions.
               </div>
             )}
-            {endpoint.description && <p className="mt-4 text-stone-600 dark:text-stone-400">{endpoint.description}</p>}
           </div>
-
-          <ApiPlayground endpoint={endpoint} state={requestState} onStateChange={handleStateChange} />
 
           <AuthRequirements security={endpoint.security} securitySchemes={endpoint.securitySchemes} />
 
@@ -252,6 +270,7 @@ export default function APIPage({ endpoint, title, breadcrumbs, markdownUrl }: A
           {endpoint.responses && <ResponseSection responses={endpoint.responses} />}
         </div>
 
+        {/* Right column: static examples */}
         <aside className="hidden w-112 shrink-0 xl:block">
           <div className="group/examples sticky top-10 flex max-h-[calc(100vh-8rem)] flex-col gap-4">
             <CodeExamples method={endpoint.method} path={endpoint.path} state={requestState} />
@@ -259,6 +278,15 @@ export default function APIPage({ endpoint, title, breadcrumbs, markdownUrl }: A
           </div>
         </aside>
       </div>
+
+      {/* Playground dialog */}
+      <ApiPlayground
+        endpoint={endpoint}
+        state={requestState}
+        onStateChange={handleStateChange}
+        open={playgroundOpen}
+        onOpenChange={setPlaygroundOpen}
+      />
     </div>
   )
 }

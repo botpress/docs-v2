@@ -5,9 +5,12 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
-import { ChevronRight } from 'lucide-react'
+import { Dialog, DialogBackdrop, DialogPopup, DialogClose, DialogPortal, DialogTitle } from '@/components/ui/dialog'
+import { ChevronRight, Play, X, Loader2 } from 'lucide-react'
 import { buildUrl } from '@/components/api/code-examples'
+import CodeExamples from '@/components/api/code-examples'
 import HighlightedCode from '@/components/api/highlighted-code'
+import CopyButton from '@/components/api/copy-button'
 import type { Schema, Parameter, Endpoint, RequestState } from '@/components/api/types'
 
 const STORAGE_KEY_TOKEN = 'bp-api-token'
@@ -41,6 +44,14 @@ function generateDefaultBody(schema: Schema | undefined): string {
   return JSON.stringify(obj, null, 2)
 }
 
+const METHOD_COLORS: Record<string, string> = {
+  GET: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300',
+  POST: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
+  PUT: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
+  PATCH: 'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300',
+  DELETE: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
+}
+
 interface PlaygroundResponse {
   status: number
   statusText: string
@@ -61,10 +72,11 @@ interface PlaygroundProps {
   endpoint: Endpoint
   state: RequestState
   onStateChange: (state: RequestState) => void
+  open: boolean
+  onOpenChange: (open: boolean) => void
 }
 
-export default function ApiPlayground({ endpoint, state, onStateChange }: PlaygroundProps) {
-  const [isOpen, setIsOpen] = useState(false)
+export default function ApiPlayground({ endpoint, state, onStateChange, open, onOpenChange }: PlaygroundProps) {
   const [loading, setLoading] = useState(false)
   const [response, setResponse] = useState<PlaygroundResponse | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -154,143 +166,221 @@ export default function ApiPlayground({ endpoint, state, onStateChange }: Playgr
     }
   }, [endpoint.method, endpoint.path, state, hasBody])
 
-  return (
-    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-      <div className="rounded-lg border border-stone-200 dark:border-stone-700">
-        <CollapsibleTrigger className="flex w-full cursor-pointer items-center justify-between px-4 py-3 text-sm font-medium text-stone-900 transition-colors hover:bg-stone-50 dark:text-stone-100 dark:hover:bg-stone-800/50">
-          <span className="flex items-center gap-2">
-            <ChevronRight
-              className={`h-4 w-4 text-stone-500 transition-transform duration-150 ${isOpen ? 'rotate-90' : ''}`}
-            />
-            Try it
-          </span>
-          {!isOpen && <span className="text-xs text-stone-400">Expand to test this endpoint</span>}
-        </CollapsibleTrigger>
+  const sectionCount = [true, pathParams.length > 0, queryParams.length > 0, headerParams.length > 0, hasBody].filter(
+    Boolean
+  ).length
 
-        <CollapsibleContent>
-          <div className="space-y-4 border-t border-stone-200 p-4 dark:border-stone-700">
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="space-y-1.5">
-                <Label className="text-xs text-stone-600 dark:text-stone-400">Base URL</Label>
-                <Input
-                  value={state.baseUrl}
-                  onChange={(e) => updateState({ baseUrl: (e.target as HTMLInputElement).value })}
-                  className="h-8 text-sm"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label className="text-xs text-stone-600 dark:text-stone-400">Bearer token</Label>
-                <Input
-                  type="password"
-                  value={state.token}
-                  onChange={(e) => updateState({ token: (e.target as HTMLInputElement).value })}
-                  placeholder="pat_..."
-                  className="h-8 text-sm"
-                />
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogPortal>
+        <DialogBackdrop />
+        <DialogPopup className="flex flex-col">
+          {/* Header bar */}
+          <div className="flex shrink-0 items-center justify-between gap-3 border-b border-stone-200 px-4 py-3 dark:border-stone-700">
+            <div className="flex min-w-0 items-center gap-3">
+              <span
+                className={`inline-flex shrink-0 items-center rounded-md px-2 py-0.5 text-xs font-bold uppercase tracking-wide ${METHOD_COLORS[endpoint.method] || 'bg-stone-100 text-stone-700'}`}
+              >
+                {endpoint.method}
+              </span>
+              <DialogTitle className="min-w-0 truncate text-sm font-medium text-stone-700 dark:text-stone-300">
+                <code>{endpoint.path}</code>
+              </DialogTitle>
+            </div>
+            <div className="flex shrink-0 items-center gap-2">
+              <Button onClick={sendRequest} disabled={loading}>
+                {loading ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" data-icon="inline-start" />
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <Play className="size-4" data-icon="inline-start" />
+                    Send
+                  </>
+                )}
+              </Button>
+              <DialogClose
+                render={
+                  <Button variant="ghost" size="icon-sm" title="Close playground">
+                    <X className="size-4" />
+                  </Button>
+                }
+              />
+            </div>
+          </div>
+
+          {/* Two-column layout */}
+          <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
+            {/* Left: param sections (2/3 width) */}
+            <div className="min-h-0 min-w-0 flex-[2] overflow-y-auto lg:border-r lg:border-stone-200 lg:dark:border-stone-700">
+              <div className={sectionCount > 1 ? 'divide-y divide-stone-100 dark:divide-stone-800' : ''}>
+                {/* Authorization */}
+                <ParamSection title="Authorization" defaultOpen badge={state.token ? 'set' : undefined}>
+                  <div className="space-y-3">
+                    <div className="grid grid-cols-[1fr_1fr] items-center gap-x-4">
+                      <Label className="text-sm font-medium text-stone-700 dark:text-stone-300">Bearer token</Label>
+                      <Input
+                        type="password"
+                        value={state.token}
+                        onChange={(e) => updateState({ token: (e.target as HTMLInputElement).value })}
+                        placeholder="enter bearer token"
+                        className="h-9 text-sm"
+                      />
+                    </div>
+                    <div className="grid grid-cols-[1fr_1fr] items-center gap-x-4">
+                      <Label className="text-sm font-medium text-stone-700 dark:text-stone-300">Base URL</Label>
+                      <Input
+                        value={state.baseUrl}
+                        onChange={(e) => updateState({ baseUrl: (e.target as HTMLInputElement).value })}
+                        placeholder="enter base URL"
+                        className="h-9 text-sm"
+                      />
+                    </div>
+                  </div>
+                </ParamSection>
+
+                {/* Path parameters */}
+                {pathParams.length > 0 && (
+                  <ParamSection title="Path" defaultOpen count={pathParams.length}>
+                    <ParamGroup
+                      params={pathParams}
+                      values={state.pathParams}
+                      onChange={(v) => updateState({ pathParams: v })}
+                    />
+                  </ParamSection>
+                )}
+
+                {/* Query parameters */}
+                {queryParams.length > 0 && (
+                  <ParamSection title="Query" defaultOpen count={queryParams.length}>
+                    <ParamGroup
+                      params={queryParams}
+                      values={state.queryParams}
+                      onChange={(v) => updateState({ queryParams: v })}
+                    />
+                  </ParamSection>
+                )}
+
+                {/* Header parameters */}
+                {headerParams.length > 0 && (
+                  <ParamSection title="Headers" defaultOpen count={headerParams.length}>
+                    <ParamGroup
+                      params={headerParams}
+                      values={state.headers}
+                      onChange={(v) => updateState({ headers: v })}
+                    />
+                  </ParamSection>
+                )}
+
+                {/* Body */}
+                {hasBody && (
+                  <ParamSection title="Body" defaultOpen>
+                    <div className="space-y-1.5">
+                      <textarea
+                        value={state.body}
+                        onChange={(e) => updateState({ body: e.target.value })}
+                        placeholder={bodySchema ? generateDefaultBody(bodySchema) : '{}'}
+                        rows={10}
+                        spellCheck={false}
+                        className="w-full rounded-lg border border-input bg-transparent px-3 py-2 font-mono text-sm leading-relaxed text-foreground outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
+                      />
+                    </div>
+                  </ParamSection>
+                )}
               </div>
             </div>
 
-            {pathParams.length > 0 && (
-              <ParamGroup
-                label="Path parameters"
-                params={pathParams}
-                values={state.pathParams}
-                onChange={(v) => updateState({ pathParams: v })}
-              />
-            )}
+            {/* Right: code blocks */}
+            <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-y-auto border-t border-stone-200 p-4 lg:border-t-0 dark:border-stone-700">
+              <CodeExamples method={endpoint.method} path={endpoint.path} state={state} />
 
-            {queryParams.length > 0 && (
-              <ParamGroup
-                label="Query parameters"
-                params={queryParams}
-                values={state.queryParams}
-                onChange={(v) => updateState({ queryParams: v })}
-              />
-            )}
+              {error && (
+                <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-800 dark:bg-red-900/20 dark:text-red-200">
+                  {error}
+                </div>
+              )}
 
-            {headerParams.length > 0 && (
-              <ParamGroup
-                label="Headers"
-                params={headerParams}
-                values={state.headers}
-                onChange={(v) => updateState({ headers: v })}
-              />
-            )}
-
-            {hasBody && (
-              <div className="space-y-1.5">
-                <Label className="text-xs text-stone-600 dark:text-stone-400">Request body</Label>
-                <textarea
-                  value={state.body}
-                  onChange={(e) => updateState({ body: e.target.value })}
-                  placeholder={bodySchema ? generateDefaultBody(bodySchema) : '{}'}
-                  rows={8}
-                  spellCheck={false}
-                  className="w-full rounded-lg border border-input bg-transparent px-3 py-2 font-mono text-xs leading-relaxed text-foreground outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
-                />
-              </div>
-            )}
-
-            <div className="flex items-center gap-3">
-              <Button onClick={sendRequest} disabled={loading} size="sm">
-                {loading ? 'Sending...' : 'Send request'}
-              </Button>
               {response && (
-                <span className="flex items-center gap-2 text-xs text-stone-500">
-                  <StatusBadge status={response.status} />
-                  <span>{response.statusText}</span>
-                  <span className="text-stone-400">{response.time}ms</span>
-                </span>
+                <div className="group/code-card flex min-h-0 flex-col rounded-lg border border-stone-200 bg-stone-50 dark:border-stone-700 dark:bg-stone-800/50">
+                  <div className="flex shrink-0 items-center gap-2 border-b border-stone-200 px-3 py-2 dark:border-stone-700">
+                    <span className="text-xs font-medium text-stone-500 dark:text-stone-400">Response</span>
+                    <StatusBadge status={response.status} />
+                    <span className="text-xs text-stone-500">{response.statusText}</span>
+                    <span className="text-xs text-stone-400">{response.time}ms</span>
+                  </div>
+                  <div className="relative min-h-0 flex-1 overflow-y-auto">
+                    <div className="max-h-80 p-4">
+                      <HighlightedCode code={response.body} language="json" />
+                    </div>
+                    <CopyButton text={response.body} />
+                  </div>
+                </div>
               )}
             </div>
-
-            {error && (
-              <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-800 dark:bg-red-900/20 dark:text-red-200">
-                {error}
-              </div>
-            )}
-
-            {response && (
-              <div className="rounded-lg border border-stone-200 dark:border-stone-700">
-                <div className="flex items-center gap-2 border-b border-stone-200 px-4 py-2 dark:border-stone-700">
-                  <span className="text-xs font-medium text-stone-500 dark:text-stone-400">Response</span>
-                </div>
-                <div className="max-h-80 overflow-auto p-4">
-                  <HighlightedCode code={response.body} language="json" />
-                </div>
-              </div>
-            )}
           </div>
-        </CollapsibleContent>
-      </div>
+        </DialogPopup>
+      </DialogPortal>
+    </Dialog>
+  )
+}
+
+function ParamSection({
+  title,
+  defaultOpen = false,
+  badge,
+  count,
+  children,
+}: {
+  title: string
+  defaultOpen?: boolean
+  badge?: string
+  count?: number
+  children: React.ReactNode
+}) {
+  const [open, setOpen] = useState(defaultOpen)
+
+  return (
+    <Collapsible open={open} onOpenChange={setOpen}>
+      <CollapsibleTrigger className="flex w-full cursor-pointer items-center gap-2 px-5 py-3.5 text-sm transition-colors hover:bg-stone-50 dark:hover:bg-stone-800/50">
+        <ChevronRight
+          className={`size-4 shrink-0 text-stone-400 transition-transform duration-150 ${open ? 'rotate-90' : ''}`}
+        />
+        <span className="text-[0.9rem] font-semibold text-stone-800 dark:text-stone-200">{title}</span>
+        {count !== undefined && <span className="text-xs text-stone-400">{count}</span>}
+        {badge && (
+          <Badge variant="info" className="ml-auto text-[10px]">
+            {badge}
+          </Badge>
+        )}
+      </CollapsibleTrigger>
+      <CollapsibleContent>
+        <div className="px-5 pb-5">{children}</div>
+      </CollapsibleContent>
     </Collapsible>
   )
 }
 
 function ParamGroup({
-  label,
   params,
   values,
   onChange,
 }: {
-  label: string
   params: Parameter[]
   values: Record<string, string>
   onChange: (values: Record<string, string>) => void
 }) {
   return (
-    <div className="space-y-1.5">
-      <Label className="text-xs text-stone-600 dark:text-stone-400">{label}</Label>
-      <div className="space-y-2">
-        {params.map((p) => (
-          <ParamInput
-            key={p.name}
-            param={p}
-            value={values[p.name] || ''}
-            onChange={(v) => onChange({ ...values, [p.name]: v })}
-          />
-        ))}
-      </div>
+    <div className="space-y-3">
+      {params.map((p) => (
+        <ParamInput
+          key={p.name}
+          param={p}
+          value={values[p.name] || ''}
+          onChange={(v) => onChange({ ...values, [p.name]: v })}
+        />
+      ))}
     </div>
   )
 }
@@ -305,16 +395,22 @@ function ParamInput({
   onChange: (value: string) => void
 }) {
   return (
-    <div className="flex items-start gap-2">
-      <div className="flex w-32 shrink-0 items-center gap-1.5 pt-1.5">
-        <code className="text-xs font-medium text-stone-700 dark:text-stone-300">{param.name}</code>
-        {param.required && (
-          <Badge variant="required" className="h-4 px-1 text-[10px]">
-            *
+    <div className="grid grid-cols-[1fr_1fr] items-start gap-x-4 gap-y-0.5">
+      <div className="flex flex-col gap-1 pt-2">
+        <div className="flex items-center gap-2">
+          <code className="text-sm font-medium text-stone-700 dark:text-stone-300">{param.name}</code>
+          <Badge variant="info" className="text-xs">
+            {param.schema?.type || 'string'}
           </Badge>
-        )}
+          {param.required && (
+            <Badge variant="required" className="text-xs">
+              required
+            </Badge>
+          )}
+        </div>
+        {param.description && <p className="text-xs text-stone-400">{param.description}</p>}
       </div>
-      <div className="min-w-0 flex-1">
+      <div className="pt-1">
         {param.schema?.enum ? (
           <Select
             value={value}
@@ -322,8 +418,8 @@ function ParamInput({
               if (v) onChange(v)
             }}
           >
-            <SelectTrigger size="sm" className="h-8 w-full text-sm">
-              <SelectValue placeholder="Select..." />
+            <SelectTrigger size="sm" className="h-9 w-full text-sm">
+              <SelectValue placeholder={`enter ${param.name}`} />
             </SelectTrigger>
             <SelectContent>
               {param.schema.enum.map((v) => (
@@ -337,11 +433,10 @@ function ParamInput({
           <Input
             value={value}
             onChange={(e) => onChange((e.target as HTMLInputElement).value)}
-            placeholder={param.schema?.example?.toString() || param.description || ''}
-            className="h-8 text-sm"
+            placeholder={`enter ${param.name}`}
+            className="h-9 text-sm"
           />
         )}
-        {param.description && <p className="mt-0.5 text-[11px] text-stone-400">{param.description}</p>}
       </div>
     </div>
   )
