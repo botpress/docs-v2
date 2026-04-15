@@ -6,7 +6,7 @@ export default function ThemeToggle({ size = 'sm' }: { size?: Size }) {
     document.documentElement.classList.toggle('dark', next === 'dark')
     try {
       localStorage.setItem('hc-theme', next)
-    } catch  {}
+    } catch {}
   }
 
   const sizeClass = size === 'lg' ? 'h-[2.375rem] w-[4.5rem]' : 'h-[26px] w-[50px]'

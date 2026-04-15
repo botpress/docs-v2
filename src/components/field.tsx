@@ -1,4 +1,4 @@
-import { useMemo, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { Badge } from '@/components/ui/badge'
 
 interface FieldProps {
@@ -13,21 +13,25 @@ interface FieldProps {
 }
 
 function Field({ name, type, required, default: defaultValue, deprecated, hidden, parentPath, children }: FieldProps) {
-  const stringifiedDefault = useMemo(() => {
-    if (defaultValue === undefined || defaultValue === null) return null
+  let stringifiedDefault: string | null = null
+  if (defaultValue !== undefined && defaultValue !== null) {
     if (typeof defaultValue === 'object') {
       const nested = Object.values(defaultValue as Record<string, unknown>).some(
         (v) => v !== null && typeof v === 'object'
       )
-      if (nested) return null
+      if (!nested) {
+        try {
+          const s = JSON.stringify(defaultValue)
+          if (s && s.length > 0 && s.length < 60) stringifiedDefault = s
+        } catch {}
+      }
+    } else {
+      try {
+        const s = JSON.stringify(defaultValue)
+        if (s && s.length > 0 && s.length < 60) stringifiedDefault = s
+      } catch {}
     }
-    try {
-      const s = JSON.stringify(defaultValue)
-      return s && s.length > 0 && s.length < 60 ? s : null
-    } catch {
-      return null
-    }
-  }, [defaultValue])
+  }
 
   if (hidden) return null
 
