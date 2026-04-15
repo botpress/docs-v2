@@ -59,7 +59,15 @@ function extractEndpoint(pathObj: any, method: string, apiPath: string, spec: an
   const security = op.security ?? spec.security
   const securitySchemes = spec.components?.securitySchemes
 
-  const baseUrl = spec.servers?.[0]?.url
+  const server = spec.servers?.[0]
+  const rawUrl = server?.url as string | undefined
+  const rawVars = server?.variables as Record<string, { default?: string; description?: string }> | undefined
+  const serverVariables = rawVars
+    ? Object.entries(rawVars).map(([name, v]) => ({ name, default: v.default || '', description: v.description }))
+    : undefined
+
+  const baseUrl = rawUrl?.replace(/\/?\{[^}]+\}/g, '').replace(/\/+$/, '') || undefined
+  const serverUrlSuffix = rawUrl && baseUrl && rawUrl.length > baseUrl.length ? rawUrl.slice(baseUrl.length) : undefined
 
   return {
     method: method.toUpperCase(),
@@ -67,7 +75,9 @@ function extractEndpoint(pathObj: any, method: string, apiPath: string, spec: an
     operationId: op.operationId,
     summary: op.summary,
     description: op.description,
-    baseUrl: baseUrl || undefined,
+    baseUrl,
+    serverUrlSuffix,
+    serverVariables: serverVariables?.length ? serverVariables : undefined,
     parameters: params.length > 0 ? params : undefined,
     requestBody: op.requestBody || undefined,
     responses: op.responses && Object.keys(op.responses).length > 0 ? op.responses : undefined,

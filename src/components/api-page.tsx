@@ -13,7 +13,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import PageOptions from '@/components/page-options'
-import CodeExamples from '@/components/api/code-examples'
+import CodeExamples, { resolveServerUrl } from '@/components/api/code-examples'
 import ResponseExamples from '@/components/api/response-examples'
 import ApiPlayground, { generateDefaultBody, DEFAULT_BASE_URL } from '@/components/api/playground'
 import SchemaExplorer from '@/components/api/schema-explorer'
@@ -25,15 +25,19 @@ function EndpointBar({
   method,
   path,
   baseUrl,
+  serverUrlSuffix,
+  serverVars,
   onTryIt,
 }: {
   method: string
   path: string
   baseUrl?: string
+  serverUrlSuffix?: string
+  serverVars?: Record<string, string>
   onTryIt: () => void
 }) {
   const { copied, copy } = useCopyToClipboard()
-  const fullUrl = `${baseUrl || DEFAULT_BASE_URL}${path}`
+  const fullUrl = `${resolveServerUrl(baseUrl || DEFAULT_BASE_URL, serverVars || {}, serverUrlSuffix)}${path}`
 
   return (
     <div className="flex items-center gap-2 rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 dark:border-stone-700 dark:bg-stone-800/50">
@@ -187,8 +191,15 @@ export default function APIPage({ endpoint, title, breadcrumbs, markdownUrl }: A
       if (p.in === 'header' && p.required) headers[p.name] = p.schema?.example?.toString() || ''
     }
 
+    const serverVars: Record<string, string> = {}
+    for (const v of endpoint.serverVariables || []) {
+      serverVars[v.name] = v.default
+    }
+
     return {
       baseUrl: endpoint.baseUrl || DEFAULT_BASE_URL,
+      serverUrlSuffix: endpoint.serverUrlSuffix,
+      serverVars,
       pathParams,
       queryParams,
       headers,
@@ -244,6 +255,8 @@ export default function APIPage({ endpoint, title, breadcrumbs, markdownUrl }: A
               method={endpoint.method}
               path={endpoint.path}
               baseUrl={endpoint.baseUrl}
+              serverUrlSuffix={endpoint.serverUrlSuffix}
+              serverVars={requestState.serverVars}
               onTryIt={() => setPlaygroundOpen(true)}
             />
             {endpoint.deprecated && (

@@ -38,6 +38,12 @@ export interface SecurityScheme {
   in?: string
 }
 
+export interface ServerVariable {
+  name: string
+  default: string
+  description?: string
+}
+
 export interface Endpoint {
   method: string
   path: string
@@ -47,6 +53,8 @@ export interface Endpoint {
   deprecated?: boolean
   experimental?: boolean
   baseUrl?: string
+  serverUrlSuffix?: string
+  serverVariables?: ServerVariable[]
   parameters?: Parameter[]
   requestBody?: {
     required?: boolean
@@ -66,6 +74,8 @@ export interface Endpoint {
 
 export interface RequestState {
   baseUrl: string
+  serverUrlSuffix?: string
+  serverVars: Record<string, string>
   pathParams: Record<string, string>
   queryParams: Record<string, string>
   headers: Record<string, string>

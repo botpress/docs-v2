@@ -30,6 +30,15 @@ function buildUrl(
   return `${baseUrl}${url}${qs}`
 }
 
+function resolveServerUrl(baseUrl: string, serverVars: Record<string, string>, serverUrlSuffix?: string): string {
+  if (!serverUrlSuffix) return baseUrl
+  let suffix = serverUrlSuffix
+  for (const [key, value] of Object.entries(serverVars)) {
+    suffix = suffix.replace(`{${key}}`, value || `{${key}}`)
+  }
+  return baseUrl + suffix
+}
+
 function headerPairs(headers: Record<string, string>, token: string): [string, string][] {
   const result: [string, string][] = []
   for (const [key, value] of Object.entries(headers)) {
@@ -297,8 +306,14 @@ export default function CodeExamples({ method, path, state }: CodeExamplesProps)
   const [activeLang, setActiveLang] = useState<Lang>('curl')
 
   const url = useMemo(
-    () => buildUrl(state.baseUrl, path, state.pathParams, state.queryParams),
-    [state.baseUrl, path, state.pathParams, state.queryParams]
+    () =>
+      buildUrl(
+        resolveServerUrl(state.baseUrl, state.serverVars, state.serverUrlSuffix),
+        path,
+        state.pathParams,
+        state.queryParams
+      ),
+    [state.baseUrl, state.serverVars, state.serverUrlSuffix, path, state.pathParams, state.queryParams]
   )
 
   const hdrs = useMemo(() => headerPairs(state.headers, state.token), [state.headers, state.token])
@@ -338,4 +353,4 @@ export default function CodeExamples({ method, path, state }: CodeExamplesProps)
   )
 }
 
-export { buildUrl }
+export { buildUrl, resolveServerUrl }
