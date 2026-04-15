@@ -9,7 +9,7 @@ import { Dialog, DialogBackdrop, DialogPopup, DialogClose, DialogPortal, DialogT
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
 import { Check, ChevronRight, Copy, Play, X } from 'lucide-react'
-import { buildUrl } from '@/components/api/code-examples'
+import { buildUrl, resolveServerUrl } from '@/components/api/code-examples'
 import CodeExamples from '@/components/api/code-examples'
 import HighlightedCode from '@/components/api/highlighted-code'
 import CopyButton from '@/components/api/copy-button'
@@ -63,7 +63,12 @@ function StatusBadge({ status }: { status: number }) {
 
 function CopyableUrl({ method, path, state }: { method: string; path: string; state: RequestState }) {
   const { copied, copy } = useCopyToClipboard()
-  const fullUrl = buildUrl(state.baseUrl, path, state.pathParams, state.queryParams)
+  const fullUrl = buildUrl(
+    resolveServerUrl(state.baseUrl, state.serverVars, state.serverUrlSuffix),
+    path,
+    state.pathParams,
+    state.queryParams
+  )
 
   return (
     <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-stone-200 bg-stone-50 px-3 py-1.5 dark:border-stone-700 dark:bg-stone-800/50">
@@ -128,6 +133,7 @@ export default function ApiPlayground({ endpoint, state, onStateChange, open, on
     [endpoint.parameters]
   )
 
+  const hasServerVars = (endpoint.serverVariables?.length ?? 0) > 0
   const hasBody = ['POST', 'PUT', 'PATCH'].includes(endpoint.method)
   const bodySchema = useMemo(() => {
     if (!hasBody || !endpoint.requestBody?.content) return undefined
@@ -140,7 +146,12 @@ export default function ApiPlayground({ endpoint, state, onStateChange, open, on
     setError(null)
     setResponse(null)
 
-    const url = buildUrl(state.baseUrl, endpoint.path, state.pathParams, state.queryParams)
+    const url = buildUrl(
+      resolveServerUrl(state.baseUrl, state.serverVars, state.serverUrlSuffix),
+      endpoint.path,
+      state.pathParams,
+      state.queryParams
+    )
     const headers: Record<string, string> = {}
 
     if (state.token) headers['Authorization'] = `Bearer ${state.token}`
@@ -179,9 +190,14 @@ export default function ApiPlayground({ endpoint, state, onStateChange, open, on
     }
   }, [endpoint.method, endpoint.path, state, hasBody])
 
-  const sectionCount = [true, pathParams.length > 0, queryParams.length > 0, headerParams.length > 0, hasBody].filter(
-    Boolean
-  ).length
+  const sectionCount = [
+    true,
+    hasServerVars,
+    pathParams.length > 0,
+    queryParams.length > 0,
+    headerParams.length > 0,
+    hasBody,
+  ].filter(Boolean).length
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -258,6 +274,34 @@ export default function ApiPlayground({ endpoint, state, onStateChange, open, on
                     </div>
                   </div>
                 </ParamSection>
+
+                {/* Server variables */}
+                {hasServerVars && (
+                  <ParamSection title="Server" defaultOpen count={endpoint.serverVariables!.length}>
+                    <div className="space-y-3">
+                      {endpoint.serverVariables!.map((v) => (
+                        <div key={v.name} className="grid grid-cols-[1fr_1fr] items-start gap-x-4">
+                          <div className="flex flex-col gap-1 pt-1">
+                            <code className="text-sm font-semibold text-primary">{v.name}</code>
+                            {v.description && (
+                              <p className="text-sm text-stone-600 dark:text-stone-400">{v.description}</p>
+                            )}
+                          </div>
+                          <Input
+                            value={state.serverVars[v.name] || ''}
+                            onChange={(e) =>
+                              updateState({
+                                serverVars: { ...state.serverVars, [v.name]: (e.target as HTMLInputElement).value },
+                              })
+                            }
+                            placeholder={`enter ${v.name}`}
+                            className="h-9 text-sm"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </ParamSection>
+                )}
 
                 {/* Path parameters */}
                 {pathParams.length > 0 && (
