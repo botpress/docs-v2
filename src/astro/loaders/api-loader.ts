@@ -25,10 +25,13 @@ const HTTP_METHODS = ['get', 'post', 'put', 'patch', 'delete'] as const
 const MARKDOWN_LINK_RE = /\[([^\]]+)\]\([^)]+\)/g
 
 // TODO: actually include schemas in the docs so we don't have to strip these
-function stripMarkdownLinks(obj: any): any {
-  if (typeof obj === 'string') return obj.replace(MARKDOWN_LINK_RE, '$1')
-  if (Array.isArray(obj)) return obj.map(stripMarkdownLinks)
-  if (obj && typeof obj === 'object') {
+function stripMarkdownLinks(input: unknown): unknown {
+  if (typeof input === 'string') return input.replace(MARKDOWN_LINK_RE, '$1')
+
+  if (Array.isArray(input)) return input.map(stripMarkdownLinks)
+
+  if (input && typeof input === 'object') {
+    const obj = input as Record<string, string | unknown>
     for (const key of Object.keys(obj)) {
       if (key === 'description' && typeof obj[key] === 'string') {
         obj[key] = obj[key].replace(MARKDOWN_LINK_RE, '$1')
@@ -36,8 +39,9 @@ function stripMarkdownLinks(obj: any): any {
         stripMarkdownLinks(obj[key])
       }
     }
+    return obj
   }
-  return obj
+  return input
 }
 
 function slugify(str: string): string {
@@ -132,8 +136,9 @@ export function apiLoader({ packageApis, staticApis }: ApiLoaderOptions): Loader
         for (const entry of packageApis) {
           const exportDir = path.join(tmpDir, entry.key)
 
+          console.log('Processing openapi for', entry.key)
           const origWrite = process.stdout.write
-          process.stdout.write = () => true
+          //process.stdout.write = () => true
           try {
             entry.api.exportOpenapi(exportDir)
           } finally {
