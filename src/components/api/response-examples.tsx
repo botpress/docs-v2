@@ -80,7 +80,7 @@ export default function ResponseExamples({ responses }: ResponseExamplesProps) {
   const defaultTab = examples.find((e) => e.status.startsWith('2'))?.status || examples[0]!.status
 
   return (
-    <div className="group/code-card flex min-h-0 flex-col rounded-lg border border-stone-200 bg-stone-50 dark:border-stone-700 dark:bg-stone-800/50">
+    <div className="group/code-card flex min-h-0 flex-col rounded-xl border border-stone-200 bg-stone-50 dark:border-stone-700 dark:bg-stone-800/50">
       <Tabs defaultValue={defaultTab} className="flex min-h-0 flex-1 flex-col">
         <div className="flex shrink-0 items-center justify-between border-b border-stone-200 px-3 py-2 dark:border-stone-700">
           <span className="text-xs font-medium text-stone-500 dark:text-stone-400">Response</span>

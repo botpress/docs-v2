@@ -1,3 +1,4 @@
+import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { Field } from '@/components/field'
 import { Expandable } from '@/components/api/expandable'
@@ -64,13 +65,13 @@ function SchemaNode({
       {schema.description}
       {constraints.length > 0 && <span className="ml-1 text-xs text-stone-400">({constraints.join(', ')})</span>}
       {schema.enum && (
-        <div className="mt-2 flex flex-wrap gap-1">
+        <div className="mt-2 flex flex-wrap items-center gap-1">
           Available options:
           {schema.enum.map((v, i) => (
             <span key={v}>
-              <code className="rounded bg-stone-100 px-1.5 py-0.5 text-xs text-stone-600 dark:bg-stone-800 dark:text-stone-400">
-                "{v}"
-              </code>
+              <Badge variant="info">
+                <code>"{v}"</code>
+              </Badge>
               {i < schema.enum!.length - 1 && ','}
             </span>
           ))}

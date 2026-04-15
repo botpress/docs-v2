@@ -1,3 +1,4 @@
+import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Field } from '@/components/field'
 import type { SecurityScheme } from '@/components/api/types'
@@ -60,15 +61,12 @@ export default function AuthRequirements({ security, securitySchemes }: AuthRequ
             <Field key={`${i}-${entry.name}`} name={fieldName} type={typeParts.join(' · ')} required>
               {schemeDescription(entry.scheme)}
               {entry.scopes.length > 0 && (
-                <div className="mt-2 flex flex-wrap gap-1">
+                <div className="mt-2 flex flex-wrap items-center gap-1">
                   <span className="text-xs text-stone-500 dark:text-stone-400">Scopes:</span>
                   {entry.scopes.map((scope) => (
-                    <code
-                      key={scope}
-                      className="rounded bg-stone-100 px-1.5 py-0.5 text-xs text-stone-600 dark:bg-stone-800 dark:text-stone-400"
-                    >
-                      {scope}
-                    </code>
+                    <Badge key={scope} variant="info">
+                      <code>{scope}</code>
+                    </Badge>
                   ))}
                 </div>
               )}
