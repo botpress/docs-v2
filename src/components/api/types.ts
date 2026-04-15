@@ -46,6 +46,7 @@ export interface Endpoint {
   description?: string
   deprecated?: boolean
   experimental?: boolean
+  baseUrl?: string
   parameters?: Parameter[]
   requestBody?: {
     required?: boolean

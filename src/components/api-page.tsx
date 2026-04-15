@@ -1,8 +1,9 @@
-import React, { useState, useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
-import { Play } from 'lucide-react'
+import { Check, Copy, Play } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import {
   Breadcrumb,
@@ -20,11 +21,27 @@ import AuthRequirements from '@/components/api/auth-requirements'
 import ContentTypeSwitcher from '@/components/api/content-type-switcher'
 import type { Endpoint, RequestState, Parameter } from '@/components/api/types'
 
-function EndpointBar({ method, path, onTryIt }: { method: string; path: string; onTryIt: () => void }) {
+function EndpointBar({
+  method,
+  path,
+  baseUrl,
+  onTryIt,
+}: {
+  method: string
+  path: string
+  baseUrl?: string
+  onTryIt: () => void
+}) {
+  const { copied, copy } = useCopyToClipboard()
+  const fullUrl = `${baseUrl || DEFAULT_BASE_URL}${path}`
+
   return (
-    <div className="flex items-center gap-3 rounded-lg border border-stone-200 px-3 py-2 dark:border-stone-700">
+    <div className="flex items-center gap-2 rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 dark:border-stone-700 dark:bg-stone-800/50">
       <Badge variant={method.toLowerCase() as any}>{method}</Badge>
-      <code className="min-w-0 flex-1 truncate text-sm font-medium text-stone-700 dark:text-stone-300">{path}</code>
+      <code className="min-w-0 flex-1 truncate text-sm font-medium text-stone-600 dark:text-stone-400">{path}</code>
+      <Button variant="ghost" size="icon-xs" onClick={() => copy(fullUrl)} className="shrink-0" title="Copy URL">
+        {copied ? <Check /> : <Copy />}
+      </Button>
       <Button size="lg" onClick={onTryIt}>
         Try it
         <Play className="size-3.5" data-icon="inline-end" />
@@ -171,7 +188,7 @@ export default function APIPage({ endpoint, title, breadcrumbs, markdownUrl }: A
     }
 
     return {
-      baseUrl: DEFAULT_BASE_URL,
+      baseUrl: endpoint.baseUrl || DEFAULT_BASE_URL,
       pathParams,
       queryParams,
       headers,
@@ -223,7 +240,12 @@ export default function APIPage({ endpoint, title, breadcrumbs, markdownUrl }: A
 
           {/* Endpoint bar with Try it button */}
           <div>
-            <EndpointBar method={endpoint.method} path={endpoint.path} onTryIt={() => setPlaygroundOpen(true)} />
+            <EndpointBar
+              method={endpoint.method}
+              path={endpoint.path}
+              baseUrl={endpoint.baseUrl}
+              onTryIt={() => setPlaygroundOpen(true)}
+            />
             {endpoint.deprecated && (
               <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-800 dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-200">
                 This endpoint is deprecated.

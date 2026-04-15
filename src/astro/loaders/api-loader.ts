@@ -59,12 +59,15 @@ function extractEndpoint(pathObj: any, method: string, apiPath: string, spec: an
   const security = op.security ?? spec.security
   const securitySchemes = spec.components?.securitySchemes
 
+  const baseUrl = spec.servers?.[0]?.url
+
   return {
     method: method.toUpperCase(),
     path: apiPath,
     operationId: op.operationId,
     summary: op.summary,
     description: op.description,
+    baseUrl: baseUrl || undefined,
     parameters: params.length > 0 ? params : undefined,
     requestBody: op.requestBody || undefined,
     responses: op.responses && Object.keys(op.responses).length > 0 ? op.responses : undefined,
