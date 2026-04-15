@@ -80,9 +80,9 @@ export default function ResponseExamples({ responses }: ResponseExamplesProps) {
   const defaultTab = examples.find((e) => e.status.startsWith('2'))?.status || examples[0]!.status
 
   return (
-    <div className="group/code-card min-h-0 overflow-y-auto rounded-lg border border-stone-200 bg-stone-50 dark:border-stone-700 dark:bg-stone-800/50">
-      <Tabs defaultValue={defaultTab}>
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-stone-200 bg-stone-50 px-3 pt-2 dark:border-stone-700 dark:bg-stone-800/50">
+    <div className="group/code-card flex min-h-0 flex-col rounded-lg border border-stone-200 bg-stone-50 dark:border-stone-700 dark:bg-stone-800/50">
+      <Tabs defaultValue={defaultTab} className="flex min-h-0 flex-1 flex-col">
+        <div className="flex shrink-0 items-center justify-between border-b border-stone-200 px-3 py-2 dark:border-stone-700">
           <span className="text-xs font-medium text-stone-500 dark:text-stone-400">Response</span>
           {examples.length > 1 && (
             <TabsList variant="line" className="h-7 gap-0">
@@ -106,7 +106,7 @@ export default function ResponseExamples({ responses }: ResponseExamplesProps) {
         </div>
 
         {examples.map((ex) => (
-          <TabsContent key={ex.status} value={ex.status} className="p-0">
+          <TabsContent key={ex.status} value={ex.status} className="min-h-0 flex-1 overflow-y-auto p-0">
             <div className="relative">
               <div className="p-4">
                 <HighlightedCode code={ex.json} language="json" />
