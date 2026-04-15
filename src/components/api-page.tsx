@@ -43,7 +43,7 @@ function EndpointBar({
     <div className="flex items-center gap-2 rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 dark:border-stone-700 dark:bg-stone-800/50">
       <Badge variant={method.toLowerCase() as any}>{method}</Badge>
       <code className="min-w-0 flex-1 truncate text-sm font-medium text-stone-600 dark:text-stone-400">{path}</code>
-      <Button variant="ghost" size="icon-xs" onClick={() => copy(fullUrl)} className="shrink-0" title="Copy URL">
+      <Button variant="ghost" size="icon-sm" onClick={() => copy(fullUrl)} className="shrink-0" title="Copy URL">
         {copied ? <Check /> : <Copy />}
       </Button>
       <Button size="lg" onClick={onTryIt}>

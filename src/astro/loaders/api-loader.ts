@@ -22,6 +22,23 @@ export interface StaticApiSource extends ApiSource {
 }
 
 const HTTP_METHODS = ['get', 'post', 'put', 'patch', 'delete'] as const
+const MARKDOWN_LINK_RE = /\[([^\]]+)\]\([^)]+\)/g
+
+// TODO: actually include schemas in the docs so we don't have to strip these
+function stripMarkdownLinks(obj: any): any {
+  if (typeof obj === 'string') return obj.replace(MARKDOWN_LINK_RE, '$1')
+  if (Array.isArray(obj)) return obj.map(stripMarkdownLinks)
+  if (obj && typeof obj === 'object') {
+    for (const key of Object.keys(obj)) {
+      if (key === 'description' && typeof obj[key] === 'string') {
+        obj[key] = obj[key].replace(MARKDOWN_LINK_RE, '$1')
+      } else if (typeof obj[key] === 'object') {
+        stripMarkdownLinks(obj[key])
+      }
+    }
+  }
+  return obj
+}
 
 function slugify(str: string): string {
   return str
@@ -125,14 +142,14 @@ export function apiLoader({ packageApis, staticApis }: ApiLoaderOptions): Loader
 
           const specPath = path.join(exportDir, 'openapi.json')
           const raw = tagFilterSpec(JSON.parse(fs.readFileSync(specPath, 'utf-8')))
-          const spec = await SwaggerParser.dereference(raw)
+          const spec = stripMarkdownLinks(await SwaggerParser.dereference(raw))
           await processSpec(spec, entry.slug, entry.label, store, parseData)
         }
 
         for (const entry of staticApis) {
           const specPath = path.join(STATIC_SPECS_DIR, entry.file)
           const raw = JSON.parse(fs.readFileSync(specPath, 'utf-8'))
-          const spec = await SwaggerParser.dereference(raw)
+          const spec = stripMarkdownLinks(await SwaggerParser.dereference(raw))
           await processSpec(spec, entry.slug, entry.label, store, parseData)
         }
       } finally {
