@@ -5,9 +5,9 @@ export interface Schema {
   required?: string[]
   description?: string
   enum?: string[]
-  default?: any
+  default?: unknown
   format?: string
-  example?: any
+  example?: unknown
   oneOf?: Schema[]
   anyOf?: Schema[]
   nullable?: boolean
