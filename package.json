@@ -13,7 +13,7 @@
     "check": "bun run --parallel check:format check:lint check:type",
     "check:format": "bunx oxfmt --check .",
     "check:lint": "bunx oxlint",
-    "check:type": "astro check",
+    "check:type": "bun --bun astro check",
     "fix": "bun run --sequential fix:format fix:lint",
     "fix:format": "bunx oxfmt .",
     "fix:lint": "bunx oxlint --fix",
