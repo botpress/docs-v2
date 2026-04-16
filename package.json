@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && npx pagefind --site dist",
+    "build": "bun --bun astro build && npx pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
     "check": "bun run --parallel check:format check:lint check:type",
