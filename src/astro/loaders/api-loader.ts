@@ -7,6 +7,36 @@ import type { Endpoint } from '@/components/api/types'
 
 const STATIC_SPECS_DIR = path.resolve('./public/api-specs')
 
+interface OpenApiOperation {
+  operationId?: string
+  summary?: string
+  description?: string
+  deprecated?: boolean
+  tags?: string[]
+  parameters?: Record<string, unknown>[]
+  requestBody?: Record<string, unknown>
+  responses?: Record<string, unknown>
+  security?: Record<string, string[]>[]
+  'x-hidden'?: boolean
+  'x-experimental'?: boolean
+}
+
+interface OpenApiPathItem {
+  parameters?: Record<string, unknown>[]
+  get?: OpenApiOperation
+  post?: OpenApiOperation
+  put?: OpenApiOperation
+  patch?: OpenApiOperation
+  delete?: OpenApiOperation
+}
+
+interface OpenApiSpec {
+  paths: Record<string, OpenApiPathItem>
+  servers?: { url: string; variables?: Record<string, { default?: string; description?: string }> }[]
+  security?: Record<string, string[]>[]
+  components?: { securitySchemes?: Record<string, unknown> }
+}
+
 export interface ApiSource {
   slug: string
   label: string
@@ -51,20 +81,20 @@ function slugify(str: string): string {
     .replace(/^-|-$/g, '')
 }
 
-function tagFilterSpec(spec: any): any {
-  for (const apiPath of Object.keys(spec.paths || {})) {
-    for (const verb of Object.keys(spec.paths[apiPath])) {
-      if (!HTTP_METHODS.includes(verb as any)) continue
-      const op = spec.paths[apiPath][verb]
+function tagFilterSpec(spec: OpenApiSpec): OpenApiSpec {
+  for (const pathItem of Object.values(spec.paths || {})) {
+    for (const method of HTTP_METHODS) {
+      const op = pathItem[method]
+      if (!op) continue
 
       if (!op.tags?.includes('documented')) {
         op['x-hidden'] = true
       } else {
-        op.tags = op.tags.filter((t: string) => t !== 'documented')
+        op.tags = op.tags.filter((t) => t !== 'documented')
       }
 
       if (op.tags?.includes('experimental') || op.tags?.includes('expermimental')) {
-        op.tags = op.tags.filter((t: string) => t !== 'experimental' && t !== 'expermimental')
+        op.tags = op.tags.filter((t) => t !== 'experimental' && t !== 'expermimental')
         op['x-experimental'] = true
       }
     }
@@ -72,17 +102,22 @@ function tagFilterSpec(spec: any): any {
   return spec
 }
 
-function extractEndpoint(pathObj: any, method: string, apiPath: string, spec: any): Endpoint {
-  const op = pathObj[method]
+function extractEndpoint(
+  pathItem: OpenApiPathItem,
+  method: (typeof HTTP_METHODS)[number],
+  apiPath: string,
+  spec: OpenApiSpec
+): Endpoint {
+  const op = pathItem[method]!
 
-  const params = [...(pathObj.parameters || []), ...(op.parameters || [])]
+  const params = [...(pathItem.parameters || []), ...(op.parameters || [])]
 
   const security = op.security ?? spec.security
   const securitySchemes = spec.components?.securitySchemes
 
   const server = spec.servers?.[0]
-  const rawUrl = server?.url as string | undefined
-  const rawVars = server?.variables as Record<string, { default?: string; description?: string }> | undefined
+  const rawUrl = server?.url
+  const rawVars = server?.variables
   const serverVariables = rawVars
     ? Object.entries(rawVars).map(([name, v]) => ({ name, default: v.default || '', description: v.description }))
     : undefined
@@ -99,11 +134,12 @@ function extractEndpoint(pathObj: any, method: string, apiPath: string, spec: an
     baseUrl,
     serverUrlSuffix,
     serverVariables: serverVariables?.length ? serverVariables : undefined,
-    parameters: params.length > 0 ? params : undefined,
-    requestBody: op.requestBody || undefined,
-    responses: op.responses && Object.keys(op.responses).length > 0 ? op.responses : undefined,
+    parameters: params.length > 0 ? (params as unknown as Endpoint['parameters']) : undefined,
+    requestBody: (op.requestBody as Endpoint['requestBody']) || undefined,
+    responses:
+      op.responses && Object.keys(op.responses).length > 0 ? (op.responses as Endpoint['responses']) : undefined,
     security: security || undefined,
-    securitySchemes: securitySchemes || undefined,
+    securitySchemes: (securitySchemes as Endpoint['securitySchemes']) || undefined,
     deprecated: op.deprecated || false,
     experimental: op['x-experimental'] || false,
   }
@@ -146,15 +182,19 @@ export function apiLoader({ packageApis, staticApis }: ApiLoaderOptions): Loader
           }
 
           const specPath = path.join(exportDir, 'openapi.json')
-          const raw = tagFilterSpec(JSON.parse(fs.readFileSync(specPath, 'utf-8')))
-          const spec = stripMarkdownLinks(await SwaggerParser.dereference(raw))
+          const raw = tagFilterSpec(JSON.parse(fs.readFileSync(specPath, 'utf-8')) as OpenApiSpec)
+          const dereferenced = await SwaggerParser.dereference(
+            raw as unknown as Parameters<typeof SwaggerParser.dereference>[0]
+          )
+          const spec = stripMarkdownLinks(dereferenced) as OpenApiSpec
           await processSpec(spec, entry.slug, entry.label, store, parseData)
         }
 
         for (const entry of staticApis) {
           const specPath = path.join(STATIC_SPECS_DIR, entry.file)
           const raw = JSON.parse(fs.readFileSync(specPath, 'utf-8'))
-          const spec = stripMarkdownLinks(await SwaggerParser.dereference(raw))
+          const dereferenced = await SwaggerParser.dereference(raw)
+          const spec = stripMarkdownLinks(dereferenced) as OpenApiSpec
           await processSpec(spec, entry.slug, entry.label, store, parseData)
         }
       } finally {
@@ -164,21 +204,27 @@ export function apiLoader({ packageApis, staticApis }: ApiLoaderOptions): Loader
   }
 }
 
-async function processSpec(spec: any, apiSlug: string, apiLabel: string, store: any, parseData: any) {
+async function processSpec(
+  spec: OpenApiSpec,
+  apiSlug: string,
+  apiLabel: string,
+  store: Parameters<Loader['load']>[0]['store'],
+  parseData: Parameters<Loader['load']>[0]['parseData']
+) {
   let sortOrder = 0
 
-  for (const [apiPath, pathObj] of Object.entries(spec.paths as Record<string, any>)) {
+  for (const [apiPath, pathItem] of Object.entries(spec.paths)) {
     for (const method of HTTP_METHODS) {
-      if (!pathObj[method]) continue
-      const op = pathObj[method]
+      const op = pathItem[method]
+      if (!op) continue
       if (op['x-hidden']) continue
 
-      const endpoint = extractEndpoint(pathObj, method, apiPath, spec)
-      const operationId = op.operationId as string | undefined
+      const endpoint = extractEndpoint(pathItem, method, apiPath, spec)
+      const operationId = op.operationId
       const filename = slugify(operationId || `${method}-${apiPath.replace(/\//g, '-')}`)
       const id = `${apiSlug}/endpoints/${filename}`
       const title = operationId || `${method.toUpperCase()} ${apiPath}`
-      const description = (op.description?.split('\n')[0]?.slice(0, 200) as string) || ''
+      const description = op.description?.split('\n')[0]?.slice(0, 200) || ''
 
       const data = await parseData({
         id,
