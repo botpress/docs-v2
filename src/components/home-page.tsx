@@ -1,5 +1,5 @@
 import { Card } from './card'
-import { Badge } from './badge'
+import { Badge } from './ui/badge'
 import { WebchatCard, IntegrationsCard } from './link-card'
 
 export default function HomePage() {
@@ -45,7 +45,7 @@ export default function HomePage() {
       <div className="mx-auto flex max-w-[68rem] flex-col flex-wrap px-8 pb-4 md:flex-row md:gap-8 lg:px-16">
         <div className="md:max-w-[33.333%] md:flex-[1_1_0%]">
           <Card title="ADK" img="/homepage-assets/adk.jpg" cta="Install the CLI" href="/adk/introduction">
-            TypeScript library for building AI agents from code <Badge color="blue">Beta</Badge>
+            TypeScript library for building AI agents from code <Badge variant="outline">Beta</Badge>
           </Card>
         </div>
         <div className="md:max-w-[33.333%] md:flex-[1_1_0%]">

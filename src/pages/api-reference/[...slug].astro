@@ -1,0 +1,74 @@
+---
+import PageNavigation from "../../components/page-navigation";
+import DocsLayout from "../../layouts/DocsLayout.astro";
+import APIPage from "../../components/api-page";
+import { getCollection } from "astro:content";
+import { toMarkdownPath } from "../../lib/markdown-routes";
+import {
+  buildSidebarTree,
+  buildApiSidebarNodes,
+  buildApiSidebarData,
+  getActiveTab,
+  getAdjacentPages,
+} from "../../lib/sidebar-tree";
+import path from "node:path";
+
+export async function getStaticPaths() {
+  const apiEntries = await getCollection("api");
+
+  return apiEntries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { title, endpoint, apiLabel } = entry.data;
+
+const markdownUrl = toMarkdownPath(Astro.url.pathname);
+
+const breadcrumbs = [{ label: apiLabel }];
+
+const contentDir = path.resolve("./src/content/docs");
+const docsEntries = await getCollection("docs");
+const apiEntries = await getCollection("api");
+const { titleMap, methodMap } = buildApiSidebarData(
+  docsEntries,
+  apiEntries,
+  contentDir
+);
+const apiNodes = buildApiSidebarNodes(apiEntries);
+
+const treeResult = buildSidebarTree(titleMap, contentDir, methodMap, apiNodes);
+const currentPath = Astro.url.pathname;
+const hasTabs = treeResult.tabs.length > 0;
+const activeTab = hasTabs
+  ? getActiveTab(currentPath, treeResult.slugToTab)
+  : null;
+const sidebarTree =
+  hasTabs && activeTab
+    ? (treeResult.trees[activeTab] ?? treeResult.defaultTree)
+    : treeResult.defaultTree;
+const { prev, next } = getAdjacentPages(sidebarTree, currentPath);
+---
+
+<DocsLayout title={title} breadcrumbs={breadcrumbs}>
+  <div
+    class="flex w-full justify-center px-8 pt-10 pb-8 sm:px-8 sm:pt-12 sm:pb-10 lg:px-16"
+    data-pagefind-body
+  >
+    <div class="min-w-0 flex-1" style="max-width: calc(40rem + 2.5rem + 28rem)">
+      <APIPage
+        client:load
+        endpoint={endpoint}
+        title={title}
+        breadcrumbs={breadcrumbs}
+        markdownUrl={markdownUrl}
+      />
+
+      <div class="max-w-[40rem] not-prose">
+        <PageNavigation prev={prev} next={next} />
+      </div>
+    </div>
+  </div>
+</DocsLayout>

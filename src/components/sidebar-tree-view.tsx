@@ -1,6 +1,19 @@
 import { useState } from 'react'
+import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/utils'
 import type { SidebarNode, SidebarCategoryNode } from '../lib/sidebar-types'
 import { isPathActive, hasActiveChild } from '../lib/sidebar-types'
+
+function SidebarMethodBadge({ method }: { method: string }) {
+  return (
+    <Badge
+      variant={method.toLowerCase() as 'get' | 'post' | 'put' | 'patch' | 'delete'}
+      className={cn('ml-auto shrink-0 rounded px-1.5 py-0.5 text-[10px] leading-none')}
+    >
+      {method}
+    </Badge>
+  )
+}
 
 interface Props {
   nodes: SidebarNode[]
@@ -123,7 +136,8 @@ function ChildNode({
             : 'text-stone-600 hover:bg-black/5 hover:text-stone-900 dark:text-stone-400 dark:hover:bg-white/5 dark:hover:text-stone-100'
         }`}
       >
-        {node.title}
+        <span className="min-w-0 truncate">{node.title}</span>
+        {node.method && <SidebarMethodBadge method={node.method} />}
       </a>
     </li>
   )
@@ -132,7 +146,7 @@ function ChildNode({
 export default function SidebarTreeView({ nodes, currentPath, textSize = 'sm' }: Props) {
   return (
     <>
-      {nodes.map((node, index) => {
+      {nodes.map((node) => {
         if (node.type === 'category') {
           return (
             <div key={node.path} className="mb-8">
@@ -155,20 +169,10 @@ export default function SidebarTreeView({ nodes, currentPath, textSize = 'sm' }:
           )
         }
 
-        const active = isPathActive(node.href, currentPath)
-
         return (
-          <a
-            key={node.href}
-            href={node.href}
-            className={`flex items-center rounded-md pl-4 pr-2 py-1.5 ${textSize === 'base' ? 'text-base' : 'text-sm'} transition-colors ${
-              active
-                ? 'text-primary bg-primary/10 dark:bg-primary/15 font-medium'
-                : 'text-stone-600 hover:bg-black/5 hover:text-stone-900 dark:text-stone-400 dark:hover:bg-white/5 dark:hover:text-stone-100'
-            }`}
-          >
-            {node.title}
-          </a>
+          <ul key={node.href} className="mb-8 space-y-0.5">
+            <ChildNode node={node} currentPath={currentPath} textSize={textSize} />
+          </ul>
         )
       })}
     </>

@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro'
 import { getCollection, type CollectionEntry } from 'astro:content'
 import path from 'node:path'
 import { toMarkdownHref } from '../lib/markdown-routes'
-import { computeStrippedSlug, normalizeCollectionEntries, buildSidebarTree } from '../lib/sidebar-tree'
+import { computeStrippedSlug, buildSidebarTree, buildApiSidebarNodes, buildApiSidebarData } from '../lib/sidebar-tree'
 import type { SidebarNode } from '../lib/sidebar-types'
 
 const SITE_URL = 'https://botpress.com/docs'
@@ -49,17 +49,15 @@ function collectOrderedSlugs(nodes: SidebarNode[]): string[] {
 }
 
 export const GET: APIRoute = async () => {
-  const entries = await getCollection('docs')
-  const articles = normalizeCollectionEntries(entries, contentDir)
-  const titleMap = new Map<string, string>()
-  for (const a of articles) {
-    titleMap.set(a.slug, a.title)
-  }
+  const docsEntries = await getCollection('docs')
+  const apiEntries = await getCollection('api')
+  const { titleMap, methodMap } = buildApiSidebarData(docsEntries, apiEntries, contentDir)
+  const apiNodes = buildApiSidebarNodes(apiEntries)
 
-  const treeResult = buildSidebarTree(titleMap, contentDir)
+  const treeResult = buildSidebarTree(titleMap, contentDir, methodMap, apiNodes)
 
   const entryBySlug = new Map<string, CollectionEntry<'docs'>>()
-  for (const entry of entries) {
+  for (const entry of docsEntries) {
     const rawSlug = entry.id.replace(/\.(md|mdx)$/, '')
     const slug = computeStrippedSlug(rawSlug, contentDir)
     entryBySlug.set(slug, entry)
