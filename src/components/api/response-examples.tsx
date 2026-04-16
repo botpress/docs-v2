@@ -4,7 +4,7 @@ import HighlightedCode from '@/components/api/highlighted-code'
 import CopyButton from '@/components/api/copy-button'
 import type { Schema, Endpoint } from '@/components/api/types'
 
-function generateSampleValue(schema: Schema | undefined, depth = 0): any {
+function generateSampleValue(schema: Schema | undefined, depth = 0): unknown {
   if (!schema || depth > 5) return null
 
   if (schema.example !== undefined) return schema.example
@@ -35,7 +35,7 @@ function generateSampleValue(schema: Schema | undefined, depth = 0): any {
       return []
     case 'object': {
       if (schema.properties) {
-        const obj: Record<string, any> = {}
+        const obj: Record<string, unknown> = {}
         for (const [key, propSchema] of Object.entries(schema.properties)) {
           const val = generateSampleValue(propSchema, depth + 1)
           if (val !== null) obj[key] = val
