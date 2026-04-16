@@ -1,5 +1,5 @@
 {
   "label": "API Reference",
   "root": true,
-  "sidebarPages": ["index"]
+  "sidebarPages": ["index", "admin-api", "chat-api", "files-api", "runtime-api", "tables-api"]
 }
