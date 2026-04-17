@@ -2,7 +2,7 @@ import SwaggerParser from '@apidevtools/swagger-parser'
 import fs from 'node:fs'
 import path from 'node:path'
 import os from 'node:os'
-import type { Loader } from 'astro/loaders'
+import type { DataStore, Loader, LoaderContext } from 'astro/loaders'
 import type { Endpoint } from '@/components/api/types'
 
 const STATIC_SPECS_DIR = path.resolve('./public/api-specs')
@@ -208,8 +208,8 @@ async function processSpec(
   spec: OpenApiSpec,
   apiSlug: string,
   apiLabel: string,
-  store: Parameters<Loader['load']>[0]['store'],
-  parseData: Parameters<Loader['load']>[0]['parseData']
+  store: DataStore,
+  parseData: LoaderContext['parseData']
 ) {
   let sortOrder = 0
 

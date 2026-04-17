@@ -3,6 +3,7 @@ import { z } from 'astro/zod'
 import { glob } from 'astro/loaders'
 import { runtimeApi, adminApi, tablesApi, filesApi } from '@botpress/api'
 import { apiLoader, type PackageApiSource, type StaticApiSource } from './astro/loaders/api-loader'
+import { EndpointSchema } from './components/api/types'
 
 const packageApis: PackageApiSource[] = [
   { api: adminApi, slug: 'admin-api', label: 'Admin API', key: 'admin' },
@@ -31,7 +32,7 @@ const api = defineCollection({
     apiSlug: z.string(),
     apiLabel: z.string(),
     sortOrder: z.number(),
-    endpoint: z.any(),
+    endpoint: EndpointSchema,
   }),
 })
 
