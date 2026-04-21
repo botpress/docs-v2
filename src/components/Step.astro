@@ -1,0 +1,35 @@
+---
+interface Props {
+  title?: string;
+  class?: string;
+}
+
+const { title, class: className } = Astro.props;
+---
+
+<div
+  class={`group/step relative flex items-start pb-5 [counter-increment:step] ${className || ""}`}
+>
+  <div
+    class="absolute top-11 h-[calc(100%-2.75rem)] w-px bg-stone-200/70 last:bg-gradient-to-b last:from-stone-200 last:via-stone-200 last:via-80% last:to-transparent dark:bg-white/10 dark:last:from-white/10 dark:last:via-white/10"
+  >
+  </div>
+  <div class="absolute ml-[-13px] py-2">
+    <div
+      class="flex size-7 shrink-0 items-center justify-center rounded-full bg-stone-50 font-semibold text-stone-900 text-xs before:content-[counter(step)] dark:bg-white/10 dark:text-stone-50"
+    >
+    </div>
+  </div>
+  <div class="w-full overflow-hidden pr-px pl-8">
+    {
+      title && (
+        <p class="mt-2 font-semibold text-stone-900 dark:text-stone-200">
+          {title}
+        </p>
+      )
+    }
+    <div class={`prose dark:prose-invert ${!title && "mt-2"}`}>
+      <slot />
+    </div>
+  </div>
+</div>

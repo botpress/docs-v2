@@ -3,10 +3,11 @@ title: Quickstart
 description: Build, test, and deploy your first AI agent.
 ---
 
-import { Tip, Note, Check } from '@/components/callout'
-import { Steps, Step } from '@/components/steps'
-import { Card } from '@/components/card'
-import { CardGroup } from '@/components/card-group'
+import Callout from '@/components/Callout.astro'
+import Steps from '@/components/Steps.astro'
+import Step from '@/components/Step.astro'
+import Card from '@/components/Card.astro'
+import CardGroup from '@/components/CardGroup.astro'
 
 It's easy to build an AI agent on Botpress in just a few minutes, regardless of your level of development experience.
 
@@ -16,7 +17,9 @@ By the end of this guide, you'll have a bot that:
 - Aligns with your branding
 - Has a unique, shareable link
 
-<Tip>Visual learner? Check out our [platform walkthrough on YouTube](https://www.youtube.com/watch?v=41U-ofr7MxE).</Tip>
+<Callout variant="tip">
+  Visual learner? Check out our [platform walkthrough on YouTube](https://www.youtube.com/watch?v=41U-ofr7MxE).
+</Callout>
 
 ## Step 1: Build your bot
 
@@ -29,10 +32,10 @@ By the end of this guide, you'll have a bot that:
   </Step>
 </Steps>
 
-<Note>
+<Callout variant="note">
   If you'd prefer to set your bot up from scratch, hit **Skip** and head over to the
   [tutorial](/tutorial/introduction)—we'll show you how to start building with Botpress Studio.
-</Note>
+</Callout>
 
 ## Step 2: Fine-tune your bot (Optional)
 
@@ -87,4 +90,4 @@ When you're ready to deploy your bot, select one of the options below:
   </Card>
 </CardGroup>
 
-<Check>You just built and deployed your first bot with Botpress!</Check>
+<Callout variant="check">You just built and deployed your first bot with Botpress!</Callout>

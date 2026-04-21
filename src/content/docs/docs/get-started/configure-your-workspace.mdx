@@ -2,14 +2,16 @@
 title: Configure your workspace
 ---
 
-import { Note, Tip } from '@/components/callout'
-import { Steps, Step } from '@/components/steps'
-import { Icon } from '@/components/icon'
-import { Frame } from '@/components/frame'
-import { Card } from '@/components/card'
+import Callout from '@/components/Callout.astro'
+import Steps from '@/components/Steps.astro'
+import Step from '@/components/Step.astro'
+import Icon from '@/components/Icon.astro'
+import Frame from '@/components/Frame.astro'
+import Card from '@/components/Card.astro'
 import { Badge } from '@/components/ui/badge'
-import { Tooltip } from '@/components/tooltip'
-import { Accordion, AccordionGroup } from '@/components/accordion'
+import Tooltip from '@/components/Tooltip.astro'
+import Accordion from '@/components/Accordion.astro'
+import AccordionGroup from '@/components/AccordionGroup.astro'
 
 In Botpress, your workspace is the environment where you organize, manage, and collaborate on your agent projects.
 
@@ -29,15 +31,15 @@ To add a new workspace:
   <Step>Enter a name for the new workspace, then select **Create**.</Step>
 </Steps>
 
-<Note>There is no limit to the number of workspaces you can create on one account.</Note>
+<Callout variant="note">There is no limit to the number of workspaces you can create on one account.</Callout>
 
 ## Manage your agents
 
 You can manage all your agents in your workspace's **<Icon icon="house"/> Home** menu:
 
 <Frame>
-  <img alt="Home" className="block dark:hidden" src="/assets/get-started/home.png" />
-  <img alt="Home" className="hidden dark:block" src="/assets/get-started/home-dark.png" />
+  <img alt="Home" class="block dark:hidden" src="/assets/get-started/home.png" />
+  <img alt="Home" class="hidden dark:block" src="/assets/get-started/home-dark.png" />
 </Frame>
 
 ### Create a new agent
@@ -52,7 +54,9 @@ To rename an existing agent, select <Icon icon="ellipsis-vertical"/> then **<Ico
 
 You can enable [Always Alive](#always-alive) on any agent to keep it running continuously, even when no conversation is active. This allows for quicker response times when users first begin a conversation.
 
-<Note>The number of agents you can enable Always Alive for depends on your [plan](https://botpress.com/pricing).</Note>
+<Callout variant="note">
+  The number of agents you can enable Always Alive for depends on your [plan](https://botpress.com/pricing).
+</Callout>
 
 ### Copy an existing agent
 
@@ -77,10 +81,10 @@ To delete an agent, select <Icon icon="ellipsis-vertical"/> then **<Icon icon="t
 
 You can manage any integrations you've built and deployed to your workspace in the **<Icon icon="boxes"/> Integrations** menu.
 
-<Note>
+<Callout variant="note">
   If you just want to install third-party integrations, you can ignore this menu—instead, check out the official
   [integrations documentation](/integrations/get-started/introduction).
-</Note>
+</Callout>
 
 To learn more about building and deploying your own integrations:
 
@@ -93,13 +97,13 @@ To learn more about building and deploying your own integrations:
 You can track information about usage across your workspace in the **<Icon icon="chart-pie"/> Usage** menu.
 
 <Frame>
-  <img alt="Usage" className="block dark:hidden" src="/assets/get-started/usage.png" />
-  <img alt="Usage" className="hidden dark:block" src="/assets/get-started/usage-dark.png" />
+  <img alt="Usage" class="block dark:hidden" src="/assets/get-started/usage.png" />
+  <img alt="Usage" class="hidden dark:block" src="/assets/get-started/usage-dark.png" />
 </Frame>
 
 This page contains a breakdown of each type of usage quota.
 
-<Note>You can always increase any limits in the [Billing menu](#billing).</Note>
+<Callout variant="note">You can always increase any limits in the [Billing menu](#billing).</Callout>
 
 ### AI Spend
 
@@ -111,9 +115,9 @@ Your **AI Spend** quota is the budget you allocate for your agent's usage of LLM
 
 AI Spend cost is charged at cost, meaning you pay for the exact amount of tokens used by your agent without any additional markup. You can find detailed information about your agent's AI spend usage for each individual action in its [logs](/studio/concepts/debugger-logs-json#logs).
 
-<Tip>
+<Callout variant="tip">
   You can estimate your required AI Spend using our [AI Spend Calculator](https://botpress.com/ai-spend-calculator).
-</Tip>
+</Callout>
 
 ### File Storage
 

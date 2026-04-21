@@ -2,8 +2,8 @@
 title: Add knowledge sources
 ---
 
-import { Note, Tip } from '@/components/callout'
-import { Icon } from '@/components/icon'
+import Callout from '@/components/Callout.astro'
+import Icon from '@/components/Icon.astro'
 
 You can add and manage knowledge sources in the **<Icon icon="book-open-text"/> Knowledge** section of your agent's menu. Here's a breakdown of each sub-section:
 
@@ -11,7 +11,9 @@ You can add and manage knowledge sources in the **<Icon icon="book-open-text"/> 
 
 You can view data your agent has stored in the **Tables** sub-section. Select any table to view its contents.
 
-<Note>You can [create new tables in Studio](/studio/concepts/tables) if you want your agent to store custom data.</Note>
+<Callout variant="note">
+  You can [create new tables in Studio](/studio/concepts/tables) if you want your agent to store custom data.
+</Callout>
 
 ---
 
@@ -21,7 +23,7 @@ You can manage which sources your bot has access to in the **Knowledge Bases** s
 
 Every new agent has a default empty Knowledge Base. Open it, then select **+ Add Knowledge Source** to provide your agent with new sources—it'll automatically reference them when answering users.
 
-<Tip>You can also select **+ Add Knowledge Base** to create an entirely new Knowledge Base.</Tip>
+<Callout variant="tip">You can also select **+ Add Knowledge Base** to create an entirely new Knowledge Base.</Callout>
 
 ### Manage website indexing
 
