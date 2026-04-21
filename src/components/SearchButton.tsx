@@ -1,5 +1,3 @@
-'use client'
-
 export default function SearchButton() {
   const openSearch = () => {
     window.dispatchEvent(new CustomEvent('hc:open-search'))
