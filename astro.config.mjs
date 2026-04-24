@@ -16,9 +16,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  redirects: {
-    '/sitemap.xml': '/sitemap-index.xml',
-  },
   markdown: {
     remarkPlugins: [remarkGfm],
     rehypePlugins: [
