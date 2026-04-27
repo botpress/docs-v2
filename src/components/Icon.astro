@@ -8,6 +8,10 @@ interface Props {
 
 const { icon, class: className } = Astro.props;
 const IconComponent = icons[icon];
+
+if (!IconComponent) {
+  throw new Error(`Icon "${icon}" not found in lucide-react`);
+}
 ---
 
 <IconComponent className={className} />
