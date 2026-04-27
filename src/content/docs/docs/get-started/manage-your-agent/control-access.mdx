@@ -2,10 +2,11 @@
 title: Control access to your agent
 ---
 
-import { Info, Note } from '@/components/callout'
-import { Steps, Step } from '@/components/steps'
-import { Icon } from '@/components/icon'
-import { Frame } from '@/components/frame'
+import { Info, Note } from '@/components/callouts'
+import Steps from '@/components/Steps.astro'
+import Step from '@/components/Step.astro'
+import Icon from '@/components/Icon.astro'
+import Frame from '@/components/Frame.astro'
 
 If you're an owner or administrator in your workspace, you can restrict who in your Workspace has access to your agent.
 
@@ -14,7 +15,7 @@ If you're an owner or administrator in your workspace, you can restrict who in y
 <Steps>
   <Step>
     Go to **
-    <Icon icon="settings" /> Settings** in your agent's menu.
+    <Icon icon="Settings" /> Settings** in your agent's menu.
   </Step>
   <Step>Select **Access Control**.</Step>
 </Steps>
@@ -22,8 +23,8 @@ If you're an owner or administrator in your workspace, you can restrict who in y
 Here, you can select which members of your Workspace have access to your agent:
 
 <Frame>
-  <img alt="Access control" className="block dark:hidden" src="/assets/manage-your-agent/access-control.png" />
-  <img alt="Access control" className="hidden dark:block" src="/assets/manage-your-agent/access-control-dark.png" />
+  <img alt="Access control" class="block dark:hidden" src="/assets/manage-your-agent/access-control.png" />
+  <img alt="Access control" class="hidden dark:block" src="/assets/manage-your-agent/access-control-dark.png" />
 </Frame>
 
 When you're done, select **Save**.

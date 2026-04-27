@@ -1,0 +1,11 @@
+---
+import Callout from './Callout.astro';
+
+interface Props {
+  title?: string;
+  class?: string;
+}
+
+const { title, class: className } = Astro.props;
+---
+<Callout variant="check" title={title} class={className}><slot /></Callout>
