@@ -35,7 +35,7 @@ const apiEntries = await getCollection("api");
 const { titleMap, methodMap } = buildApiSidebarData(
   docsEntries,
   apiEntries,
-  contentDir
+  contentDir,
 );
 const apiNodes = buildApiSidebarNodes(apiEntries);
 

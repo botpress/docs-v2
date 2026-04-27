@@ -1,6 +1,6 @@
 ---
 import { icons } from "lucide-react";
-import clsx from 'clsx'
+import clsx from "clsx";
 
 interface Props {
   icon: keyof typeof icons;
@@ -15,7 +15,7 @@ if (!IconComponent) {
 }
 ---
 
-<IconComponent className={clsx(className,'size-4','icon')} />
+<IconComponent className={clsx(className, "size-4", "icon")} />
 
 <style>
   :global(p) .icon {
