@@ -4,6 +4,9 @@ pre-commit:
     format:
       glob: '**/*.{ts,tsx,md,mdx,css,json,yml}'
       run: bunx oxfmt --check {staged_files}
+    format-astro:
+      glob: '**/*.astro'
+      run: bunx prettier --check {staged_files}
     lint:
       glob: '**/*.{ts,tsx}'
       run: bunx oxlint {staged_files}
