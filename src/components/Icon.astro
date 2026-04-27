@@ -1,5 +1,6 @@
 ---
 import { icons } from "lucide-react";
+import clsx from 'clsx'
 
 interface Props {
   icon: keyof typeof icons;
@@ -14,4 +15,10 @@ if (!IconComponent) {
 }
 ---
 
-<IconComponent className={className} />
+<IconComponent className={clsx(className,'size-4','icon')} />
+
+<style>
+  :global(p) .icon {
+    display: inline;
+  }
+</style>
