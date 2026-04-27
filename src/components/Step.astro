@@ -8,7 +8,7 @@ const { title, class: className } = Astro.props;
 ---
 
 <div
-  class={`group/step relative flex items-start pb-5 [counter-increment:step] ${className || ""}`}
+  class:list={['group/step relative flex items-start pb-5 [counter-increment:step]', className]}
 >
   <div
     class="absolute top-11 h-[calc(100%-2.75rem)] w-px bg-stone-200/70 last:bg-gradient-to-b last:from-stone-200 last:via-stone-200 last:via-80% last:to-transparent dark:bg-white/10 dark:last:from-white/10 dark:last:via-white/10"
@@ -28,7 +28,7 @@ const { title, class: className } = Astro.props;
         </p>
       )
     }
-    <div class={`prose dark:prose-invert ${!title && "mt-2"}`}>
+    <div class:list={['prose dark:prose-invert', { 'mt-2': !title }]}>
       <slot />
     </div>
   </div>

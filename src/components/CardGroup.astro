@@ -1,22 +1,21 @@
 ---
 interface Props {
-  cols?: number | string;
+  cols?: number;
   class?: string;
 }
 
 const { cols = 2, class: className } = Astro.props;
-const colCount = Number(cols);
-
-const colClasses: Record<number, string> = {
-  1: "sm:grid-cols-1",
-  2: "sm:grid-cols-2",
-  3: "sm:grid-cols-3",
-  4: "sm:grid-cols-4",
-};
-
-const gridClass = colClasses[colCount] || colClasses[2];
 ---
 
-<div class={`not-prose grid gap-4 ${gridClass} ${className || ""}`}>
+<div class:list={[
+  'not-prose grid gap-4',
+  className,
+  {
+    'sm:grid-cols-1': cols === 1,
+    'sm:grid-cols-2': cols === 2,
+    'sm:grid-cols-3': cols === 3,
+    'sm:grid-cols-4': cols === 4,
+  },
+]}>
   <slot />
 </div>

@@ -7,7 +7,7 @@ interface Props {
 const { tip, class: className } = Astro.props;
 ---
 
-<span class={`group/tooltip relative inline-block ${className || ""}`}>
+<span class:list={['group/tooltip relative inline-block', className]}>
   <span
     class="cursor-pointer underline decoration-stone-400 decoration-dotted decoration-2 underline-offset-4 dark:decoration-stone-500"
   >
