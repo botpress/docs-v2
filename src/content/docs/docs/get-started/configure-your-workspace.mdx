@@ -2,7 +2,7 @@
 title: Configure your workspace
 ---
 
-import Callout from '@/components/Callout.astro'
+import { Note, Tip } from '@/components/callouts'
 import Steps from '@/components/Steps.astro'
 import Step from '@/components/Step.astro'
 import Icon from '@/components/Icon.astro'
@@ -31,7 +31,7 @@ To add a new workspace:
   <Step>Enter a name for the new workspace, then select **Create**.</Step>
 </Steps>
 
-<Callout variant="note">There is no limit to the number of workspaces you can create on one account.</Callout>
+<Note>There is no limit to the number of workspaces you can create on one account.</Note>
 
 ## Manage your agents
 
@@ -54,9 +54,7 @@ To rename an existing agent, select <Icon icon="EllipsisVertical"/> then **<Icon
 
 You can enable [Always Alive](#always-alive) on any agent to keep it running continuously, even when no conversation is active. This allows for quicker response times when users first begin a conversation.
 
-<Callout variant="note">
-  The number of agents you can enable Always Alive for depends on your [plan](https://botpress.com/pricing).
-</Callout>
+<Note>The number of agents you can enable Always Alive for depends on your [plan](https://botpress.com/pricing).</Note>
 
 ### Copy an existing agent
 
@@ -81,10 +79,10 @@ To delete an agent, select <Icon icon="EllipsisVertical"/> then **<Icon icon="Tr
 
 You can manage any integrations you've built and deployed to your workspace in the **<Icon icon="Boxes"/> Integrations** menu.
 
-<Callout variant="note">
+<Note>
   If you just want to install third-party integrations, you can ignore this menu—instead, check out the official
   [integrations documentation](/integrations/get-started/introduction).
-</Callout>
+</Note>
 
 To learn more about building and deploying your own integrations:
 
@@ -103,7 +101,7 @@ You can track information about usage across your workspace in the **<Icon icon=
 
 This page contains a breakdown of each type of usage quota.
 
-<Callout variant="note">You can always increase any limits in the [Billing menu](#billing).</Callout>
+<Note>You can always increase any limits in the [Billing menu](#billing).</Note>
 
 ### AI Spend
 
@@ -115,9 +113,9 @@ Your **AI Spend** quota is the budget you allocate for your agent's usage of LLM
 
 AI Spend cost is charged at cost, meaning you pay for the exact amount of tokens used by your agent without any additional markup. You can find detailed information about your agent's AI spend usage for each individual action in its [logs](/studio/concepts/debugger-logs-json#logs).
 
-<Callout variant="tip">
+<Tip>
   You can estimate your required AI Spend using our [AI Spend Calculator](https://botpress.com/ai-spend-calculator).
-</Callout>
+</Tip>
 
 ### File Storage
 

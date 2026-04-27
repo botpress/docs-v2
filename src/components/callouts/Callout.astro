@@ -31,46 +31,55 @@ const config: Record<
     border: string;
     bg: string;
     text: string;
+    iconComponent: typeof InfoIcon;
   }
 > = {
   note: {
     border: "border-blue-200 dark:border-blue-900",
     bg: "bg-blue-50 dark:bg-blue-600/20",
     text: "text-blue-800 dark:text-blue-300",
+    iconComponent: InfoIcon,
   },
   info: {
     border: "border-fuchsia-200/50 dark:border-purple-500/30",
     bg: "bg-fuchsia-50/50 dark:bg-fuchsia-500/10",
     text: "text-fuchsia-900 dark:text-fuchsia-200",
+    iconComponent: InfoIcon,
   },
   tip: {
     border: "border-green-200 dark:border-green-900",
     bg: "bg-green-50 dark:bg-green-600/20",
     text: "text-green-800 dark:text-green-300",
+    iconComponent: Lightbulb,
   },
   check: {
     border: "border-green-200 dark:border-green-900",
     bg: "bg-green-50 dark:bg-green-600/20",
     text: "text-green-800 dark:text-green-300",
+    iconComponent: CircleCheck,
   },
   warning: {
     border: "border-yellow-200 dark:border-yellow-900",
     bg: "bg-yellow-50 dark:bg-yellow-600/20",
     text: "text-yellow-800 dark:text-yellow-300",
+    iconComponent: TriangleAlert,
   },
   danger: {
     border: "border-red-200 dark:border-red-900",
     bg: "bg-red-50 dark:bg-red-600/20",
     text: "text-red-800 dark:text-red-300",
+    iconComponent: OctagonAlert,
   },
   goodtoknow: {
     border: "border-green-200 dark:border-green-900",
     bg: "bg-green-50 dark:bg-green-600/20",
     text: "text-green-800 dark:text-green-300",
+    iconComponent: NotebookPen,
   },
 };
 
 const c = config[variant];
+const IconComponent = c.iconComponent;
 const iconClass = `mt-0.5 h-4 w-4 shrink-0 ${c.text}`;
 ---
 
@@ -78,13 +87,7 @@ const iconClass = `mt-0.5 h-4 w-4 shrink-0 ${c.text}`;
   role="alert"
   class={`my-4 flex gap-3 overflow-hidden rounded-xl border px-5 py-4 text-sm ${c.border} ${c.bg} ${className || ""}`}
 >
-  {variant === "note" && <InfoIcon className={iconClass} />}
-  {variant === "info" && <InfoIcon className={iconClass} />}
-  {variant === "tip" && <Lightbulb className={iconClass} />}
-  {variant === "check" && <CircleCheck className={iconClass} />}
-  {variant === "warning" && <TriangleAlert className={iconClass} />}
-  {variant === "danger" && <OctagonAlert className={iconClass} />}
-  {variant === "goodtoknow" && <NotebookPen className={iconClass} />}
+  <IconComponent className={iconClass} />
 
   <div
     class={`min-w-0 ${c.text} [&_a]:border-current [&_a]:text-current [&_code]:text-current [&_p]:leading-relaxed`}
