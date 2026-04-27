@@ -15,7 +15,10 @@ const {
 ---
 
 <details
-  class={`group/accordion mb-3 cursor-default overflow-hidden rounded-2xl border border-stone-200/70 bg-white dark:border-white/10 dark:bg-[#0b0c0e] ${className || ""}`}
+  class:list={[
+    "group/accordion mb-3 cursor-default overflow-hidden rounded-2xl border border-stone-200/70 bg-white dark:border-white/10 dark:bg-[#0b0c0e]",
+    className,
+  ]}
   open={defaultOpen}
 >
   <summary
