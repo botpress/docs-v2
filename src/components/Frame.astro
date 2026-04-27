@@ -1,0 +1,32 @@
+---
+interface Props {
+  description?: string;
+  class?: string;
+}
+
+const { description, class: className } = Astro.props;
+---
+
+<div class={className}>
+  <div
+    class="not-prose relative overflow-hidden rounded-2xl bg-stone-50/50 p-2 dark:bg-stone-800/25"
+  >
+    <div
+      class="relative flex w-full justify-center overflow-hidden rounded-xl bg-white dark:bg-stone-800"
+    >
+      <slot />
+    </div>
+    {
+      description && (
+        <div class="relative mt-3 flex w-full justify-center rounded-2xl bg-white px-8 pt-0 pb-2 text-sm text-stone-700 dark:bg-stone-800 dark:text-stone-400">
+          <p>{description}</p>
+        </div>
+      )
+    }
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 rounded-2xl border border-black/5 dark:border-white/5"
+    >
+    </div>
+  </div>
+</div>

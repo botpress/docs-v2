@@ -1,0 +1,17 @@
+---
+import { icons } from "lucide-react";
+
+interface Props {
+  icon: keyof typeof icons;
+  class?: string;
+}
+
+const { icon, class: className } = Astro.props;
+const IconComponent = icons[icon];
+
+if (!IconComponent) {
+  throw new Error(`Icon "${icon}" not found in lucide-react`);
+}
+---
+
+<IconComponent className={className} />

@@ -2,21 +2,22 @@
 title: Configure Human Handoff
 ---
 
-import { Tip } from '@/components/callout'
-import { Steps, Step } from '@/components/steps'
-import { Icon } from '@/components/icon'
-import { Frame } from '@/components/frame'
-import { Card } from '@/components/card'
+import { Tip } from '@/components/callouts'
+import Steps from '@/components/Steps.astro'
+import Step from '@/components/Step.astro'
+import Icon from '@/components/Icon.astro'
+import Frame from '@/components/Frame.astro'
+import Card from '@/components/Card.astro'
 import { Badge } from '@/components/ui/badge'
-import { Tooltip } from '@/components/tooltip'
+import Tooltip from '@/components/Tooltip.astro'
 
-If you want to allow a live agent to join your agent's conversations, you can configure this in the **<Icon icon="message-square-reply"/> Human Handoff** section of your bot's menu.
+If you want to allow a live agent to join your agent's conversations, you can configure this in the **<Icon icon="MessageSquareReply"/> Human Handoff** section of your bot's menu.
 
 ## Setup
 
 To get started using Human Handoff, you need to install and configure the official Human-in-the-Loop (HITL) integration:
 
-<Card title="Configure HITL" href="/integrations/integration-guides/hitl/introduction" icon="plug" horizontal>
+<Card title="Configure HITL" href="/integrations/integration-guides/hitl/introduction" icon="Plug" horizontal>
   Install and configure the official integration{' '}
   <Tooltip tip="This feature requires a Botpress Plus plan or higher.">
     <Badge variant="outline">Plus</Badge>
@@ -38,14 +39,10 @@ When you've finished setting up the integration, you'll have access to the Human
 When a user triggers Human Handoff, a ticket is opened. You can view your tickets in the left sidebar:
 
 <Frame>
+  <img alt="Pending conversation" class="block dark:hidden" src="/assets/manage-your-agent/pending-conversation.png" />
   <img
     alt="Pending conversation"
-    className="block dark:hidden"
-    src="/assets/manage-your-agent/pending-conversation.png"
-  />
-  <img
-    alt="Pending conversation"
-    className="hidden dark:block"
+    class="hidden dark:block"
     src="/assets/manage-your-agent/pending-conversation-dark.png"
   />
 </Frame>
@@ -56,17 +53,13 @@ Select any ticket to view the conversation with the user.
 
 ### Assign a ticket
 
-You can assign a ticket to anyone in your Workspace, including yourself. For example, select **<Icon icon="user-round"/> Assign to me**:
+You can assign a ticket to anyone in your Workspace, including yourself. For example, select **<Icon icon="UserRound"/> Assign to me**:
 
 <Frame>
+  <img alt="Assign conversation" class="block dark:hidden" src="/assets/manage-your-agent/assign-conversation.png" />
   <img
     alt="Assign conversation"
-    className="block dark:hidden"
-    src="/assets/manage-your-agent/assign-conversation.png"
-  />
-  <img
-    alt="Assign conversation"
-    className="hidden dark:block"
+    class="hidden dark:block"
     src="/assets/manage-your-agent/assign-conversation-dark.png"
   />
 </Frame>
@@ -74,14 +67,14 @@ You can assign a ticket to anyone in your Workspace, including yourself. For exa
 Now you can chat directly with the user:
 
 <Frame>
-  <img alt="Respond to user" className="block dark:hidden" src="/assets/manage-your-agent/respond-to-user.png" />
-  <img alt="Respond to user" className="hidden dark:block" src="/assets/manage-your-agent/respond-to-user-dark.png" />
+  <img alt="Respond to user" class="block dark:hidden" src="/assets/manage-your-agent/respond-to-user.png" />
+  <img alt="Respond to user" class="hidden dark:block" src="/assets/manage-your-agent/respond-to-user-dark.png" />
 </Frame>
 
 ### Close a ticket
 
 {/* vale Vale.Spelling = NO */}
-When you've resolved the conversation with the user, select **Resume Chatbot <Icon icon="undo-2"/>**. This removes you from the conversation and lets the user keep chatting with your agent.
+When you've resolved the conversation with the user, select **Resume Chatbot <Icon icon="Undo2"/>**. This removes you from the conversation and lets the user keep chatting with your agent.
 {/* vale Vale.Spelling = YES */}
 
 ## Testing
@@ -96,18 +89,18 @@ You can test Human Handoff by using your agent's preview to simulate an escalati
     <Frame>
       <img
         alt="Trigger Human Handoff"
-        className="block dark:hidden"
+        class="block dark:hidden"
         src="/assets/manage-your-agent/trigger-human-handoff.png"
       />
       <img
         alt="Trigger Human Handoff"
-        className="hidden dark:block"
+        class="hidden dark:block"
         src="/assets/manage-your-agent/trigger-human-handoff-dark.png"
       />
     </Frame>
 
   </Step>
   <Step>
-    Navigate to the Dashboard, then go to the bot's **<Icon icon="message-square-reply"/> Human Handoff** menu. From there, you can assign and interact with the ticket.
+    Navigate to the Dashboard, then go to the bot's **<Icon icon="MessageSquareReply"/> Human Handoff** menu. From there, you can assign and interact with the ticket.
   </Step>
 </Steps>
