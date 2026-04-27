@@ -22,6 +22,7 @@ import {
   BreadcrumbSeparator,
 } from "../components/ui/breadcrumb";
 import path from "node:path";
+import { cleanupHeadings } from "@/lib/cleanup-headings";
 
 export async function getStaticPaths() {
   const entries = await getCollection("docs");
@@ -40,10 +41,13 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content, headings } = await render(entry);
+const renderResult = await render(entry);
 const title = entry.data.title;
 const useProse = entry.data.prose !== false;
-const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+
+const Content = renderResult.Content;
+
+const headings = cleanupHeadings(entry.body ?? "", renderResult.headings);
 const markdownUrl = toMarkdownPath(Astro.url.pathname);
 
 const contentDir = path.resolve("./src/content/docs");
@@ -114,10 +118,10 @@ const { prev, next } = getAdjacentPages(sidebarTree, currentPath);
         </div>
       </article>
 
-      {tocHeadings.length > 0 && (
+      {headings.length > 0 && (
         <aside class="hidden w-64 shrink-0 xl:block pl-10">
           <div class="sticky top-10">
-            <ClerkTOC client:load headings={tocHeadings} />
+            <ClerkTOC client:load headings={headings} />
           </div>
         </aside>
       )}
