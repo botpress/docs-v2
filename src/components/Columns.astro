@@ -1,11 +1,10 @@
 ---
 interface Props {
-  cols?: number | string;
+  cols?: number;
   class?: string;
 }
 
 const { cols = 2, class: className } = Astro.props;
-const colCount = Number(cols);
 
 const colClasses: Record<number, string> = {
   1: "sm:grid-cols-1",
@@ -14,7 +13,7 @@ const colClasses: Record<number, string> = {
   4: "sm:grid-cols-4",
 };
 
-const gridClass = colClasses[colCount] || colClasses[2];
+const gridClass = colClasses[cols] || colClasses[2];
 ---
 
 <div
