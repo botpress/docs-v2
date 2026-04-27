@@ -24,7 +24,11 @@ const docsEntries = await getCollection("docs");
 const apiEntries = await getCollection("api");
 const contentDir = path.resolve("./src/content/docs");
 
-const { titleMap, methodMap } = buildApiSidebarData(docsEntries, apiEntries, contentDir);
+const { titleMap, methodMap } = buildApiSidebarData(
+  docsEntries,
+  apiEntries,
+  contentDir,
+);
 const apiNodes = buildApiSidebarNodes(apiEntries);
 
 const result = buildSidebarTree(titleMap, contentDir, methodMap, apiNodes);
