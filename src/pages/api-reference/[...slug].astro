@@ -23,7 +23,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { title, endpoint, apiLabel } = entry.data;
+const { title, description, endpoint, apiLabel } = entry.data;
 
 const markdownUrl = toMarkdownPath(Astro.url.pathname);
 
@@ -52,7 +52,7 @@ const sidebarTree =
 const { prev, next } = getAdjacentPages(sidebarTree, currentPath);
 ---
 
-<DocsLayout title={title} breadcrumbs={breadcrumbs}>
+<DocsLayout title={title} description={description} breadcrumbs={breadcrumbs}>
   <div
     class="flex w-full justify-center px-8 pt-10 pb-8 sm:px-8 sm:pt-12 sm:pb-10 lg:px-16"
     data-pagefind-body

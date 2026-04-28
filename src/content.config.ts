@@ -14,11 +14,15 @@ const packageApis: PackageApiSource[] = [
 
 const staticApis: StaticApiSource[] = [{ file: 'chat-openapi.json', slug: 'chat-api', label: 'Chat API' }]
 
+export const DEFAULT_DESCRIPTION = 'Botpress documentation for building, deploying, and managing AI agents.'
+export const DEFAULT_API_DESCRIPTION =
+  'Explore the Botpress API reference for endpoints, parameters, and response schemas.'
+
 const docs = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/docs' }),
   schema: z.object({
     title: z.string(),
-    description: z.string().optional(),
+    description: z.string().default(DEFAULT_DESCRIPTION),
     prose: z.boolean().default(true),
   }),
 })
@@ -27,7 +31,7 @@ const api = defineCollection({
   loader: apiLoader({ packageApis, staticApis }),
   schema: z.object({
     title: z.string(),
-    description: z.string().optional(),
+    description: z.string().default(DEFAULT_API_DESCRIPTION),
     method: z.string(),
     apiSlug: z.string(),
     apiLabel: z.string(),
