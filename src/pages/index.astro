@@ -2,10 +2,10 @@
 import PageOptions from "../components/page-options";
 import DocsLayout from "../layouts/DocsLayout.astro";
 import { getCollection, render } from "astro:content";
-import { DEFAULT_DESCRIPTION } from "../content.config";
 import { toMarkdownPath } from "../lib/markdown-routes";
 import { computeStrippedSlug } from "../lib/sidebar-tree";
 import path from "node:path";
+import { DEFAULT_DESCRIPTION } from "../astro/loaders/docs-loader";
 
 const contentDir = path.resolve("./src/content/docs");
 const entries = await getCollection("docs");
@@ -26,10 +26,7 @@ if (!rootEntry) {
 
 const { Content } = await render(rootEntry);
 const title = rootEntry.data.title;
-const description = rootEntry.data.description;
-if (description === DEFAULT_DESCRIPTION) {
-  console.warn(`\x1b[33m[SEO] Missing description: ${rootEntry.id}\x1b[0m`);
-}
+const description = rootEntry.data.description ?? DEFAULT_DESCRIPTION;
 const useProse = rootEntry.data.prose !== false;
 const markdownUrl = toMarkdownPath(Astro.url.pathname);
 ---

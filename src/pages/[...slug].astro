@@ -3,7 +3,6 @@ import PageOptions from "../components/page-options";
 import PageNavigation from "../components/page-navigation";
 import DocsLayout from "../layouts/DocsLayout.astro";
 import { getCollection, render } from "astro:content";
-import { DEFAULT_DESCRIPTION } from "../content.config";
 import { toMarkdownPath } from "../lib/markdown-routes";
 import {
   computeStrippedSlug,
@@ -24,6 +23,7 @@ import {
 } from "../components/ui/breadcrumb";
 import path from "node:path";
 import { cleanupHeadings } from "@/lib/cleanup-headings";
+import { DEFAULT_DESCRIPTION } from "../astro/loaders/docs-loader";
 
 export async function getStaticPaths() {
   const entries = await getCollection("docs");
@@ -44,10 +44,7 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const renderResult = await render(entry);
 const title = entry.data.title;
-const description = entry.data.description;
-if (description === DEFAULT_DESCRIPTION) {
-  console.warn(`\x1b[33m[SEO] Missing description: ${entry.id}\x1b[0m`);
-}
+const description = entry.data.description ?? DEFAULT_DESCRIPTION;
 const useProse = entry.data.prose !== false;
 
 const Content = renderResult.Content;
