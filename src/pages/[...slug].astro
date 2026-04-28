@@ -23,6 +23,7 @@ import {
 } from "../components/ui/breadcrumb";
 import path from "node:path";
 import { cleanupHeadings } from "@/lib/cleanup-headings";
+import { DEFAULT_DESCRIPTION } from "../astro/loaders/docs-loader";
 
 export async function getStaticPaths() {
   const entries = await getCollection("docs");
@@ -43,6 +44,7 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const renderResult = await render(entry);
 const title = entry.data.title;
+const description = entry.data.description ?? DEFAULT_DESCRIPTION;
 const useProse = entry.data.prose !== false;
 
 const Content = renderResult.Content;
@@ -74,7 +76,7 @@ const sidebarTree =
 const { prev, next } = getAdjacentPages(sidebarTree, currentPath);
 ---
 
-<DocsLayout title={title} breadcrumbs={breadcrumbs}>
+<DocsLayout title={title} description={description} breadcrumbs={breadcrumbs}>
   {
     !useProse ? (
       <div

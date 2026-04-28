@@ -5,6 +5,7 @@ import { getCollection, render } from "astro:content";
 import { toMarkdownPath } from "../lib/markdown-routes";
 import { computeStrippedSlug } from "../lib/sidebar-tree";
 import path from "node:path";
+import { DEFAULT_DESCRIPTION } from "../astro/loaders/docs-loader";
 
 const contentDir = path.resolve("./src/content/docs");
 const entries = await getCollection("docs");
@@ -25,11 +26,12 @@ if (!rootEntry) {
 
 const { Content } = await render(rootEntry);
 const title = rootEntry.data.title;
+const description = rootEntry.data.description ?? DEFAULT_DESCRIPTION;
 const useProse = rootEntry.data.prose !== false;
 const markdownUrl = toMarkdownPath(Astro.url.pathname);
 ---
 
-<DocsLayout title={title}>
+<DocsLayout title={title} description={description}>
   {
     useProse ? (
       <div

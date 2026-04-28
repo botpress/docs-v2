@@ -224,7 +224,7 @@ async function processSpec(
       const filename = slugify(operationId || `${method}-${apiPath.replace(/\//g, '-')}`)
       const id = `${apiSlug}/endpoints/${filename}`
       const title = operationId || `${method.toUpperCase()} ${apiPath}`
-      const description = op.description?.split('\n')[0]?.slice(0, 200) || ''
+      const description = op.description?.split('\n')[0]?.slice(0, 200) || undefined
 
       const data = await parseData({
         id,

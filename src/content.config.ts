@@ -1,8 +1,8 @@
 import { defineCollection } from 'astro:content'
 import { z } from 'astro/zod'
-import { glob } from 'astro/loaders'
 import { runtimeApi, adminApi, tablesApi, filesApi } from '@botpress/api'
 import { apiLoader, type PackageApiSource, type StaticApiSource } from './astro/loaders/api-loader'
+import { docsLoader } from './astro/loaders/docs-loader'
 import { EndpointSchema } from './components/api/types'
 
 const packageApis: PackageApiSource[] = [
@@ -14,8 +14,11 @@ const packageApis: PackageApiSource[] = [
 
 const staticApis: StaticApiSource[] = [{ file: 'chat-openapi.json', slug: 'chat-api', label: 'Chat API' }]
 
+export const DEFAULT_API_DESCRIPTION =
+  'Explore the Botpress API reference for endpoints, parameters, and response schemas.'
+
 const docs = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/docs' }),
+  loader: docsLoader({ pattern: '**/*.{md,mdx}', base: './src/content/docs' }),
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
@@ -27,7 +30,7 @@ const api = defineCollection({
   loader: apiLoader({ packageApis, staticApis }),
   schema: z.object({
     title: z.string(),
-    description: z.string().optional(),
+    description: z.string().default(DEFAULT_API_DESCRIPTION),
     method: z.string(),
     apiSlug: z.string(),
     apiLabel: z.string(),

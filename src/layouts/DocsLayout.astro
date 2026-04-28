@@ -15,10 +15,11 @@ import { siteConfig } from "../lib/site-config";
 import path from "node:path";
 interface Props {
   title: string;
+  description: string;
   breadcrumbs?: { label: string; href?: string }[];
 }
 
-const { title, breadcrumbs } = Astro.props;
+const { title, description, breadcrumbs } = Astro.props;
 
 const docsEntries = await getCollection("docs");
 const apiEntries = await getCollection("api");
@@ -55,7 +56,10 @@ const navItems: { label: string; href: string; icon?: string }[] = [
 ];
 ---
 
-<BaseLayout title={siteConfig.name ? `${title} – ${siteConfig.name}` : title}>
+<BaseLayout
+  title={siteConfig.name ? `${title} – ${siteConfig.name}` : title}
+  description={description}
+>
   <div class="flex h-dvh flex-col overflow-hidden">
     <Header
       tabs={result.tabs}
