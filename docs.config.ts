@@ -14,7 +14,6 @@ export default defineConfig({
               'get-started/configure-your-workspace',
               {
                 group: 'Manage your agent',
-                root: 'get-started/manage-your-agent/overview',
                 pages: [
                   'get-started/manage-your-agent/preview',
                   'get-started/manage-your-agent/edit-appearance',
