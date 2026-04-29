@@ -10,7 +10,7 @@ import {
   buildApiSidebarNodes,
   buildApiSidebarData,
   getActiveTab,
-} from "../lib/sidebar-tree";
+} from "@/bach";
 import { siteConfig } from "../lib/site-config";
 import path from "node:path";
 interface Props {
@@ -32,7 +32,12 @@ const { titleMap, methodMap } = buildApiSidebarData(
 );
 const apiNodes = buildApiSidebarNodes(apiEntries);
 
-const result = buildSidebarTree(titleMap, contentDir, methodMap, apiNodes);
+const result = await buildSidebarTree(
+  titleMap,
+  contentDir,
+  methodMap,
+  apiNodes,
+);
 
 const currentPath = Astro.url.pathname;
 const hasTabs = result.tabs.length > 0;

@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro'
 import { getCollection } from 'astro:content'
 import path from 'node:path'
-import { buildSidebarTree, buildApiSidebarNodes, buildApiSidebarData } from '../lib/sidebar-tree'
+import { buildSidebarTree, buildApiSidebarNodes, buildApiSidebarData } from '@/bach'
 import type { SidebarNode } from '../lib/sidebar-types'
 
 const SITE_URL = 'https://botpress.com/docs'
@@ -39,7 +39,7 @@ export const GET: APIRoute = async () => {
   const { titleMap, methodMap } = buildApiSidebarData(docsEntries, apiEntries, contentDir)
   const apiNodes = buildApiSidebarNodes(apiEntries)
 
-  const treeResult = buildSidebarTree(titleMap, contentDir, methodMap, apiNodes)
+  const treeResult = await buildSidebarTree(titleMap, contentDir, methodMap, apiNodes)
   const sections: string[] = []
 
   sections.push('# Botpress Documentation')

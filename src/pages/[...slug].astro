@@ -11,7 +11,7 @@ import {
   buildApiSidebarData,
   getActiveTab,
   getAdjacentPages,
-} from "../lib/sidebar-tree";
+} from "@/bach";
 import { ClerkTOC } from "../components/clerk-toc";
 import {
   Breadcrumb,
@@ -61,8 +61,18 @@ const { titleMap, methodMap } = buildApiSidebarData(
   contentDir,
 );
 const apiNodes = buildApiSidebarNodes(apiEntries);
-const treeResult = buildSidebarTree(titleMap, contentDir, methodMap, apiNodes);
-const breadcrumbs = buildBreadcrumbs(entry.id, contentDir, title, titleMap);
+const treeResult = await buildSidebarTree(
+  titleMap,
+  contentDir,
+  methodMap,
+  apiNodes,
+);
+const breadcrumbs = await buildBreadcrumbs(
+  entry.id,
+  contentDir,
+  title,
+  titleMap,
+);
 const currentPath = Astro.url.pathname;
 const hasTabs = treeResult.tabs.length > 0;
 const activeTab = hasTabs

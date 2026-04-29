@@ -10,7 +10,7 @@ import {
   buildApiSidebarData,
   getActiveTab,
   getAdjacentPages,
-} from "../../lib/sidebar-tree";
+} from "@/bach";
 import path from "node:path";
 
 export async function getStaticPaths() {
@@ -39,7 +39,12 @@ const { titleMap, methodMap } = buildApiSidebarData(
 );
 const apiNodes = buildApiSidebarNodes(apiEntries);
 
-const treeResult = buildSidebarTree(titleMap, contentDir, methodMap, apiNodes);
+const treeResult = await buildSidebarTree(
+  titleMap,
+  contentDir,
+  methodMap,
+  apiNodes,
+);
 const currentPath = Astro.url.pathname;
 const hasTabs = treeResult.tabs.length > 0;
 const activeTab = hasTabs
