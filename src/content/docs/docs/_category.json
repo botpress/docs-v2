@@ -1,6 +1,0 @@
-{
-  "label": "Docs",
-  "root": true,
-  "strip": true,
-  "sidebarPages": ["get-started"]
-}

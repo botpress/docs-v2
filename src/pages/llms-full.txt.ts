@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro'
 import { getCollection, type CollectionEntry } from 'astro:content'
 import path from 'node:path'
 import { toMarkdownHref } from '../lib/markdown-routes'
-import { computeStrippedSlug, buildSidebarTree, buildApiSidebarNodes, buildApiSidebarData } from '../lib/sidebar-tree'
+import { buildSidebarTree, buildApiSidebarNodes, buildApiSidebarData } from '../lib/sidebar-tree'
 import type { SidebarNode } from '../lib/sidebar-types'
 
 const SITE_URL = 'https://botpress.com/docs'
@@ -59,7 +59,7 @@ export const GET: APIRoute = async () => {
   const entryBySlug = new Map<string, CollectionEntry<'docs'>>()
   for (const entry of docsEntries) {
     const rawSlug = entry.id.replace(/\.(md|mdx)$/, '')
-    const slug = computeStrippedSlug(rawSlug, contentDir)
+    const slug = rawSlug === 'index' ? 'index' : rawSlug.replace(/\/index$/, '')
     entryBySlug.set(slug, entry)
   }
 

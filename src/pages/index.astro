@@ -3,20 +3,11 @@ import PageOptions from "../components/page-options";
 import DocsLayout from "../layouts/DocsLayout.astro";
 import { getCollection, render } from "astro:content";
 import { toMarkdownPath } from "../lib/markdown-routes";
-import { computeStrippedSlug } from "../lib/sidebar-tree";
-import path from "node:path";
 import { DEFAULT_DESCRIPTION } from "../astro/loaders/docs-loader";
 
-const contentDir = path.resolve("./src/content/docs");
 const entries = await getCollection("docs");
 
-const rootEntry = entries.find((e) => {
-  const stripped = computeStrippedSlug(
-    e.id.replace(/\.(md|mdx)$/, ""),
-    contentDir,
-  );
-  return stripped === "index";
-});
+const rootEntry = entries.find((e) => e.id === "index");
 
 if (!rootEntry) {
   throw new Error(

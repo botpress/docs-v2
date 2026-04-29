@@ -7,6 +7,8 @@ import type { ApiEntryData } from '@/astro/loaders/api-loader'
 export type { SidebarNode, SidebarCategoryNode, SidebarArticleNode, SidebarTreeResult, TabInfo } from './sidebar-types'
 export { isPathActive, hasActiveChild } from './sidebar-types'
 
+// --- Interfaces ---
+
 export interface AdjacentPage {
   title: string
   href: string
@@ -23,85 +25,28 @@ export interface ArticleEntry {
   method?: string
 }
 
-interface CategoryMeta {
-  label: string
-  sidebarPages?: string[]
-  strip?: boolean
-  root?: boolean
+// --- docs.json types ---
+
+interface GroupItem {
+  group: string
+  root?: string
+  pages: PageItem[]
 }
 
-function readCategoryMeta(dirPath: string): CategoryMeta | null {
-  const metaPath = path.join(dirPath, '_category.json')
-  try {
-    const raw = fs.readFileSync(metaPath, 'utf-8')
-    return JSON.parse(raw) as CategoryMeta
-  } catch {
-    return null
+type PageItem = string | GroupItem
+
+interface TabItem {
+  tab: string
+  pages: PageItem[]
+}
+
+interface DocsJson {
+  navigation: {
+    tabs: TabItem[]
   }
 }
 
-/**
- * Build breadcrumb labels from the original entry file path (before stripping).
- * Walks each directory segment and reads _category.json for labels,
- * skipping root categories so they don't appear in breadcrumbs.
- */
-export function buildBreadcrumbs(
-  entryId: string,
-  contentDir: string,
-  _pageTitle: string
-): { label: string; href: string }[] {
-  const rawPath = entryId.replace(/\.(md|mdx)$/, '')
-  const segments = rawPath.split('/')
-  const crumbs: { label: string; href: string }[] = []
-
-  let currentDir = contentDir
-  const slugParts: string[] = []
-
-  for (let i = 0; i < segments.length; i++) {
-    const segment = segments[i]!
-    const isLast = i === segments.length - 1
-
-    if (isLast) break
-
-    currentDir = path.join(currentDir, segment)
-    const meta = readCategoryMeta(currentDir)
-    if (meta?.root) continue
-
-    if (!meta?.strip) {
-      slugParts.push(segment)
-    }
-
-    const indexHref = findContentFile(currentDir, 'index')
-      ? '/' + slugParts.join('/')
-      : findFirstPageHref(currentDir, [...slugParts])
-
-    crumbs.push({
-      label: meta?.label || titleFromSlug(segment),
-      href: indexHref ?? '/' + slugParts.join('/'),
-    })
-  }
-
-  return crumbs
-}
-
-function findFirstPageHref(dirPath: string, slugPrefix: string[]): string | null {
-  const meta = readCategoryMeta(dirPath)
-  const items = getOrderedItems(dirPath, meta)
-
-  for (const item of items) {
-    if (item === 'index') continue
-    if (findContentFile(dirPath, item)) {
-      return '/' + [...slugPrefix, item].join('/')
-    }
-    if (isDirectory(dirPath, item)) {
-      const subMeta = readCategoryMeta(path.join(dirPath, item))
-      const childSlug = subMeta?.strip ? slugPrefix : [...slugPrefix, item]
-      const href = findFirstPageHref(path.join(dirPath, item), childSlug)
-      if (href) return href
-    }
-  }
-  return null
-}
+// --- Utilities ---
 
 function titleFromSlug(slug: string): string {
   return slug
@@ -110,189 +55,101 @@ function titleFromSlug(slug: string): string {
     .join(' ')
 }
 
-/**
- * Compute a URL slug for a file, stripping segments whose _category.json has strip: true.
- * `filePath` is the path relative to contentDir (e.g., "getting-started/quick-start").
- *
- * Handles Astro's glob loader behavior where index files get their `/index` suffix
- * removed from the entry ID (e.g., "getting-started/index.mdx" → id "getting-started").
- */
-export function computeStrippedSlug(filePath: string, contentDir: string): string {
-  const segments = filePath.split('/')
-  const result: string[] = []
-
-  let currentDir = contentDir
-  for (let i = 0; i < segments.length; i++) {
-    const segment = segments[i]!
-    const isLast = i === segments.length - 1
-
-    if (isLast) {
-      const possibleDir = path.join(currentDir, segment)
-      try {
-        if (fs.statSync(possibleDir).isDirectory()) {
-          const meta = readCategoryMeta(possibleDir)
-          if (meta?.strip) {
-            result.push('index')
-            continue
-          }
-        }
-      } catch {}
-      result.push(segment)
-    } else {
-      currentDir = path.join(currentDir, segment)
-      const meta = readCategoryMeta(currentDir)
-      if (meta?.strip) continue
-      result.push(segment)
-    }
-  }
-
-  return result.join('/')
+function slugify(name: string): string {
+  return name.toLowerCase().replace(/\s+/g, '-')
 }
 
-/**
- * Normalize content collection entries into ArticleEntry[].
- */
-export function normalizeCollectionEntries(entries: CollectionEntry<'docs'>[], contentDir: string): ArticleEntry[] {
-  return entries.map((entry) => {
-    const rawSlug = entry.id.replace(/\.(md|mdx)$/, '')
-    return {
-      slug: computeStrippedSlug(rawSlug, contentDir),
-      title: entry.data.title,
-    }
-  })
+function normalizePagePath(pagePath: string): string {
+  if (pagePath === 'index') return 'index'
+  return pagePath.replace(/\/index$/, '')
 }
 
-/**
- * List ordered items for a directory: uses the sidebarPages array from _category.json if present,
- * otherwise lists directory contents alphabetically (excluding _ prefixed files).
- */
-function getOrderedItems(dirPath: string, meta: CategoryMeta | null): string[] {
-  if (meta?.sidebarPages) return meta.sidebarPages
+function normalizeSlug(rawSlug: string): string {
+  if (rawSlug === 'index') return 'index'
+  return rawSlug.replace(/\/index$/, '')
+}
 
+function lastSegment(pagePath: string): string {
+  const parts = pagePath.split('/')
+  return parts[parts.length - 1]!
+}
+
+// --- docs.json reader ---
+
+let _docsJsonCache: DocsJson | null = null
+
+function readDocsJson(): DocsJson {
+  if (_docsJsonCache) return _docsJsonCache
+  const docsJsonPath = path.resolve('./docs.json')
   try {
-    const entries = fs.readdirSync(dirPath, { withFileTypes: true })
-    return entries
-      .filter((e) => !e.name.startsWith('_') && !e.name.startsWith('.'))
-      .map((e) => {
-        if (e.isDirectory()) return e.name
-        return e.name.replace(/\.(md|mdx)$/, '')
-      })
-      .filter((name: string, i: number, arr: string[]) => arr.indexOf(name) === i)
-      .sort()
-  } catch {
-    return []
+    const raw = fs.readFileSync(docsJsonPath, 'utf-8')
+    _docsJsonCache = JSON.parse(raw) as DocsJson
+    return _docsJsonCache
+  } catch (err) {
+    throw new Error(`Failed to read docs.json: ${err}`)
   }
 }
 
-/**
- * Check if a name corresponds to a directory on disk.
- */
-function isDirectory(dirPath: string, name: string): boolean {
-  try {
-    return fs.statSync(path.join(dirPath, name)).isDirectory()
-  } catch {
-    return false
-  }
-}
+// --- Tree builder ---
 
-/**
- * Check if a name corresponds to a content file on disk (mdx, md, or tsx).
- */
-function findContentFile(dirPath: string, name: string): string | null {
-  for (const ext of ['.mdx', '.md']) {
-    if (fs.existsSync(path.join(dirPath, name + ext))) return name + ext
-  }
-  return null
-}
-
-function buildLevel(
-  dirPath: string,
-  slugPrefix: string[],
-  isStripped: boolean,
+function buildPages(
+  pages: PageItem[],
+  depth: number,
+  parentPath: string,
   titleMap: Map<string, string>,
-  methodMap: Map<string, string>,
-  injectableNodes?: Map<string, SidebarNode>
+  methodMap: Map<string, string>
 ): SidebarNode[] {
-  const meta = readCategoryMeta(dirPath)
-  const items = getOrderedItems(dirPath, meta)
   const nodes: SidebarNode[] = []
 
-  for (const item of items) {
-    if (item === 'index') {
-      const file = findContentFile(dirPath, item)
-      if (!file) continue
+  for (const item of pages) {
+    if (typeof item === 'string') {
+      // Page path
+      const pagePath = item
+      const normalizedPath = normalizePagePath(pagePath)
+      const href = normalizedPath === 'index' ? '/' : `/${normalizedPath}`
+      const title = titleMap.get(normalizedPath) ?? titleFromSlug(lastSegment(pagePath))
 
-      const articleSlug = isStripped ? 'index' : slugPrefix.join('/') || 'index'
-      const title = titleMap.get(articleSlug) ?? titleFromSlug(item)
       const articleNode: SidebarArticleNode = {
         type: 'article',
         title,
-        href: articleSlug === 'index' ? '/' : `/${articleSlug}`,
-        path: articleSlug,
-        method: methodMap.get(articleSlug),
+        href,
+        path: normalizedPath,
+        method: methodMap.get(normalizedPath),
       }
       nodes.push(articleNode)
-      continue
-    }
+    } else {
+      // Group
+      const groupSlug = slugify(item.group)
+      const groupPath = parentPath ? `${parentPath}/${groupSlug}` : groupSlug
 
-    if (isDirectory(dirPath, item)) {
-      const subDirPath = path.join(dirPath, item)
-      const subMeta = readCategoryMeta(subDirPath)
-      const subStrip = subMeta?.strip ?? false
+      let href: string | undefined
+      let childrenPages = item.pages
 
-      const childSlugPrefix = subStrip ? slugPrefix : [...slugPrefix, item]
+      if (item.root && depth > 0) {
+        // Nested group with root: root page is the group href, excluded from children
+        const rootNormalized = normalizePagePath(item.root)
+        href = rootNormalized === 'index' ? '/' : `/${rootNormalized}`
 
-      const children = buildLevel(subDirPath, childSlugPrefix, subStrip, titleMap, methodMap)
-
-      const indexExplicitlyListed = subMeta?.sidebarPages?.includes('index')
-
-      let categoryHref: string | undefined
-      const indexFile = findContentFile(subDirPath, 'index')
-      if (indexFile && !indexExplicitlyListed) {
-        const indexSlug = subStrip ? 'index' : childSlugPrefix.join('/') || 'index'
-        categoryHref = indexSlug === 'index' ? '/' : `/${indexSlug}`
+        // Filter out the root page from children
+        childrenPages = item.pages.filter((p) => {
+          if (typeof p === 'string') {
+            return normalizePagePath(p) !== rootNormalized
+          }
+          return true
+        })
       }
 
-      const filteredChildren = indexExplicitlyListed
-        ? children
-        : children.filter((c) => !(c.type === 'article' && (c.href === categoryHref || c.path === 'index')))
-
-      const mergedChildren = [...filteredChildren]
-      const injectable = injectableNodes?.get(item)
-      if (injectable && injectable.type === 'category') {
-        mergedChildren.push(...injectable.children)
-      }
+      const children = buildPages(childrenPages, depth + 1, groupPath, titleMap, methodMap)
 
       const categoryNode: SidebarCategoryNode = {
         type: 'category',
-        label: subMeta?.label || titleFromSlug(item),
-        slug: item,
-        path: [...slugPrefix, item].join('/') || item,
-        href: categoryHref,
-        children: mergedChildren,
+        label: item.group,
+        slug: groupSlug,
+        path: groupPath,
+        href: depth > 0 ? href : undefined,
+        children,
       }
       nodes.push(categoryNode)
-      continue
-    }
-
-    const file = findContentFile(dirPath, item)
-    if (file) {
-      const articleSlug = isStripped ? item : [...slugPrefix, item].join('/')
-      const title = titleMap.get(articleSlug) ?? titleFromSlug(item)
-
-      const articleNode: SidebarArticleNode = {
-        type: 'article',
-        title,
-        href: `/${articleSlug}`,
-        path: articleSlug,
-        method: methodMap.get(articleSlug),
-      }
-      nodes.push(articleNode)
-      continue
-    }
-
-    if (injectableNodes?.has(item)) {
-      nodes.push(injectableNodes.get(item)!)
     }
   }
 
@@ -310,173 +167,145 @@ function findFirstHref(nodes: SidebarNode[]): string | null {
   return null
 }
 
-function collectAllContentSlugs(dirPath: string, slugPrefix: string[], isStripped: boolean): string[] {
+function collectAllSlugs(nodes: SidebarNode[]): string[] {
   const slugs: string[] = []
-  try {
-    const entries = fs.readdirSync(dirPath, { withFileTypes: true })
-    for (const entry of entries) {
-      if (entry.name.startsWith('_') || entry.name.startsWith('.')) continue
-
-      if (entry.isDirectory()) {
-        const subDirPath = path.join(dirPath, entry.name)
-        const subMeta = readCategoryMeta(subDirPath)
-        const subStrip = subMeta?.strip ?? false
-        const childSlugPrefix = subStrip ? slugPrefix : [...slugPrefix, entry.name]
-        slugs.push(...collectAllContentSlugs(subDirPath, childSlugPrefix, subStrip))
-        continue
+  for (const node of nodes) {
+    if (node.type === 'article') {
+      slugs.push(node.path)
+    } else {
+      if (node.href) {
+        const hrefPath = node.href.replace(/^\//, '') || 'index'
+        slugs.push(hrefPath)
       }
-
-      if (!entry.name.match(/\.(md|mdx)$/)) continue
-      const name = entry.name.replace(/\.(md|mdx)$/, '')
-
-      if (name === 'index') {
-        const slug = isStripped ? 'index' : slugPrefix.join('/') || 'index'
-        slugs.push(slug)
-      } else {
-        slugs.push(isStripped ? name : [...slugPrefix, name].join('/'))
-      }
+      slugs.push(...collectAllSlugs(node.children))
     }
-  } catch {}
+  }
   return slugs
 }
 
-/**
- * Builds a sidebar tree by scanning the filesystem for _category.json files.
- * Detects `root: true` categories and promotes them to header tabs.
- * Returns a SidebarTreeResult with per-tab trees and slug-to-tab mapping.
- *
- * `apiNodes` are injected into the `api-reference` tab tree (if it exists)
- * after the filesystem-based tree is built.
- */
 export function buildSidebarTree(
   titleMap: Map<string, string>,
-  contentDir: string,
+  _contentDir: string,
   methodMap?: Map<string, string>,
   apiNodes?: SidebarCategoryNode[]
 ): SidebarTreeResult {
+  const docsJson = readDocsJson()
   const _methodMap = methodMap ?? new Map()
-  const rootMeta = readCategoryMeta(contentDir)
-  const rootStrip = rootMeta?.strip ?? false
-  const orderedItems = getOrderedItems(contentDir, rootMeta)
 
   const tabs: TabInfo[] = []
   const trees: Record<string, SidebarNode[]> = {}
   const slugToTab: Record<string, string> = {}
 
-  const hasRootFolders = orderedItems.some((item) => {
-    if (!isDirectory(contentDir, item)) return false
-    const meta = readCategoryMeta(path.join(contentDir, item))
-    return meta?.root === true
-  })
+  for (const tabItem of docsJson.navigation.tabs) {
+    const tabSlug = slugify(tabItem.tab)
+    const tabTree = buildPages(tabItem.pages, 0, '', titleMap, _methodMap)
 
-  const defaultTree = buildLevel(contentDir, [], rootStrip, titleMap, _methodMap)
-
-  if (!hasRootFolders) {
-    return { tabs: [], trees: {}, defaultTree, slugToTab: {} }
-  }
-
-  for (const item of orderedItems) {
-    if (!isDirectory(contentDir, item)) continue
-
-    const subDirPath = path.join(contentDir, item)
-    const subMeta = readCategoryMeta(subDirPath)
-    if (!subMeta?.root) continue
-
-    const subStrip = subMeta.strip ?? false
-    const childSlugPrefix = subStrip ? [] : [item]
-
-    let injectableMap: Map<string, SidebarNode> | undefined
-    if (item === 'api-reference' && apiNodes?.length) {
-      injectableMap = new Map()
-      for (const node of apiNodes) {
-        injectableMap.set(node.slug, node)
-      }
-    }
-
-    const tabTree = buildLevel(subDirPath, childSlugPrefix, subStrip, titleMap, _methodMap, injectableMap)
-
-    if (injectableMap) {
-      for (const node of apiNodes!) {
-        collectSlugsFromNodes([node], slugToTab, item)
+    // Inject API nodes into API Reference tab
+    if (tabSlug === 'api-reference' && apiNodes?.length) {
+      for (const apiNode of apiNodes) {
+        tabTree.push(apiNode)
+        collectSlugsFromNodes([apiNode], slugToTab, tabSlug)
       }
     }
 
     const firstHref = findFirstHref(tabTree) ?? '/'
 
     tabs.push({
-      slug: item,
-      label: subMeta.label || titleFromSlug(item),
+      slug: tabSlug,
+      label: tabItem.tab,
       href: firstHref,
     })
 
-    trees[item] = tabTree
+    trees[tabSlug] = tabTree
 
-    for (const slug of collectAllContentSlugs(subDirPath, childSlugPrefix, subStrip)) {
-      slugToTab[slug] = item
+    for (const slug of collectAllSlugs(tabTree)) {
+      slugToTab[slug] = tabSlug
     }
   }
 
-  return { tabs, trees, defaultTree, slugToTab }
+  return { tabs, trees, defaultTree: [], slugToTab }
 }
 
-function collectSlugsFromNodes(nodes: SidebarNode[], slugToTab: Record<string, string>, tab: string) {
-  for (const node of nodes) {
-    if (node.type === 'article') {
-      slugToTab[node.path] = tab
-    } else {
-      collectSlugsFromNodes(node.children, slugToTab, tab)
-    }
-  }
-}
+// --- Breadcrumbs ---
 
-function flattenTree(nodes: SidebarNode[]): AdjacentPage[] {
-  const pages: AdjacentPage[] = []
-  for (const node of nodes) {
-    if (node.type === 'article') {
-      pages.push({ title: node.title, href: node.href })
-    } else if (node.type === 'category') {
-      if (node.href) {
-        pages.push({ title: node.label, href: node.href })
+function searchPagesForBreadcrumbs(
+  pagePath: string,
+  pages: PageItem[],
+  prefix: { label: string; href: string }[],
+  titleMap: Map<string, string>
+): { label: string; href: string }[] | null {
+  const normalizedTarget = normalizePagePath(pagePath)
+
+  for (const item of pages) {
+    if (typeof item === 'string') {
+      if (normalizePagePath(item) === normalizedTarget) {
+        const href = normalizedTarget === 'index' ? '/' : `/${normalizedTarget}`
+        return [...prefix, { label: titleMap.get(normalizedTarget) ?? titleFromSlug(lastSegment(item)), href }]
       }
-      pages.push(...flattenTree(node.children))
+    } else {
+      const groupPrefix = [...prefix]
+      if (item.root) {
+        const rootNormalized = normalizePagePath(item.root)
+        groupPrefix.push({
+          label: item.group,
+          href: rootNormalized === 'index' ? '/' : `/${rootNormalized}`,
+        })
+        // If this group's root IS the target page, return breadcrumbs up to and including this group
+        if (rootNormalized === normalizedTarget) {
+          return groupPrefix
+        }
+      } else {
+        // Find first page href for breadcrumb link
+        const firstChildHref = findFirstHref(buildPages(item.pages, 0, '', titleMap, new Map()))
+        groupPrefix.push({ label: item.group, href: firstChildHref ?? '/' })
+      }
+
+      const result = searchPagesForBreadcrumbs(pagePath, item.pages, groupPrefix, titleMap)
+      if (result) return result
     }
-  }
-  return pages
-}
-
-export function getAdjacentPages(nodes: SidebarNode[], currentPath: string): AdjacentPages {
-  const flat = flattenTree(nodes)
-  const normalized = currentPath.endsWith('/') ? currentPath.slice(0, -1) : currentPath
-  const idx = flat.findIndex((p) => {
-    const href = p.href.endsWith('/') ? p.href.slice(0, -1) : p.href
-    return href === normalized
-  })
-
-  return {
-    prev: idx > 0 ? flat[idx - 1]! : null,
-    next: idx >= 0 && idx < flat.length - 1 ? flat[idx + 1]! : null,
-  }
-}
-
-/**
- * Determines the active tab slug from the current URL path.
- */
-export function getActiveTab(pathname: string, slugToTab: Record<string, string>): string | null {
-  const normalized = pathname.replace(/^\/|\/$/g, '') || 'index'
-  if (slugToTab[normalized]) return slugToTab[normalized]
-
-  for (const [slug, tab] of Object.entries(slugToTab)) {
-    if (normalized.startsWith(slug + '/') || normalized === slug) return tab
   }
 
   return null
 }
 
-/**
- * Build sidebar category nodes from API collection entries.
- * Groups entries by apiSlug, sorts by sortOrder, and creates the
- * API Name > Endpoints > [articles] structure.
- */
+export function buildBreadcrumbs(
+  entryId: string,
+  _contentDir: string,
+  pageTitle: string,
+  titleMap: Map<string, string>
+): { label: string; href: string }[] {
+  const rawSlug = entryId.replace(/\.(md|mdx)$/, '')
+  const pagePath = normalizeSlug(rawSlug)
+
+  const docsJson = readDocsJson()
+
+  for (const tab of docsJson.navigation.tabs) {
+    const crumbs = searchPagesForBreadcrumbs(pagePath, tab.pages, [], titleMap)
+    if (crumbs) {
+      // Remove the active page itself — breadcrumbs show only the parent path
+      return crumbs.slice(0, -1)
+    }
+  }
+
+  // Fallback: just the page title
+  return [{ label: pageTitle, href: '/' }]
+}
+
+// --- Collection normalization ---
+
+export function normalizeCollectionEntries(entries: CollectionEntry<'docs'>[]): ArticleEntry[] {
+  return entries.map((entry) => {
+    const rawSlug = entry.id.replace(/\.(md|mdx)$/, '')
+    const slug = normalizeSlug(rawSlug)
+    return {
+      slug,
+      title: entry.data.title,
+    }
+  })
+}
+
+// --- API sidebar nodes ---
+
 export function buildApiSidebarNodes(apiEntries: { id: string; data: ApiEntryData }[]): SidebarCategoryNode[] {
   const grouped = new Map<string, { label: string; entries: { id: string; data: ApiEntryData }[] }>()
 
@@ -521,16 +350,14 @@ export function buildApiSidebarNodes(apiEntries: { id: string; data: ApiEntryDat
   })
 }
 
-/**
- * Build unified titleMap, methodMap, and slugToTab data from both docs and API collections.
- * This is the single entry point for pages and layouts to get sidebar data.
- */
+// --- API sidebar data ---
+
 export function buildApiSidebarData(
   docsEntries: CollectionEntry<'docs'>[],
   apiEntries: { id: string; data: ApiEntryData }[],
-  contentDir: string
+  _contentDir: string
 ) {
-  const articles = normalizeCollectionEntries(docsEntries, contentDir)
+  const articles = normalizeCollectionEntries(docsEntries)
   const titleMap = new Map<string, string>()
   const methodMap = new Map<string, string>()
 
@@ -546,4 +373,56 @@ export function buildApiSidebarData(
   }
 
   return { titleMap, methodMap, articles }
+}
+
+// --- Tree utilities ---
+
+function collectSlugsFromNodes(nodes: SidebarNode[], slugToTab: Record<string, string>, tab: string) {
+  for (const node of nodes) {
+    if (node.type === 'article') {
+      slugToTab[node.path] = tab
+    } else {
+      collectSlugsFromNodes(node.children, slugToTab, tab)
+    }
+  }
+}
+
+function flattenTree(nodes: SidebarNode[]): AdjacentPage[] {
+  const pages: AdjacentPage[] = []
+  for (const node of nodes) {
+    if (node.type === 'article') {
+      pages.push({ title: node.title, href: node.href })
+    } else if (node.type === 'category') {
+      if (node.href) {
+        pages.push({ title: node.label, href: node.href })
+      }
+      pages.push(...flattenTree(node.children))
+    }
+  }
+  return pages
+}
+
+export function getAdjacentPages(nodes: SidebarNode[], currentPath: string): AdjacentPages {
+  const flat = flattenTree(nodes)
+  const normalized = currentPath.endsWith('/') ? currentPath.slice(0, -1) : currentPath
+  const idx = flat.findIndex((p) => {
+    const href = p.href.endsWith('/') ? p.href.slice(0, -1) : p.href
+    return href === normalized
+  })
+
+  return {
+    prev: idx > 0 ? flat[idx - 1]! : null,
+    next: idx >= 0 && idx < flat.length - 1 ? flat[idx + 1]! : null,
+  }
+}
+
+export function getActiveTab(pathname: string, slugToTab: Record<string, string>): string | null {
+  const normalized = pathname.replace(/^\/|\/$/g, '') || 'index'
+  if (slugToTab[normalized]) return slugToTab[normalized]
+
+  for (const [slug, tab] of Object.entries(slugToTab)) {
+    if (normalized.startsWith(slug + '/') || normalized === slug) return tab
+  }
+
+  return null
 }

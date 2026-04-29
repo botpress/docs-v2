@@ -1,11 +1,6 @@
 import type { APIRoute } from 'astro'
 import { getCollection, type CollectionEntry } from 'astro:content'
-import path from 'node:path'
 import { toMarkdownHref } from '../lib/markdown-routes'
-import { computeStrippedSlug } from '../lib/sidebar-tree'
-
-const contentDir = path.resolve('./src/content/docs')
-
 function stripMdxPreamble(source: string): string {
   return source.replace(/^(?:import\s.+\n)+\n?/, '')
 }
@@ -32,12 +27,12 @@ function serializeEntry(entry: CollectionEntry<'docs'>): string {
 export async function getStaticPaths() {
   const entries = await getCollection('docs')
 
-  return entries.map((entry) => {
+  return entries.map((entry: CollectionEntry<'docs'>) => {
     const rawSlug = entry.id.replace(/\.(md|mdx)$/, '')
-    const strippedSlug = computeStrippedSlug(rawSlug, contentDir)
+    const slug = rawSlug === 'index' ? 'index' : rawSlug.replace(/\/index$/, '')
 
     return {
-      params: { slug: strippedSlug },
+      params: { slug },
       props: { entry },
     }
   })

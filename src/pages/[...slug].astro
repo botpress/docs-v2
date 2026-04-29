@@ -5,7 +5,6 @@ import DocsLayout from "../layouts/DocsLayout.astro";
 import { getCollection, render } from "astro:content";
 import { toMarkdownPath } from "../lib/markdown-routes";
 import {
-  computeStrippedSlug,
   buildBreadcrumbs,
   buildSidebarTree,
   buildApiSidebarNodes,
@@ -27,14 +26,14 @@ import { DEFAULT_DESCRIPTION } from "../astro/loaders/docs-loader";
 
 export async function getStaticPaths() {
   const entries = await getCollection("docs");
-  const contentDir = path.resolve("./src/content/docs");
 
   return entries
     .map((entry) => {
       const rawSlug = entry.id.replace(/\.(md|mdx)$/, "");
-      const strippedSlug = computeStrippedSlug(rawSlug, contentDir);
+      const slug =
+        rawSlug === "index" ? "index" : rawSlug.replace(/\/index$/, "");
       return {
-        params: { slug: strippedSlug },
+        params: { slug },
         props: { entry },
       };
     })
@@ -53,7 +52,6 @@ const headings = cleanupHeadings(entry.body ?? "", renderResult.headings);
 const markdownUrl = toMarkdownPath(Astro.url.pathname);
 
 const contentDir = path.resolve("./src/content/docs");
-const breadcrumbs = buildBreadcrumbs(entry.id, contentDir, title);
 
 const docsEntries = await getCollection("docs");
 const apiEntries = await getCollection("api");
@@ -64,6 +62,7 @@ const { titleMap, methodMap } = buildApiSidebarData(
 );
 const apiNodes = buildApiSidebarNodes(apiEntries);
 const treeResult = buildSidebarTree(titleMap, contentDir, methodMap, apiNodes);
+const breadcrumbs = buildBreadcrumbs(entry.id, contentDir, title, titleMap);
 const currentPath = Astro.url.pathname;
 const hasTabs = treeResult.tabs.length > 0;
 const activeTab = hasTabs
