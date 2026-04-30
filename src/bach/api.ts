@@ -1,6 +1,6 @@
 import type { CollectionEntry } from 'astro:content'
 import type { SidebarCategoryNode, SidebarArticleNode, ArticleEntry } from './types'
-import type { ApiEntryData } from '@/astro/loaders/api-loader'
+import type { ApiEntryData } from './loaders'
 import { normalizeSlug } from './utils'
 
 export function normalizeCollectionEntries(entries: CollectionEntry<'docs'>[]): ArticleEntry[] {

@@ -1,9 +1,8 @@
 import { defineCollection } from 'astro:content'
-import { z } from 'astro/zod'
 import { runtimeApi, adminApi, tablesApi, filesApi } from '@botpress/api'
-import { apiLoader, type PackageApiSource, type StaticApiSource } from './astro/loaders/api-loader'
-import { docsLoader } from './astro/loaders/docs-loader'
-import { EndpointSchema } from './components/api/types'
+
+import { apiLoader, docsLoader, type PackageApiSource, type StaticApiSource } from '@/bach'
+import { docsSchema, apiCollectionSchema } from '@/bach/schemas'
 
 const packageApis: PackageApiSource[] = [
   { api: adminApi, slug: 'admin-api', label: 'Admin API', key: 'admin' },
@@ -14,29 +13,14 @@ const packageApis: PackageApiSource[] = [
 
 const staticApis: StaticApiSource[] = [{ file: 'chat-openapi.json', slug: 'chat-api', label: 'Chat API' }]
 
-export const DEFAULT_API_DESCRIPTION =
-  'Explore the Botpress API reference for endpoints, parameters, and response schemas.'
-
 const docs = defineCollection({
   loader: docsLoader({ pattern: '**/*.{md,mdx}', base: './src/content/docs' }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string().optional(),
-    prose: z.boolean().default(true),
-  }),
+  schema: docsSchema,
 })
 
 const api = defineCollection({
   loader: apiLoader({ packageApis, staticApis }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string().default(DEFAULT_API_DESCRIPTION),
-    method: z.string(),
-    apiSlug: z.string(),
-    apiLabel: z.string(),
-    sortOrder: z.number(),
-    endpoint: EndpointSchema,
-  }),
+  schema: apiCollectionSchema,
 })
 
 export const collections = { docs, api }

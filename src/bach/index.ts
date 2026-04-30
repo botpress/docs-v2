@@ -26,3 +26,28 @@ export { searchPagesForBreadcrumbs, buildBreadcrumbs } from './breadcrumbs'
 export { normalizeCollectionEntries, buildApiSidebarNodes, buildApiSidebarData } from './api'
 
 export { getAdjacentPages, getActiveTab } from './nav'
+
+export { apiLoader, docsLoader, DEFAULT_DESCRIPTION } from './loaders'
+
+export type { ApiEntryData, ApiSource, PackageApiSource, StaticApiSource } from './loaders'
+
+export {
+  SchemaSchema,
+  ParameterSchema,
+  SecuritySchemeSchema,
+  ServerVariableSchema,
+  EndpointSchema,
+  DEFAULT_API_DESCRIPTION,
+  apiCollectionSchema,
+  docsSchema,
+} from './schemas'
+
+export type {
+  Schema,
+  Parameter,
+  SecurityScheme,
+  ServerVariable,
+  Endpoint,
+  DocsSchema,
+  ApiCollectionSchema,
+} from './schemas'

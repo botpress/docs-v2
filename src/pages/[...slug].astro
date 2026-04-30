@@ -22,7 +22,7 @@ import {
 } from "../components/ui/breadcrumb";
 import path from "node:path";
 import { cleanupHeadings } from "@/lib/cleanup-headings";
-import { DEFAULT_DESCRIPTION } from "../astro/loaders/docs-loader";
+import { DEFAULT_DESCRIPTION } from "@/bach";
 
 export async function getStaticPaths() {
   const entries = await getCollection("docs");

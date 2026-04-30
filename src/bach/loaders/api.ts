@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import os from 'node:os'
 import type { DataStore, Loader, LoaderContext } from 'astro/loaders'
-import type { Endpoint } from '@/components/api/types'
+import type { Endpoint } from '../schemas/api'
 
 const STATIC_SPECS_DIR = path.resolve('./public/api-specs')
 

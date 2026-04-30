@@ -19,7 +19,8 @@ import ApiPlayground, { generateDefaultBody, DEFAULT_BASE_URL } from '@/componen
 import SchemaExplorer from '@/components/api/schema-explorer'
 import AuthRequirements from '@/components/api/auth-requirements'
 import ContentTypeSwitcher from '@/components/api/content-type-switcher'
-import type { Endpoint, RequestState, Parameter } from '@/components/api/types'
+import type { Endpoint, Parameter } from '@/bach/schemas'
+import type { RequestState } from '@/components/api/types'
 import { badgeVariantForMethod } from '@/lib/utils'
 
 function EndpointBar({

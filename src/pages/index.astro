@@ -3,7 +3,7 @@ import PageOptions from "../components/page-options";
 import DocsLayout from "../layouts/DocsLayout.astro";
 import { getCollection, render } from "astro:content";
 import { toMarkdownPath } from "../lib/markdown-routes";
-import { DEFAULT_DESCRIPTION } from "../astro/loaders/docs-loader";
+import { DEFAULT_DESCRIPTION } from "@/bach";
 
 const entries = await getCollection("docs");
 
