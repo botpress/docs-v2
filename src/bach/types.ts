@@ -7,12 +7,11 @@ export type {
 } from '../lib/sidebar-types'
 export { isPathActive, hasActiveChild } from '../lib/sidebar-types'
 
-// --- Config types ---
-
 export interface GroupItem {
   group: string
   root?: string
   pages: PageItem[]
+  openapi?: PackageApiConfig | StaticApiConfig
 }
 
 export type PageItem = string | GroupItem
@@ -28,7 +27,19 @@ export interface DocsConfig {
   }
 }
 
-// --- Runtime types ---
+export interface ApiConfig {
+  slug: string
+  label: string
+}
+
+export interface PackageApiConfig extends ApiConfig {
+  api: { exportOpenapi: (dir: string) => void }
+  key: string
+}
+
+export interface StaticApiConfig extends ApiConfig {
+  file: string
+}
 
 export interface AdjacentPage {
   title: string

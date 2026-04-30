@@ -13,6 +13,8 @@ export type {
   PageItem,
   TabItem,
   DocsConfig,
+  PackageApiConfig,
+  StaticApiConfig,
 } from './types'
 
 export { isPathActive, hasActiveChild } from './types'
@@ -23,13 +25,13 @@ export { readDocsConfig, buildPages, findFirstHref, collectAllSlugs, buildSideba
 
 export { searchPagesForBreadcrumbs, buildBreadcrumbs } from './breadcrumbs'
 
-export { normalizeCollectionEntries, buildApiSidebarNodes, buildApiSidebarData } from './api'
+export { normalizeCollectionEntries, buildApiEntriesMap, buildApiSidebarData } from './api'
 
 export { getAdjacentPages, getActiveTab } from './nav'
 
-export { apiLoader, docsLoader, DEFAULT_DESCRIPTION } from './loaders'
+export { apiLoader, docsLoader, DEFAULT_DESCRIPTION, collectApiConfigs } from './loaders'
 
-export type { ApiEntryData, ApiSource, PackageApiSource, StaticApiSource } from './loaders'
+export type { ApiEntryData, ApiSource, PackageApiSource, StaticApiSource, ApiLoaderConfig } from './loaders'
 
 export {
   SchemaSchema,

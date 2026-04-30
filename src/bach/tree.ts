@@ -26,7 +26,8 @@ export function buildPages(
   depth: number,
   parentPath: string,
   titleMap: Map<string, string>,
-  methodMap: Map<string, string>
+  methodMap: Map<string, string>,
+  apiEntries?: Map<string, { id: string; title: string; method: string }[]>
 ): SidebarNode[] {
   const nodes: SidebarNode[] = []
 
@@ -64,7 +65,24 @@ export function buildPages(
         })
       }
 
-      const children = buildPages(childrenPages, depth + 1, groupPath, titleMap, methodMap)
+      const children = buildPages(childrenPages, depth + 1, groupPath, titleMap, methodMap, apiEntries)
+
+      if (item.openapi && apiEntries) {
+        const slug = 'api' in item.openapi ? item.openapi.slug : item.openapi.slug
+        const entries = apiEntries.get(slug)
+        if (entries) {
+          for (const entry of entries) {
+            const articleNode: SidebarArticleNode = {
+              type: 'article',
+              title: entry.title,
+              href: `/${entry.id}`,
+              path: entry.id,
+              method: entry.method,
+            }
+            children.push(articleNode)
+          }
+        }
+      }
 
       const categoryNode: SidebarCategoryNode = {
         type: 'category',
@@ -112,7 +130,7 @@ export async function buildSidebarTree(
   titleMap: Map<string, string>,
   _contentDir: string,
   methodMap?: Map<string, string>,
-  apiNodes?: SidebarCategoryNode[]
+  apiEntries?: Map<string, { id: string; title: string; method: string }[]>
 ): Promise<SidebarTreeResult> {
   const docsConfig = await readDocsConfig()
   const _methodMap = methodMap ?? new Map()
@@ -123,14 +141,7 @@ export async function buildSidebarTree(
 
   for (const tabItem of docsConfig.navigation.tabs) {
     const tabSlug = slugify(tabItem.tab)
-    const tabTree = buildPages(tabItem.pages, 0, '', titleMap, _methodMap)
-
-    if (tabSlug === 'api-reference' && apiNodes?.length) {
-      for (const apiNode of apiNodes) {
-        tabTree.push(apiNode)
-        collectSlugsFromNodes([apiNode], slugToTab, tabSlug)
-      }
-    }
+    const tabTree = buildPages(tabItem.pages, 0, '', titleMap, _methodMap, apiEntries)
 
     const firstHref = findFirstHref(tabTree) ?? '/'
 
@@ -148,14 +159,4 @@ export async function buildSidebarTree(
   }
 
   return { tabs, trees, defaultTree: [], slugToTab }
-}
-
-function collectSlugsFromNodes(nodes: SidebarNode[], slugToTab: Record<string, string>, tab: string) {
-  for (const node of nodes) {
-    if (node.type === 'article') {
-      slugToTab[node.path] = tab
-    } else {
-      collectSlugsFromNodes(node.children, slugToTab, tab)
-    }
-  }
 }

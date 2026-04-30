@@ -7,7 +7,7 @@ import SearchOverlay from "../components/search-overlay";
 import { getCollection } from "astro:content";
 import {
   buildSidebarTree,
-  buildApiSidebarNodes,
+  buildApiEntriesMap,
   buildApiSidebarData,
   getActiveTab,
 } from "@/bach";
@@ -30,13 +30,13 @@ const { titleMap, methodMap } = buildApiSidebarData(
   apiEntries,
   contentDir,
 );
-const apiNodes = buildApiSidebarNodes(apiEntries);
+const apiEntriesMap = buildApiEntriesMap(apiEntries);
 
 const result = await buildSidebarTree(
   titleMap,
   contentDir,
   methodMap,
-  apiNodes,
+  apiEntriesMap,
 );
 
 const currentPath = Astro.url.pathname;

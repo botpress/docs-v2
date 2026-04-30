@@ -1,33 +1,26 @@
 ---
-import PageOptions from "../components/page-options";
 import PageNavigation from "../components/page-navigation";
 import DocsLayout from "../layouts/DocsLayout.astro";
-import { getCollection, render } from "astro:content";
+import APIPage from "../components/api-page";
+import DocsPage from "../components/docs-page.astro";
+import { getCollection } from "astro:content";
 import { toMarkdownPath } from "../lib/markdown-routes";
 import {
   buildBreadcrumbs,
   buildSidebarTree,
-  buildApiSidebarNodes,
+  buildApiEntriesMap,
   buildApiSidebarData,
   getActiveTab,
   getAdjacentPages,
 } from "@/bach";
-import { ClerkTOC } from "../components/clerk-toc";
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbSeparator,
-} from "../components/ui/breadcrumb";
 import path from "node:path";
-import { cleanupHeadings } from "@/lib/cleanup-headings";
 import { DEFAULT_DESCRIPTION } from "@/bach";
 
 export async function getStaticPaths() {
-  const entries = await getCollection("docs");
+  const docsEntries = await getCollection("docs");
+  const apiEntries = await getCollection("api");
 
-  return entries
+  const docsPaths = docsEntries
     .map((entry) => {
       const rawSlug = entry.id.replace(/\.(md|mdx)$/, "");
       const slug =
@@ -38,17 +31,20 @@ export async function getStaticPaths() {
       };
     })
     .filter((p) => p.params.slug !== "index");
+
+  const apiPaths = apiEntries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+
+  return [...docsPaths, ...apiPaths];
 }
 
 const { entry } = Astro.props;
-const renderResult = await render(entry);
+const isApi = entry.collection === "api";
+
 const title = entry.data.title;
 const description = entry.data.description ?? DEFAULT_DESCRIPTION;
-const useProse = entry.data.prose !== false;
-
-const Content = renderResult.Content;
-
-const headings = cleanupHeadings(entry.body ?? "", renderResult.headings);
 const markdownUrl = toMarkdownPath(Astro.url.pathname);
 
 const contentDir = path.resolve("./src/content/docs");
@@ -60,19 +56,23 @@ const { titleMap, methodMap } = buildApiSidebarData(
   apiEntries,
   contentDir,
 );
-const apiNodes = buildApiSidebarNodes(apiEntries);
+const apiEntriesMap = buildApiEntriesMap(apiEntries);
 const treeResult = await buildSidebarTree(
   titleMap,
   contentDir,
   methodMap,
-  apiNodes,
+  apiEntriesMap,
 );
-const breadcrumbs = await buildBreadcrumbs(
-  entry.id,
-  contentDir,
-  title,
-  titleMap,
-);
+
+let breadcrumbs: { label: string; href?: string }[];
+
+if (isApi) {
+  const { apiLabel } = entry.data;
+  breadcrumbs = [{ label: apiLabel }];
+} else {
+  breadcrumbs = await buildBreadcrumbs(entry.id, contentDir, title, titleMap);
+}
+
 const currentPath = Astro.url.pathname;
 const hasTabs = treeResult.tabs.length > 0;
 const activeTab = hasTabs
@@ -87,64 +87,36 @@ const { prev, next } = getAdjacentPages(sidebarTree, currentPath);
 
 <DocsLayout title={title} description={description} breadcrumbs={breadcrumbs}>
   {
-    !useProse ? (
+    isApi ? (
       <div
-        class="w-full px-8 pt-10 pb-8 sm:px-8 sm:pt-12 sm:pb-10 lg:px-16"
+        class="flex w-full justify-center px-8 pt-10 pb-8 sm:px-8 sm:pt-12 sm:pb-10 lg:px-16"
         data-pagefind-body
       >
-        <Content />
-      </div>
-    ) : (
-      <div class="flex w-full justify-center gap-10 px-8 pt-10 pb-8 sm:px-8 sm:pt-12 sm:pb-10 lg:px-16">
-        <article class="min-w-0 max-w-[40rem] flex-1" data-pagefind-body>
-          <div class="hidden items-start justify-between gap-4 lg:flex">
-            {breadcrumbs.length > 0 ? (
-              <Breadcrumb className="min-w-0 flex-1">
-                <BreadcrumbList>
-                  {breadcrumbs.map((crumb, i) => (
-                    <>
-                      {i > 0 && <BreadcrumbSeparator />}
-                      <BreadcrumbItem className="truncate">
-                        <BreadcrumbLink href={crumb.href}>
-                          {crumb.label}
-                        </BreadcrumbLink>
-                      </BreadcrumbItem>
-                    </>
-                  ))}
-                </BreadcrumbList>
-              </Breadcrumb>
-            ) : (
-              <div />
-            )}
+        <div
+          class="min-w-0 flex-1"
+          style="max-width: calc(40rem + 2.5rem + 28rem)"
+        >
+          <APIPage
+            client:load
+            endpoint={entry.data.endpoint}
+            title={title}
+            breadcrumbs={breadcrumbs}
+            markdownUrl={markdownUrl}
+          />
 
-            <PageOptions client:load markdownUrl={markdownUrl} />
-          </div>
-
-          <h1 class="font-heading text-2xl font-semibold text-stone-900 lg:text-3xl dark:text-stone-100">
-            {title}
-          </h1>
-
-          <div class="mt-3 lg:hidden">
-            <PageOptions client:load markdownUrl={markdownUrl} />
-          </div>
-
-          <div class="prose prose-stone mt-6 max-w-none prose-headings:text-stone-900 prose-headings:font-semibold prose-p:text-stone-600 prose-a:text-stone-900 prose-a:underline prose-a:underline-offset-2 prose-a:decoration-stone-300 hover:prose-a:decoration-stone-500 prose-strong:text-stone-800 prose-code:rounded-md prose-code:bg-stone-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-stone-700 prose-code:before:content-none prose-code:after:content-none prose-th:text-left prose-th:text-stone-700 prose-td:text-stone-600 dark:prose-headings:text-stone-100 dark:prose-p:text-stone-300 dark:prose-a:text-stone-100 dark:prose-a:decoration-stone-600 dark:hover:prose-a:decoration-stone-400 dark:prose-strong:text-stone-200 dark:prose-code:bg-stone-800 dark:prose-code:text-stone-300 dark:prose-th:text-stone-300 dark:prose-td:text-stone-400 dark:prose-li:text-stone-300 dark:prose-hr:border-stone-800">
-            <Content />
-          </div>
-
-          <div class="not-prose">
+          <div class="max-w-[40rem] not-prose">
             <PageNavigation prev={prev} next={next} />
           </div>
-        </article>
-
-        {headings.length > 0 && (
-          <aside class="hidden w-64 shrink-0 xl:block pl-10">
-            <div class="sticky top-10">
-              <ClerkTOC client:load headings={headings} />
-            </div>
-          </aside>
-        )}
+        </div>
       </div>
+    ) : (
+      <DocsPage
+        entry={entry}
+        breadcrumbs={breadcrumbs}
+        markdownUrl={markdownUrl}
+        prev={prev}
+        next={next}
+      />
     )
   }
 </DocsLayout>
