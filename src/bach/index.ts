@@ -49,7 +49,7 @@ export type { ContentEntry, ApiEntry, DynamicCollectionEntry } from './api'
 
 export { getAdjacentPages, getActiveTab, resolveActiveSidebarTree } from './nav'
 
-export { apiLoader, docsLoader, DEFAULT_DESCRIPTION } from './loaders'
+export { apiLoader, docsLoader } from './loaders'
 
 export type { ApiEntryData, ApiSource, PackageApiSource, StaticApiSource } from './loaders'
 

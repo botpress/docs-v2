@@ -4,11 +4,12 @@ import DocsLayout from "../layouts/DocsLayout.astro";
 import { render } from "astro:content";
 import { toMarkdownPath } from "../lib/markdown-routes";
 import {
-  DEFAULT_DESCRIPTION,
   readDocsConfig,
   getDefaultCollection,
   fetchCollectionEntries,
 } from "@/bach";
+
+const DEFAULT_DESCRIPTION = 'Botpress documentation for building, deploying, and managing AI agents.'
 
 const docsConfig = await readDocsConfig();
 const defaultCollection = getDefaultCollection(docsConfig);
