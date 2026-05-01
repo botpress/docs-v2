@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
-import type { SidebarNode, SidebarCategoryNode } from '../lib/sidebar-types'
-import { isPathActive, hasActiveChild } from '../lib/sidebar-types'
+import { hasActiveChild, isPathActive, type SidebarCategoryNode, type SidebarNode } from '@/bach/types'
 
 function SidebarMethodBadge({ method }: { method: string }) {
   return (

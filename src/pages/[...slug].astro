@@ -17,7 +17,8 @@ import {
   resolveActiveSidebarTree,
 } from "@/bach";
 
-const DEFAULT_DESCRIPTION = 'Botpress documentation for building, deploying, and managing AI agents.'
+const DEFAULT_DESCRIPTION =
+  "Botpress documentation for building, deploying, and managing AI agents.";
 
 const docsConfig = await readDocsConfig();
 const { treeResult, titleMap } = await getSidebarTree(docsConfig);

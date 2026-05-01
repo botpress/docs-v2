@@ -1,6 +1,5 @@
 import type { APIRoute } from 'astro'
-import { getSidebarTree, readDocsConfig } from '@/bach'
-import type { SidebarNode } from '../lib/sidebar-types'
+import { getSidebarTree, readDocsConfig, type SidebarNode } from '@/bach'
 
 const SITE_URL = 'https://botpress.com/docs'
 

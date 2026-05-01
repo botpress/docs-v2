@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
-import type { SidebarNode, TabInfo } from '../lib/sidebar-types'
-import { isPathActive } from '../lib/sidebar-types'
+import { isPathActive, type SidebarNode, type TabInfo } from '@/bach/types'
 import SidebarTreeView from './sidebar-tree-view'
 import ThemeToggle from './theme-toggle'
 import { ChevronDownIcon } from 'lucide-react'

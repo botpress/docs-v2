@@ -1,8 +1,7 @@
 import type { APIRoute } from 'astro'
 import { toMarkdownHref } from '../lib/markdown-routes'
 import { getSidebarTree, getDefaultCollection, readDocsConfig, fetchCollectionEntries, normalizeEntryId } from '@/bach'
-import type { DynamicCollectionEntry } from '@/bach'
-import type { SidebarNode } from '../lib/sidebar-types'
+import type { DynamicCollectionEntry, SidebarNode } from '@/bach'
 
 const SITE_URL = 'https://botpress.com/docs'
 
