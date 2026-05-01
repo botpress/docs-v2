@@ -6,6 +6,7 @@ import type { Endpoint } from './schemas'
 import { normalizeEntryId } from './utils'
 import { getReferencedCollections, buildSidebarTree } from './tree'
 
+/** Generic content collection entry with a title and optional method/sortOrder. */
 export interface ContentEntry {
   id: string
   data: {
@@ -15,6 +16,7 @@ export interface ContentEntry {
   } & Record<string, unknown>
 }
 
+/** Shape of an API collection entry (has an `endpoint` field). */
 export interface ApiEntry {
   id: string
   data: {
@@ -28,6 +30,7 @@ export interface ApiEntry {
   }
 }
 
+/** Astro-compatible dynamic collection entry returned by `getCollection()`. */
 export interface DynamicCollectionEntry {
   id: string
   collection: string
@@ -36,10 +39,16 @@ export interface DynamicCollectionEntry {
   render(): Promise<unknown>
 }
 
+/** Type guard: returns true when an entry contains an `endpoint` field. */
 export function isApiEntry(entry: { data: Record<string, unknown> }): entry is { data: ApiEntry['data'] } {
   return 'endpoint' in entry.data
 }
 
+/**
+ * Fetch all entries for a named content collection via Astro's `getCollection`.
+ * Logs a `[bach]` warning and re-throws on failure so callers can decide to
+ * bail (getStaticPaths) or skip (sidebar generation).
+ */
 export async function fetchCollection(name: string): Promise<ContentEntry[]> {
   try {
     const { getCollection } = await import('astro:content')
@@ -50,6 +59,10 @@ export async function fetchCollection(name: string): Promise<ContentEntry[]> {
   }
 }
 
+/**
+ * Fetch dynamic collection entries (with `render()`) for a named collection.
+ * Same error behaviour as {@link fetchCollection}.
+ */
 export async function fetchCollectionEntries(name: string): Promise<DynamicCollectionEntry[]> {
   try {
     const { getCollection } = await import('astro:content')
@@ -60,11 +73,16 @@ export async function fetchCollectionEntries(name: string): Promise<DynamicColle
   }
 }
 
+/** Render a dynamic collection entry to HTML (and headings) via Astro. */
 export async function renderEntry(entry: DynamicCollectionEntry) {
   const { render } = await import('astro:content')
   return render(entry as never)
 }
 
+/**
+ * Normalize Astro `CollectionEntry<'docs'>` items into lightweight
+ * `{ slug, title }` objects used by the search index.
+ */
 export function normalizeCollectionEntries(entries: CollectionEntry<'docs'>[]): ArticleEntry[] {
   return entries.map((entry) => ({
     slug: normalizeEntryId(entry.id),
@@ -72,6 +90,10 @@ export function normalizeCollectionEntries(entries: CollectionEntry<'docs'>[]): 
   }))
 }
 
+/**
+ * Group normalized collection entries by their collection name.
+ * Produces the map consumed by {@link buildPages} for `collection`-type groups.
+ */
 export function buildSidebarEntryMap<TCollection extends string>(
   allEntries: Map<TCollection, ContentEntry[]>
 ): Map<TCollection, CollectionEntryData[]> {
@@ -90,6 +112,13 @@ export function buildSidebarEntryMap<TCollection extends string>(
   return map
 }
 
+/**
+ * Build flat lookup maps from all loaded collection entries.
+ *
+ * - `titleMap`: slug → title (and raw id → title)
+ * - `methodMap`: slug → HTTP method (and raw id → method)
+ * - `articles`: list of all articles for search indexing
+ */
 export function buildCollectionsSidebarData<TCollection extends string>(allEntries: Map<TCollection, ContentEntry[]>) {
   const titleMap = new Map<string, string>()
   const methodMap = new Map<string, string>()
@@ -115,6 +144,11 @@ export function buildCollectionsSidebarData<TCollection extends string>(allEntri
   return { titleMap, methodMap, articles }
 }
 
+/**
+ * Load every collection referenced by the docs config.
+ * Missing collections are skipped (with a warning) so the sidebar can still
+ * render even when a collection is temporarily unavailable.
+ */
 export async function loadCollections<TCollection extends string>(
   config: DocsConfig<TCollection>
 ): Promise<Map<TCollection, ContentEntry[]>> {
@@ -131,6 +165,11 @@ export async function loadCollections<TCollection extends string>(
   return allEntries
 }
 
+/**
+ * One-shot helper: load all collections, build lookup maps, and construct the
+ * full sidebar tree. Returns everything consumers need (tree, title/method
+ * maps, and the raw collections map).
+ */
 export async function getSidebarTree<TCollection extends string>(
   config: DocsConfig<TCollection>
 ): Promise<{

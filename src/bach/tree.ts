@@ -13,6 +13,10 @@ import { slugify, normalizePagePath, lastSegment, titleFromSlug } from './utils'
 
 let _docsConfigCache: DocsConfig | null = null
 
+/**
+ * Load and cache the docs configuration from `docs.config.ts`.
+ * The result is cached for the lifetime of the process.
+ */
 export async function readDocsConfig(): Promise<DocsConfig> {
   if (_docsConfigCache) return _docsConfigCache
   const { default: config } = await import('../../docs.config')
@@ -22,6 +26,10 @@ export async function readDocsConfig(): Promise<DocsConfig> {
 
 // --- Collection reference collector ---
 
+/**
+ * Walk the navigation config and collect every collection name referenced by a
+ * `collection` group. Always includes `config.defaultCollection`.
+ */
 export function getReferencedCollections<TCollection extends string>(
   config: DocsConfig<TCollection>
 ): Set<TCollection> {
@@ -33,6 +41,7 @@ export function getReferencedCollections<TCollection extends string>(
   return refs
 }
 
+/** Return the default collection name from the docs config. */
 export function getDefaultCollection<TCollection extends string>(config: DocsConfig<TCollection>): TCollection {
   return config.defaultCollection
 }
@@ -51,6 +60,7 @@ function _collectFromPages<TCollection extends string>(pages: PageItem<TCollecti
 
 // --- Tree builder ---
 
+/** Lightweight metadata extracted from a content collection entry. */
 export interface CollectionEntryData {
   id: string
   title: string
@@ -58,6 +68,14 @@ export interface CollectionEntryData {
   sortOrder?: number
 }
 
+/**
+ * Recursively build sidebar nodes from the navigation config.
+ *
+ * - Plain strings become article nodes (title resolved from `titleMap`).
+ * - Groups with a `collection` become category nodes whose children are pulled
+ *   from `collectionsMap` and sorted by `sortOrder` then `id`.
+ * - Groups with explicit `pages` become nested category nodes.
+ */
 export function buildPages<TCollection extends string>(
   pages: PageItem<TCollection>[],
   depth: number,
@@ -150,6 +168,7 @@ export function buildPages<TCollection extends string>(
   return nodes
 }
 
+/** Return the href of the first article node encountered in a depth-first walk. */
 export function findFirstHref(nodes: SidebarNode[]): string | null {
   for (const node of nodes) {
     if (node.type === 'article') return node.href
@@ -161,6 +180,10 @@ export function findFirstHref(nodes: SidebarNode[]): string | null {
   return null
 }
 
+/**
+ * Collect every URL slug represented by a tree of sidebar nodes.
+ * Includes article paths, category root hrefs, and all nested children.
+ */
 export function collectAllSlugs(nodes: SidebarNode[]): string[] {
   const slugs: string[] = []
   for (const node of nodes) {
@@ -177,6 +200,12 @@ export function collectAllSlugs(nodes: SidebarNode[]): string[] {
   return slugs
 }
 
+/**
+ * Build the complete sidebar tree for every tab defined in `docs.config.ts`.
+ *
+ * Returns tab metadata, per-tab trees, and a slug→tab lookup map used by
+ * {@link resolveActiveSidebarTree}.
+ */
 export async function buildSidebarTree<TCollection extends string>(
   titleMap: Map<string, string>,
   methodMap?: Map<string, string>,

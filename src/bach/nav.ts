@@ -15,6 +15,10 @@ function flattenTree(nodes: SidebarNode[]): AdjacentPage[] {
   return pages
 }
 
+/**
+ * Find the previous and next pages relative to `currentPath` inside a flattened
+ * sidebar tree. Returns `null` when there is no prev/next item.
+ */
 export function getAdjacentPages(nodes: SidebarNode[], currentPath: string): AdjacentPages {
   const flat = flattenTree(nodes)
   const normalized = currentPath.endsWith('/') ? currentPath.slice(0, -1) : currentPath
@@ -29,6 +33,10 @@ export function getAdjacentPages(nodes: SidebarNode[], currentPath: string): Adj
   }
 }
 
+/**
+ * Determine which tab a given URL path belongs to.
+ * Falls back to prefix matching when there is no exact slug match.
+ */
 export function getActiveTab(pathname: string, slugToTab: Record<string, string>): string | null {
   const normalized = pathname.replace(/^\/|\/$/g, '') || 'index'
   if (slugToTab[normalized]) return slugToTab[normalized]
@@ -40,6 +48,10 @@ export function getActiveTab(pathname: string, slugToTab: Record<string, string>
   return null
 }
 
+/**
+ * Given a full sidebar tree result and the current URL path, return the
+ * active tab slug and the sidebar nodes that belong to that tab.
+ */
 export function resolveActiveSidebarTree(
   treeResult: SidebarTreeResult,
   currentPath: string

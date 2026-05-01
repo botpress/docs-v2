@@ -2,6 +2,11 @@ import type { PageItem } from './types'
 import { normalizePagePath, normalizeEntryId, titleFromSlug, lastSegment } from './utils'
 import { buildPages, findFirstHref, readDocsConfig } from './tree'
 
+/**
+ * Recursively walk the navigation config looking for a breadcrumb trail that
+ * ends at `pagePath`. Collection groups are skipped because their entries are
+ * handled by the caller (see {@link buildBreadcrumbs}).
+ */
 export async function searchPagesForBreadcrumbs<TCollection extends string>(
   pagePath: string,
   pages: PageItem<TCollection>[],
@@ -47,6 +52,13 @@ export async function searchPagesForBreadcrumbs<TCollection extends string>(
   return null
 }
 
+/**
+ * Build a breadcrumb array for a given entry ID.
+ * Looks up the page path in every tab's navigation tree; if no match is found
+ * falls back to a single home crumb.
+ *
+ * The active page itself is excluded from the returned array.
+ */
 export async function buildBreadcrumbs(
   entryId: string,
   pageTitle: string,
