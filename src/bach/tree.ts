@@ -14,12 +14,12 @@ import { slugify, normalizePagePath, lastSegment, titleFromSlug } from './utils'
 let _docsConfigCache: DocsConfig | null = null
 
 /**
- * Load and cache the docs configuration from `docs.config.ts`.
+ * Load and cache the docs configuration from `bach.config.ts`.
  * The result is cached for the lifetime of the process.
  */
 export async function readDocsConfig(): Promise<DocsConfig> {
   if (_docsConfigCache) return _docsConfigCache
-  const { default: config } = await import('../../docs.config')
+  const { default: config } = await import('../../bach.config')
   _docsConfigCache = config
   return config
 }
@@ -201,7 +201,7 @@ export function collectAllSlugs(nodes: SidebarNode[]): string[] {
 }
 
 /**
- * Build the complete sidebar tree for every tab defined in `docs.config.ts`.
+ * Build the complete sidebar tree for every tab defined in `bach.config.ts`.
  *
  * Returns tab metadata, per-tab trees, and a slug→tab lookup map used by
  * {@link resolveActiveSidebarTree}.
