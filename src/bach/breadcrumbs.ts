@@ -49,7 +49,6 @@ export async function searchPagesForBreadcrumbs<TCollection extends string>(
 
 export async function buildBreadcrumbs(
   entryId: string,
-  _contentDir: string,
   pageTitle: string,
   titleMap: Map<string, string>
 ): Promise<{ label: string; href: string }[]> {

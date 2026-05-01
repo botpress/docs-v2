@@ -1,10 +1,8 @@
 import type { APIRoute } from 'astro'
-import path from 'node:path'
 import { getSidebarTree, readDocsConfig } from '@/bach'
 import type { SidebarNode } from '../lib/sidebar-types'
 
 const SITE_URL = 'https://botpress.com/docs'
-const contentDir = path.resolve('./src/content/docs')
 
 function toMdUrl(href: string): string {
   if (href === '/') return `${SITE_URL}/index.md`
@@ -34,7 +32,7 @@ function renderNodes(nodes: SidebarNode[], depth: number): string {
 
 export const GET: APIRoute = async () => {
   const docsConfig = await readDocsConfig()
-  const { treeResult } = await getSidebarTree(docsConfig, contentDir)
+  const { treeResult } = await getSidebarTree(docsConfig)
   const sections: string[] = []
 
   sections.push('# Botpress Documentation')

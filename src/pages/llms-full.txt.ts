@@ -1,12 +1,10 @@
 import type { APIRoute } from 'astro'
-import path from 'node:path'
 import { toMarkdownHref } from '../lib/markdown-routes'
 import { getSidebarTree, getDefaultCollection, readDocsConfig, fetchCollectionEntries, normalizeEntryId } from '@/bach'
 import type { DynamicCollectionEntry } from '@/bach'
 import type { SidebarNode } from '../lib/sidebar-types'
 
 const SITE_URL = 'https://botpress.com/docs'
-const contentDir = path.resolve('./src/content/docs')
 
 function stripMdxPreamble(source: string): string {
   return source.replace(/^(?:import\s.+\n)+\n?/, '')
@@ -51,7 +49,7 @@ function collectOrderedSlugs(nodes: SidebarNode[]): string[] {
 export const GET: APIRoute = async () => {
   const docsConfig = await readDocsConfig()
   const defaultCollection = getDefaultCollection(docsConfig)
-  const { treeResult } = await getSidebarTree(docsConfig, contentDir)
+  const { treeResult } = await getSidebarTree(docsConfig)
 
   const defaultEntries = await fetchCollectionEntries(defaultCollection)
   const entryBySlug = new Map<string, DynamicCollectionEntry>()

@@ -179,7 +179,6 @@ export function collectAllSlugs(nodes: SidebarNode[]): string[] {
 
 export async function buildSidebarTree<TCollection extends string>(
   titleMap: Map<string, string>,
-  _contentDir: string,
   methodMap?: Map<string, string>,
   collectionsMap?: Map<TCollection, CollectionEntryData[]>
 ): Promise<SidebarTreeResult> {

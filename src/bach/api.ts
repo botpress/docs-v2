@@ -132,8 +132,7 @@ export async function loadCollections<TCollection extends string>(
 }
 
 export async function getSidebarTree<TCollection extends string>(
-  config: DocsConfig<TCollection>,
-  _contentDir: string
+  config: DocsConfig<TCollection>
 ): Promise<{
   treeResult: SidebarTreeResult
   titleMap: Map<string, string>
@@ -143,6 +142,6 @@ export async function getSidebarTree<TCollection extends string>(
   const allEntries = await loadCollections(config)
   const { titleMap, methodMap } = buildCollectionsSidebarData(allEntries)
   const collectionsMap = buildSidebarEntryMap(allEntries)
-  const treeResult = await buildSidebarTree(titleMap, _contentDir, methodMap, collectionsMap)
+  const treeResult = await buildSidebarTree(titleMap, methodMap, collectionsMap)
   return { treeResult, titleMap, methodMap, collectionsMap }
 }

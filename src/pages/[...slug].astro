@@ -16,12 +16,10 @@ import {
   normalizeEntryId,
   resolveActiveSidebarTree,
 } from "@/bach";
-import path from "node:path";
 import { DEFAULT_DESCRIPTION } from "@/bach";
 
 const docsConfig = await readDocsConfig();
-const contentDir = path.resolve("./src/content/docs");
-const { treeResult, titleMap } = await getSidebarTree(docsConfig, contentDir);
+const { treeResult, titleMap } = await getSidebarTree(docsConfig);
 
 export async function getStaticPaths() {
   const config = await readDocsConfig();
@@ -75,7 +73,7 @@ let breadcrumbs: { label: string; href?: string }[];
 if (isApi) {
   breadcrumbs = [{ label: entry.data.apiLabel }];
 } else {
-  breadcrumbs = await buildBreadcrumbs(entry.id, contentDir, title, titleMap);
+  breadcrumbs = await buildBreadcrumbs(entry.id, title, titleMap);
 }
 
 const currentPath = Astro.url.pathname;
