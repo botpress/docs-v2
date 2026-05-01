@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
 import { toMarkdownHref } from '../lib/markdown-routes'
-import { readDocsConfig, getDefaultCollection, fetchCollectionEntries } from '@/bach'
+import { readDocsConfig, getDefaultCollection, fetchCollectionEntries, normalizeEntryId } from '@/bach'
 import type { DynamicCollectionEntry } from '@/bach'
 
 function stripMdxPreamble(source: string): string {
@@ -31,15 +31,10 @@ export async function getStaticPaths() {
   const defaultCollection = getDefaultCollection(docsConfig)
   const entries = await fetchCollectionEntries(defaultCollection)
 
-  return entries.map((entry) => {
-    const rawSlug = entry.id.replace(/\.(md|mdx)$/, '')
-    const slug = rawSlug === 'index' ? 'index' : rawSlug.replace(/\/index$/, '')
-
-    return {
-      params: { slug },
-      props: { entry },
-    }
-  })
+  return entries.map((entry) => ({
+    params: { slug: normalizeEntryId(entry.id) },
+    props: { entry },
+  }))
 }
 
 export const GET: APIRoute = async ({ props }) => {

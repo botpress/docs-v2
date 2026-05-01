@@ -1,4 +1,4 @@
-import type { SidebarNode, AdjacentPage, AdjacentPages } from './types'
+import type { SidebarNode, AdjacentPage, AdjacentPages, SidebarTreeResult } from './types'
 
 function flattenTree(nodes: SidebarNode[]): AdjacentPage[] {
   const pages: AdjacentPage[] = []
@@ -38,4 +38,15 @@ export function getActiveTab(pathname: string, slugToTab: Record<string, string>
   }
 
   return null
+}
+
+export function resolveActiveSidebarTree(
+  treeResult: SidebarTreeResult,
+  currentPath: string
+): { activeTab: string | null; sidebarTree: SidebarNode[] } {
+  const hasTabs = treeResult.tabs.length > 0
+  const activeTab = hasTabs ? getActiveTab(currentPath, treeResult.slugToTab) : null
+  const sidebarTree =
+    hasTabs && activeTab ? (treeResult.trees[activeTab] ?? treeResult.defaultTree) : treeResult.defaultTree
+  return { activeTab, sidebarTree }
 }

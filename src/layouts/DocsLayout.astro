@@ -5,15 +5,10 @@ import Sidebar from "../components/sidebar";
 import MobileSidebar from "../components/mobile-sidebar";
 import SearchOverlay from "../components/search-overlay";
 import {
-  buildSidebarTree,
-  buildSidebarEntryMap,
-  buildCollectionsSidebarData,
-  getActiveTab,
-  getReferencedCollections,
+  getSidebarTree,
   readDocsConfig,
-  fetchCollection,
+  resolveActiveSidebarTree,
 } from "@/bach";
-import type { ContentEntry } from "@/bach";
 import { siteConfig } from "../lib/site-config";
 import path from "node:path";
 interface Props {
@@ -25,38 +20,14 @@ interface Props {
 const { title, description, breadcrumbs } = Astro.props;
 
 const docsConfig = await readDocsConfig();
-const collectionNames = Array.from(getReferencedCollections(docsConfig));
-
-// Dynamically fetch all referenced collections
-const allEntries = new Map<string, ContentEntry[]>();
-for (const name of collectionNames) {
-  try {
-    const entries = await fetchCollection(name);
-    allEntries.set(name, entries);
-  } catch {
-    // Collection might not exist, skip
-  }
-}
-
 const contentDir = path.resolve("./src/content/docs");
-
-const { titleMap, methodMap } = buildCollectionsSidebarData(allEntries);
-const collectionsMap = buildSidebarEntryMap(allEntries);
-
-const result = await buildSidebarTree(
-  titleMap,
-  contentDir,
-  methodMap,
-  collectionsMap,
-);
+const { treeResult } = await getSidebarTree(docsConfig, contentDir);
 
 const currentPath = Astro.url.pathname;
-const hasTabs = result.tabs.length > 0;
-const activeTab = hasTabs ? getActiveTab(currentPath, result.slugToTab) : null;
-const sidebarTree =
-  hasTabs && activeTab
-    ? (result.trees[activeTab] ?? result.defaultTree)
-    : result.defaultTree;
+const { activeTab, sidebarTree } = resolveActiveSidebarTree(
+  treeResult,
+  currentPath,
+);
 
 const navItems: { label: string; href: string; icon?: string }[] = [
   {
@@ -78,7 +49,7 @@ const navItems: { label: string; href: string; icon?: string }[] = [
 >
   <div class="flex h-dvh flex-col overflow-hidden">
     <Header
-      tabs={result.tabs}
+      tabs={treeResult.tabs}
       activeTab={activeTab}
       siteName={siteConfig.name}
       siteLogo={siteConfig.logo}
@@ -95,9 +66,9 @@ const navItems: { label: string; href: string; icon?: string }[] = [
       siteLogo={siteConfig.logo}
       siteLogoDark={siteConfig.logoDark}
       breadcrumbs={breadcrumbs}
-      tabs={result.tabs}
+      tabs={treeResult.tabs}
       activeTab={activeTab}
-      allTrees={hasTabs ? result.trees : undefined}
+      allTrees={treeResult.tabs.length > 0 ? treeResult.trees : undefined}
     />
 
     <div class="flex flex-1 overflow-hidden">

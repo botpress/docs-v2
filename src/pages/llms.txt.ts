@@ -1,14 +1,6 @@
 import type { APIRoute } from 'astro'
 import path from 'node:path'
-import {
-  buildSidebarTree,
-  buildSidebarEntryMap,
-  buildCollectionsSidebarData,
-  getReferencedCollections,
-  readDocsConfig,
-  fetchCollection,
-} from '@/bach'
-import type { ContentEntry } from '@/bach'
+import { getSidebarTree, readDocsConfig } from '@/bach'
 import type { SidebarNode } from '../lib/sidebar-types'
 
 const SITE_URL = 'https://botpress.com/docs'
@@ -42,24 +34,7 @@ function renderNodes(nodes: SidebarNode[], depth: number): string {
 
 export const GET: APIRoute = async () => {
   const docsConfig = await readDocsConfig()
-  const collectionNames = Array.from(getReferencedCollections(docsConfig))
-
-  // Fetch all referenced collections for sidebar tree building
-  const allEntries = new Map<string, ContentEntry[]>()
-
-  for (const name of collectionNames) {
-    try {
-      const entries = await fetchCollection(name)
-      allEntries.set(name, entries)
-    } catch {
-      // Skip missing collections
-    }
-  }
-
-  const { titleMap, methodMap } = buildCollectionsSidebarData(allEntries)
-  const collectionsMap = buildSidebarEntryMap(allEntries)
-
-  const treeResult = await buildSidebarTree(titleMap, contentDir, methodMap, collectionsMap)
+  const { treeResult } = await getSidebarTree(docsConfig, contentDir)
   const sections: string[] = []
 
   sections.push('# Botpress Documentation')

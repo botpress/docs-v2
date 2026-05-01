@@ -1,5 +1,5 @@
 import type { PageItem } from './types'
-import { normalizePagePath, normalizeSlug, titleFromSlug, lastSegment } from './utils'
+import { normalizePagePath, normalizeEntryId, titleFromSlug, lastSegment } from './utils'
 import { buildPages, findFirstHref, readDocsConfig } from './tree'
 
 export async function searchPagesForBreadcrumbs<TCollection extends string>(
@@ -53,8 +53,7 @@ export async function buildBreadcrumbs(
   pageTitle: string,
   titleMap: Map<string, string>
 ): Promise<{ label: string; href: string }[]> {
-  const rawSlug = entryId.replace(/\.(md|mdx)$/, '')
-  const pagePath = normalizeSlug(rawSlug)
+  const pagePath = normalizeEntryId(entryId)
 
   const docsConfig = await readDocsConfig()
 

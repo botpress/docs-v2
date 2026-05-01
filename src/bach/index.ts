@@ -18,7 +18,7 @@ export type {
 
 export { isPathActive, hasActiveChild } from './types'
 
-export { titleFromSlug, slugify, normalizePagePath, normalizeSlug, lastSegment } from './utils'
+export { titleFromSlug, slugify, normalizePagePath, normalizeSlug, normalizeEntryId, lastSegment } from './utils'
 
 export {
   readDocsConfig,
@@ -42,10 +42,12 @@ export {
   fetchCollection,
   fetchCollectionEntries,
   renderEntry,
+  loadCollections,
+  getSidebarTree,
 } from './api'
 export type { ContentEntry, ApiEntry, DynamicCollectionEntry } from './api'
 
-export { getAdjacentPages, getActiveTab } from './nav'
+export { getAdjacentPages, getActiveTab, resolveActiveSidebarTree } from './nav'
 
 export { apiLoader, docsLoader, DEFAULT_DESCRIPTION } from './loaders'
 

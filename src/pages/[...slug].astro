@@ -6,35 +6,22 @@ import DocsPage from "../components/docs-page.astro";
 import { toMarkdownPath } from "../lib/markdown-routes";
 import {
   buildBreadcrumbs,
-  buildSidebarTree,
-  buildSidebarEntryMap,
-  buildCollectionsSidebarData,
-  getActiveTab,
+  getSidebarTree,
   getAdjacentPages,
   getReferencedCollections,
   getDefaultCollection,
   readDocsConfig,
   isApiEntry,
-  fetchCollection,
   fetchCollectionEntries,
+  normalizeEntryId,
+  resolveActiveSidebarTree,
 } from "@/bach";
-import type { ContentEntry } from "@/bach";
 import path from "node:path";
 import { DEFAULT_DESCRIPTION } from "@/bach";
 
 const docsConfig = await readDocsConfig();
-const collectionNames = Array.from(getReferencedCollections(docsConfig));
-
-// Dynamically fetch all referenced collections for sidebar building
-const allEntries = new Map<string, ContentEntry[]>();
-for (const name of collectionNames) {
-  try {
-    const entries = await fetchCollection(name);
-    allEntries.set(name, entries);
-  } catch {
-    // Collection might not exist, skip
-  }
-}
+const contentDir = path.resolve("./src/content/docs");
+const { treeResult, titleMap } = await getSidebarTree(docsConfig, contentDir);
 
 export async function getStaticPaths() {
   const config = await readDocsConfig();
@@ -59,12 +46,9 @@ export async function getStaticPaths() {
     try {
       const entries = await fetchCollectionEntries(name);
       for (const entry of entries) {
-        let slug = entry.id;
-        if (name === _defaultCollection) {
-          slug = slug.replace(/\.(md|mdx)$/, "");
-          slug = slug === "index" ? "index" : slug.replace(/\/index$/, "");
-          if (slug === "index") continue;
-        }
+        let slug =
+          name === _defaultCollection ? normalizeEntryId(entry.id) : entry.id;
+        if (slug === "index") continue;
         allPaths.push({
           params: { slug },
           props: { entry, collectionName: name },
@@ -86,18 +70,6 @@ const description =
   (entry.data.description as string | undefined) ?? DEFAULT_DESCRIPTION;
 const markdownUrl = toMarkdownPath(Astro.url.pathname);
 
-const contentDir = path.resolve("./src/content/docs");
-
-const { titleMap, methodMap } = buildCollectionsSidebarData(allEntries);
-const collectionsMap = buildSidebarEntryMap(allEntries);
-
-const treeResult = await buildSidebarTree(
-  titleMap,
-  contentDir,
-  methodMap,
-  collectionsMap,
-);
-
 let breadcrumbs: { label: string; href?: string }[];
 
 if (isApi) {
@@ -107,14 +79,7 @@ if (isApi) {
 }
 
 const currentPath = Astro.url.pathname;
-const hasTabs = treeResult.tabs.length > 0;
-const activeTab = hasTabs
-  ? getActiveTab(currentPath, treeResult.slugToTab)
-  : null;
-const sidebarTree =
-  hasTabs && activeTab
-    ? (treeResult.trees[activeTab] ?? treeResult.defaultTree)
-    : treeResult.defaultTree;
+const { sidebarTree } = resolveActiveSidebarTree(treeResult, currentPath);
 const { prev, next } = getAdjacentPages(sidebarTree, currentPath);
 ---
 

@@ -1,17 +1,8 @@
 import type { APIRoute } from 'astro'
 import path from 'node:path'
 import { toMarkdownHref } from '../lib/markdown-routes'
-import {
-  buildSidebarTree,
-  buildSidebarEntryMap,
-  buildCollectionsSidebarData,
-  getReferencedCollections,
-  getDefaultCollection,
-  readDocsConfig,
-  fetchCollection,
-  fetchCollectionEntries,
-} from '@/bach'
-import type { ContentEntry, DynamicCollectionEntry } from '@/bach'
+import { getSidebarTree, getDefaultCollection, readDocsConfig, fetchCollectionEntries, normalizeEntryId } from '@/bach'
+import type { DynamicCollectionEntry } from '@/bach'
 import type { SidebarNode } from '../lib/sidebar-types'
 
 const SITE_URL = 'https://botpress.com/docs'
@@ -59,32 +50,13 @@ function collectOrderedSlugs(nodes: SidebarNode[]): string[] {
 
 export const GET: APIRoute = async () => {
   const docsConfig = await readDocsConfig()
-  const collectionNames = Array.from(getReferencedCollections(docsConfig))
   const defaultCollection = getDefaultCollection(docsConfig)
-
-  // Fetch all referenced collections for sidebar tree building
-  const allEntries = new Map<string, ContentEntry[]>()
-
-  for (const name of collectionNames) {
-    try {
-      const entries = await fetchCollection(name)
-      allEntries.set(name, entries)
-    } catch {
-      // Skip missing collections
-    }
-  }
-
-  const { titleMap, methodMap } = buildCollectionsSidebarData(allEntries)
-  const collectionsMap = buildSidebarEntryMap(allEntries)
-
-  const treeResult = await buildSidebarTree(titleMap, contentDir, methodMap, collectionsMap)
+  const { treeResult } = await getSidebarTree(docsConfig, contentDir)
 
   const defaultEntries = await fetchCollectionEntries(defaultCollection)
   const entryBySlug = new Map<string, DynamicCollectionEntry>()
   for (const entry of defaultEntries) {
-    const rawSlug = entry.id.replace(/\.(md|mdx)$/, '')
-    const slug = rawSlug === 'index' ? 'index' : rawSlug.replace(/\/index$/, '')
-    entryBySlug.set(slug, entry)
+    entryBySlug.set(normalizeEntryId(entry.id), entry)
   }
 
   const orderedSlugs: string[] = []

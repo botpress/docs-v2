@@ -28,6 +28,11 @@ export function normalizeSlug(rawSlug: string): string {
   return rawSlug.replace(/\/index$/, '')
 }
 
+export function normalizeEntryId(id: string): string {
+  const rawSlug = id.replace(/\.(md|mdx)$/, '')
+  return normalizeSlug(rawSlug)
+}
+
 export function lastSegment(pagePath: string): string {
   const parts = pagePath.split('/')
   return parts[parts.length - 1]!

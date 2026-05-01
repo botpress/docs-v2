@@ -1,8 +1,10 @@
 import type { CollectionEntry } from 'astro:content'
-import type { ArticleEntry } from './types'
+import type { ArticleEntry, SidebarTreeResult } from './types'
 import type { CollectionEntryData } from './tree'
+import type { DocsConfig } from './types'
 import type { Endpoint } from './schemas'
-import { normalizeSlug } from './utils'
+import { normalizeEntryId } from './utils'
+import { getReferencedCollections, buildSidebarTree } from './tree'
 
 export interface ContentEntry {
   id: string
@@ -39,15 +41,23 @@ export function isApiEntry(entry: { data: Record<string, unknown> }): entry is {
 }
 
 export async function fetchCollection(name: string): Promise<ContentEntry[]> {
-  const { getCollection } = await import('astro:content')
-  const entries = await (getCollection as unknown as (name: string) => Promise<ContentEntry[]>)(name)
-  return entries
+  try {
+    const { getCollection } = await import('astro:content')
+    return await (getCollection as unknown as (name: string) => Promise<ContentEntry[]>)(name)
+  } catch (err) {
+    console.warn(`[bach] Collection "${name}" could not be loaded:`, err)
+    throw err
+  }
 }
 
 export async function fetchCollectionEntries(name: string): Promise<DynamicCollectionEntry[]> {
-  const { getCollection } = await import('astro:content')
-  const entries = await (getCollection as unknown as (name: string) => Promise<DynamicCollectionEntry[]>)(name)
-  return entries
+  try {
+    const { getCollection } = await import('astro:content')
+    return await (getCollection as unknown as (name: string) => Promise<DynamicCollectionEntry[]>)(name)
+  } catch (err) {
+    console.warn(`[bach] Collection "${name}" could not be loaded:`, err)
+    throw err
+  }
 }
 
 export async function renderEntry(entry: DynamicCollectionEntry) {
@@ -56,14 +66,10 @@ export async function renderEntry(entry: DynamicCollectionEntry) {
 }
 
 export function normalizeCollectionEntries(entries: CollectionEntry<'docs'>[]): ArticleEntry[] {
-  return entries.map((entry) => {
-    const rawSlug = entry.id.replace(/\.(md|mdx)$/, '')
-    const slug = normalizeSlug(rawSlug)
-    return {
-      slug,
-      title: entry.data.title,
-    }
-  })
+  return entries.map((entry) => ({
+    slug: normalizeEntryId(entry.id),
+    title: entry.data.title,
+  }))
 }
 
 export function buildSidebarEntryMap<TCollection extends string>(
@@ -91,8 +97,7 @@ export function buildCollectionsSidebarData<TCollection extends string>(allEntri
 
   for (const [, entries] of allEntries) {
     for (const entry of entries) {
-      const rawSlug = entry.id.replace(/\.(md|mdx)$/, '')
-      const slug = normalizeSlug(rawSlug)
+      const slug = normalizeEntryId(entry.id)
       titleMap.set(slug, entry.data.title)
       titleMap.set(entry.id, entry.data.title)
       if (entry.data.method) {
@@ -108,4 +113,36 @@ export function buildCollectionsSidebarData<TCollection extends string>(allEntri
   }
 
   return { titleMap, methodMap, articles }
+}
+
+export async function loadCollections<TCollection extends string>(
+  config: DocsConfig<TCollection>
+): Promise<Map<TCollection, ContentEntry[]>> {
+  const names = Array.from(getReferencedCollections(config))
+  const allEntries = new Map<TCollection, ContentEntry[]>()
+  for (const name of names) {
+    try {
+      const entries = await fetchCollection(name)
+      allEntries.set(name, entries)
+    } catch {
+      // Warning already logged by fetchCollection; skip from sidebar
+    }
+  }
+  return allEntries
+}
+
+export async function getSidebarTree<TCollection extends string>(
+  config: DocsConfig<TCollection>,
+  _contentDir: string
+): Promise<{
+  treeResult: SidebarTreeResult
+  titleMap: Map<string, string>
+  methodMap: Map<string, string>
+  collectionsMap: Map<TCollection, CollectionEntryData[]>
+}> {
+  const allEntries = await loadCollections(config)
+  const { titleMap, methodMap } = buildCollectionsSidebarData(allEntries)
+  const collectionsMap = buildSidebarEntryMap(allEntries)
+  const treeResult = await buildSidebarTree(titleMap, _contentDir, methodMap, collectionsMap)
+  return { treeResult, titleMap, methodMap, collectionsMap }
 }
