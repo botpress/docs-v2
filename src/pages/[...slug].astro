@@ -8,13 +8,10 @@ import {
   buildBreadcrumbs,
   getSidebarTree,
   getAdjacentPages,
-  getReferencedCollections,
-  getDefaultCollection,
   readDocsConfig,
   isApiEntry,
-  fetchCollectionEntries,
-  normalizeEntryId,
   resolveActiveSidebarTree,
+  generateStaticPaths,
 } from "@/bach";
 
 const DEFAULT_DESCRIPTION =
@@ -24,42 +21,7 @@ const docsConfig = await readDocsConfig();
 const { treeResult, titleMap } = await getSidebarTree(docsConfig);
 
 export async function getStaticPaths() {
-  const config = await readDocsConfig();
-  const names = Array.from(getReferencedCollections(config));
-  const _defaultCollection = getDefaultCollection(config);
-
-  const allPaths: Array<{
-    params: { slug: string };
-    props: {
-      entry: {
-        id: string;
-        collection: string;
-        body?: string;
-        data: Record<string, unknown>;
-        render(): Promise<unknown>;
-      };
-      collectionName: string;
-    };
-  }> = [];
-
-  for (const name of names) {
-    try {
-      const entries = await fetchCollectionEntries(name);
-      for (const entry of entries) {
-        let slug =
-          name === _defaultCollection ? normalizeEntryId(entry.id) : entry.id;
-        if (slug === "index") continue;
-        allPaths.push({
-          params: { slug },
-          props: { entry, collectionName: name },
-        });
-      }
-    } catch {
-      // Skip missing collections
-    }
-  }
-
-  return allPaths;
+  return generateStaticPaths();
 }
 
 const { entry } = Astro.props;

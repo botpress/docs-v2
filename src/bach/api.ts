@@ -4,7 +4,7 @@ import type { CollectionEntryData } from './tree'
 import type { DocsConfig } from './types'
 import type { Endpoint } from './schemas'
 import { normalizeEntryId } from './utils'
-import { getReferencedCollections, buildSidebarTree } from './tree'
+import { getReferencedCollections, getDefaultCollection, readDocsConfig, buildSidebarTree } from './tree'
 
 /** Generic content collection entry with a title and optional method/sortOrder. */
 export interface ContentEntry {
@@ -71,6 +71,60 @@ export async function fetchCollectionEntries(name: string): Promise<DynamicColle
     console.warn(`[bach] Collection "${name}" could not be loaded:`, err)
     throw err
   }
+}
+
+/** Static path returned by {@link generateStaticPaths}. */
+export interface StaticPath {
+  params: { slug: string }
+  props: {
+    entry: DynamicCollectionEntry
+    collectionName: string
+  }
+}
+
+/**
+ * Generate Astro `getStaticPaths` entries for all docs collections.
+ *
+ * By default walks every collection referenced in the docs config, skips the
+ * `index` entry, and resolves slugs the same way `[...slug].astro` does:
+ * default-collection entries use `normalizeEntryId`, others keep their raw id.
+ *
+ * @example
+ * ```ts
+ * export async function getStaticPaths() {
+ *   return generateStaticPaths()
+ * }
+ * ```
+ */
+export async function generateStaticPaths(options?: {
+  /** Collection names to include. Defaults to all referenced collections. */
+  collections?: string[]
+  /** Whether to include the `index` entry. Defaults to `false`. */
+  includeIndex?: boolean
+}): Promise<StaticPath[]> {
+  const config = await readDocsConfig()
+  const names = options?.collections ?? Array.from(getReferencedCollections(config))
+  const defaultCollection = getDefaultCollection(config)
+
+  const allPaths: StaticPath[] = []
+
+  for (const name of names) {
+    try {
+      const entries = await fetchCollectionEntries(name)
+      for (const entry of entries) {
+        const slug = name === defaultCollection ? normalizeEntryId(entry.id) : entry.id
+        if (!options?.includeIndex && slug === 'index') continue
+        allPaths.push({
+          params: { slug },
+          props: { entry, collectionName: name },
+        })
+      }
+    } catch {
+      // Skip missing collections
+    }
+  }
+
+  return allPaths
 }
 
 /** Render a dynamic collection entry to HTML (and headings) via Astro. */

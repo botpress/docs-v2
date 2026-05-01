@@ -44,8 +44,9 @@ export {
   renderEntry,
   loadCollections,
   getSidebarTree,
+  generateStaticPaths,
 } from './api'
-export type { ContentEntry, ApiEntry, DynamicCollectionEntry } from './api'
+export type { ContentEntry, ApiEntry, DynamicCollectionEntry, StaticPath } from './api'
 
 export { getAdjacentPages, getActiveTab, resolveActiveSidebarTree } from './nav'
 
