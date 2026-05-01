@@ -9,14 +9,13 @@ import {
   BreadcrumbLink,
   BreadcrumbSeparator,
 } from "./ui/breadcrumb";
-import { render } from "astro:content";
 import { cleanupHeadings } from "@/lib/cleanup-headings";
+import { renderEntry } from "@/bach";
+import type { DynamicCollectionEntry } from "@/bach";
 import type { AdjacentPages } from "@/bach";
 
 interface Props {
-  entry: Awaited<
-    ReturnType<typeof import("astro:content").getCollection<"docs">>
-  >[number];
+  entry: DynamicCollectionEntry;
   breadcrumbs: { label: string; href?: string }[];
   markdownUrl: string;
   prev: AdjacentPages["prev"];
@@ -25,11 +24,11 @@ interface Props {
 
 const { entry, breadcrumbs, markdownUrl, prev, next } = Astro.props;
 
-const renderResult = await render(entry);
+const renderResult = await renderEntry(entry);
 const { Content } = renderResult;
 const headings = cleanupHeadings(entry.body ?? "", renderResult.headings);
 const useProse = entry.data.prose !== false;
-const title = entry.data.title;
+const title = entry.data.title as string;
 ---
 
 {

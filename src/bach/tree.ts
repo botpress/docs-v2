@@ -5,29 +5,66 @@ import type {
   SidebarTreeResult,
   TabInfo,
   PageItem,
+  DocsConfig,
 } from './types'
 import { slugify, normalizePagePath, lastSegment, titleFromSlug } from './utils'
 
 // --- Config reader ---
 
-let _docsConfigCache: import('./types').DocsConfig | null = null
+let _docsConfigCache: DocsConfig | null = null
 
-export async function readDocsConfig(): Promise<import('./types').DocsConfig> {
+export async function readDocsConfig(): Promise<DocsConfig> {
   if (_docsConfigCache) return _docsConfigCache
   const { default: config } = await import('../../docs.config')
   _docsConfigCache = config
   return config
 }
 
+// --- Collection reference collector ---
+
+export function getReferencedCollections<TCollection extends string>(
+  config: DocsConfig<TCollection>
+): Set<TCollection> {
+  const refs = new Set<TCollection>()
+  refs.add(config.defaultCollection)
+  for (const tab of config.navigation.tabs) {
+    _collectFromPages(tab.pages, refs)
+  }
+  return refs
+}
+
+export function getDefaultCollection<TCollection extends string>(config: DocsConfig<TCollection>): TCollection {
+  return config.defaultCollection
+}
+
+function _collectFromPages<TCollection extends string>(pages: PageItem<TCollection>[], refs: Set<TCollection>): void {
+  for (const item of pages) {
+    if (typeof item === 'string') continue
+    if ('collection' in item && item.collection) {
+      refs.add(item.collection)
+    }
+    if ('pages' in item && item.pages) {
+      _collectFromPages(item.pages, refs)
+    }
+  }
+}
+
 // --- Tree builder ---
 
-export function buildPages(
-  pages: PageItem[],
+export interface CollectionEntryData {
+  id: string
+  title: string
+  method?: string
+  sortOrder?: number
+}
+
+export function buildPages<TCollection extends string>(
+  pages: PageItem<TCollection>[],
   depth: number,
   parentPath: string,
   titleMap: Map<string, string>,
   methodMap: Map<string, string>,
-  apiEntries?: Map<string, { id: string; title: string; method: string }[]>
+  collectionsMap?: Map<TCollection, CollectionEntryData[]>
 ): SidebarNode[] {
   const nodes: SidebarNode[] = []
 
@@ -51,7 +88,36 @@ export function buildPages(
       const groupPath = parentPath ? `${parentPath}/${groupSlug}` : groupSlug
 
       let href: string | undefined
-      let childrenPages = item.pages
+      let childrenPages: PageItem<TCollection>[] = []
+
+      if ('collection' in item) {
+        // Collection group: no explicit children
+        const entries = collectionsMap?.get(item.collection) ?? []
+        // Sort by sortOrder if present, then by id
+        const sortedEntries = [...entries].sort((a, b) => {
+          const aOrder = a.sortOrder ?? Number.MAX_SAFE_INTEGER
+          const bOrder = b.sortOrder ?? Number.MAX_SAFE_INTEGER
+          if (aOrder !== bOrder) return aOrder - bOrder
+          return a.id.localeCompare(b.id)
+        })
+
+        const categoryNode: SidebarCategoryNode = {
+          type: 'category',
+          label: item.group,
+          slug: groupSlug,
+          path: groupPath,
+          href: depth > 0 ? href : undefined,
+          children: sortedEntries.map((entry) => ({
+            type: 'article',
+            title: entry.title,
+            href: `/${entry.id}`,
+            path: entry.id,
+            method: entry.method,
+          })),
+        }
+        nodes.push(categoryNode)
+        continue
+      }
 
       if (item.root && depth > 0) {
         const rootNormalized = normalizePagePath(item.root)
@@ -63,26 +129,11 @@ export function buildPages(
           }
           return true
         })
+      } else {
+        childrenPages = item.pages
       }
 
-      const children = buildPages(childrenPages, depth + 1, groupPath, titleMap, methodMap, apiEntries)
-
-      if (item.openapi && apiEntries) {
-        const slug = 'api' in item.openapi ? item.openapi.slug : item.openapi.slug
-        const entries = apiEntries.get(slug)
-        if (entries) {
-          for (const entry of entries) {
-            const articleNode: SidebarArticleNode = {
-              type: 'article',
-              title: entry.title,
-              href: `/${entry.id}`,
-              path: entry.id,
-              method: entry.method,
-            }
-            children.push(articleNode)
-          }
-        }
-      }
+      const children = buildPages(childrenPages, depth + 1, groupPath, titleMap, methodMap, collectionsMap)
 
       const categoryNode: SidebarCategoryNode = {
         type: 'category',
@@ -126,11 +177,11 @@ export function collectAllSlugs(nodes: SidebarNode[]): string[] {
   return slugs
 }
 
-export async function buildSidebarTree(
+export async function buildSidebarTree<TCollection extends string>(
   titleMap: Map<string, string>,
   _contentDir: string,
   methodMap?: Map<string, string>,
-  apiEntries?: Map<string, { id: string; title: string; method: string }[]>
+  collectionsMap?: Map<TCollection, CollectionEntryData[]>
 ): Promise<SidebarTreeResult> {
   const docsConfig = await readDocsConfig()
   const _methodMap = methodMap ?? new Map()
@@ -141,7 +192,7 @@ export async function buildSidebarTree(
 
   for (const tabItem of docsConfig.navigation.tabs) {
     const tabSlug = slugify(tabItem.tab)
-    const tabTree = buildPages(tabItem.pages, 0, '', titleMap, _methodMap, apiEntries)
+    const tabTree = buildPages(tabItem.pages, 0, '', titleMap, _methodMap, collectionsMap)
 
     const firstHref = findFirstHref(tabTree) ?? '/'
 

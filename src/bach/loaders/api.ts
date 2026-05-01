@@ -156,11 +156,11 @@ export interface ApiEntryData {
 }
 
 interface ApiLoaderOptions {
-  packageApis: PackageApiSource[]
-  staticApis: StaticApiSource[]
+  packageApis?: PackageApiSource[]
+  staticApis?: StaticApiSource[]
 }
 
-export function apiLoader({ packageApis, staticApis }: ApiLoaderOptions): Loader {
+export function apiLoader({ packageApis = [], staticApis = [] }: ApiLoaderOptions): Loader {
   return {
     name: 'api-loader',
     async load({ store, parseData }) {

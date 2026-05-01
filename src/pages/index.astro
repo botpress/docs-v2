@@ -1,23 +1,32 @@
 ---
 import PageOptions from "../components/page-options";
 import DocsLayout from "../layouts/DocsLayout.astro";
-import { getCollection, render } from "astro:content";
+import { render } from "astro:content";
 import { toMarkdownPath } from "../lib/markdown-routes";
-import { DEFAULT_DESCRIPTION } from "@/bach";
+import {
+  DEFAULT_DESCRIPTION,
+  readDocsConfig,
+  getDefaultCollection,
+  fetchCollectionEntries,
+} from "@/bach";
 
-const entries = await getCollection("docs");
+const docsConfig = await readDocsConfig();
+const defaultCollection = getDefaultCollection(docsConfig);
+
+const entries = await fetchCollectionEntries(defaultCollection);
 
 const rootEntry = entries.find((e) => e.id === "index");
 
 if (!rootEntry) {
   throw new Error(
-    "Could not find index page — expected a docs/index.md or docs/index.mdx",
+    `Could not find index page — expected a ${defaultCollection}/index.md or ${defaultCollection}/index.mdx`,
   );
 }
 
-const { Content } = await render(rootEntry);
-const title = rootEntry.data.title;
-const description = rootEntry.data.description ?? DEFAULT_DESCRIPTION;
+const { Content } = await render(rootEntry as never);
+const title = rootEntry.data.title as string;
+const description =
+  (rootEntry.data.description as string | undefined) ?? DEFAULT_DESCRIPTION;
 const useProse = rootEntry.data.prose !== false;
 const markdownUrl = toMarkdownPath(Astro.url.pathname);
 ---

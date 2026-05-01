@@ -10,28 +10,46 @@ export type {
   AdjacentPages,
   ArticleEntry,
   GroupItem,
+  CollectionGroupItem,
   PageItem,
   TabItem,
   DocsConfig,
-  PackageApiConfig,
-  StaticApiConfig,
 } from './types'
 
 export { isPathActive, hasActiveChild } from './types'
 
 export { titleFromSlug, slugify, normalizePagePath, normalizeSlug, lastSegment } from './utils'
 
-export { readDocsConfig, buildPages, findFirstHref, collectAllSlugs, buildSidebarTree } from './tree'
+export {
+  readDocsConfig,
+  buildPages,
+  findFirstHref,
+  collectAllSlugs,
+  buildSidebarTree,
+  getReferencedCollections,
+  getDefaultCollection,
+} from './tree'
+
+export type { CollectionEntryData } from './tree'
 
 export { searchPagesForBreadcrumbs, buildBreadcrumbs } from './breadcrumbs'
 
-export { normalizeCollectionEntries, buildApiEntriesMap, buildApiSidebarData } from './api'
+export {
+  normalizeCollectionEntries,
+  buildSidebarEntryMap,
+  buildCollectionsSidebarData,
+  isApiEntry,
+  fetchCollection,
+  fetchCollectionEntries,
+  renderEntry,
+} from './api'
+export type { ContentEntry, ApiEntry, DynamicCollectionEntry } from './api'
 
 export { getAdjacentPages, getActiveTab } from './nav'
 
-export { apiLoader, docsLoader, DEFAULT_DESCRIPTION, collectApiConfigs } from './loaders'
+export { apiLoader, docsLoader, DEFAULT_DESCRIPTION } from './loaders'
 
-export type { ApiEntryData, ApiSource, PackageApiSource, StaticApiSource, ApiLoaderConfig } from './loaders'
+export type { ApiEntryData, ApiSource, PackageApiSource, StaticApiSource } from './loaders'
 
 export {
   SchemaSchema,

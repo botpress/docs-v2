@@ -1,7 +1,8 @@
 import { defineConfig } from '@/bach'
-import { adminApi, runtimeApi, filesApi, tablesApi } from '@botpress/api'
+import { collections } from './src/content.config'
 
-export default defineConfig({
+export default defineConfig(collections, {
+  defaultCollection: 'docs',
   navigation: {
     tabs: [
       {
@@ -36,53 +37,23 @@ export default defineConfig({
           'api-reference/index',
           {
             group: 'Admin API',
-            pages: [
-              {
-                group: 'Endpoints',
-                pages: [],
-                openapi: { api: adminApi, key: 'admin', slug: 'api-reference/admin-api', label: 'Admin API' },
-              },
-            ],
+            pages: [{ group: 'Endpoints', collection: 'adminApi' }],
           },
           {
             group: 'Chat API',
-            pages: [
-              {
-                group: 'Endpoints',
-                pages: [],
-                openapi: { file: 'chat-openapi.json', slug: 'api-reference/chat-api', label: 'Chat API' },
-              },
-            ],
+            pages: [{ group: 'Endpoints', collection: 'chatApi' }],
           },
           {
             group: 'Files API',
-            pages: [
-              {
-                group: 'Endpoints',
-                pages: [],
-                openapi: { api: filesApi, key: 'files', slug: 'api-reference/files-api', label: 'Files API' },
-              },
-            ],
+            pages: [{ group: 'Endpoints', collection: 'filesApi' }],
           },
           {
             group: 'Runtime API',
-            pages: [
-              {
-                group: 'Runtime API',
-                pages: [],
-                openapi: { api: runtimeApi, key: 'runtime', slug: 'api-reference/runtime-api', label: 'Runtime API' },
-              },
-            ],
+            pages: [{ group: 'Endpoints', collection: 'runtimeApi' }],
           },
           {
             group: 'Tables API',
-            pages: [
-              {
-                group: 'Endpoints',
-                pages: [],
-                openapi: { api: tablesApi, key: 'tables', slug: 'api-reference/tables-api', label: 'Tables API' },
-              },
-            ],
+            pages: [{ group: 'Endpoints', collection: 'tablesApi' }],
           },
         ],
       },

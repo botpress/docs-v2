@@ -2,9 +2,9 @@ import type { PageItem } from './types'
 import { normalizePagePath, normalizeSlug, titleFromSlug, lastSegment } from './utils'
 import { buildPages, findFirstHref, readDocsConfig } from './tree'
 
-export async function searchPagesForBreadcrumbs(
+export async function searchPagesForBreadcrumbs<TCollection extends string>(
   pagePath: string,
-  pages: PageItem[],
+  pages: PageItem<TCollection>[],
   prefix: { label: string; href: string }[],
   titleMap: Map<string, string>
 ): Promise<{ label: string; href: string }[] | null> {
@@ -17,6 +17,13 @@ export async function searchPagesForBreadcrumbs(
         return [...prefix, { label: titleMap.get(normalizedTarget) ?? titleFromSlug(lastSegment(item)), href }]
       }
     } else {
+      // Check if this is a collection group and the target matches a collection entry
+      if ('collection' in item) {
+        // Collection groups don't have explicit pages to match
+        // We'll skip matching here and let the caller handle collection entry breadcrumbs
+        continue
+      }
+
       const groupPrefix = [...prefix]
       if (item.root) {
         const rootNormalized = normalizePagePath(item.root)

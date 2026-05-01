@@ -1,4 +1,4 @@
-export type {
+import type {
   SidebarNode,
   SidebarCategoryNode,
   SidebarArticleNode,
@@ -7,38 +7,33 @@ export type {
 } from '../lib/sidebar-types'
 export { isPathActive, hasActiveChild } from '../lib/sidebar-types'
 
-export interface GroupItem {
+export interface GroupItem<TCollection extends string = string> {
   group: string
   root?: string
-  pages: PageItem[]
-  openapi?: PackageApiConfig | StaticApiConfig
+  pages: PageItem<TCollection>[]
 }
 
-export type PageItem = string | GroupItem
+export interface CollectionGroupItem<TCollection extends string = string> {
+  group: string
+  root?: string
+  collection: TCollection
+}
 
-export interface TabItem {
+export type PageItem<TCollection extends string = string> =
+  | string
+  | GroupItem<TCollection>
+  | CollectionGroupItem<TCollection>
+
+export interface TabItem<TCollection extends string = string> {
   tab: string
-  pages: PageItem[]
+  pages: PageItem<TCollection>[]
 }
 
-export interface DocsConfig {
+export interface DocsConfig<TCollection extends string = string> {
+  defaultCollection: TCollection
   navigation: {
-    tabs: TabItem[]
+    tabs: TabItem<TCollection>[]
   }
-}
-
-export interface ApiConfig {
-  slug: string
-  label: string
-}
-
-export interface PackageApiConfig extends ApiConfig {
-  api: { exportOpenapi: (dir: string) => void }
-  key: string
-}
-
-export interface StaticApiConfig extends ApiConfig {
-  file: string
 }
 
 export interface AdjacentPage {
@@ -56,3 +51,5 @@ export interface ArticleEntry {
   title: string
   method?: string
 }
+
+export type { SidebarNode, SidebarCategoryNode, SidebarArticleNode, SidebarTreeResult, TabInfo }

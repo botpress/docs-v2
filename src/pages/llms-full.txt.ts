@@ -1,8 +1,17 @@
 import type { APIRoute } from 'astro'
-import { getCollection, type CollectionEntry } from 'astro:content'
 import path from 'node:path'
 import { toMarkdownHref } from '../lib/markdown-routes'
-import { buildSidebarTree, buildApiEntriesMap, buildApiSidebarData } from '@/bach'
+import {
+  buildSidebarTree,
+  buildSidebarEntryMap,
+  buildCollectionsSidebarData,
+  getReferencedCollections,
+  getDefaultCollection,
+  readDocsConfig,
+  fetchCollection,
+  fetchCollectionEntries,
+} from '@/bach'
+import type { ContentEntry, DynamicCollectionEntry } from '@/bach'
 import type { SidebarNode } from '../lib/sidebar-types'
 
 const SITE_URL = 'https://botpress.com/docs'
@@ -20,10 +29,10 @@ function rewriteInternalLinks(source: string): string {
     })
 }
 
-function serializeEntry(entry: CollectionEntry<'docs'>, slug: string): string {
+function serializeEntry(entry: DynamicCollectionEntry, slug: string): string {
   const sourceUrl = slug === 'index' ? SITE_URL : `${SITE_URL}/${slug}`
-  const sections = [`# ${entry.data.title}`, `Source: ${sourceUrl}`]
-  const description = entry.data.description?.trim()
+  const sections = [`# ${entry.data.title as string}`, `Source: ${sourceUrl}`]
+  const description = (entry.data.description as string | undefined)?.trim()
   const body = rewriteInternalLinks(stripMdxPreamble(entry.body ?? '').trim())
 
   if (description) sections.push(description)
@@ -49,15 +58,30 @@ function collectOrderedSlugs(nodes: SidebarNode[]): string[] {
 }
 
 export const GET: APIRoute = async () => {
-  const docsEntries = await getCollection('docs')
-  const apiEntries = await getCollection('api')
-  const { titleMap, methodMap } = buildApiSidebarData(docsEntries, apiEntries, contentDir)
-  const apiEntriesMap = buildApiEntriesMap(apiEntries)
+  const docsConfig = await readDocsConfig()
+  const collectionNames = Array.from(getReferencedCollections(docsConfig))
+  const defaultCollection = getDefaultCollection(docsConfig)
 
-  const treeResult = await buildSidebarTree(titleMap, contentDir, methodMap, apiEntriesMap)
+  // Fetch all referenced collections for sidebar tree building
+  const allEntries = new Map<string, ContentEntry[]>()
 
-  const entryBySlug = new Map<string, CollectionEntry<'docs'>>()
-  for (const entry of docsEntries) {
+  for (const name of collectionNames) {
+    try {
+      const entries = await fetchCollection(name)
+      allEntries.set(name, entries)
+    } catch {
+      // Skip missing collections
+    }
+  }
+
+  const { titleMap, methodMap } = buildCollectionsSidebarData(allEntries)
+  const collectionsMap = buildSidebarEntryMap(allEntries)
+
+  const treeResult = await buildSidebarTree(titleMap, contentDir, methodMap, collectionsMap)
+
+  const defaultEntries = await fetchCollectionEntries(defaultCollection)
+  const entryBySlug = new Map<string, DynamicCollectionEntry>()
+  for (const entry of defaultEntries) {
     const rawSlug = entry.id.replace(/\.(md|mdx)$/, '')
     const slug = rawSlug === 'index' ? 'index' : rawSlug.replace(/\/index$/, '')
     entryBySlug.set(slug, entry)

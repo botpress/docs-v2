@@ -1,4 +1,9 @@
-export function defineConfig(config: import('./types').DocsConfig): import('./types').DocsConfig {
+import type { DocsConfig } from './types'
+
+export function defineConfig<T, TCollection extends keyof T & string>(
+  collections: T,
+  config: DocsConfig<TCollection>
+): DocsConfig<TCollection> {
   return config
 }
 

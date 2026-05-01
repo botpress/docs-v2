@@ -1,6 +1,8 @@
 import type { APIRoute } from 'astro'
-import { getCollection, type CollectionEntry } from 'astro:content'
 import { toMarkdownHref } from '../lib/markdown-routes'
+import { readDocsConfig, getDefaultCollection, fetchCollectionEntries } from '@/bach'
+import type { DynamicCollectionEntry } from '@/bach'
+
 function stripMdxPreamble(source: string): string {
   return source.replace(/^(?:import\s.+\n)+\n?/, '')
 }
@@ -13,9 +15,9 @@ function rewriteInternalLinks(source: string): string {
     })
 }
 
-function serializeEntry(entry: CollectionEntry<'docs'>): string {
-  const sections = [`# ${entry.data.title}`]
-  const description = entry.data.description?.trim()
+function serializeEntry(entry: DynamicCollectionEntry): string {
+  const sections = [`# ${entry.data.title as string}`]
+  const description = (entry.data.description as string | undefined)?.trim()
   const body = rewriteInternalLinks(stripMdxPreamble(entry.body ?? '').trim())
 
   if (description) sections.push(description)
@@ -25,9 +27,11 @@ function serializeEntry(entry: CollectionEntry<'docs'>): string {
 }
 
 export async function getStaticPaths() {
-  const entries = await getCollection('docs')
+  const docsConfig = await readDocsConfig()
+  const defaultCollection = getDefaultCollection(docsConfig)
+  const entries = await fetchCollectionEntries(defaultCollection)
 
-  return entries.map((entry: CollectionEntry<'docs'>) => {
+  return entries.map((entry) => {
     const rawSlug = entry.id.replace(/\.(md|mdx)$/, '')
     const slug = rawSlug === 'index' ? 'index' : rawSlug.replace(/\/index$/, '')
 
@@ -39,7 +43,7 @@ export async function getStaticPaths() {
 }
 
 export const GET: APIRoute = async ({ props }) => {
-  const { entry } = props as { entry: CollectionEntry<'docs'> }
+  const { entry } = props as { entry: DynamicCollectionEntry }
 
   return new Response(serializeEntry(entry), {
     headers: {

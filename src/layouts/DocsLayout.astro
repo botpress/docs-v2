@@ -4,13 +4,16 @@ import Header from "../components/header";
 import Sidebar from "../components/sidebar";
 import MobileSidebar from "../components/mobile-sidebar";
 import SearchOverlay from "../components/search-overlay";
-import { getCollection } from "astro:content";
 import {
   buildSidebarTree,
-  buildApiEntriesMap,
-  buildApiSidebarData,
+  buildSidebarEntryMap,
+  buildCollectionsSidebarData,
   getActiveTab,
+  getReferencedCollections,
+  readDocsConfig,
+  fetchCollection,
 } from "@/bach";
+import type { ContentEntry } from "@/bach";
 import { siteConfig } from "../lib/site-config";
 import path from "node:path";
 interface Props {
@@ -21,22 +24,30 @@ interface Props {
 
 const { title, description, breadcrumbs } = Astro.props;
 
-const docsEntries = await getCollection("docs");
-const apiEntries = await getCollection("api");
+const docsConfig = await readDocsConfig();
+const collectionNames = Array.from(getReferencedCollections(docsConfig));
+
+// Dynamically fetch all referenced collections
+const allEntries = new Map<string, ContentEntry[]>();
+for (const name of collectionNames) {
+  try {
+    const entries = await fetchCollection(name);
+    allEntries.set(name, entries);
+  } catch {
+    // Collection might not exist, skip
+  }
+}
+
 const contentDir = path.resolve("./src/content/docs");
 
-const { titleMap, methodMap } = buildApiSidebarData(
-  docsEntries,
-  apiEntries,
-  contentDir,
-);
-const apiEntriesMap = buildApiEntriesMap(apiEntries);
+const { titleMap, methodMap } = buildCollectionsSidebarData(allEntries);
+const collectionsMap = buildSidebarEntryMap(allEntries);
 
 const result = await buildSidebarTree(
   titleMap,
   contentDir,
   methodMap,
-  apiEntriesMap,
+  collectionsMap,
 );
 
 const currentPath = Astro.url.pathname;

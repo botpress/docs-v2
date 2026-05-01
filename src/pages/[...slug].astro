@@ -3,72 +3,105 @@ import PageNavigation from "../components/page-navigation";
 import DocsLayout from "../layouts/DocsLayout.astro";
 import APIPage from "../components/api-page";
 import DocsPage from "../components/docs-page.astro";
-import { getCollection } from "astro:content";
 import { toMarkdownPath } from "../lib/markdown-routes";
 import {
   buildBreadcrumbs,
   buildSidebarTree,
-  buildApiEntriesMap,
-  buildApiSidebarData,
+  buildSidebarEntryMap,
+  buildCollectionsSidebarData,
   getActiveTab,
   getAdjacentPages,
+  getReferencedCollections,
+  getDefaultCollection,
+  readDocsConfig,
+  isApiEntry,
+  fetchCollection,
+  fetchCollectionEntries,
 } from "@/bach";
+import type { ContentEntry } from "@/bach";
 import path from "node:path";
 import { DEFAULT_DESCRIPTION } from "@/bach";
 
+const docsConfig = await readDocsConfig();
+const collectionNames = Array.from(getReferencedCollections(docsConfig));
+
+// Dynamically fetch all referenced collections for sidebar building
+const allEntries = new Map<string, ContentEntry[]>();
+for (const name of collectionNames) {
+  try {
+    const entries = await fetchCollection(name);
+    allEntries.set(name, entries);
+  } catch {
+    // Collection might not exist, skip
+  }
+}
+
 export async function getStaticPaths() {
-  const docsEntries = await getCollection("docs");
-  const apiEntries = await getCollection("api");
+  const config = await readDocsConfig();
+  const names = Array.from(getReferencedCollections(config));
+  const _defaultCollection = getDefaultCollection(config);
 
-  const docsPaths = docsEntries
-    .map((entry) => {
-      const rawSlug = entry.id.replace(/\.(md|mdx)$/, "");
-      const slug =
-        rawSlug === "index" ? "index" : rawSlug.replace(/\/index$/, "");
-      return {
-        params: { slug },
-        props: { entry },
+  const allPaths: Array<{
+    params: { slug: string };
+    props: {
+      entry: {
+        id: string;
+        collection: string;
+        body?: string;
+        data: Record<string, unknown>;
+        render(): Promise<unknown>;
       };
-    })
-    .filter((p) => p.params.slug !== "index");
+      collectionName: string;
+    };
+  }> = [];
 
-  const apiPaths = apiEntries.map((entry) => ({
-    params: { slug: entry.id },
-    props: { entry },
-  }));
+  for (const name of names) {
+    try {
+      const entries = await fetchCollectionEntries(name);
+      for (const entry of entries) {
+        let slug = entry.id;
+        if (name === _defaultCollection) {
+          slug = slug.replace(/\.(md|mdx)$/, "");
+          slug = slug === "index" ? "index" : slug.replace(/\/index$/, "");
+          if (slug === "index") continue;
+        }
+        allPaths.push({
+          params: { slug },
+          props: { entry, collectionName: name },
+        });
+      }
+    } catch {
+      // Skip missing collections
+    }
+  }
 
-  return [...docsPaths, ...apiPaths];
+  return allPaths;
 }
 
 const { entry } = Astro.props;
-const isApi = entry.collection === "api";
+const isApi = isApiEntry(entry);
 
-const title = entry.data.title;
-const description = entry.data.description ?? DEFAULT_DESCRIPTION;
+const title = entry.data.title as string;
+const description =
+  (entry.data.description as string | undefined) ?? DEFAULT_DESCRIPTION;
 const markdownUrl = toMarkdownPath(Astro.url.pathname);
 
 const contentDir = path.resolve("./src/content/docs");
 
-const docsEntries = await getCollection("docs");
-const apiEntries = await getCollection("api");
-const { titleMap, methodMap } = buildApiSidebarData(
-  docsEntries,
-  apiEntries,
-  contentDir,
-);
-const apiEntriesMap = buildApiEntriesMap(apiEntries);
+const { titleMap, methodMap } = buildCollectionsSidebarData(allEntries);
+const collectionsMap = buildSidebarEntryMap(allEntries);
+
 const treeResult = await buildSidebarTree(
   titleMap,
   contentDir,
   methodMap,
-  apiEntriesMap,
+  collectionsMap,
 );
 
 let breadcrumbs: { label: string; href?: string }[];
 
 if (isApi) {
-  const { apiLabel } = entry.data;
-  breadcrumbs = [{ label: apiLabel }];
+  breadcrumbs = [{ label: entry.data.apiLabel }];
 } else {
   breadcrumbs = await buildBreadcrumbs(entry.id, contentDir, title, titleMap);
 }
