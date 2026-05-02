@@ -43,12 +43,14 @@ export {
   fetchCollectionEntries,
   renderEntry,
   loadCollections,
-  getSidebarTree,
   generateStaticPaths,
 } from './api'
 export type { ContentEntry, ApiEntry, DynamicCollectionEntry, StaticPath } from './api'
 
 export { getAdjacentPages, getActiveTab, resolveActiveSidebarTree } from './nav'
+
+export { getSiteContext, getPageContext } from './context'
+export type { SiteContext, PageContext } from './context'
 
 export { apiLoader, docsLoader } from './loaders'
 

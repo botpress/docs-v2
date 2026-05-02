@@ -1,10 +1,10 @@
 import type { CollectionEntry } from 'astro:content'
-import type { ArticleEntry, SidebarTreeResult } from './types'
+import type { ArticleEntry } from './types'
 import type { CollectionEntryData } from './tree'
 import type { DocsConfig } from './types'
 import type { Endpoint } from './schemas'
 import { normalizeEntryId } from './utils'
-import { getReferencedCollections, getDefaultCollection, readDocsConfig, buildSidebarTree } from './tree'
+import { getReferencedCollections, getDefaultCollection, readDocsConfig } from './tree'
 
 /** Generic content collection entry with a title and optional method/sortOrder. */
 export interface ContentEntry {
@@ -217,24 +217,4 @@ export async function loadCollections<TCollection extends string>(
     }
   }
   return allEntries
-}
-
-/**
- * One-shot helper: load all collections, build lookup maps, and construct the
- * full sidebar tree. Returns everything consumers need (tree, title/method
- * maps, and the raw collections map).
- */
-export async function getSidebarTree<TCollection extends string>(
-  config: DocsConfig<TCollection>
-): Promise<{
-  treeResult: SidebarTreeResult
-  titleMap: Map<string, string>
-  methodMap: Map<string, string>
-  collectionsMap: Map<TCollection, CollectionEntryData[]>
-}> {
-  const allEntries = await loadCollections(config)
-  const { titleMap, methodMap } = buildCollectionsSidebarData(allEntries)
-  const collectionsMap = buildSidebarEntryMap(allEntries)
-  const treeResult = await buildSidebarTree(titleMap, methodMap, collectionsMap)
-  return { treeResult, titleMap, methodMap, collectionsMap }
 }

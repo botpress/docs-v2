@@ -4,11 +4,7 @@ import Header from "../components/header";
 import Sidebar from "../components/sidebar";
 import MobileSidebar from "../components/mobile-sidebar";
 import SearchOverlay from "../components/search-overlay";
-import {
-  getSidebarTree,
-  readDocsConfig,
-  resolveActiveSidebarTree,
-} from "@/bach";
+import { getSiteContext, resolveActiveSidebarTree } from "@/bach";
 import { siteConfig } from "../lib/site-config";
 interface Props {
   title: string;
@@ -18,12 +14,11 @@ interface Props {
 
 const { title, description, breadcrumbs } = Astro.props;
 
-const docsConfig = await readDocsConfig();
-const { treeResult } = await getSidebarTree(docsConfig);
+const { sidebar } = await getSiteContext();
 
 const currentPath = Astro.url.pathname;
 const { activeTab, sidebarTree } = resolveActiveSidebarTree(
-  treeResult,
+  sidebar,
   currentPath,
 );
 
@@ -47,7 +42,7 @@ const navItems: { label: string; href: string; icon?: string }[] = [
 >
   <div class="flex h-dvh flex-col overflow-hidden">
     <Header
-      tabs={treeResult.tabs}
+      tabs={sidebar.tabs}
       activeTab={activeTab}
       siteName={siteConfig.name}
       siteLogo={siteConfig.logo}
@@ -64,9 +59,9 @@ const navItems: { label: string; href: string; icon?: string }[] = [
       siteLogo={siteConfig.logo}
       siteLogoDark={siteConfig.logoDark}
       breadcrumbs={breadcrumbs}
-      tabs={treeResult.tabs}
+      tabs={sidebar.tabs}
       activeTab={activeTab}
-      allTrees={treeResult.tabs.length > 0 ? treeResult.trees : undefined}
+      allTrees={sidebar.tabs.length > 0 ? sidebar.trees : undefined}
     />
 
     <div class="flex flex-1 overflow-hidden">

@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
 import { toMarkdownHref } from '../lib/markdown-routes'
-import { getSidebarTree, getDefaultCollection, readDocsConfig, fetchCollectionEntries, normalizeEntryId } from '@/bach'
+import { getSiteContext, getDefaultCollection, fetchCollectionEntries, normalizeEntryId } from '@/bach'
 import type { DynamicCollectionEntry, SidebarNode } from '@/bach'
 
 const SITE_URL = 'https://botpress.com/docs'
@@ -46,9 +46,8 @@ function collectOrderedSlugs(nodes: SidebarNode[]): string[] {
 }
 
 export const GET: APIRoute = async () => {
-  const docsConfig = await readDocsConfig()
-  const defaultCollection = getDefaultCollection(docsConfig)
-  const { treeResult } = await getSidebarTree(docsConfig)
+  const { config, sidebar } = await getSiteContext()
+  const defaultCollection = getDefaultCollection(config)
 
   const defaultEntries = await fetchCollectionEntries(defaultCollection)
   const entryBySlug = new Map<string, DynamicCollectionEntry>()
@@ -57,13 +56,13 @@ export const GET: APIRoute = async () => {
   }
 
   const orderedSlugs: string[] = []
-  if (treeResult.tabs.length > 0) {
-    for (const tab of treeResult.tabs) {
-      const tree = treeResult.trees[tab.slug]
+  if (sidebar.tabs.length > 0) {
+    for (const tab of sidebar.tabs) {
+      const tree = sidebar.trees[tab.slug]
       if (tree) orderedSlugs.push(...collectOrderedSlugs(tree))
     }
   } else {
-    orderedSlugs.push(...collectOrderedSlugs(treeResult.defaultTree))
+    orderedSlugs.push(...collectOrderedSlugs(sidebar.defaultTree))
   }
 
   const serialized: string[] = []

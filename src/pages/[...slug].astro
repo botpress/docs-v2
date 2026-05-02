@@ -4,45 +4,28 @@ import DocsLayout from "../layouts/DocsLayout.astro";
 import APIPage from "../components/api-page";
 import DocsPage from "../components/docs-page.astro";
 import { toMarkdownPath } from "../lib/markdown-routes";
-import {
-  buildBreadcrumbs,
-  getSidebarTree,
-  getAdjacentPages,
-  readDocsConfig,
-  isApiEntry,
-  resolveActiveSidebarTree,
-  generateStaticPaths,
-} from "@/bach";
+import { getPageContext, generateStaticPaths } from "@/bach";
 
 const DEFAULT_DESCRIPTION =
   "Botpress documentation for building, deploying, and managing AI agents.";
-
-const docsConfig = await readDocsConfig();
-const { treeResult, titleMap } = await getSidebarTree(docsConfig);
 
 export async function getStaticPaths() {
   return generateStaticPaths();
 }
 
 const { entry } = Astro.props;
-const isApi = isApiEntry(entry);
+const {
+  isApi,
+  title,
+  description: pageDescription,
+  breadcrumbs,
+  prev,
+  next,
+  apiData,
+} = await getPageContext(Astro.url.pathname, entry);
 
-const title = entry.data.title as string;
-const description =
-  (entry.data.description as string | undefined) ?? DEFAULT_DESCRIPTION;
+const description = pageDescription ?? DEFAULT_DESCRIPTION;
 const markdownUrl = toMarkdownPath(Astro.url.pathname);
-
-let breadcrumbs: { label: string; href?: string }[];
-
-if (isApi) {
-  breadcrumbs = [{ label: entry.data.apiLabel }];
-} else {
-  breadcrumbs = await buildBreadcrumbs(entry.id, title, titleMap);
-}
-
-const currentPath = Astro.url.pathname;
-const { sidebarTree } = resolveActiveSidebarTree(treeResult, currentPath);
-const { prev, next } = getAdjacentPages(sidebarTree, currentPath);
 ---
 
 <DocsLayout title={title} description={description} breadcrumbs={breadcrumbs}>
@@ -58,7 +41,7 @@ const { prev, next } = getAdjacentPages(sidebarTree, currentPath);
         >
           <APIPage
             client:load
-            endpoint={entry.data.endpoint}
+            endpoint={apiData!.endpoint}
             title={title}
             breadcrumbs={breadcrumbs}
             markdownUrl={markdownUrl}
