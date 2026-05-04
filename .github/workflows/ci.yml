@@ -33,10 +33,25 @@ jobs:
       - run: bun install --frozen-lockfile
       - run: bun run check:format
 
+  check-writing:
+    name: Check Writing
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - run: bun install -g mdx2vast
+      - uses: vale-cli/vale-action@v2.1.1
+        with:
+          files: src/content/docs/
+          fail_on_error: true
+          filter_mode: nofilter
+          reporter: github-check
+          vale_flags: --glob=*.{md,mdx}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [check-type, check-lint, check-format]
+    needs: [check-type, check-lint, check-format, check-writing]
     steps:
       - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v2
