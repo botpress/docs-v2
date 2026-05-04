@@ -18,7 +18,7 @@
     "check:lint:oxlint": "bunx --bun oxlint",
     "check:lint:biome": "bunx --bun @biomejs/biome lint",
     "check:type": "bun --bun astro check",
-    "check:writing": "vale src/content/docs/",
+    "check:writing": "scripts/check-vale.sh src/content/docs/",
     "fix": "bun run --sequential fix:format fix:lint",
     "fix:format": "bun run --sequential fix:format:oxfmt fix:format:biome",
     "fix:format:oxfmt": "bunx --bun oxfmt .",

@@ -12,4 +12,4 @@ pre-commit:
       run: bunx oxlint {staged_files}
     vale:
       glob: '**/*.{md,mdx}'
-      run: scripts/check-vale.sh src/content/docs/
+      run: scripts/check-vale.sh {staged_files}
