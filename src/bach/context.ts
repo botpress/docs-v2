@@ -1,23 +1,26 @@
 import type { DocsConfig, SidebarTreeResult, SidebarNode, AdjacentPage, ArticleEntry } from './types'
-import type { DynamicCollectionEntry, ApiEntry } from './api'
-import { isApiEntry } from './api'
-import { readDocsConfig, buildSidebarTree } from './tree'
+import type { DynamicCollectionEntry, ApiCollectionData } from './content'
+import { isApiEntry } from './content'
+import { readDocsConfig, buildSidebarTree, getDefaultCollection } from './tree'
 import { buildBreadcrumbs } from './breadcrumbs'
 import { resolveActiveSidebarTree, getAdjacentPages } from './nav'
-import { loadCollections, buildCollectionsSidebarData, buildSidebarEntryMap } from './api'
+import { loadCollections, buildCollectionsSidebarData, buildSidebarEntryMap } from './content'
+import { normalizeEntryId } from './utils'
 
 export interface SiteContext {
   config: DocsConfig
+  defaultCollection: string
   sidebar: SidebarTreeResult
   titleMap: Map<string, string>
   methodMap: Map<string, string>
   articles: ArticleEntry[]
+  defaultEntriesBySlug: Map<string, DynamicCollectionEntry>
 }
 
 export interface PageContext extends SiteContext {
   entry: DynamicCollectionEntry
   isApi: boolean
-  apiData: ApiEntry['data'] | undefined
+  apiData: ApiCollectionData | undefined
   title: string
   description: string | undefined
   activeTab: string | null
@@ -37,12 +40,18 @@ export async function getSiteContext(): Promise<SiteContext> {
   if (_siteContextCache) return _siteContextCache
 
   const config = await readDocsConfig()
+  const defaultCollection = getDefaultCollection(config)
   const allEntries = await loadCollections(config)
   const { titleMap, methodMap, articles } = buildCollectionsSidebarData(allEntries)
   const collectionsMap = buildSidebarEntryMap(allEntries)
   const sidebar = await buildSidebarTree(titleMap, methodMap, collectionsMap)
 
-  _siteContextCache = { config, sidebar, titleMap, methodMap, articles }
+  const defaultEntriesBySlug = new Map<string, DynamicCollectionEntry>()
+  for (const entry of allEntries.get(defaultCollection) ?? []) {
+    defaultEntriesBySlug.set(normalizeEntryId(entry.id), entry)
+  }
+
+  _siteContextCache = { config, defaultCollection, sidebar, titleMap, methodMap, articles, defaultEntriesBySlug }
   return _siteContextCache
 }
 
@@ -54,9 +63,9 @@ export async function getPageContext(pathname: string, entry: DynamicCollectionE
   const site = await getSiteContext()
 
   const isApi = isApiEntry(entry)
-  const title = entry.data.title as string
-  const description = entry.data.description as string | undefined
-  const apiData = isApi ? (entry.data as ApiEntry['data']) : undefined
+  const title = entry.data.title
+  const description = entry.data.description
+  const apiData = isApi ? entry.data : undefined
 
   const { activeTab, sidebarTree } = resolveActiveSidebarTree(site.sidebar, pathname)
 

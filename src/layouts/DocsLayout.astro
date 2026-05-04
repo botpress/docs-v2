@@ -4,23 +4,21 @@ import Header from "../components/header";
 import Sidebar from "../components/sidebar";
 import MobileSidebar from "../components/mobile-sidebar";
 import SearchOverlay from "../components/search-overlay";
-import { getSiteContext, resolveActiveSidebarTree } from "@/bach";
+import type { SidebarTreeResult, SidebarNode } from "@/bach/types";
 import { siteConfig } from "../lib/site-config";
 interface Props {
   title: string;
   description: string;
   breadcrumbs?: { label: string; href?: string }[];
+  sidebar: SidebarTreeResult;
+  activeTab: string | null;
+  sidebarTree: SidebarNode[];
 }
 
-const { title, description, breadcrumbs } = Astro.props;
-
-const { sidebar } = await getSiteContext();
+const { title, description, breadcrumbs, sidebar, activeTab, sidebarTree } =
+  Astro.props;
 
 const currentPath = Astro.url.pathname;
-const { activeTab, sidebarTree } = resolveActiveSidebarTree(
-  sidebar,
-  currentPath,
-);
 
 const navItems: { label: string; href: string; icon?: string }[] = [
   {

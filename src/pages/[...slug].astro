@@ -9,9 +9,7 @@ import { getPageContext, generateStaticPaths } from "@/bach";
 const DEFAULT_DESCRIPTION =
   "Botpress documentation for building, deploying, and managing AI agents.";
 
-export async function getStaticPaths() {
-  return generateStaticPaths();
-}
+export const getStaticPaths = generateStaticPaths;
 
 const { entry } = Astro.props;
 const {
@@ -22,13 +20,23 @@ const {
   prev,
   next,
   apiData,
+  sidebar,
+  activeTab,
+  sidebarTree,
 } = await getPageContext(Astro.url.pathname, entry);
 
 const description = pageDescription ?? DEFAULT_DESCRIPTION;
 const markdownUrl = toMarkdownPath(Astro.url.pathname);
 ---
 
-<DocsLayout title={title} description={description} breadcrumbs={breadcrumbs}>
+<DocsLayout
+  title={title}
+  description={description}
+  breadcrumbs={breadcrumbs}
+  sidebar={sidebar}
+  activeTab={activeTab}
+  sidebarTree={sidebarTree}
+>
   {
     isApi ? (
       <div

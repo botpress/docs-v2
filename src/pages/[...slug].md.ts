@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro'
 import { toMarkdownHref } from '../lib/markdown-routes'
-import { readDocsConfig, getDefaultCollection, generateStaticPaths } from '@/bach'
-import type { DynamicCollectionEntry } from '@/bach'
+import { getSiteContext, generateStaticPaths } from '@/bach'
+import type { DynamicCollectionEntry } from '@/bach/content'
 
 function stripMdxPreamble(source: string): string {
   return source.replace(/^(?:import\s.+\n)+\n?/, '')
@@ -16,8 +16,8 @@ function rewriteInternalLinks(source: string): string {
 }
 
 function serializeEntry(entry: DynamicCollectionEntry): string {
-  const sections = [`# ${entry.data.title as string}`]
-  const description = (entry.data.description as string | undefined)?.trim()
+  const sections = [`# ${entry.data.title}`]
+  const description = entry.data.description?.trim()
   const body = rewriteInternalLinks(stripMdxPreamble(entry.body ?? '').trim())
 
   if (description) sections.push(description)
@@ -27,8 +27,7 @@ function serializeEntry(entry: DynamicCollectionEntry): string {
 }
 
 export async function getStaticPaths() {
-  const config = await readDocsConfig()
-  const defaultCollection = getDefaultCollection(config)
+  const { defaultCollection } = await getSiteContext()
   return generateStaticPaths({
     collections: [defaultCollection],
     includeIndex: true,

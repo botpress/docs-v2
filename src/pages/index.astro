@@ -3,37 +3,43 @@ import PageOptions from "../components/page-options";
 import DocsLayout from "../layouts/DocsLayout.astro";
 import { render } from "astro:content";
 import { toMarkdownPath } from "../lib/markdown-routes";
-import {
-  getSiteContext,
-  getDefaultCollection,
-  fetchCollectionEntries,
-} from "@/bach";
+import { getSiteContext, getPageContext } from "@/bach";
 
 const DEFAULT_DESCRIPTION =
   "Botpress documentation for building, deploying, and managing AI agents.";
 
-const { config } = await getSiteContext();
-const defaultCollection = getDefaultCollection(config);
+const { defaultEntriesBySlug } = await getSiteContext();
 
-const entries = await fetchCollectionEntries(defaultCollection);
-
-const rootEntry = entries.find((e) => e.id === "index");
+const rootEntry = defaultEntriesBySlug.get("index");
 
 if (!rootEntry) {
   throw new Error(
-    `Could not find index page — expected a ${defaultCollection}/index.md or ${defaultCollection}/index.mdx`,
+    `Could not find index page — expected an index.md or index.mdx in the default collection`,
   );
 }
 
-const { Content } = await render(rootEntry as never);
-const title = rootEntry.data.title as string;
-const description =
-  (rootEntry.data.description as string | undefined) ?? DEFAULT_DESCRIPTION;
-const useProse = rootEntry.data.prose !== false;
+const { Content } = await render(rootEntry);
+
+const {
+  title,
+  description: pageDescription,
+  sidebar,
+  activeTab,
+  sidebarTree,
+} = await getPageContext(Astro.url.pathname, rootEntry);
+
+const description = pageDescription ?? DEFAULT_DESCRIPTION;
+const useProse = "prose" in rootEntry.data && rootEntry.data.prose !== false;
 const markdownUrl = toMarkdownPath(Astro.url.pathname);
 ---
 
-<DocsLayout title={title} description={description}>
+<DocsLayout
+  title={title}
+  description={description}
+  sidebar={sidebar}
+  activeTab={activeTab}
+  sidebarTree={sidebarTree}
+>
   {
     useProse ? (
       <div

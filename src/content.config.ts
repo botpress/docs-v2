@@ -1,5 +1,5 @@
 import { defineCollection } from 'astro:content'
-import { apiLoader, docsLoader } from '@/bach'
+import { apiLoader, docsLoader } from '@/bach/loaders'
 import { docsSchema, apiCollectionSchema } from '@/bach/schemas'
 import { adminApi, runtimeApi, filesApi, tablesApi } from '@botpress/api'
 
