@@ -3,12 +3,12 @@ import PageOptions from "../components/page-options";
 import DocsLayout from "../layouts/DocsLayout.astro";
 import { render } from "astro:content";
 import { toMarkdownPath } from "../lib/markdown-routes";
-import { getSiteContext, getPageContext } from "@/bach";
+import { site } from "@/site";
 
 const DEFAULT_DESCRIPTION =
   "Botpress documentation for building, deploying, and managing AI agents.";
 
-const { defaultEntriesBySlug } = await getSiteContext();
+const { defaultEntriesBySlug } = await site.getContext();
 
 const rootEntry = defaultEntriesBySlug.get("index");
 
@@ -26,7 +26,7 @@ const {
   sidebar,
   activeTab,
   sidebarTree,
-} = await getPageContext(Astro.url.pathname, rootEntry);
+} = await site.getPageContext(Astro.url.pathname, rootEntry);
 
 const description = pageDescription ?? DEFAULT_DESCRIPTION;
 const useProse = "prose" in rootEntry.data && rootEntry.data.prose !== false;

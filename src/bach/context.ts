@@ -1,7 +1,7 @@
 import type { DocsConfig, SidebarTreeResult, SidebarNode, AdjacentPage, ArticleEntry } from './types'
 import type { DynamicCollectionEntry, ApiCollectionData } from './content'
 import { isApiEntry } from './content'
-import { readDocsConfig, buildSidebarTree, getDefaultCollection } from './tree'
+import { buildSidebarTree, getDefaultCollection } from './tree'
 import { buildBreadcrumbs } from './breadcrumbs'
 import { resolveActiveSidebarTree, getAdjacentPages } from './nav'
 import { loadCollections, buildCollectionsSidebarData, buildSidebarEntryMap } from './content'
@@ -30,56 +30,50 @@ export interface PageContext extends SiteContext {
   next: AdjacentPage | null
 }
 
-let _siteContextCache: SiteContext | null = null
-
 /**
  * Build the global site context from the docs config.
- * The result is memoized for the lifetime of the process.
  */
-export async function getSiteContext(): Promise<SiteContext> {
-  if (_siteContextCache) return _siteContextCache
-
-  const config = await readDocsConfig()
+export async function getSiteContext(config: DocsConfig): Promise<SiteContext> {
   const defaultCollection = getDefaultCollection(config)
   const allEntries = await loadCollections(config)
   const { titleMap, methodMap, articles } = buildCollectionsSidebarData(allEntries)
   const collectionsMap = buildSidebarEntryMap(allEntries)
-  const sidebar = await buildSidebarTree(titleMap, methodMap, collectionsMap)
+  const sidebar = await buildSidebarTree(config, titleMap, methodMap, collectionsMap)
 
   const defaultEntriesBySlug = new Map<string, DynamicCollectionEntry>()
   for (const entry of allEntries.get(defaultCollection) ?? []) {
     defaultEntriesBySlug.set(normalizeEntryId(entry.id), entry)
   }
 
-  _siteContextCache = { config, defaultCollection, sidebar, titleMap, methodMap, articles, defaultEntriesBySlug }
-  return _siteContextCache
+  return { config, defaultCollection, sidebar, titleMap, methodMap, articles, defaultEntriesBySlug }
 }
 
 /**
  * Derive the full page context for a given URL path and content entry.
- * Internally calls {@link getSiteContext} so the site-wide data is only built once.
  */
-export async function getPageContext(pathname: string, entry: DynamicCollectionEntry): Promise<PageContext> {
-  const site = await getSiteContext()
-
+export async function getPageContext(
+  pathname: string,
+  entry: DynamicCollectionEntry,
+  siteContext: SiteContext
+): Promise<PageContext> {
   const isApi = isApiEntry(entry)
   const title = entry.data.title
   const description = entry.data.description
   const apiData = isApi ? entry.data : undefined
 
-  const { activeTab, sidebarTree } = resolveActiveSidebarTree(site.sidebar, pathname)
+  const { activeTab, sidebarTree } = resolveActiveSidebarTree(siteContext.sidebar, pathname)
 
   let breadcrumbs: { label: string; href?: string }[]
   if (isApi) {
     breadcrumbs = [{ label: apiData!.apiLabel }]
   } else {
-    breadcrumbs = await buildBreadcrumbs(entry.id, title, site.titleMap)
+    breadcrumbs = await buildBreadcrumbs(siteContext.config, entry.id, title, siteContext.titleMap)
   }
 
   const { prev, next } = getAdjacentPages(sidebarTree, pathname)
 
   return {
-    ...site,
+    ...siteContext,
     entry,
     isApi,
     apiData,

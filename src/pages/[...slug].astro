@@ -4,12 +4,14 @@ import DocsLayout from "../layouts/DocsLayout.astro";
 import APIPage from "../components/api-page";
 import DocsPage from "../components/docs-page.astro";
 import { toMarkdownPath } from "../lib/markdown-routes";
-import { getPageContext, generateStaticPaths } from "@/bach";
+import { site } from "@/site";
 
 const DEFAULT_DESCRIPTION =
   "Botpress documentation for building, deploying, and managing AI agents.";
 
-export const getStaticPaths = generateStaticPaths;
+export async function getStaticPaths() {
+  return await site.getStaticPaths();
+}
 
 const { entry } = Astro.props;
 const {
@@ -23,7 +25,7 @@ const {
   sidebar,
   activeTab,
   sidebarTree,
-} = await getPageContext(Astro.url.pathname, entry);
+} = await site.getPageContext(Astro.url.pathname, entry);
 
 const description = pageDescription ?? DEFAULT_DESCRIPTION;
 const markdownUrl = toMarkdownPath(Astro.url.pathname);

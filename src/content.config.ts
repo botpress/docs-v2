@@ -9,37 +9,27 @@ const docs = defineCollection({
 })
 
 const adminApiCollection = defineCollection({
-  loader: apiLoader({
-    packageApis: [{ api: adminApi, key: 'admin', slug: 'api-reference/admin-api', label: 'Admin API' }],
-  }),
+  loader: apiLoader({ api: adminApi, key: 'admin', slug: 'api-reference/admin-api', label: 'Admin API' }),
   schema: apiCollectionSchema,
 })
 
 const chatApiCollection = defineCollection({
-  loader: apiLoader({
-    staticApis: [{ file: 'chat-openapi.json', slug: 'api-reference/chat-api', label: 'Chat API' }],
-  }),
+  loader: apiLoader({ file: 'chat-openapi.json', slug: 'api-reference/chat-api', label: 'Chat API' }),
   schema: apiCollectionSchema,
 })
 
 const filesApiCollection = defineCollection({
-  loader: apiLoader({
-    packageApis: [{ api: filesApi, key: 'files', slug: 'api-reference/files-api', label: 'Files API' }],
-  }),
+  loader: apiLoader({ api: filesApi, key: 'files', slug: 'api-reference/files-api', label: 'Files API' }),
   schema: apiCollectionSchema,
 })
 
 const runtimeApiCollection = defineCollection({
-  loader: apiLoader({
-    packageApis: [{ api: runtimeApi, key: 'runtime', slug: 'api-reference/runtime-api', label: 'Runtime API' }],
-  }),
+  loader: apiLoader({ api: runtimeApi, key: 'runtime', slug: 'api-reference/runtime-api', label: 'Runtime API' }),
   schema: apiCollectionSchema,
 })
 
 const tablesApiCollection = defineCollection({
-  loader: apiLoader({
-    packageApis: [{ api: tablesApi, key: 'tables', slug: 'api-reference/tables-api', label: 'Tables API' }],
-  }),
+  loader: apiLoader({ api: tablesApi, key: 'tables', slug: 'api-reference/tables-api', label: 'Tables API' }),
   schema: apiCollectionSchema,
 })
 

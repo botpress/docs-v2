@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
 import { toMarkdownHref } from '../lib/markdown-routes'
-import { getSiteContext } from '@/bach'
+import { site } from '@/site'
 import type { DynamicCollectionEntry } from '@/bach/content'
 import type { SidebarNode } from '@/bach/types'
 
@@ -47,7 +47,7 @@ function collectOrderedSlugs(nodes: SidebarNode[]): string[] {
 }
 
 export const GET: APIRoute = async () => {
-  const { defaultEntriesBySlug, sidebar } = await getSiteContext()
+  const { defaultEntriesBySlug, sidebar } = await site.getContext()
 
   const orderedSlugs: string[] = []
   if (sidebar.tabs.length > 0) {

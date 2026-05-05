@@ -1,6 +1,6 @@
-import type { PageItem } from './types'
+import type { DocsConfig, PageItem } from './types'
 import { normalizePagePath, normalizeEntryId, titleFromSlug, lastSegment } from './utils'
-import { buildPages, findFirstHref, readDocsConfig } from './tree'
+import { buildPages, findFirstHref } from './tree'
 
 /**
  * Recursively walk the navigation config looking for a breadcrumb trail that
@@ -59,16 +59,15 @@ export async function searchPagesForBreadcrumbs<TCollection extends string>(
  *
  * The active page itself is excluded from the returned array.
  */
-export async function buildBreadcrumbs(
+export async function buildBreadcrumbs<TCollection extends string>(
+  config: DocsConfig<TCollection>,
   entryId: string,
   pageTitle: string,
   titleMap: Map<string, string>
 ): Promise<{ label: string; href: string }[]> {
   const pagePath = normalizeEntryId(entryId)
 
-  const docsConfig = await readDocsConfig()
-
-  for (const tab of docsConfig.navigation.tabs) {
+  for (const tab of config.navigation.tabs) {
     const crumbs = await searchPagesForBreadcrumbs(pagePath, tab.pages, [], titleMap)
     if (crumbs) {
       // Remove the active page itself — breadcrumbs show only the parent path

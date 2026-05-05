@@ -3,7 +3,7 @@ import type { ArticleEntry } from './types'
 import type { CollectionEntryData } from './tree'
 import type { DocsConfig } from './types'
 import { normalizeEntryId } from './utils'
-import { getReferencedCollections, getDefaultCollection, readDocsConfig } from './tree'
+import { getReferencedCollections, getDefaultCollection } from './tree'
 
 export type DynamicCollectionEntry = CollectionEntry<keyof DataEntryMap>
 
@@ -32,7 +32,7 @@ export async function fetchCollectionEntries(name: string): Promise<DynamicColle
   }
 }
 
-/** Static path returned by {@link generateStaticPaths}. */
+/** Static path returned by {@link getStaticPaths}. */
 export interface StaticPath {
   params: { slug: string }
   props: {
@@ -51,17 +51,19 @@ export interface StaticPath {
  * @example
  * ```ts
  * export async function getStaticPaths() {
- *   return generateStaticPaths()
+ *   return getStaticPaths()
  * }
  * ```
  */
-export async function generateStaticPaths(options?: {
-  /** Collection names to include. Defaults to all referenced collections. */
-  collections?: string[]
-  /** Whether to include the `index` entry. Defaults to `false`. */
-  includeIndex?: boolean
-}): Promise<StaticPath[]> {
-  const config = await readDocsConfig()
+export async function getStaticPaths(
+  config: DocsConfig,
+  options?: {
+    /** Collection names to include. Defaults to all referenced collections. */
+    collections?: string[]
+    /** Whether to include the `index` entry. Defaults to `false`. */
+    includeIndex?: boolean
+  }
+): Promise<StaticPath[]> {
   const names = options?.collections ?? Array.from(getReferencedCollections(config))
   const defaultCollection = getDefaultCollection(config)
 

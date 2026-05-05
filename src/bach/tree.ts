@@ -9,21 +9,6 @@ import type {
 } from './types'
 import { slugify, normalizePagePath, lastSegment, titleFromSlug } from './utils'
 
-// --- Config reader ---
-
-let _docsConfigCache: DocsConfig | null = null
-
-/**
- * Load and cache the docs configuration from `bach.config.ts`.
- * The result is cached for the lifetime of the process.
- */
-export async function readDocsConfig(): Promise<DocsConfig> {
-  if (_docsConfigCache) return _docsConfigCache
-  const { default: config } = await import('../../bach.config')
-  _docsConfigCache = config
-  return config
-}
-
 // --- Collection reference collector ---
 
 /**
@@ -207,18 +192,18 @@ export function collectAllSlugs(nodes: SidebarNode[]): string[] {
  * {@link resolveActiveSidebarTree}.
  */
 export async function buildSidebarTree<TCollection extends string>(
+  config: DocsConfig<TCollection>,
   titleMap: Map<string, string>,
   methodMap?: Map<string, string>,
   collectionsMap?: Map<TCollection, CollectionEntryData[]>
 ): Promise<SidebarTreeResult> {
-  const docsConfig = await readDocsConfig()
   const _methodMap = methodMap ?? new Map()
 
   const tabs: TabInfo[] = []
   const trees: Record<string, SidebarNode[]> = {}
   const slugToTab: Record<string, string> = {}
 
-  for (const tabItem of docsConfig.navigation.tabs) {
+  for (const tabItem of config.navigation.tabs) {
     const tabSlug = slugify(tabItem.tab)
     const tabTree = buildPages(tabItem.pages, 0, '', titleMap, _methodMap, collectionsMap)
 

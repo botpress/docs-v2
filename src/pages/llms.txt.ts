@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro'
-import { getSiteContext } from '@/bach'
+import { site } from '@/site'
 import type { SidebarNode } from '@/bach/types'
 
 const SITE_URL = 'https://botpress.com/docs'
@@ -31,7 +31,7 @@ function renderNodes(nodes: SidebarNode[], depth: number): string {
 }
 
 export const GET: APIRoute = async () => {
-  const { sidebar } = await getSiteContext()
+  const { sidebar } = await site.getContext()
   const sections: string[] = []
 
   sections.push('# Botpress Documentation')
