@@ -2,7 +2,7 @@
 /**
  * Fast, build-less broken link checker.
  *
- * Derives every valid internal route from bach (docs + API reference),
+ * Derives every valid internal route from docs files on disk and OpenAPI specs,
  * then scans source files for internal links and reports broken ones.
  *
  * Usage: bun run scripts/check-broken-links.ts
