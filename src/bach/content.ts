@@ -3,7 +3,7 @@ import type { ArticleEntry } from './types'
 import type { CollectionEntryData } from './tree'
 import type { DocsConfig } from './types'
 import { normalizeEntryId } from './utils'
-import { getReferencedCollections, getDefaultCollection } from './tree'
+import { getReferencedCollections } from './tree'
 
 export type DynamicCollectionEntry = CollectionEntry<keyof DataEntryMap>
 
@@ -20,7 +20,7 @@ export function isApiEntry(
 /**
  * Fetch dynamic collection entries (with `render()`) for a named collection.
  * Logs a `[bach]` warning and re-throws on failure so callers can decide to
- * bail (getStaticPaths) or skip (sidebar generation).
+ * bail (static path generation) or skip (sidebar generation).
  */
 export async function fetchCollectionEntries(name: string): Promise<DynamicCollectionEntry[]> {
   try {
@@ -32,60 +32,13 @@ export async function fetchCollectionEntries(name: string): Promise<DynamicColle
   }
 }
 
-/** Static path returned by {@link getStaticPaths}. */
+/** Static path entry for Astro `getStaticPaths`. */
 export interface StaticPath {
   params: { slug: string }
   props: {
     entry: DynamicCollectionEntry
     collectionName: string
   }
-}
-
-/**
- * Generate Astro `getStaticPaths` entries for all docs collections.
- *
- * By default walks every collection referenced in the docs config, skips the
- * `index` entry, and resolves slugs the same way `[...slug].astro` does:
- * default-collection entries use `normalizeEntryId`, others keep their raw id.
- *
- * @example
- * ```ts
- * export async function getStaticPaths() {
- *   return getStaticPaths()
- * }
- * ```
- */
-export async function getStaticPaths(
-  config: DocsConfig,
-  options?: {
-    /** Collection names to include. Defaults to all referenced collections. */
-    collections?: string[]
-    /** Whether to include the `index` entry. Defaults to `false`. */
-    includeIndex?: boolean
-  }
-): Promise<StaticPath[]> {
-  const names = options?.collections ?? Array.from(getReferencedCollections(config))
-  const defaultCollection = getDefaultCollection(config)
-
-  const allPaths: StaticPath[] = []
-
-  for (const name of names) {
-    try {
-      const entries = await fetchCollectionEntries(name)
-      for (const entry of entries) {
-        const slug = name === defaultCollection ? normalizeEntryId(entry.id) : entry.id
-        if (!options?.includeIndex && slug === 'index') continue
-        allPaths.push({
-          params: { slug },
-          props: { entry, collectionName: name },
-        })
-      }
-    } catch {
-      // Skip missing collections
-    }
-  }
-
-  return allPaths
 }
 
 /**
