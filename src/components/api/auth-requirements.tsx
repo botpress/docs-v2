@@ -1,7 +1,7 @@
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Field } from '@/components/field'
-import type { SecurityScheme } from '@/components/api/types'
+import type { SecurityScheme } from '@/bach/schemas'
 
 interface AuthRequirementsProps {
   security?: Record<string, string[]>[]

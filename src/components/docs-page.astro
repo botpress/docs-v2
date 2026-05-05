@@ -1,0 +1,94 @@
+---
+import PageOptions from "./page-options";
+import PageNavigation from "./page-navigation";
+import { ClerkTOC } from "./clerk-toc";
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+} from "./ui/breadcrumb";
+import { cleanupHeadings } from "@/lib/cleanup-headings";
+import { render } from "astro:content";
+import type { DynamicCollectionEntry } from "@/bach/content";
+import type { AdjacentPages } from "@/bach/types";
+
+interface Props {
+  entry: DynamicCollectionEntry;
+  breadcrumbs: { label: string; href?: string }[];
+  markdownUrl: string;
+  prev: AdjacentPages["prev"];
+  next: AdjacentPages["next"];
+}
+
+const { entry, breadcrumbs, markdownUrl, prev, next } = Astro.props;
+
+const renderResult = await render(entry);
+const { Content } = renderResult;
+const headings = cleanupHeadings(entry.body ?? "", renderResult.headings);
+const useProse = "prose" in entry.data && entry.data.prose !== false;
+const title = entry.data.title;
+---
+
+{
+  !useProse ? (
+    <div
+      class="w-full px-8 pt-10 pb-8 sm:px-8 sm:pt-12 sm:pb-10 lg:px-16"
+      data-pagefind-body
+    >
+      <Content />
+    </div>
+  ) : (
+    <div class="flex w-full justify-center gap-10 px-8 pt-10 pb-8 sm:px-8 sm:pt-12 sm:pb-10 lg:px-16">
+      <article class="min-w-0 max-w-[40rem] flex-1" data-pagefind-body>
+        <div class="hidden items-start justify-between gap-4 lg:flex">
+          {breadcrumbs.length > 0 ? (
+            <Breadcrumb className="min-w-0 flex-1">
+              <BreadcrumbList>
+                {breadcrumbs.map((crumb, i) => (
+                  <>
+                    {i > 0 && <BreadcrumbSeparator />}
+                    <BreadcrumbItem className="truncate">
+                      <BreadcrumbLink href={crumb.href}>
+                        {crumb.label}
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                  </>
+                ))}
+              </BreadcrumbList>
+            </Breadcrumb>
+          ) : (
+            <div />
+          )}
+
+          <PageOptions client:load markdownUrl={markdownUrl} />
+        </div>
+
+        <h1 class="font-heading text-2xl font-semibold text-stone-900 lg:text-3xl dark:text-stone-100">
+          {title}
+        </h1>
+
+        <div class="mt-3 lg:hidden">
+          <PageOptions client:load markdownUrl={markdownUrl} />
+        </div>
+
+        <div class="prose prose-stone mt-6 max-w-none prose-headings:text-stone-900 prose-headings:font-semibold prose-p:text-stone-600 prose-a:text-stone-900 prose-a:underline prose-a:underline-offset-2 prose-a:decoration-stone-300 hover:prose-a:decoration-stone-500 prose-strong:text-stone-800 prose-code:rounded-md prose-code:bg-stone-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-stone-700 prose-code:before:content-none prose-code:after:content-none prose-th:text-left prose-th:text-stone-700 prose-td:text-stone-600 dark:prose-headings:text-stone-100 dark:prose-p:text-stone-300 dark:prose-a:text-stone-100 dark:prose-a:decoration-stone-600 dark:hover:prose-a:decoration-stone-400 dark:prose-strong:text-stone-200 dark:prose-code:bg-stone-800 dark:prose-code:text-stone-300 dark:prose-th:text-stone-300 dark:prose-td:text-stone-400 dark:prose-li:text-stone-300 dark:prose-hr:border-stone-800">
+          <Content />
+        </div>
+
+        <div class="not-prose">
+          <PageNavigation prev={prev} next={next} />
+        </div>
+      </article>
+
+      {headings.length > 0 && (
+        <aside class="hidden w-64 shrink-0 xl:block pl-10">
+          <div class="sticky top-10">
+            <ClerkTOC client:load headings={headings} />
+          </div>
+        </aside>
+      )}
+    </div>
+  )
+}
