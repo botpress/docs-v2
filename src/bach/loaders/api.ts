@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import os from 'node:os'
 import type { DataStore, Loader, LoaderContext } from 'astro/loaders'
-import type { Endpoint } from '@/components/api/types'
+import type { Endpoint } from '../schemas/api'
 
 const STATIC_SPECS_DIR = path.resolve('./public/api-specs')
 
@@ -155,48 +155,47 @@ export interface ApiEntryData {
   endpoint: Endpoint
 }
 
-interface ApiLoaderOptions {
-  packageApis: PackageApiSource[]
-  staticApis: StaticApiSource[]
-}
+type ApiLoaderOptions = (
+  | {
+      file: string
+    }
+  | { api: { exportOpenapi: (dir: string) => void }; key: string }
+) &
+  ApiSource
 
-export function apiLoader({ packageApis, staticApis }: ApiLoaderOptions): Loader {
+export function apiLoader(options: ApiLoaderOptions): Loader {
   return {
     name: 'api-loader',
     async load({ store, parseData }) {
       store.clear()
-
       const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'api-specs-'))
-
       try {
-        for (const entry of packageApis) {
-          const exportDir = path.join(tmpDir, entry.key)
-
-          console.log('Processing openapi for', entry.key)
+        let spec: OpenApiSpec
+        if ('file' in options) {
+          const specPath = path.join(STATIC_SPECS_DIR, options.file)
+          const raw = JSON.parse(fs.readFileSync(specPath, 'utf-8'))
+          spec = raw as OpenApiSpec
+        } else if ('api' in options) {
+          const exportDir = path.join(tmpDir, options.key)
+          console.log('Processing openapi for', options.key)
           const origWrite = process.stdout.write
-          //process.stdout.write = () => true
           try {
-            entry.api.exportOpenapi(exportDir)
+            options.api.exportOpenapi(exportDir)
           } finally {
             process.stdout.write = origWrite
           }
 
           const specPath = path.join(exportDir, 'openapi.json')
           const raw = tagFilterSpec(JSON.parse(fs.readFileSync(specPath, 'utf-8')) as OpenApiSpec)
-          const dereferenced = await SwaggerParser.dereference(
-            raw as unknown as Parameters<typeof SwaggerParser.dereference>[0]
-          )
-          const spec = stripMarkdownLinks(dereferenced) as OpenApiSpec
-          await processSpec(spec, entry.slug, entry.label, store, parseData)
+          spec = raw
+        } else {
+          throw new Error('Malformed arguments to apiloader: expected API or spec file, got neither')
         }
-
-        for (const entry of staticApis) {
-          const specPath = path.join(STATIC_SPECS_DIR, entry.file)
-          const raw = JSON.parse(fs.readFileSync(specPath, 'utf-8'))
-          const dereferenced = await SwaggerParser.dereference(raw)
-          const spec = stripMarkdownLinks(dereferenced) as OpenApiSpec
-          await processSpec(spec, entry.slug, entry.label, store, parseData)
-        }
+        const dereferencedSpec = await SwaggerParser.dereference(
+          spec as unknown as Parameters<typeof SwaggerParser.dereference>[0]
+        )
+        const strippedSpec = stripMarkdownLinks(dereferencedSpec) as OpenApiSpec
+        await processSpec(strippedSpec, options.slug, options.label, store, parseData)
       } finally {
         fs.rmSync(tmpDir, { recursive: true, force: true })
       }
@@ -222,7 +221,7 @@ async function processSpec(
       const endpoint = extractEndpoint(pathItem, method, apiPath, spec)
       const operationId = op.operationId
       const filename = slugify(operationId || `${method}-${apiPath.replace(/\//g, '-')}`)
-      const id = `${apiSlug}/endpoints/${filename}`
+      const id = `${apiSlug}/${filename}`
       const title = operationId || `${method.toUpperCase()} ${apiPath}`
       const description = op.description?.split('\n')[0]?.slice(0, 200) || undefined
 

@@ -1,10 +1,7 @@
 import type { APIRoute } from 'astro'
-import { getCollection, type CollectionEntry } from 'astro:content'
-import path from 'node:path'
 import { toMarkdownHref } from '../lib/markdown-routes'
-import { computeStrippedSlug } from '../lib/sidebar-tree'
-
-const contentDir = path.resolve('./src/content/docs')
+import { site } from '@/site'
+import type { DynamicCollectionEntry } from '@/bach/content'
 
 function stripMdxPreamble(source: string): string {
   return source.replace(/^(?:import\s.+\n)+\n?/, '')
@@ -18,7 +15,7 @@ function rewriteInternalLinks(source: string): string {
     })
 }
 
-function serializeEntry(entry: CollectionEntry<'docs'>): string {
+function serializeEntry(entry: DynamicCollectionEntry): string {
   const sections = [`# ${entry.data.title}`]
   const description = entry.data.description?.trim()
   const body = rewriteInternalLinks(stripMdxPreamble(entry.body ?? '').trim())
@@ -30,21 +27,15 @@ function serializeEntry(entry: CollectionEntry<'docs'>): string {
 }
 
 export async function getStaticPaths() {
-  const entries = await getCollection('docs')
-
-  return entries.map((entry) => {
-    const rawSlug = entry.id.replace(/\.(md|mdx)$/, '')
-    const strippedSlug = computeStrippedSlug(rawSlug, contentDir)
-
-    return {
-      params: { slug: strippedSlug },
-      props: { entry },
-    }
+  const { defaultCollection } = await site.getContext()
+  return site.getStaticPaths({
+    collections: [defaultCollection],
+    includeIndex: true,
   })
 }
 
 export const GET: APIRoute = async ({ props }) => {
-  const { entry } = props as { entry: CollectionEntry<'docs'> }
+  const { entry } = props as { entry: DynamicCollectionEntry }
 
   return new Response(serializeEntry(entry), {
     headers: {

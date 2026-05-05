@@ -1,7 +1,5 @@
 import { glob, type Loader } from 'astro/loaders'
 
-export const DEFAULT_DESCRIPTION = 'Botpress documentation for building, deploying, and managing AI agents.'
-
 export type DocsLoaderOptions = {
   pattern: string
   base: string

@@ -1,12 +1,10 @@
 import type { APIRoute } from 'astro'
-import { getCollection, type CollectionEntry } from 'astro:content'
-import path from 'node:path'
 import { toMarkdownHref } from '../lib/markdown-routes'
-import { computeStrippedSlug, buildSidebarTree, buildApiSidebarNodes, buildApiSidebarData } from '../lib/sidebar-tree'
-import type { SidebarNode } from '../lib/sidebar-types'
+import { site } from '@/site'
+import type { DynamicCollectionEntry } from '@/bach/content'
+import type { SidebarNode } from '@/bach/types'
 
 const SITE_URL = 'https://botpress.com/docs'
-const contentDir = path.resolve('./src/content/docs')
 
 function stripMdxPreamble(source: string): string {
   return source.replace(/^(?:import\s.+\n)+\n?/, '')
@@ -20,7 +18,7 @@ function rewriteInternalLinks(source: string): string {
     })
 }
 
-function serializeEntry(entry: CollectionEntry<'docs'>, slug: string): string {
+function serializeEntry(entry: DynamicCollectionEntry, slug: string): string {
   const sourceUrl = slug === 'index' ? SITE_URL : `${SITE_URL}/${slug}`
   const sections = [`# ${entry.data.title}`, `Source: ${sourceUrl}`]
   const description = entry.data.description?.trim()
@@ -49,28 +47,16 @@ function collectOrderedSlugs(nodes: SidebarNode[]): string[] {
 }
 
 export const GET: APIRoute = async () => {
-  const docsEntries = await getCollection('docs')
-  const apiEntries = await getCollection('api')
-  const { titleMap, methodMap } = buildApiSidebarData(docsEntries, apiEntries, contentDir)
-  const apiNodes = buildApiSidebarNodes(apiEntries)
-
-  const treeResult = buildSidebarTree(titleMap, contentDir, methodMap, apiNodes)
-
-  const entryBySlug = new Map<string, CollectionEntry<'docs'>>()
-  for (const entry of docsEntries) {
-    const rawSlug = entry.id.replace(/\.(md|mdx)$/, '')
-    const slug = computeStrippedSlug(rawSlug, contentDir)
-    entryBySlug.set(slug, entry)
-  }
+  const { defaultEntriesBySlug, sidebar } = await site.getContext()
 
   const orderedSlugs: string[] = []
-  if (treeResult.tabs.length > 0) {
-    for (const tab of treeResult.tabs) {
-      const tree = treeResult.trees[tab.slug]
+  if (sidebar.tabs.length > 0) {
+    for (const tab of sidebar.tabs) {
+      const tree = sidebar.trees[tab.slug]
       if (tree) orderedSlugs.push(...collectOrderedSlugs(tree))
     }
   } else {
-    orderedSlugs.push(...collectOrderedSlugs(treeResult.defaultTree))
+    orderedSlugs.push(...collectOrderedSlugs(sidebar.defaultTree))
   }
 
   const serialized: string[] = []
@@ -79,11 +65,11 @@ export const GET: APIRoute = async () => {
   for (const slug of orderedSlugs) {
     if (seen.has(slug)) continue
     seen.add(slug)
-    const entry = entryBySlug.get(slug)
+    const entry = defaultEntriesBySlug.get(slug)
     if (entry) serialized.push(serializeEntry(entry, slug))
   }
 
-  for (const [slug, entry] of entryBySlug) {
+  for (const [slug, entry] of defaultEntriesBySlug) {
     if (seen.has(slug)) continue
     seen.add(slug)
     serialized.push(serializeEntry(entry, slug))

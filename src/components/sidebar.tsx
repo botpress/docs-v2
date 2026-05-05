@@ -1,4 +1,4 @@
-import type { SidebarNode } from '../lib/sidebar-types'
+import type { SidebarNode } from '@/bach/types'
 import SidebarTreeView from './sidebar-tree-view'
 import ThemeToggle from './theme-toggle'
 import { LUCIDE_NAV_ICONS } from '../lib/nav-icons'

@@ -1,42 +1,43 @@
 import { defineCollection } from 'astro:content'
-import { z } from 'astro/zod'
-import { runtimeApi, adminApi, tablesApi, filesApi } from '@botpress/api'
-import { apiLoader, type PackageApiSource, type StaticApiSource } from './astro/loaders/api-loader'
-import { docsLoader } from './astro/loaders/docs-loader'
-import { EndpointSchema } from './components/api/types'
-
-const packageApis: PackageApiSource[] = [
-  { api: adminApi, slug: 'admin-api', label: 'Admin API', key: 'admin' },
-  { api: filesApi, slug: 'files-api', label: 'Files API', key: 'files' },
-  { api: runtimeApi, slug: 'runtime-api', label: 'Runtime API', key: 'runtime' },
-  { api: tablesApi, slug: 'tables-api', label: 'Tables API', key: 'tables' },
-]
-
-const staticApis: StaticApiSource[] = [{ file: 'chat-openapi.json', slug: 'chat-api', label: 'Chat API' }]
-
-export const DEFAULT_API_DESCRIPTION =
-  'Explore the Botpress API reference for endpoints, parameters, and response schemas.'
+import { apiLoader, docsLoader } from '@/bach/loaders'
+import { docsSchema, apiCollectionSchema } from '@/bach/schemas'
+import { adminApi, runtimeApi, filesApi, tablesApi } from '@botpress/api'
 
 const docs = defineCollection({
   loader: docsLoader({ pattern: '**/*.{md,mdx}', base: './src/content/docs' }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string().optional(),
-    prose: z.boolean().default(true),
-  }),
+  schema: docsSchema,
 })
 
-const api = defineCollection({
-  loader: apiLoader({ packageApis, staticApis }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string().default(DEFAULT_API_DESCRIPTION),
-    method: z.string(),
-    apiSlug: z.string(),
-    apiLabel: z.string(),
-    sortOrder: z.number(),
-    endpoint: EndpointSchema,
-  }),
+const adminApiCollection = defineCollection({
+  loader: apiLoader({ api: adminApi, key: 'admin', slug: 'api-reference/admin-api', label: 'Admin API' }),
+  schema: apiCollectionSchema,
 })
 
-export const collections = { docs, api }
+const chatApiCollection = defineCollection({
+  loader: apiLoader({ file: 'chat-openapi.json', slug: 'api-reference/chat-api', label: 'Chat API' }),
+  schema: apiCollectionSchema,
+})
+
+const filesApiCollection = defineCollection({
+  loader: apiLoader({ api: filesApi, key: 'files', slug: 'api-reference/files-api', label: 'Files API' }),
+  schema: apiCollectionSchema,
+})
+
+const runtimeApiCollection = defineCollection({
+  loader: apiLoader({ api: runtimeApi, key: 'runtime', slug: 'api-reference/runtime-api', label: 'Runtime API' }),
+  schema: apiCollectionSchema,
+})
+
+const tablesApiCollection = defineCollection({
+  loader: apiLoader({ api: tablesApi, key: 'tables', slug: 'api-reference/tables-api', label: 'Tables API' }),
+  schema: apiCollectionSchema,
+})
+
+export const collections = {
+  docs,
+  adminApi: adminApiCollection,
+  chatApi: chatApiCollection,
+  filesApi: filesApiCollection,
+  runtimeApi: runtimeApiCollection,
+  tablesApi: tablesApiCollection,
+}
