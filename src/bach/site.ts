@@ -70,7 +70,11 @@ export class BachSite<TCollection extends string = string> {
     return this._siteContextCache
   }
 
-  /** Derive the full page context for a URL path and content entry. */
+  /**
+   * Derive the full page context for a URL path and content entry.
+   * @param pathname - The URL pathname for the current page.
+   * @param entry - The content collection entry for the page.
+   */
   async getPageContext(pathname: string, entry: DynamicCollectionEntry): Promise<PageContext> {
     const siteContext = await this.getContext()
 
