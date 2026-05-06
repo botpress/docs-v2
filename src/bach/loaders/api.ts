@@ -159,11 +159,11 @@ export type ApiSpecOptions = { file: string } | { api: { exportOpenapi: (dir: st
 
 export type ApiLoaderOptions = ApiSpecOptions & ApiSource
 
-function loadSpec(options: ApiSpecOptions): OpenApiSpec {
+function loadSpec(options: ApiSpecOptions): { spec: OpenApiSpec; cleanup: () => void } {
   if ('file' in options) {
     const specPath = path.join(STATIC_SPECS_DIR, options.file)
     const raw = JSON.parse(fs.readFileSync(specPath, 'utf-8'))
-    return raw as OpenApiSpec
+    return { spec: raw as OpenApiSpec, cleanup: () => {} }
   } else if ('api' in options) {
     const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'api-specs-'))
     try {
@@ -177,9 +177,16 @@ function loadSpec(options: ApiSpecOptions): OpenApiSpec {
       }
 
       const specPath = path.join(exportDir, 'openapi.json')
-      return tagFilterSpec(JSON.parse(fs.readFileSync(specPath, 'utf-8')) as OpenApiSpec)
-    } finally {
+      const spec = tagFilterSpec(JSON.parse(fs.readFileSync(specPath, 'utf-8')) as OpenApiSpec)
+      return {
+        spec,
+        cleanup: () => {
+          fs.rmSync(tmpDir, { recursive: true, force: true })
+        },
+      }
+    } catch (err) {
       fs.rmSync(tmpDir, { recursive: true, force: true })
+      throw err
     }
   } else {
     throw new Error('Malformed arguments to apiloader: expected API or spec file, got neither')
@@ -187,22 +194,26 @@ function loadSpec(options: ApiSpecOptions): OpenApiSpec {
 }
 
 export function getApiEntryIds(options: ApiSpecOptions & { slug: string }): string[] {
-  const spec = loadSpec(options)
-  const ids: string[] = []
+  const { spec, cleanup } = loadSpec(options)
+  try {
+    const ids: string[] = []
 
-  for (const [apiPath, pathItem] of Object.entries(spec.paths)) {
-    for (const method of HTTP_METHODS) {
-      const op = pathItem[method]
-      if (!op) continue
-      if (op['x-hidden']) continue
+    for (const [apiPath, pathItem] of Object.entries(spec.paths)) {
+      for (const method of HTTP_METHODS) {
+        const op = pathItem[method]
+        if (!op) continue
+        if (op['x-hidden']) continue
 
-      const operationId = op.operationId
-      const filename = slugify(operationId || `${method}-${apiPath.replace(/\//g, '-')}`)
-      ids.push(`${options.slug}/${filename}`)
+        const operationId = op.operationId
+        const filename = slugify(operationId || `${method}-${apiPath.replace(/\//g, '-')}`)
+        ids.push(`${options.slug}/${filename}`)
+      }
     }
-  }
 
-  return ids
+    return ids
+  } finally {
+    cleanup()
+  }
 }
 
 export function apiLoader(options: ApiLoaderOptions): Loader {
@@ -210,12 +221,16 @@ export function apiLoader(options: ApiLoaderOptions): Loader {
     name: 'api-loader',
     async load({ store, parseData }) {
       store.clear()
-      const spec = loadSpec(options)
-      const dereferencedSpec = await SwaggerParser.dereference(
-        spec as unknown as Parameters<typeof SwaggerParser.dereference>[0]
-      )
-      const strippedSpec = stripMarkdownLinks(dereferencedSpec) as OpenApiSpec
-      await processSpec(strippedSpec, options.slug, options.label, store, parseData)
+      const { spec, cleanup } = loadSpec(options)
+      try {
+        const dereferencedSpec = await SwaggerParser.dereference(
+          spec as unknown as Parameters<typeof SwaggerParser.dereference>[0]
+        )
+        const strippedSpec = stripMarkdownLinks(dereferencedSpec) as OpenApiSpec
+        await processSpec(strippedSpec, options.slug, options.label, store, parseData)
+      } finally {
+        cleanup()
+      }
     },
   }
 }
