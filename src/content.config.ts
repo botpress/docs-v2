@@ -1,7 +1,7 @@
 import { defineCollection } from 'astro:content'
 import { apiLoader, docsLoader } from '@/bach/loaders'
 import { docsSchema, apiCollectionSchema } from '@/bach/schemas'
-import { adminApi, runtimeApi, filesApi, tablesApi } from '@botpress/api'
+import { adminApiConfig, chatApiConfig, filesApiConfig, runtimeApiConfig, tablesApiConfig } from './api-collections'
 
 const docs = defineCollection({
   loader: docsLoader({ pattern: '**/*.{md,mdx}', base: './src/content/docs' }),
@@ -9,27 +9,27 @@ const docs = defineCollection({
 })
 
 const adminApiCollection = defineCollection({
-  loader: apiLoader({ api: adminApi, key: 'admin', slug: 'api-reference/admin-api', label: 'Admin API' }),
+  loader: apiLoader(adminApiConfig),
   schema: apiCollectionSchema,
 })
 
 const chatApiCollection = defineCollection({
-  loader: apiLoader({ file: 'chat-openapi.json', slug: 'api-reference/chat-api', label: 'Chat API' }),
+  loader: apiLoader(chatApiConfig),
   schema: apiCollectionSchema,
 })
 
 const filesApiCollection = defineCollection({
-  loader: apiLoader({ api: filesApi, key: 'files', slug: 'api-reference/files-api', label: 'Files API' }),
+  loader: apiLoader(filesApiConfig),
   schema: apiCollectionSchema,
 })
 
 const runtimeApiCollection = defineCollection({
-  loader: apiLoader({ api: runtimeApi, key: 'runtime', slug: 'api-reference/runtime-api', label: 'Runtime API' }),
+  loader: apiLoader(runtimeApiConfig),
   schema: apiCollectionSchema,
 })
 
 const tablesApiCollection = defineCollection({
-  loader: apiLoader({ api: tablesApi, key: 'tables', slug: 'api-reference/tables-api', label: 'Tables API' }),
+  loader: apiLoader(tablesApiConfig),
   schema: apiCollectionSchema,
 })
 

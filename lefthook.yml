@@ -13,3 +13,5 @@ pre-commit:
     vale:
       glob: '**/*.{md,mdx}'
       run: scripts/check-vale.sh {staged_files}
+    link:
+      run: bun check:link
