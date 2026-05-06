@@ -160,7 +160,7 @@ function main() {
       console.warn(`    line ${link.line}: ${link.target}`)
     }
   }
-  console.error('')
+  console.warn('')
 
   // TODO: replace with 1 once content is merged in
   process.exit(0)
