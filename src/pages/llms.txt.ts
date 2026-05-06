@@ -1,11 +1,8 @@
 import type { APIRoute } from 'astro'
-import { getCollection } from 'astro:content'
-import path from 'node:path'
-import { buildSidebarTree, buildApiSidebarNodes, buildApiSidebarData } from '../lib/sidebar-tree'
-import type { SidebarNode } from '../lib/sidebar-types'
+import { site } from '@/site'
+import type { SidebarNode } from '@/bach/types'
 
 const SITE_URL = 'https://botpress.com/docs'
-const contentDir = path.resolve('./src/content/docs')
 
 function toMdUrl(href: string): string {
   if (href === '/') return `${SITE_URL}/index.md`
@@ -34,12 +31,7 @@ function renderNodes(nodes: SidebarNode[], depth: number): string {
 }
 
 export const GET: APIRoute = async () => {
-  const docsEntries = await getCollection('docs')
-  const apiEntries = await getCollection('api')
-  const { titleMap, methodMap } = buildApiSidebarData(docsEntries, apiEntries, contentDir)
-  const apiNodes = buildApiSidebarNodes(apiEntries)
-
-  const treeResult = buildSidebarTree(titleMap, contentDir, methodMap, apiNodes)
+  const { sidebar } = await site.getContext()
   const sections: string[] = []
 
   sections.push('# Botpress Documentation')
@@ -48,9 +40,9 @@ export const GET: APIRoute = async () => {
   sections.push('')
   sections.push(`Full docs available at: ${SITE_URL}`)
 
-  if (treeResult.tabs.length > 0) {
-    for (const tab of treeResult.tabs) {
-      const tree = treeResult.trees[tab.slug]
+  if (sidebar.tabs.length > 0) {
+    for (const tab of sidebar.tabs) {
+      const tree = sidebar.trees[tab.slug]
       if (!tree?.length) continue
 
       sections.push('')
@@ -58,7 +50,7 @@ export const GET: APIRoute = async () => {
       sections.push(renderNodes(tree, 0))
     }
   } else {
-    sections.push(renderNodes(treeResult.defaultTree, 0))
+    sections.push(renderNodes(sidebar.defaultTree, 0))
   }
 
   const body =

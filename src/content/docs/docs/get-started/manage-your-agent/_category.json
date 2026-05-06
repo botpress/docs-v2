@@ -1,4 +1,0 @@
-{
-  "label": "Manage your agent",
-  "sidebarPages": ["preview", "edit-appearance", "knowledge", "inspect", "monitor", "human-handoff", "control-access"]
-}

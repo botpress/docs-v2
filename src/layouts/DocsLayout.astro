@@ -4,42 +4,21 @@ import Header from "../components/header";
 import Sidebar from "../components/sidebar";
 import MobileSidebar from "../components/mobile-sidebar";
 import SearchOverlay from "../components/search-overlay";
-import { getCollection } from "astro:content";
-import {
-  buildSidebarTree,
-  buildApiSidebarNodes,
-  buildApiSidebarData,
-  getActiveTab,
-} from "../lib/sidebar-tree";
+import type { SidebarTreeResult, SidebarNode } from "@/bach/types";
 import { siteConfig } from "../lib/site-config";
-import path from "node:path";
 interface Props {
   title: string;
+  description: string;
   breadcrumbs?: { label: string; href?: string }[];
+  sidebar: SidebarTreeResult;
+  activeTab: string | null;
+  sidebarTree: SidebarNode[];
 }
 
-const { title, breadcrumbs } = Astro.props;
-
-const docsEntries = await getCollection("docs");
-const apiEntries = await getCollection("api");
-const contentDir = path.resolve("./src/content/docs");
-
-const { titleMap, methodMap } = buildApiSidebarData(
-  docsEntries,
-  apiEntries,
-  contentDir,
-);
-const apiNodes = buildApiSidebarNodes(apiEntries);
-
-const result = buildSidebarTree(titleMap, contentDir, methodMap, apiNodes);
+const { title, description, breadcrumbs, sidebar, activeTab, sidebarTree } =
+  Astro.props;
 
 const currentPath = Astro.url.pathname;
-const hasTabs = result.tabs.length > 0;
-const activeTab = hasTabs ? getActiveTab(currentPath, result.slugToTab) : null;
-const sidebarTree =
-  hasTabs && activeTab
-    ? (result.trees[activeTab] ?? result.defaultTree)
-    : result.defaultTree;
 
 const navItems: { label: string; href: string; icon?: string }[] = [
   {
@@ -55,10 +34,13 @@ const navItems: { label: string; href: string; icon?: string }[] = [
 ];
 ---
 
-<BaseLayout title={siteConfig.name ? `${title} – ${siteConfig.name}` : title}>
+<BaseLayout
+  title={siteConfig.name ? `${title} – ${siteConfig.name}` : title}
+  description={description}
+>
   <div class="flex h-dvh flex-col overflow-hidden">
     <Header
-      tabs={result.tabs}
+      tabs={sidebar.tabs}
       activeTab={activeTab}
       siteName={siteConfig.name}
       siteLogo={siteConfig.logo}
@@ -75,9 +57,9 @@ const navItems: { label: string; href: string; icon?: string }[] = [
       siteLogo={siteConfig.logo}
       siteLogoDark={siteConfig.logoDark}
       breadcrumbs={breadcrumbs}
-      tabs={result.tabs}
+      tabs={sidebar.tabs}
       activeTab={activeTab}
-      allTrees={hasTabs ? result.trees : undefined}
+      allTrees={sidebar.tabs.length > 0 ? sidebar.trees : undefined}
     />
 
     <div class="flex flex-1 overflow-hidden">

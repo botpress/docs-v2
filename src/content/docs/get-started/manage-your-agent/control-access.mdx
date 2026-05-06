@@ -1,0 +1,37 @@
+---
+title: Control access to your agent
+description: Restrict which workspace members can access your agent.
+---
+
+import { Info, Note } from '@/components/callouts'
+import Steps from '@/components/Steps.astro'
+import Step from '@/components/Step.astro'
+import Icon from '@/components/Icon.astro'
+import Frame from '@/components/Frame.astro'
+
+If you're an owner or administrator in your workspace, you can restrict who in your Workspace has access to your agent.
+
+<Info>Access control requires a [Team plan](https://botpress.com/pricing) or higher.</Info>
+
+<Steps>
+  <Step>
+    Go to **
+    <Icon icon="Settings" /> Settings** in your agent's menu.
+  </Step>
+  <Step>Select **Access Control**.</Step>
+</Steps>
+
+Here, you can select which members of your Workspace have access to your agent:
+
+<Frame>
+  <img alt="Access control" class="block dark:hidden" src="/assets/manage-your-agent/access-control.png" />
+  <img alt="Access control" class="hidden dark:block" src="/assets/manage-your-agent/access-control-dark.png" />
+</Frame>
+
+When you're done, select **Save**.
+
+## Access control vs. roles
+
+Access control is an _agent-level setting_—it doesn't change the workspace member's access to any other agents or their overall role in the workspace. You can configure workspace-level roles in your [Workspace settings](/get-started/configure-your-workspace#manage-roles).
+
+<Note>Workspace owners and administrators always have access to all bots in a workspace.</Note>

@@ -1,0 +1,13 @@
+extends: substitution
+message: "If you're referring to the Botpress concept, use '%s' instead of '%s'"
+level: error
+action:
+  name: replace
+ignorecase: false
+swap:
+  workflow: Workflow
+  workflows: Workflows
+  flow: Workflow
+  flows: Workflows
+  Flow: Workflow
+  Flows: Workflows

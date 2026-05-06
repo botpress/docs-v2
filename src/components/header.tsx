@@ -1,4 +1,4 @@
-import type { TabInfo } from '../lib/sidebar-types'
+import type { TabInfo } from '@/bach/types'
 import type { NavbarLink } from '../lib/site-config'
 
 interface HeaderProps {

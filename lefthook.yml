@@ -10,3 +10,6 @@ pre-commit:
     lint:
       glob: '**/*.{ts,tsx}'
       run: bunx oxlint {staged_files}
+    vale:
+      glob: '**/*.{md,mdx}'
+      run: scripts/check-vale.sh {staged_files}
