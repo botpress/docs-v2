@@ -11,7 +11,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { getApiEntryIds } from '../src/bach/loaders/api'
-import { getValidRoutes } from '../src/lib/routes'
 import { apiCollectionConfigs } from '../src/api-collections'
 
 // ---------------------------------------------------------------------------
@@ -33,6 +32,12 @@ function findFiles(dir: string, extensions: string[]): string[] {
     }
   }
   return results
+}
+
+function normalizeEntryId(id: string): string {
+  const rawSlug = id.replace(/\.(md|mdx)$/, '')
+  if (rawSlug === 'index') return 'index'
+  return rawSlug.replace(/\/index$/, '')
 }
 
 interface BrokenLink {
@@ -69,26 +74,24 @@ function normalizeLink(href: string): string {
 
 function main() {
   // 1. Build canonical route set
-  const entriesByCollection = new Map<string, Array<{ id: string }>>()
+  const validRoutes = new Set<string>()
+  validRoutes.add('/')
 
   // Docs entries
   const docsFiles = findFiles('src/content/docs', ['.md', '.mdx'])
-  const docsEntries = docsFiles.map((file) => ({
-    id: path.relative('src/content/docs', file),
-  }))
-  entriesByCollection.set('docs', docsEntries)
+  for (const file of docsFiles) {
+    const id = path.relative('src/content/docs', file)
+    const slug = normalizeEntryId(id)
+    validRoutes.add(slug === 'index' ? '/' : `/${slug}`)
+  }
 
   // API entries from OpenAPI specs
   for (const config of apiCollectionConfigs) {
     const ids = getApiEntryIds(config)
-    const collectionName = 'file' in config ? 'chatApi' : `${config.key}Api`
-    entriesByCollection.set(
-      collectionName,
-      ids.map((id) => ({ id }))
-    )
+    for (const id of ids) {
+      validRoutes.add(`/${id}`)
+    }
   }
-
-  const validRoutes = getValidRoutes(entriesByCollection, 'docs')
 
   // Static assets from public/
   if (fs.existsSync('public')) {
