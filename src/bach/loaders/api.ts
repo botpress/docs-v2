@@ -155,49 +155,81 @@ export interface ApiEntryData {
   endpoint: Endpoint
 }
 
-type ApiLoaderOptions = (
-  | {
-      file: string
+export type ApiSpecOptions = { file: string } | { api: { exportOpenapi: (dir: string) => void }; key: string }
+
+export type ApiLoaderOptions = ApiSpecOptions & ApiSource
+
+function loadSpec(options: ApiSpecOptions): { spec: OpenApiSpec; cleanup: () => void } {
+  if ('file' in options) {
+    const specPath = path.join(STATIC_SPECS_DIR, options.file)
+    const raw = JSON.parse(fs.readFileSync(specPath, 'utf-8'))
+    return { spec: raw as OpenApiSpec, cleanup: () => {} }
+  } else if ('api' in options) {
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'api-specs-'))
+    try {
+      const exportDir = path.join(tmpDir, options.key)
+      console.log('Processing openapi for', options.key)
+      const origWrite = process.stdout.write
+      try {
+        options.api.exportOpenapi(exportDir)
+      } finally {
+        process.stdout.write = origWrite
+      }
+
+      const specPath = path.join(exportDir, 'openapi.json')
+      const spec = tagFilterSpec(JSON.parse(fs.readFileSync(specPath, 'utf-8')) as OpenApiSpec)
+      return {
+        spec,
+        cleanup: () => {
+          fs.rmSync(tmpDir, { recursive: true, force: true })
+        },
+      }
+    } catch (err) {
+      fs.rmSync(tmpDir, { recursive: true, force: true })
+      throw err
     }
-  | { api: { exportOpenapi: (dir: string) => void }; key: string }
-) &
-  ApiSource
+  } else {
+    throw new Error('Malformed arguments to apiloader: expected API or spec file, got neither')
+  }
+}
+
+export function getApiEntryIds(options: ApiSpecOptions & { slug: string }): string[] {
+  const { spec, cleanup } = loadSpec(options)
+  try {
+    const ids: string[] = []
+
+    for (const [apiPath, pathItem] of Object.entries(spec.paths)) {
+      for (const method of HTTP_METHODS) {
+        const op = pathItem[method]
+        if (!op) continue
+        if (op['x-hidden']) continue
+
+        const operationId = op.operationId
+        const filename = slugify(operationId || `${method}-${apiPath.replace(/\//g, '-')}`)
+        ids.push(`${options.slug}/${filename}`)
+      }
+    }
+
+    return ids
+  } finally {
+    cleanup()
+  }
+}
 
 export function apiLoader(options: ApiLoaderOptions): Loader {
   return {
     name: 'api-loader',
     async load({ store, parseData }) {
       store.clear()
-      const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'api-specs-'))
+      const { spec, cleanup } = loadSpec(options)
       try {
-        let spec: OpenApiSpec
-        if ('file' in options) {
-          const specPath = path.join(STATIC_SPECS_DIR, options.file)
-          const raw = JSON.parse(fs.readFileSync(specPath, 'utf-8'))
-          spec = raw as OpenApiSpec
-        } else if ('api' in options) {
-          const exportDir = path.join(tmpDir, options.key)
-          console.log('Processing openapi for', options.key)
-          const origWrite = process.stdout.write
-          try {
-            options.api.exportOpenapi(exportDir)
-          } finally {
-            process.stdout.write = origWrite
-          }
-
-          const specPath = path.join(exportDir, 'openapi.json')
-          const raw = tagFilterSpec(JSON.parse(fs.readFileSync(specPath, 'utf-8')) as OpenApiSpec)
-          spec = raw
-        } else {
-          throw new Error('Malformed arguments to apiloader: expected API or spec file, got neither')
-        }
         const dereferencedSpec = await SwaggerParser.dereference(
           spec as unknown as Parameters<typeof SwaggerParser.dereference>[0]
         )
         const strippedSpec = stripMarkdownLinks(dereferencedSpec) as OpenApiSpec
         await processSpec(strippedSpec, options.slug, options.label, store, parseData)
       } finally {
-        fs.rmSync(tmpDir, { recursive: true, force: true })
+        cleanup()
       }
     },
   }
