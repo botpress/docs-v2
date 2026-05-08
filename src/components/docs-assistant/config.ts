@@ -4,7 +4,7 @@ export const BOT_CONFIG = {
   description: 'Ask AI a question about the documentation. Powered by Botpress.',
 } as const
 
-export const CLIENT_ID = '2c5b1299-4dd1-4d89-8f58-bd1045b1829b'
+export const CLIENT_ID = 'e039110d-a525-43a5-94ac-9c059c3a6df4'
 
 export interface ModelConfig {
   id: string

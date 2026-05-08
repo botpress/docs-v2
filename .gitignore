@@ -1,5 +1,6 @@
 # build output
 dist/
+.adk
 # generated types
 .astro/
 

@@ -81,16 +81,13 @@ function AssistantInner() {
     (text: string) => {
       if (!isReady) return
 
-      const payload: { type: 'text'; text: string; value?: string } = {
-        type: 'text',
+      const payload = {
+        type: 'text' as const,
         text,
-      }
-
-      if (currentContext.length > 0 || selectedModel !== DEFAULT_MODEL.id) {
-        payload.value = JSON.stringify({
+        value: JSON.stringify({
           currentContext,
           model: selectedModel,
-        })
+        }),
       }
 
       void sendMessageRaw(payload)
