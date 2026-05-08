@@ -6,6 +6,8 @@ import MobileSidebar from "../components/mobile-sidebar";
 import SearchOverlay from "../components/search-overlay";
 import type { SidebarTreeResult, SidebarNode } from "@/bach/types";
 import { siteConfig } from "../lib/site-config";
+import { AssistantPanel } from "../components/assistant-panel";
+import { PageStateBridge } from "../components/docs-assistant/page-state-bridge";
 interface Props {
   title: string;
   description: string;
@@ -73,11 +75,22 @@ const navItems: { label: string; href: string; icon?: string }[] = [
       </div>
 
       <main
-        class="flex-1 overflow-y-auto rounded-xl border border-stone-200 bg-white mx-[calc(var(--spacing)*2)] mb-[calc(var(--spacing)*2)] dark:border-stone-800 dark:bg-stone-900"
+        class="flex-1 overflow-y-auto rounded-xl border border-stone-200 bg-white ml-[calc(var(--spacing)*2)] mb-[calc(var(--spacing)*2)] dark:border-stone-800 dark:bg-stone-900"
       >
         <slot />
       </main>
+
+      <div class="ai-panel-container">
+        <AssistantPanel client:only="react" transition:persist />
+      </div>
     </div>
+
+    <PageStateBridge
+      client:load
+      transition:persist
+      path={currentPath}
+      title={title}
+    />
 
     <SearchOverlay client:load />
   </div>

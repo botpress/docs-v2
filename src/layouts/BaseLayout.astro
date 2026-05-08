@@ -43,6 +43,31 @@ const { title, description } = Astro.props;
         document.addEventListener("astro:after-swap", applyTheme);
       })();
     </script>
+    <script is:inline>
+      (function () {
+        function setPanelVars() {
+          try {
+            var isOpen = window.localStorage.getItem("docs-assistant-panel-open") === "1";
+            var rawWidth = window.localStorage.getItem("docs-assistant-panel-width");
+            var width = rawWidth ? parseInt(rawWidth, 10) : 400;
+            if (isNaN(width)) width = 400;
+            var MIN = 280, MAX = 560;
+            if (width < MIN) width = MIN;
+            if (width > MAX) width = MAX;
+            document.documentElement.style.setProperty(
+              "--assistant-panel-width",
+              isOpen ? width + "px" : "48px"
+            );
+            document.documentElement.dataset.assistantPanelOpen = isOpen ? "true" : "false";
+          } catch (_) {
+            document.documentElement.style.setProperty("--assistant-panel-width", "48px");
+            document.documentElement.dataset.assistantPanelOpen = "false";
+          }
+        }
+        setPanelVars();
+        document.addEventListener("astro:after-swap", setPanelVars);
+      })();
+    </script>
   </head>
   <body class="min-h-dvh antialiased">
     <slot />

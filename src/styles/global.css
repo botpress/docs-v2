@@ -239,3 +239,42 @@
 .prose :is(h1, h2, h3, h4, h5, h6):hover .heading-anchor::after {
   opacity: 1;
 }
+
+/* Docs assistant — shimmer text for in-flight tool indicators */
+@keyframes docs-assistant-shimmer {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+.docs-assistant-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--muted-foreground) 0%,
+    var(--muted-foreground) 45%,
+    var(--foreground) 50%,
+    var(--muted-foreground) 55%,
+    var(--muted-foreground) 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: docs-assistant-shimmer 5s linear infinite;
+}
+
+/* AI panel — space is allocated immediately via a CSS custom property set by
+   an inline script in <head> that reads localStorage before first paint.
+   The React island only renders *inside* this pre-allocated space. */
+.ai-panel-container {
+  width: var(--assistant-panel-width, 48px);
+  flex-shrink: 0;
+}
+
+/* Hide the table of contents when the AI assistant panel is open */
+[data-assistant-panel-open='true'] .docs-toc {
+  display: none;
+}

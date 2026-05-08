@@ -1,6 +1,8 @@
-import { Check, ChevronDown, Copy, ArrowUpRight, FileText } from 'lucide-react'
+import { Check, ChevronDown, Copy, ArrowUpRight, FileText, Sparkles } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useRef, useState } from 'react'
+import { askAI } from './docs-assistant/store'
+import { currentPage } from './docs-assistant/store'
 import { Button } from './ui/button'
 import { ButtonGroup } from './ui/button-group'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
@@ -50,6 +52,16 @@ export default function PageOptions({ markdownUrl }: PageOptionsProps) {
     status === 'copying' ? 'Copying...' : isCopied ? 'Copied' : status === 'error' ? 'Retry copy' : 'Copy page'
 
   const actions: MenuAction[] = [
+    {
+      key: 'ask-ai',
+      icon: <Sparkles />,
+      label: 'Ask AI',
+      description: 'Open the assistant with this page attached',
+      onSelect: () => {
+        const page = currentPage.get()
+        if (page.path && page.title) askAI(page)
+      },
+    },
     {
       key: 'copy',
       icon: isCopied ? <Check /> : <Copy />,
