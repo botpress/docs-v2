@@ -29,7 +29,7 @@ export function EmptyState({ onPick, conversationId }: EmptyStateProps) {
       <div className="w-full max-w-md text-center">
         <div className="flex justify-center mb-5">
           <span
-            className="block size-10 rounded-lg shrink-0 animate-pulse"
+            className="block size-10 shrink-0 animate-morph-spin"
             style={{
               backgroundColor: color,
               boxShadow: `0 0 0 1px ${color}33, 0 0 56px -8px ${color}99`,

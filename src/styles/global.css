@@ -266,6 +266,33 @@
   animation: docs-assistant-shimmer 5s linear infinite;
 }
 
+@keyframes morph-spin {
+  0% {
+    transform: rotate(45deg);
+    border-radius: 0;
+  }
+  25% {
+    transform: rotate(45deg);
+    border-radius: 50%;
+  }
+  50% {
+    transform: rotate(135deg);
+    border-radius: 50%;
+  }
+  75% {
+    transform: rotate(135deg);
+    border-radius: 0;
+  }
+  100% {
+    transform: rotate(225deg);
+    border-radius: 0;
+  }
+}
+
+.animate-morph-spin {
+  animation: morph-spin 3s ease-in-out infinite;
+}
+
 /* AI panel — space is allocated immediately via a CSS custom property set by
    an inline script in <head> that reads localStorage before first paint.
    The React island only renders *inside* this pre-allocated space. */
