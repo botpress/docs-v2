@@ -82,7 +82,7 @@ export default function PageOptions({ markdownUrl }: PageOptionsProps) {
           size="lg"
           onClick={copyMarkdown}
           aria-label={label}
-          className="active:translate-y-0! cursor-pointer"
+          className="active:translate-y-0!"
         >
           {isCopied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
           <span>{label}</span>
@@ -90,7 +90,7 @@ export default function PageOptions({ markdownUrl }: PageOptionsProps) {
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
-              <Button variant="secondary" size="icon-lg" aria-label="More actions" className="cursor-pointer">
+              <Button variant="secondary" size="icon-lg" aria-label="More actions">
                 <ChevronDown className="size-3" />
               </Button>
             }
@@ -116,7 +116,7 @@ export default function PageOptions({ markdownUrl }: PageOptionsProps) {
         </DropdownMenu>
       </ButtonGroup>
 
-      <Button variant="secondary" size="icon" onClick={handleAskAI} className="active:translate-y-0! cursor-pointer">
+      <Button variant="secondary" size="icon" onClick={handleAskAI} className="active:translate-y-0!">
         <Sparkles className="size-3.5" />
         {/* <span>Ask AI</span> */}
       </Button>
