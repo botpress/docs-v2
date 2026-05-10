@@ -51,17 +51,12 @@ export default function PageOptions({ markdownUrl }: PageOptionsProps) {
   const label =
     status === 'copying' ? 'Copying...' : isCopied ? 'Copied' : status === 'error' ? 'Retry copy' : 'Copy page'
 
+  const handleAskAI = () => {
+    const page = currentPage.get()
+    if (page.path && page.title) askAI(page)
+  }
+
   const actions: MenuAction[] = [
-    {
-      key: 'ask-ai',
-      icon: <Sparkles />,
-      label: 'Ask AI',
-      description: 'Open the assistant with this page attached',
-      onSelect: () => {
-        const page = currentPage.get()
-        if (page.path && page.title) askAI(page)
-      },
-    },
     {
       key: 'copy',
       icon: isCopied ? <Check /> : <Copy />,
@@ -80,14 +75,14 @@ export default function PageOptions({ markdownUrl }: PageOptionsProps) {
   ]
 
   return (
-    <div className="not-prose" aria-live="polite">
+    <div className="not-prose flex items-center gap-2" aria-live="polite">
       <ButtonGroup>
         <Button
           variant="secondary"
           size="lg"
           onClick={copyMarkdown}
           aria-label={label}
-          className="active:translate-y-0!"
+          className="active:translate-y-0! cursor-pointer"
         >
           {isCopied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
           <span>{label}</span>
@@ -95,7 +90,7 @@ export default function PageOptions({ markdownUrl }: PageOptionsProps) {
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
-              <Button variant="secondary" size="icon-lg" aria-label="More actions">
+              <Button variant="secondary" size="icon-lg" aria-label="More actions" className="cursor-pointer">
                 <ChevronDown className="size-3" />
               </Button>
             }
@@ -120,6 +115,11 @@ export default function PageOptions({ markdownUrl }: PageOptionsProps) {
           </DropdownMenuContent>
         </DropdownMenu>
       </ButtonGroup>
+
+      <Button variant="secondary" size="icon" onClick={handleAskAI} className="active:translate-y-0! cursor-pointer">
+        <Sparkles className="size-3.5" />
+        {/* <span>Ask AI</span> */}
+      </Button>
     </div>
   )
 }

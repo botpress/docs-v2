@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
-import { ChevronDown, Plus, Trash2 } from 'lucide-react'
+import { History, Plus, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
 
 interface ChatHeaderProps {
@@ -46,25 +49,7 @@ export function ChatHeader({
   const [titles, setTitles] = useState<Record<string, string>>(() => loadTitles())
   const titlesRef = useRef(titles)
   titlesRef.current = titles
-  const wrapperRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    if (!open) return
-    const onClickAway = (e: MouseEvent) => {
-      if (!wrapperRef.current?.contains(e.target as Node)) setOpen(false)
-    }
-    const onEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false)
-    }
-    document.addEventListener('mousedown', onClickAway)
-    document.addEventListener('keydown', onEsc)
-    return () => {
-      document.removeEventListener('mousedown', onClickAway)
-      document.removeEventListener('keydown', onEsc)
-    }
-  }, [open])
-
-  // Lazily fetch titles for conversations without cached titles
   useEffect(() => {
     if (!open) return
     let cancelled = false
@@ -105,69 +90,80 @@ export function ChatHeader({
   const currentTitle = currentConversationId ? titles[currentConversationId] : undefined
 
   return (
-    <header
-      ref={wrapperRef}
-      className="relative px-4 py-3 flex items-center justify-between border-b border-border shrink-0"
-    >
-      <DropdownMenu open={open} onOpenChange={setOpen}>
-        <DropdownMenuTrigger
-          render={
-            <button
-              type="button"
-              className={cn(
-                'inline-flex items-center gap-1 rounded-md px-2 py-1 -ml-1',
-                'text-sm font-medium text-foreground',
-                'hover:bg-muted transition-colors'
-              )}
-              aria-haspopup="menu"
-              aria-expanded={open}
-            >
-              <span className="truncate max-w-[180px]">{currentTitle || 'New chat'}</span>
-              <ChevronDown className={cn('size-3.5 transition-transform', open && 'rotate-180')} />
-            </button>
-          }
-        />
-        <DropdownMenuContent align="start" className="w-64">
-          <div className="px-2 py-1.5 text-[11px] uppercase tracking-wide text-muted-foreground/70 border-b border-border/60">
-            Recent
-          </div>
-          <div className="max-h-[280px] overflow-y-auto py-1">
-            {conversations.length === 0 ? (
-              <div className="px-3 py-6 text-center text-xs text-muted-foreground">
-                {isLoading ? 'Loading…' : 'No conversations yet'}
-              </div>
-            ) : (
-              conversations.map((c) => {
-                const isActive = c.id === currentConversationId
-                return (
-                  <DropdownMenuItem
-                    key={c.id}
-                    onClick={() => handlePick(c.id)}
-                    className={cn('gap-2 cursor-pointer', isActive && 'bg-accent')}
-                  >
-                    <span className="flex-1 truncate text-sm">{titles[c.id] || previewOf(c).title}</span>
-                  </DropdownMenuItem>
-                )
-              })
-            )}
-          </div>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={handleNew} className="cursor-pointer">
-            <Plus className="size-3.5" />
-            <span>New conversation</span>
-          </DropdownMenuItem>
-          {conversations.length > 0 && (
-            <DropdownMenuItem onClick={onClearAll} className="cursor-pointer text-destructive focus:text-destructive">
-              <Trash2 className="size-3.5" />
-              <span>Clear all</span>
-            </DropdownMenuItem>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
+    <header className="relative px-4 pt-3 flex items-center justify-between shrink-0">
+      <span className="truncate max-w-[180px] text-sm font-medium text-foreground">{currentTitle || 'New chat'}</span>
 
-      <Button variant="ghost" size="icon-sm" onClick={onNewConversation} aria-label="New conversation">
-        <Plus className="size-4" />
-      </Button>
+      <div className="flex items-center gap-1">
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button variant="ghost" size="icon-lg" onClick={onNewConversation} aria-label="New conversation">
+                <Plus className="size-4" />
+              </Button>
+            }
+          />
+          <TooltipContent side="bottom">New conversation</TooltipContent>
+        </Tooltip>
+
+        <DropdownMenu open={open} onOpenChange={setOpen}>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <DropdownMenuTrigger
+                  render={
+                    <Button
+                      variant="ghost"
+                      size="icon-lg"
+                      aria-label="Conversation history"
+                      aria-haspopup="menu"
+                      aria-expanded={open}
+                    >
+                      <History className="size-4" />
+                    </Button>
+                  }
+                />
+              }
+            />
+            <TooltipContent side="bottom">Conversation history</TooltipContent>
+          </Tooltip>
+          <DropdownMenuContent align="end" className="w-64">
+            <div className="max-h-[280px] overflow-y-auto py-1">
+              {conversations.length === 0 ? (
+                <div className="px-3 py-6 text-center text-xs text-muted-foreground">
+                  {isLoading ? 'Loading…' : 'No conversations yet'}
+                </div>
+              ) : (
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel>Recent</DropdownMenuLabel>
+                  {conversations.map((c) => {
+                    const isActive = c.id === currentConversationId
+                    return (
+                      <DropdownMenuItem
+                        key={c.id}
+                        onClick={() => handlePick(c.id)}
+                        className={cn('gap-2', isActive && 'bg-accent')}
+                      >
+                        <span className="flex-1 truncate text-sm">{titles[c.id] || previewOf(c).title}</span>
+                      </DropdownMenuItem>
+                    )
+                  })}
+                </DropdownMenuGroup>
+              )}
+            </div>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleNew}>
+              <Plus className="size-3.5" />
+              <span>New conversation</span>
+            </DropdownMenuItem>
+            {conversations.length > 0 && (
+              <DropdownMenuItem onClick={onClearAll} variant="destructive">
+                <Trash2 className="size-3.5" />
+                <span>Clear all</span>
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </header>
   )
 }

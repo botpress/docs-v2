@@ -1,4 +1,4 @@
-import { Sparkles } from 'lucide-react'
+import { PanelRightOpen } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
@@ -18,12 +18,18 @@ export function CollapsedRail() {
   }, [])
 
   return (
-    <div className="flex h-full items-start justify-center pt-3">
+    <div className="flex h-full items-center justify-center">
       <Tooltip>
         <TooltipTrigger
           render={
-            <Button variant="ghost" size="icon-sm" onClick={handleClick} aria-label={`Open assistant (${shortcut})`}>
-              <Sparkles />
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={handleClick}
+              aria-label={`Open assistant (${shortcut})`}
+              className="cursor-pointer"
+            >
+              <PanelRightOpen />
             </Button>
           }
         />

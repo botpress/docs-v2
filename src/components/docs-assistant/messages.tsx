@@ -52,7 +52,10 @@ export function Messages({ messages, isThinking, thinkingComponent, conversation
   }, [scrollToBottom])
 
   return (
-    <div ref={scrollRef} className="flex-1 overflow-y-auto scrollbar-thin">
+    <div
+      ref={scrollRef}
+      className="flex-1 overflow-y-auto scrollbar-thin mask-[linear-gradient(to_bottom,transparent,white_16px,white_calc(100%-16px),transparent)]"
+    >
       <div className="mx-auto max-w-2xl w-full px-4 py-5 space-y-4">
         {messages.map((m) => (
           <MessageRow
@@ -84,7 +87,7 @@ function MessageRow({
   if (isUser) {
     return (
       <div className="flex w-full justify-end">
-        <div className="max-w-[85%] rounded-2xl bg-primary text-primary-foreground px-4 py-2.5 text-[14px] leading-6 whitespace-pre-wrap break-words">
+        <div className="max-w-[85%] rounded-xl rounded-br-none border border-stone-200 bg-white px-4 py-2 text-[14px] leading-6 whitespace-pre-wrap break-words dark:border-stone-800 dark:bg-stone-900">
           {message.text}
         </div>
       </div>

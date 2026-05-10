@@ -14,8 +14,6 @@ import { EmptyState } from './empty-state'
 import { useContextManagement } from './hooks/use-context-management'
 import { Messages, type ChatMessage } from './messages'
 import { WorkingIndicator } from './working-indicator'
-import { ModelSelector } from './model-selector'
-import { Context } from './context'
 import { CLIENT_ID, DEFAULT_MODEL } from './config'
 import { pendingMessage, panelOpen } from './store'
 
@@ -215,19 +213,17 @@ function AssistantInner() {
         )}
       </div>
 
-      <div className="shrink-0 border-t border-border px-4 pt-3 pb-4 space-y-2">
-        <div className="flex items-center gap-2 flex-wrap">
-          <Context
-            currentContext={currentContext}
-            setCurrentContext={setCurrentContext}
-            suggestedContext={suggestedContext}
-            addSuggestedContext={addSuggestedContext}
-          />
-          <div className="ml-auto">
-            <ModelSelector selectedModel={selectedModel} onModelChange={setSelectedModel} />
-          </div>
-        </div>
-        <Composer onSend={queueMessage} inputRef={inputRef} />
+      <div className="shrink-0 px-2 pb-0">
+        <Composer
+          onSend={queueMessage}
+          inputRef={inputRef}
+          currentContext={currentContext}
+          setCurrentContext={setCurrentContext}
+          suggestedContext={suggestedContext}
+          addSuggestedContext={addSuggestedContext}
+          selectedModel={selectedModel}
+          onModelChange={setSelectedModel}
+        />
       </div>
     </div>
   )
