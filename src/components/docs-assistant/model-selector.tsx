@@ -25,7 +25,7 @@ export function ModelSelector({ selectedModel, onModelChange }: ModelSelectorPro
         {MODELS.map((model) => {
           const selected = model.id === selectedModel
           return (
-            <DropdownMenuItem key={model.id} onSelect={() => onModelChange(model.id)}>
+            <DropdownMenuItem key={model.id} onClick={() => onModelChange(model.id)}>
               <span className="flex-1">{model.displayName}</span>
               {selected && <Check className="size-3.5" />}
             </DropdownMenuItem>
