@@ -47,8 +47,9 @@ export function EmptyState({ onPick, conversationId }: EmptyStateProps) {
               type="button"
               onClick={() => onPick(s)}
               className={cn(
-                'text-left text-[13px] text-foreground/85 px-3.5 py-2.5 rounded-lg',
-                'border border-border bg-background hover:bg-muted hover:border-border/80 transition-colors',
+                'text-left text-[13px] text-foreground/85 px-3.5 py-2.5 rounded-lg cursor-pointer',
+                'border border-stone-200 bg-white hover:border-stone-300 transition-colors',
+                'dark:border-stone-800 dark:bg-stone-900 dark:hover:bg-stone-800 dark:hover:border-stone-700',
                 'focus:outline-none focus:ring-2 focus:ring-foreground/10'
               )}
             >

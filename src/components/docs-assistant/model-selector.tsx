@@ -15,7 +15,7 @@ export function ModelSelector({ selectedModel, onModelChange }: ModelSelectorPro
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button variant="ghost" size="sm" aria-label="Select model" className="text-muted-foreground">
+          <Button variant="ghost" size="sm" aria-label="Select model" className="text-muted-foreground cursor-pointer">
             <span>{current.displayName}</span>
             <ChevronDown />
           </Button>
