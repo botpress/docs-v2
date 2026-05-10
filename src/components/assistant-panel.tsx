@@ -20,7 +20,7 @@ const CSS_VAR = '--assistant-panel-width'
 function updateRootStyles(isOpen: boolean) {
   const root = document.documentElement
   if (!root) return
-  root.style.setProperty(CSS_VAR, isOpen ? `${getPanelWidth()}px` : '48px')
+  root.style.setProperty(CSS_VAR, isOpen ? `${getPanelWidth()}%` : '48px')
   root.setAttribute(HTML_DATA_ATTR, isOpen ? 'true' : 'false')
 }
 
@@ -58,20 +58,24 @@ export function AssistantPanel() {
     const root = document.documentElement
     if (!root) return
 
+    const panelContainer = (e.currentTarget as HTMLElement).closest('.ai-panel-container')
+    const parentWidth = panelContainer?.parentElement?.getBoundingClientRect().width || window.innerWidth
+
     const startX = e.clientX
-    const startWidth = parseFloat(getComputedStyle(root).getPropertyValue(CSS_VAR))
+    const startPct = parseFloat(getComputedStyle(root).getPropertyValue(CSS_VAR))
 
     const handleMove = (moveEvent: PointerEvent) => {
       const delta = startX - moveEvent.clientX
-      const newWidth = Math.max(MIN_PANEL_WIDTH, Math.min(MAX_PANEL_WIDTH, startWidth + delta))
-      root.style.setProperty(CSS_VAR, `${newWidth}px`)
+      const deltaPct = (delta / parentWidth) * 100
+      const newPct = Math.max(MIN_PANEL_WIDTH, Math.min(MAX_PANEL_WIDTH, startPct + deltaPct))
+      root.style.setProperty(CSS_VAR, `${newPct}%`)
       root.setAttribute(HTML_DATA_ATTR, 'true')
       panelOpen.set(true)
     }
 
     const handleUp = () => {
-      const finalWidth = parseFloat(getComputedStyle(root).getPropertyValue(CSS_VAR))
-      setPanelWidth(finalWidth)
+      const finalPct = parseFloat(getComputedStyle(root).getPropertyValue(CSS_VAR))
+      setPanelWidth(finalPct)
       window.removeEventListener('pointermove', handleMove)
       window.removeEventListener('pointerup', handleUp)
     }

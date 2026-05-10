@@ -47,20 +47,30 @@ const { title, description } = Astro.props;
       (function () {
         function setPanelVars() {
           try {
-            var isOpen = window.localStorage.getItem("docs-assistant-panel-open") === "1";
-            var rawWidth = window.localStorage.getItem("docs-assistant-panel-width");
-            var width = rawWidth ? parseInt(rawWidth, 10) : 400;
-            if (isNaN(width)) width = 400;
-            var MIN = 280, MAX = 560;
+            var isOpen =
+              window.localStorage.getItem("docs-assistant-panel-open") === "1";
+            var rawWidth = window.localStorage.getItem(
+              "docs-assistant-panel-width",
+            );
+            var width = rawWidth ? parseFloat(rawWidth) : 30;
+            if (isNaN(width)) width = 30;
+            if (width > 100) width = 30;
+            var MIN = 25,
+              MAX = 40;
             if (width < MIN) width = MIN;
             if (width > MAX) width = MAX;
             document.documentElement.style.setProperty(
               "--assistant-panel-width",
-              isOpen ? width + "px" : "48px"
+              isOpen ? width + "%" : "48px",
             );
-            document.documentElement.dataset.assistantPanelOpen = isOpen ? "true" : "false";
+            document.documentElement.dataset.assistantPanelOpen = isOpen
+              ? "true"
+              : "false";
           } catch (_) {
-            document.documentElement.style.setProperty("--assistant-panel-width", "48px");
+            document.documentElement.style.setProperty(
+              "--assistant-panel-width",
+              "48px",
+            );
             document.documentElement.dataset.assistantPanelOpen = "false";
           }
         }

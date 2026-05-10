@@ -12,9 +12,10 @@ export interface PageInfo {
 
 const PANEL_OPEN_KEY = 'docs-assistant-panel-open'
 const PANEL_WIDTH_KEY = 'docs-assistant-panel-width'
-export const DEFAULT_PANEL_WIDTH = 400
-export const MIN_PANEL_WIDTH = 280
-export const MAX_PANEL_WIDTH = 560
+
+export const DEFAULT_PANEL_WIDTH = 30
+export const MIN_PANEL_WIDTH = 25
+export const MAX_PANEL_WIDTH = 40
 
 // Always start `false` so the first client render matches SSR. The actual
 // stored value is hydrated from localStorage inside a `useEffect` (see
@@ -41,8 +42,10 @@ export function getPanelWidth(): number {
   try {
     const raw = window.localStorage.getItem(PANEL_WIDTH_KEY)
     if (raw === null) return DEFAULT_PANEL_WIDTH
-    const parsed = parseInt(raw, 10)
-    return isNaN(parsed) ? DEFAULT_PANEL_WIDTH : Math.max(MIN_PANEL_WIDTH, Math.min(MAX_PANEL_WIDTH, parsed))
+    const parsed = parseFloat(raw)
+    if (isNaN(parsed)) return DEFAULT_PANEL_WIDTH
+    if (parsed > 100) return DEFAULT_PANEL_WIDTH
+    return Math.max(MIN_PANEL_WIDTH, Math.min(MAX_PANEL_WIDTH, parsed))
   } catch {
     return DEFAULT_PANEL_WIDTH
   }

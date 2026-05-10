@@ -97,7 +97,13 @@ export function ChatHeader({
         <Tooltip>
           <TooltipTrigger
             render={
-              <Button variant="ghost" size="icon-lg" onClick={onNewConversation} aria-label="New conversation">
+              <Button
+                variant="ghost"
+                size="icon-lg"
+                onClick={onNewConversation}
+                aria-label="New conversation"
+                className="cursor-pointer hover:bg-stone-200"
+              >
                 <Plus className="size-4" />
               </Button>
             }
@@ -117,6 +123,7 @@ export function ChatHeader({
                       aria-label="Conversation history"
                       aria-haspopup="menu"
                       aria-expanded={open}
+                      className="cursor-pointer hover:bg-stone-200"
                     >
                       <History className="size-4" />
                     </Button>
