@@ -1,26 +1,39 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Markdown } from './markdown'
 import { SourcesFooter } from './sources-footer'
+import { WorkingIndicator } from './working-indicator'
 
 export interface ChatMessage {
   id: string
   direction: 'incoming' | 'outgoing'
   text: string
   citations?: { title: string; url: string }[]
+  status?: string
 }
 
 interface MessagesProps {
   messages: ChatMessage[]
-  isThinking: boolean
-  thinkingComponent?: React.ReactNode
   conversationId?: string
 }
 
-export function Messages({ messages, isThinking, thinkingComponent, conversationId }: MessagesProps) {
+export function Messages({ messages, conversationId }: MessagesProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const seenRef = useRef<Set<string>>(new Set())
   const lastConvoRef = useRef<string | undefined>(undefined)
   const [streamingId, setStreamingId] = useState<string | undefined>(undefined)
+
+  const incomingMessages = messages.filter((m) => m.direction === 'incoming')
+  const latestIncoming = incomingMessages[incomingMessages.length - 1]
+  const latestIsStatus = latestIncoming?.status !== undefined
+
+  const indicatorLabel: string | undefined | null = latestIsStatus
+    ? latestIncoming.status!
+    : messages[messages.length - 1]?.direction === 'outgoing'
+      ? undefined
+      : null
+
+  // Filter out all status messages from the list; the indicator handles them.
+  const visibleMessages = useMemo(() => messages.filter((m) => !m.status), [messages])
 
   useEffect(() => {
     if (lastConvoRef.current !== conversationId) {
@@ -32,7 +45,7 @@ export function Messages({ messages, isThinking, thinkingComponent, conversation
     const newIncoming = messages.filter((m) => m.direction === 'incoming' && !seenRef.current.has(m.id))
     for (const m of messages) seenRef.current.add(m.id)
     const latest = newIncoming[newIncoming.length - 1]
-    if (latest) setStreamingId(latest.id)
+    if (latest && !latest.status) setStreamingId(latest.id)
   }, [messages, conversationId])
 
   const scrollToBottom = useCallback((smooth = false) => {
@@ -43,7 +56,7 @@ export function Messages({ messages, isThinking, thinkingComponent, conversation
 
   useEffect(() => {
     scrollToBottom(true)
-  }, [messages, isThinking, scrollToBottom])
+  }, [visibleMessages, indicatorLabel, scrollToBottom])
 
   // Stable ref so StreamingMarkdown's effect never needs to restart
   const scrollTickRef = useRef(() => scrollToBottom(false))
@@ -57,7 +70,7 @@ export function Messages({ messages, isThinking, thinkingComponent, conversation
       className="flex-1 overflow-y-auto scrollbar-thin mask-[linear-gradient(to_bottom,transparent,white_16px,white_calc(100%-16px),transparent)]"
     >
       <div className="mx-auto max-w-2xl w-full px-4 py-5 space-y-4">
-        {messages.map((m) => (
+        {visibleMessages.map((m) => (
           <MessageRow
             key={m.id}
             message={m}
@@ -65,7 +78,9 @@ export function Messages({ messages, isThinking, thinkingComponent, conversation
             scrollTickRef={m.id === streamingId ? scrollTickRef : undefined}
           />
         ))}
-        {isThinking && thinkingComponent}
+        <div className={indicatorLabel === null ? 'invisible' : ''}>
+          <WorkingIndicator label={indicatorLabel ?? undefined} />
+        </div>
       </div>
     </div>
   )

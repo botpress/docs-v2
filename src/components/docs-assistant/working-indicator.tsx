@@ -1,14 +1,28 @@
+import { memo } from 'react'
+
 /**
- * Subtle thinking indicator — a small pulsing dot paired with "Thinking…" text.
+ * Stable morphing square — wrapped in memo so the CSS animation never
+ * restarts when the parent re-renders with a different label.
  */
-export function WorkingIndicator() {
+const MorphShape = memo(function MorphShape() {
+  return <span className="thinking-morph" aria-hidden />
+})
+
+interface WorkingIndicatorProps {
+  label?: string
+}
+
+export function WorkingIndicator({ label }: WorkingIndicatorProps) {
   return (
-    <div className="flex items-center gap-2.5 px-1 py-2" aria-label="Thinking" role="status">
-      <span className="relative flex size-2.5">
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-        <span className="relative inline-flex rounded-full size-2.5 bg-primary" />
+    <div className="flex items-center gap-2.5 px-1 py-2" aria-label={label || 'Thinking'} role="status">
+      <MorphShape />
+      <span
+        className={`text-[13px] leading-6 font-medium text-muted-foreground docs-assistant-shimmer ${
+          label ? '' : 'invisible'
+        }`}
+      >
+        {label || 'Thinking'}
       </span>
-      <span className="text-[13px] leading-6 font-medium text-muted-foreground">Thinking…</span>
     </div>
   )
 }

@@ -293,6 +293,17 @@
   animation: morph-spin 3s ease-in-out infinite;
 }
 
+.thinking-morph {
+  flex-shrink: 0;
+  width: 9px;
+  height: 9px;
+  background-color: #d97757;
+  box-shadow:
+    0 0 0 1px rgba(217, 119, 87, 0.18),
+    0 0 14px -4px rgba(217, 119, 87, 0.55);
+  animation: morph-spin 3.2s ease-in-out infinite;
+}
+
 /* AI panel — space is allocated immediately via a CSS custom property set by
    an inline script in <head> that reads localStorage before first paint.
    The React island only renders *inside* this pre-allocated space. */

@@ -13,7 +13,7 @@ import { Composer } from './composer'
 import { EmptyState } from './empty-state'
 import { useContextManagement } from './hooks/use-context-management'
 import { Messages, type ChatMessage } from './messages'
-import { WorkingIndicator } from './working-indicator'
+
 import { CLIENT_ID, DEFAULT_MODEL } from './config'
 import { pendingMessage, panelOpen } from './store'
 
@@ -22,7 +22,7 @@ function AssistantInner() {
   const isOpen = useStore(panelOpen)
   const pending = useStore(pendingMessage)
 
-  const { messages, sendMessage: sendMessageRaw, status, isTyping, conversationId } = useActiveConversation()
+  const { messages, sendMessage: sendMessageRaw, status, conversationId } = useActiveConversation()
 
   const { userCredentials } = useUser()
   const userId = userCredentials?.userId
@@ -48,11 +48,26 @@ function AssistantInner() {
   const chatMessages = useMemo(() => {
     return messages
       .map((m) => {
-        const block = m.block as { type?: string; block?: { type?: string; text?: string }; text?: string }
-        const inner = (block?.type === 'bubble' ? block.block : block) as { type?: string; text?: string } | undefined
-        if (inner?.type !== 'text' || typeof inner.text !== 'string') return null
+        const direction = m.authorId === userId ? 'outgoing' : 'incoming'
+        const block = m.block
 
-        const rawText = inner.text
+        // Custom status message — direct or wrapped in a bubble
+        if (block.type === 'custom') {
+          return { id: m.id, direction, text: '', status: block.name }
+        }
+        if (block.type === 'bubble' && block.block.type === 'custom') {
+          return { id: m.id, direction, text: '', status: block.block.name }
+        }
+
+        // Extract text — direct or wrapped in a bubble
+        let rawText: string | undefined
+        if (block.type === 'text') {
+          rawText = block.text
+        } else if (block.type === 'bubble' && block.block.type === 'text') {
+          rawText = block.block.text
+        }
+        if (typeof rawText !== 'string') return null
+
         const match = rawText.match(/\n?<!--SOURCES:([\s\S]+?)-->$/)
         const rawCitations = match ? (JSON.parse(match[1]) as { title: string; url: string }[]) : undefined
         const citations = rawCitations?.filter(
@@ -63,13 +78,12 @@ function AssistantInner() {
         )
         const text = match ? rawText.slice(0, rawText.length - match[0].length).trim() : rawText
 
-        const msg: ChatMessage = {
+        return {
           id: m.id,
-          direction: m.authorId === userId ? 'outgoing' : 'incoming',
+          direction,
           text,
           ...(citations !== undefined && { citations }),
         }
-        return msg
       })
       .filter((m): m is ChatMessage => m !== null)
   }, [messages, userId])
@@ -202,12 +216,7 @@ function AssistantInner() {
 
       <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
         {hasMessages ? (
-          <Messages
-            messages={chatMessages}
-            isThinking={isTyping}
-            thinkingComponent={<WorkingIndicator />}
-            conversationId={conversationId}
-          />
+          <Messages messages={chatMessages} conversationId={conversationId} />
         ) : (
           <EmptyState onPick={queueMessage} conversationId={conversationId} />
         )}
