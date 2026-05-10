@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { History, Plus, Trash2 } from 'lucide-react'
+import { History, Maximize2, Minimize2, Plus, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { MAX_PANEL_WIDTH, MIN_PANEL_WIDTH, setPanelWidth } from './store'
 import { cn } from '@/lib/utils'
 
 interface ChatHeaderProps {
@@ -89,11 +90,62 @@ export function ChatHeader({
 
   const currentTitle = currentConversationId ? titles[currentConversationId] : undefined
 
+  const CSS_VAR = '--assistant-panel-width'
+  const [isMaxed, setIsMaxed] = useState(() => {
+    if (typeof window === 'undefined') return false
+    const current = parseFloat(getComputedStyle(document.documentElement).getPropertyValue(CSS_VAR))
+    return current >= MAX_PANEL_WIDTH
+  })
+
+  const handleToggleWidth = () => {
+    const root = document.documentElement
+    const current = parseFloat(getComputedStyle(root).getPropertyValue(CSS_VAR))
+    const nextMaxed = current < MAX_PANEL_WIDTH
+    const newWidth = nextMaxed ? MAX_PANEL_WIDTH : MIN_PANEL_WIDTH
+    root.style.setProperty(CSS_VAR, `${newWidth}%`)
+    setPanelWidth(newWidth)
+    setIsMaxed(nextMaxed)
+  }
+
+  useEffect(() => {
+    const container = document.querySelector('.ai-panel-container')
+    if (!container) return
+
+    const update = () => {
+      const raw = getComputedStyle(document.documentElement).getPropertyValue(CSS_VAR)
+      const pct = parseFloat(raw)
+      setIsMaxed(!isNaN(pct) && pct >= MAX_PANEL_WIDTH)
+    }
+
+    const ro = new ResizeObserver(update)
+    ro.observe(container)
+    update()
+
+    return () => ro.disconnect()
+  }, [])
+
   return (
     <header className="relative px-4 pt-3 flex items-center justify-between shrink-0">
       <span className="truncate max-w-[180px] text-sm font-medium text-foreground">{currentTitle || 'New chat'}</span>
 
       <div className="flex items-center gap-1">
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                variant="ghost"
+                size="icon-lg"
+                onClick={handleToggleWidth}
+                aria-label={isMaxed ? 'Collapse panel' : 'Expand panel'}
+                className="cursor-pointer hover:bg-stone-200"
+              >
+                {isMaxed ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
+              </Button>
+            }
+          />
+          <TooltipContent side="bottom">{isMaxed ? 'Collapse panel' : 'Expand panel'}</TooltipContent>
+        </Tooltip>
+
         <Tooltip>
           <TooltipTrigger
             render={
