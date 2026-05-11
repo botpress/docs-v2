@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Markdown } from './markdown'
 import { Sources } from './sources'
 import { WorkingIndicator } from './working-indicator'
@@ -16,11 +16,17 @@ interface MessagesProps {
   conversationId?: string
 }
 
+const BOTTOM_THRESHOLD = 5
+
 export function Messages({ messages, conversationId }: MessagesProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const seenRef = useRef<Set<string>>(new Set())
   const lastConvoRef = useRef<string | undefined>(undefined)
   const [streamingId, setStreamingId] = useState<string | undefined>(undefined)
+
+  const isNearBottomRef = useRef(true)
+  const shouldForceSnapRef = useRef(false)
+  const prevVisibleMessagesRef = useRef<ChatMessage[]>([])
 
   const incomingMessages = messages.filter((m) => m.direction === 'incoming')
   const latestIncoming = incomingMessages[incomingMessages.length - 1]
@@ -35,11 +41,30 @@ export function Messages({ messages, conversationId }: MessagesProps) {
   // Filter out all status messages from the list; the indicator handles them.
   const visibleMessages = useMemo(() => messages.filter((m) => !m.status), [messages])
 
+  // Track whether the user is near the bottom (for auto-scroll decisions).
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+
+    const handleScroll = () => {
+      const near = el.scrollTop + el.clientHeight >= el.scrollHeight - BOTTOM_THRESHOLD
+      isNearBottomRef.current = near
+    }
+
+    // Initial state
+    handleScroll()
+
+    el.addEventListener('scroll', handleScroll, { passive: true })
+    return () => el.removeEventListener('scroll', handleScroll)
+  }, [conversationId])
+
   useEffect(() => {
     if (lastConvoRef.current !== conversationId) {
       lastConvoRef.current = conversationId
       seenRef.current = new Set(messages.map((m) => m.id))
       setStreamingId(undefined)
+      isNearBottomRef.current = true
+      shouldForceSnapRef.current = false
       return
     }
     const newIncoming = messages.filter((m) => m.direction === 'incoming' && !seenRef.current.has(m.id))
@@ -48,21 +73,61 @@ export function Messages({ messages, conversationId }: MessagesProps) {
     if (latest && !latest.status) setStreamingId(latest.id)
   }, [messages, conversationId])
 
+  // Detect new outgoing messages and force snap
+  useEffect(() => {
+    const prevIds = new Set(prevVisibleMessagesRef.current.map((m) => m.id))
+    const newOutgoing = visibleMessages.find((m) => m.direction === 'outgoing' && !prevIds.has(m.id))
+    if (newOutgoing) {
+      shouldForceSnapRef.current = true
+    }
+    prevVisibleMessagesRef.current = visibleMessages
+  }, [visibleMessages])
+
   const scrollToBottom = useCallback((smooth = false) => {
     const el = scrollRef.current
     if (!el) return
     el.scrollTo({ top: el.scrollHeight, behavior: smooth ? 'smooth' : 'instant' })
+    isNearBottomRef.current = true
   }, [])
 
-  useEffect(() => {
-    scrollToBottom(true)
-  }, [visibleMessages, indicatorLabel, scrollToBottom])
-
   // Stable ref so StreamingMarkdown's effect never needs to restart
-  const scrollTickRef = useRef(() => scrollToBottom(false))
+  const scrollTickRef = useRef(() => {
+    if (isNearBottomRef.current) {
+      const el = scrollRef.current
+      if (el) el.scrollTo({ top: el.scrollHeight, behavior: 'instant' })
+    }
+  })
   useEffect(() => {
-    scrollTickRef.current = () => scrollToBottom(false)
-  }, [scrollToBottom])
+    scrollTickRef.current = () => {
+      if (isNearBottomRef.current) {
+        const el = scrollRef.current
+        if (el) el.scrollTo({ top: el.scrollHeight, behavior: 'instant' })
+      }
+    }
+  }, [])
+
+  useLayoutEffect(() => {
+    const isConvoSwitch = lastConvoRef.current !== conversationId
+
+    if (isConvoSwitch) {
+      shouldForceSnapRef.current = false
+      scrollToBottom(false)
+      return
+    }
+
+    if (shouldForceSnapRef.current) {
+      shouldForceSnapRef.current = false
+      scrollToBottom(false)
+      return
+    }
+
+    if (isNearBottomRef.current) {
+      scrollToBottom(true)
+      return
+    }
+
+    // User has manually scrolled up — respect it, do nothing.
+  }, [visibleMessages, indicatorLabel, conversationId, scrollToBottom])
 
   return (
     <div
@@ -150,8 +215,8 @@ function StreamingMarkdown({ text, scrollTickRef }: { text: string; scrollTickRe
       cancelled = true
       if (timer) clearTimeout(timer)
     }
-    // scrollTickRef and onCompleteRef are stable refs — intentionally excluded from deps
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // scrollTickRef is a stable ref — intentionally excluded from deps
+    // oxlint-disable-next-line react-hooks/exhaustive-deps
   }, [text, charsPerTick])
 
   return <Markdown text={revealed} />
