@@ -79,7 +79,7 @@ export function ChatHeader({
           aria-label="Close panel"
           className="cursor-pointer hover:bg-stone-200"
         >
-          <PanelRightClose className="size-4" />
+          <PanelRightClose className="size-4 text-stone-500 dark:text-stone-400" />
         </Button>
         <span className="text-sm font-medium text-foreground">{currentTitle}</span>
       </div>
@@ -95,7 +95,11 @@ export function ChatHeader({
                 aria-label={isMaxed ? 'Collapse panel' : 'Expand panel'}
                 className="cursor-pointer  hover:bg-stone-200"
               >
-                {isMaxed ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
+                {isMaxed ? (
+                  <Minimize2 className="size-4 text-stone-500 dark:text-stone-400" />
+                ) : (
+                  <Maximize2 className="size-4 text-stone-500 dark:text-stone-400" />
+                )}
               </Button>
             }
           />
@@ -112,7 +116,7 @@ export function ChatHeader({
                 aria-label="New conversation"
                 className="cursor-pointer  hover:bg-stone-200"
               >
-                <Plus className="size-4" />
+                <Plus className="size-4 text-stone-500 dark:text-stone-400" />
               </Button>
             }
           />
@@ -133,7 +137,7 @@ export function ChatHeader({
                       aria-expanded={open}
                       className="cursor-pointer  hover:bg-stone-200"
                     >
-                      <History className="size-4" />
+                      <History className="size-4 text-stone-500 dark:text-stone-400" />
                     </Button>
                   }
                 />
