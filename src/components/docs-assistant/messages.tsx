@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Markdown } from './markdown'
-import { SourcesFooter } from './sources-footer'
+import { Sources } from './sources'
 import { WorkingIndicator } from './working-indicator'
 
 export interface ChatMessage {
@@ -95,8 +95,7 @@ function MessageRow({
   animate: boolean
   scrollTickRef?: React.RefObject<() => void>
 }) {
-  const [streamingDone, setStreamingDone] = useState(false)
-  const showFooter = (!animate || streamingDone) && !!message.citations?.length
+  const showFooter = !!message.citations?.length
 
   const isUser = message.direction === 'outgoing'
   if (isUser) {
@@ -111,37 +110,21 @@ function MessageRow({
   return (
     <div className="flex w-full justify-start">
       <div className="max-w-full break-words">
+        {showFooter && <Sources sources={message.citations!} />}
         {animate ? (
-          <StreamingMarkdown
-            text={message.text}
-            scrollTickRef={scrollTickRef}
-            onComplete={() => setStreamingDone(true)}
-          />
+          <StreamingMarkdown text={message.text} scrollTickRef={scrollTickRef} />
         ) : (
           <Markdown text={message.text} />
         )}
-        {showFooter && <SourcesFooter sources={message.citations!} />}
       </div>
     </div>
   )
 }
 
-function StreamingMarkdown({
-  text,
-  scrollTickRef,
-  onComplete,
-}: {
-  text: string
-  scrollTickRef?: React.RefObject<() => void>
-  onComplete?: () => void
-}) {
+function StreamingMarkdown({ text, scrollTickRef }: { text: string; scrollTickRef?: React.RefObject<() => void> }) {
   const charsPerTick = Math.max(6, Math.ceil(text.length / 240))
   const [revealed, setRevealed] = useState(() => text.slice(0, charsPerTick))
   const indexRef = useRef(charsPerTick)
-  const onCompleteRef = useRef(onComplete)
-  useEffect(() => {
-    onCompleteRef.current = onComplete
-  })
 
   useEffect(() => {
     indexRef.current = charsPerTick
@@ -154,7 +137,6 @@ function StreamingMarkdown({
       if (indexRef.current >= text.length) {
         setRevealed(text)
         scrollTickRef?.current?.()
-        onCompleteRef.current?.()
         return
       }
       indexRef.current = Math.min(indexRef.current + charsPerTick, text.length)

@@ -60,23 +60,30 @@ function AssistantInner() {
         }
 
         // Extract text — direct or wrapped in a bubble
-        let rawText: string | undefined
+        let text: string | undefined
         if (block.type === 'text') {
-          rawText = block.text
+          text = block.text
         } else if (block.type === 'bubble' && block.block.type === 'text') {
-          rawText = block.block.text
+          text = block.block.text
         }
-        if (typeof rawText !== 'string') return null
+        if (typeof text !== 'string') return null
 
-        const match = rawText.match(/\n?<!--SOURCES:([\s\S]+?)-->$/)
-        const rawCitations = match ? (JSON.parse(match[1]) as { title: string; url: string }[]) : undefined
-        const citations = rawCitations?.filter(
-          (s) =>
-            s.url.startsWith('http') &&
-            !s.title.startsWith('data_source://') &&
-            !s.url.includes('raw.githubusercontent.com')
-        )
-        const text = match ? rawText.slice(0, rawText.length - match[0].length).trim() : rawText
+        // Citations come from message metadata (knowledge-base sources)
+        let citations: { title: string; url: string }[] | undefined
+        if (direction === 'incoming' && m.metadata?.citations) {
+          type RawCitation = { citation: { source: { title: string; url: string } } }
+          const rawCitations = (m.metadata.citations as RawCitation[]).map((c) => ({
+            title: c.citation.source.title?.replace(' - Botpress', '') || 'Title not found',
+            url: c.citation.source.url,
+          }))
+          // Deduplicate by URL
+          const seen = new Set<string>()
+          citations = rawCitations.filter((c) => {
+            if (seen.has(c.url)) return false
+            seen.add(c.url)
+            return true
+          })
+        }
 
         return {
           id: m.id,
