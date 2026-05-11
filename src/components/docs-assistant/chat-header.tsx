@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { History, Maximize2, Minimize2, Plus, Trash2 } from 'lucide-react'
+import { History, Maximize2, Minimize2, PanelRightClose, Plus, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { MAX_PANEL_WIDTH, MIN_PANEL_WIDTH, setPanelWidth } from './store'
+import { MAX_PANEL_WIDTH, MIN_PANEL_WIDTH, setPanelWidth, closePanel } from './store'
 import { cn } from '@/lib/utils'
 
 interface ChatHeaderProps {
@@ -70,8 +70,19 @@ export function ChatHeader({
   }
 
   return (
-    <header className="relative px-3 pt-3 flex items-center justify-between shrink-0">
-      <span className="text-sm font-medium text-foreground">{currentTitle}</span>
+    <header className="relative pr-3 pt-3 flex items-center justify-between shrink-0">
+      <div className="flex items-center gap-1">
+        <Button
+          variant="ghost"
+          size="icon-lg"
+          onClick={closePanel}
+          aria-label="Close panel"
+          className="cursor-pointer hover:bg-stone-200"
+        >
+          <PanelRightClose className="size-4" />
+        </Button>
+        <span className="text-sm font-medium text-foreground">{currentTitle}</span>
+      </div>
 
       <div className="flex items-center gap-1">
         <Tooltip>
