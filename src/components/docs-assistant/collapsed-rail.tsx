@@ -25,7 +25,7 @@ export function CollapsedRail() {
         aria-label={`Open assistant (${shortcut})`}
         className="cursor-pointer hover:bg-stone-200"
       >
-        <PanelRightOpen />
+        <PanelRightOpen className="text-stone-500" />
       </Button>
     </div>
   )
