@@ -134,7 +134,7 @@ export function Messages({ messages, conversationId }: MessagesProps) {
       ref={scrollRef}
       className="flex-1 overflow-y-auto scrollbar-thin mask-[linear-gradient(to_bottom,transparent,white_16px,white_calc(100%-16px),transparent)]"
     >
-      <div className="mx-auto max-w-2xl w-full px-4 py-5 space-y-4">
+      <div className="mx-auto max-w-2xl w-full px-3 py-5 space-y-4">
         {visibleMessages.map((m) => (
           <MessageRow
             key={m.id}

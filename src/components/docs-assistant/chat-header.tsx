@@ -70,7 +70,7 @@ export function ChatHeader({
   }
 
   return (
-    <header className="relative px-4 pt-3 flex items-center justify-between shrink-0">
+    <header className="relative px-3 pt-3 flex items-center justify-between shrink-0">
       <span className="text-sm font-medium text-foreground">{currentTitle}</span>
 
       <div className="flex items-center gap-1">

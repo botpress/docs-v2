@@ -208,7 +208,7 @@ function AssistantInner() {
         )}
       </div>
 
-      <div className="shrink-0 px-2 pb-0">
+      <div className="shrink-0">
         <Composer
           onSend={queueMessage}
           inputRef={inputRef}

@@ -14,7 +14,7 @@ interface WorkingIndicatorProps {
 
 export function WorkingIndicator({ label }: WorkingIndicatorProps) {
   return (
-    <div className="flex items-center gap-2.5 px-1 py-2" aria-label={label || 'Thinking'} role="status">
+    <div className="flex items-center gap-2.5 py-2" aria-label={label || 'Thinking'} role="status">
       <MorphShape />
       <span
         className={`text-[13px] leading-6 font-medium text-muted-foreground docs-assistant-shimmer ${

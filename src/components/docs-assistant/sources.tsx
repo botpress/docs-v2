@@ -17,7 +17,7 @@ export function Sources({ sources }: { sources: Source[] }) {
     <Collapsible open={open} onOpenChange={setOpen} className="flex flex-col gap-1 mb-2">
       <CollapsibleTrigger
         className={cn(
-          'flex items-center gap-1.5 px-1 py-2 text-xs font-medium text-muted-foreground transition-colors',
+          'flex items-center gap-1.5 py-2 text-xs font-medium text-muted-foreground transition-colors',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/10 rounded-sm cursor-pointer'
         )}
       >
