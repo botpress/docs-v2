@@ -70,7 +70,7 @@ export function ChatHeader({
   }
 
   return (
-    <header className="relative pr-3 pt-3 flex items-center justify-between shrink-0">
+    <header className="relative pr-6 py-3 flex items-center justify-between shrink-0">
       <div className="flex items-center gap-1">
         <Button
           variant="ghost"
@@ -93,7 +93,7 @@ export function ChatHeader({
                 size="icon-lg"
                 onClick={handleToggleWidth}
                 aria-label={isMaxed ? 'Collapse panel' : 'Expand panel'}
-                className="cursor-pointer hover:bg-stone-200"
+                className="cursor-pointer  hover:bg-stone-200"
               >
                 {isMaxed ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
               </Button>
@@ -110,7 +110,7 @@ export function ChatHeader({
                 size="icon-lg"
                 onClick={onNewConversation}
                 aria-label="New conversation"
-                className="cursor-pointer hover:bg-stone-200"
+                className="cursor-pointer  hover:bg-stone-200"
               >
                 <Plus className="size-4" />
               </Button>
@@ -131,7 +131,7 @@ export function ChatHeader({
                       aria-label="Conversation history"
                       aria-haspopup="menu"
                       aria-expanded={open}
-                      className="cursor-pointer hover:bg-stone-200"
+                      className="cursor-pointer  hover:bg-stone-200"
                     >
                       <History className="size-4" />
                     </Button>

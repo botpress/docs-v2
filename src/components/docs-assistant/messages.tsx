@@ -41,6 +41,31 @@ export function Messages({ messages, conversationId }: MessagesProps) {
   // Filter out all status messages from the list; the indicator handles them.
   const visibleMessages = useMemo(() => messages.filter((m) => !m.status), [messages])
 
+  // Group messages into exchanges (user prompt + assistant replies)
+  const exchanges = useMemo(() => {
+    const result: { user: ChatMessage; assistant: ChatMessage[] }[] = []
+    let currentUser: ChatMessage | null = null
+    let currentAssistant: ChatMessage[] = []
+
+    for (const m of visibleMessages) {
+      if (m.direction === 'outgoing') {
+        if (currentUser) {
+          result.push({ user: currentUser, assistant: currentAssistant })
+        }
+        currentUser = m
+        currentAssistant = []
+      } else {
+        currentAssistant.push(m)
+      }
+    }
+
+    if (currentUser) {
+      result.push({ user: currentUser, assistant: currentAssistant })
+    }
+
+    return result
+  }, [visibleMessages])
+
   // Track whether the user is near the bottom (for auto-scroll decisions).
   useEffect(() => {
     const el = scrollRef.current
@@ -130,18 +155,24 @@ export function Messages({ messages, conversationId }: MessagesProps) {
   }, [visibleMessages, indicatorLabel, conversationId, scrollToBottom])
 
   return (
-    <div
-      ref={scrollRef}
-      className="flex-1 overflow-y-auto scrollbar-thin mask-[linear-gradient(to_bottom,transparent,white_16px,white_calc(100%-16px),transparent)]"
-    >
-      <div className="mx-auto max-w-2xl w-full px-3 py-5 space-y-4">
-        {visibleMessages.map((m) => (
-          <MessageRow
-            key={m.id}
-            message={m}
-            animate={m.id === streamingId}
-            scrollTickRef={m.id === streamingId ? scrollTickRef : undefined}
-          />
+    <div ref={scrollRef} className="flex-1 overflow-y-auto scrollbar-thin">
+      <div className="w-full">
+        {exchanges.map((exchange) => (
+          <div key={exchange.user.id} className="mb-4">
+            <div className="flex w-full justify-start sticky top-0 px-1 z-10 bg-background">
+              <div className="w-full rounded-xl border border-stone-200 bg-white px-4 py-2 text-[14px] leading-6 whitespace-pre-wrap break-words dark:border-stone-800 dark:bg-stone-900">
+                {exchange.user.text}
+              </div>
+            </div>
+            {exchange.assistant.map((m) => (
+              <AssistantMessageRow
+                key={m.id}
+                message={m}
+                animate={m.id === streamingId}
+                scrollTickRef={m.id === streamingId ? scrollTickRef : undefined}
+              />
+            ))}
+          </div>
         ))}
         <div className={indicatorLabel === null ? 'invisible' : ''}>
           <WorkingIndicator label={indicatorLabel ?? undefined} />
@@ -151,7 +182,7 @@ export function Messages({ messages, conversationId }: MessagesProps) {
   )
 }
 
-function MessageRow({
+function AssistantMessageRow({
   message,
   animate,
   scrollTickRef,
@@ -162,18 +193,8 @@ function MessageRow({
 }) {
   const showFooter = !!message.citations?.length
 
-  const isUser = message.direction === 'outgoing'
-  if (isUser) {
-    return (
-      <div className="flex w-full justify-end">
-        <div className="max-w-[85%] rounded-xl rounded-br-none border border-stone-200 bg-white px-4 py-2 text-[14px] leading-6 whitespace-pre-wrap break-words dark:border-stone-800 dark:bg-stone-900">
-          {message.text}
-        </div>
-      </div>
-    )
-  }
   return (
-    <div className="flex w-full justify-start">
+    <div className="flex w-full justify-start my-4 last:mb-0 px-4">
       <div className="max-w-full break-words">
         {showFooter && <Sources sources={message.citations!} />}
         {animate ? (
