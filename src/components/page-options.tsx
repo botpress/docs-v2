@@ -116,7 +116,7 @@ export default function PageOptions({ markdownUrl }: PageOptionsProps) {
         </DropdownMenu>
       </ButtonGroup>
 
-      <Button variant="secondary" size="icon" onClick={handleAskAI} className="active:translate-y-0!">
+      <Button variant="secondary" size="icon-lg" onClick={handleAskAI} className="active:translate-y-0!">
         <Sparkles className="size-3.5" />
         {/* <span>Ask AI</span> */}
       </Button>
