@@ -1,17 +1,11 @@
-import {
-  WebchatProvider,
-  useActiveConversation,
-  useConversations,
-  useConversationList,
-  useUser,
-  useWebchatContext,
-} from '@botpress/webchat'
+import { WebchatProvider, useActiveConversation, useConversations, useUser, useWebchatContext } from '@botpress/webchat'
 import { useStore } from '@nanostores/react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ChatHeader } from './chat-header'
 import { Composer } from './composer'
 import { EmptyState } from './empty-state'
 import { useContextManagement } from './hooks/use-context-management'
+import { useConversationHistory } from './hooks/use-conversation-history'
 import { Messages, type ChatMessage } from './messages'
 
 import { CLIENT_ID, DEFAULT_MODEL } from './config'
@@ -27,18 +21,17 @@ function AssistantInner() {
   const { userCredentials } = useUser()
   const userId = userCredentials?.userId
 
-  const { listConversations, openConversation } = useConversations()
-  const { client } = useWebchatContext()
+  const { openConversation } = useConversations()
+  const { emitter } = useWebchatContext()
 
   const {
-    conversations,
-    isLoading: isListLoading,
-    refresh,
-  } = useConversationList({
-    clientId: CLIENT_ID,
-    listConversations,
-    userCredentials,
-  })
+    conversationIds,
+    addConversation,
+    moveToTop,
+    setConversationTitle,
+    getConversationTitle,
+    clearAllConversations,
+  } = useConversationHistory()
 
   const isReady = status === 'connected'
 
@@ -95,6 +88,26 @@ function AssistantInner() {
       .filter((m): m is ChatMessage => m !== null)
   }, [messages, userId])
 
+  // Add conversation to history when user sends their first message
+  const trackConversation = useCallback(() => {
+    if (conversationId && !conversationIds.includes(conversationId)) {
+      addConversation(conversationId)
+    }
+  }, [conversationId, conversationIds, addConversation])
+
+  // Listen for conversation title events from the bot
+  useEffect(() => {
+    if (!emitter) return
+    const unsubscribe = emitter.on('customEvent', (event: Record<string, unknown>) => {
+      if (event.type === 'conversationTitle' && typeof event.title === 'string' && conversationId) {
+        setConversationTitle(conversationId, event.title)
+      }
+    })
+    return () => {
+      if (typeof unsubscribe === 'function') unsubscribe()
+    }
+  }, [emitter, conversationId, setConversationTitle])
+
   // Send message wrapper with context + model metadata
   const handleSend = useCallback(
     (text: string) => {
@@ -111,8 +124,9 @@ function AssistantInner() {
 
       void sendMessageRaw(payload)
       setCurrentContext([])
+      trackConversation()
     },
-    [isReady, sendMessageRaw, currentContext, selectedModel, setCurrentContext]
+    [isReady, sendMessageRaw, currentContext, selectedModel, setCurrentContext, trackConversation]
   )
 
   // Queue messages that arrive before webchat connects; flush when ready.
@@ -149,76 +163,41 @@ function AssistantInner() {
     pendingMessage.set(null)
   }, [pending, isReady, handleSend])
 
-  // Focus composer when panel opens
+  // Focus composer when panel opens or conversation changes
   useEffect(() => {
     if (!isOpen) return
     const t = setTimeout(() => inputRef.current?.focus(), 100)
     return () => clearTimeout(t)
-  }, [isOpen, inputRef])
-
-  // Fetch conversation title from first user message
-  const fetchConversationTitle = useCallback(
-    async (id: string): Promise<string | undefined> => {
-      if (!client || !userId) return undefined
-      type Msg = {
-        userId?: string
-        createdAt?: string
-        payload?: { type?: string; text?: string }
-      }
-      const all: Msg[] = []
-      let nextToken: string | undefined = undefined
-      let pages = 0
-      do {
-        const res = (await client.listConversationMessages({
-          conversationId: id,
-          ...(nextToken ? { nextToken } : {}),
-        })) as { messages: Msg[]; meta?: { nextToken?: string } }
-        all.push(...res.messages)
-        nextToken = res.meta?.nextToken
-        pages += 1
-      } while (nextToken && pages < 5)
-
-      all.sort((a, b) => new Date(a.createdAt ?? 0).getTime() - new Date(b.createdAt ?? 0).getTime())
-      const firstUser = all.find((m) => m.userId === userId && m.payload?.type === 'text' && m.payload.text)
-      return firstUser?.payload?.text?.slice(0, 60)
-    },
-    [client, userId]
-  )
+  }, [isOpen, conversationId, inputRef])
 
   const handleSwitchConversation = useCallback(
     (id: string) => {
+      moveToTop(id)
       openConversation(id)
     },
-    [openConversation]
+    [openConversation, moveToTop]
   )
 
   const handleNewConversation = useCallback(() => {
     openConversation()
-    void refresh()
-  }, [openConversation, refresh])
+  }, [openConversation])
 
   const handleClearAll = useCallback(() => {
-    // Clear all localStorage conversation state
-    try {
-      localStorage.removeItem('docs-bot-conversations')
-      localStorage.removeItem('docs-bot-conversation-titles')
-      localStorage.removeItem('docs-assistant-conv-titles')
-    } catch {}
+    clearAllConversations()
     handleNewConversation()
-  }, [handleNewConversation])
+  }, [clearAllConversations, handleNewConversation])
 
   const hasMessages = chatMessages.length > 0
 
   return (
     <div className="h-full flex flex-col bg-background">
       <ChatHeader
-        conversations={conversations}
-        isLoading={isListLoading}
+        conversationIds={conversationIds}
         currentConversationId={conversationId}
         onSwitchConversation={handleSwitchConversation}
         onNewConversation={handleNewConversation}
         onClearAll={handleClearAll}
-        getTitle={fetchConversationTitle}
+        getConversationTitle={getConversationTitle}
       />
 
       <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
