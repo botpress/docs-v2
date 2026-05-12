@@ -4,7 +4,6 @@ import { ArrowUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Context } from './context'
-import { ModelSelector } from './model-selector'
 import type { ContextItem } from './store'
 
 interface ComposerProps {
@@ -14,8 +13,6 @@ interface ComposerProps {
   setCurrentContext: (value: ContextItem[]) => void
   suggestedContext?: ContextItem | null
   addSuggestedContext?: () => void
-  selectedModel: string
-  onModelChange: (model: string) => void
 }
 
 /**
@@ -29,8 +26,6 @@ export function Composer({
   setCurrentContext,
   suggestedContext,
   addSuggestedContext,
-  selectedModel,
-  onModelChange,
 }: ComposerProps) {
   const [value, setValue] = useState('')
   const internalRef = useRef<HTMLTextAreaElement>(null)
@@ -77,17 +72,14 @@ export function Composer({
           'transition-colors'
         )}
       >
-        {/* Context + model floating inside the composer */}
-        <div className="flex items-start gap-2 flex-wrap px-3 pt-2">
+        {/* Context floating inside the composer */}
+        <div className="flex items-start gap-2 flex-wrap px-3 pt-2 min-h-[28px]">
           <Context
             currentContext={currentContext}
             setCurrentContext={setCurrentContext}
             suggestedContext={suggestedContext}
             addSuggestedContext={addSuggestedContext}
           />
-          <div className="ml-auto shrink-0">
-            <ModelSelector selectedModel={selectedModel} onModelChange={onModelChange} />
-          </div>
         </div>
 
         {/* Input + send button on the same horizontal line */}

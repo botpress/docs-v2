@@ -5,8 +5,8 @@ export default defineConfig({
   description: "An AI agent built with Botpress ADK",
 
   defaultModels: {
-    autonomous: "openai:gpt-4.1",
-    zai: "cerebras:gpt-oss-120b",
+    autonomous: "openai:gpt-4.1-2025-04-14",
+    zai: "openai:gpt-4.1-2025-04-14",
   },
 
   bot: {

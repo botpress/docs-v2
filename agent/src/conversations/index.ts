@@ -5,7 +5,6 @@ import { makeGuardrails } from "./extensions/guardrails";
 export default new Conversation({
   channel: ["webchat.channel"],
   handler: async ({ execute, state, message, conversation, client }) => {
-    let selectedModel;
     let messageText = "";
 
     if (
@@ -27,10 +26,6 @@ export default new Conversation({
         parsed.currentContext?.map(
           (item: { title: string; path: string }) => item.path
         ) || [];
-
-      if (parsed.model) {
-        selectedModel = parsed.model;
-      }
 
       if ("text" in message.payload) {
         messageText = message.payload.text;
@@ -63,7 +58,7 @@ If there are any pages in ${state.context}, prioritize them when generating your
 Don't use emojis or inline citations.
 `,
       knowledge: [KnowledgeDocs],
-      model: selectedModel || "auto",
+      model: "auto",
       hooks: {
         onBeforeTool: async (event) => {
           await onBeforeToolGuard(event);

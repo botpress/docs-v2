@@ -1,6 +1,6 @@
 import { WebchatProvider, useActiveConversation, useConversations, useUser, useWebchatContext } from '@botpress/webchat'
 import { useStore } from '@nanostores/react'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { ChatHeader } from './chat-header'
 import { Composer } from './composer'
 import { EmptyState } from './empty-state'
@@ -8,11 +8,10 @@ import { useContextManagement } from './hooks/use-context-management'
 import { useConversationHistory } from './hooks/use-conversation-history'
 import { Messages, type ChatMessage } from './messages'
 
-import { CLIENT_ID, DEFAULT_MODEL } from './config'
+import { CLIENT_ID } from './config'
 import { pendingMessage, panelOpen } from './store'
 
 function AssistantInner() {
-  const [selectedModel, setSelectedModel] = useState(DEFAULT_MODEL.id)
   const isOpen = useStore(panelOpen)
   const pending = useStore(pendingMessage)
 
@@ -118,7 +117,6 @@ function AssistantInner() {
         text,
         value: JSON.stringify({
           currentContext,
-          model: selectedModel,
         }),
       }
 
@@ -126,7 +124,7 @@ function AssistantInner() {
       setCurrentContext([])
       trackConversation()
     },
-    [isReady, sendMessageRaw, currentContext, selectedModel, setCurrentContext, trackConversation]
+    [isReady, sendMessageRaw, currentContext, setCurrentContext, trackConversation]
   )
 
   // Queue messages that arrive before webchat connects; flush when ready.
@@ -216,8 +214,6 @@ function AssistantInner() {
           setCurrentContext={setCurrentContext}
           suggestedContext={suggestedContext}
           addSuggestedContext={addSuggestedContext}
-          selectedModel={selectedModel}
-          onModelChange={setSelectedModel}
         />
       </div>
     </div>
