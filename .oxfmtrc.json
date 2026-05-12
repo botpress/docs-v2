@@ -20,7 +20,6 @@
     "*.tsbuildinfo",
     ".env",
     ".env.local",
-    "coverage",
-    "agent"
+    "coverage"
   ]
 }
