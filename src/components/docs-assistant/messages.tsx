@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
 import { Sources } from './sources'
 import { WorkingIndicator } from './working-indicator'
@@ -174,7 +175,7 @@ export function Messages({ messages, conversationId }: MessagesProps) {
             ))}
           </div>
         ))}
-        <div className={indicatorLabel === null ? 'invisible' : ''}>
+        <div className={cn('px-4', indicatorLabel === null && 'invisible')}>
           <WorkingIndicator label={indicatorLabel ?? undefined} />
         </div>
       </div>
