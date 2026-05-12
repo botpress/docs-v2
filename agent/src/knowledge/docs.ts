@@ -66,7 +66,7 @@ const SkillsSource = DataSource.Website.fromUrls(
   { id: 'botpress-skills' }
 )
 
-const ScreenshotsSource = DataSource.Directory.fromPath('./src/knowledge', {
+const ScreenshotsSource = DataSource.Directory.fromPath('./src/knowledge/assets', {
   id: 'botpress-screenshots',
 })
 
