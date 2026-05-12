@@ -113,11 +113,11 @@ export function Composer({
             disabled={!canSend}
             aria-label="Send"
             className={cn(
-              'size-8 shrink-0 rounded-full transition-all disabled:opacity-100',
+              'size-10 sm:size-8 shrink-0 rounded-full transition-all disabled:opacity-100',
               canSend ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'bg-muted text-muted-foreground/40'
             )}
           >
-            <ArrowUp className="size-4" strokeWidth={2.25} />
+            <ArrowUp className="size-5 sm:size-4" strokeWidth={2.25} />
           </Button>
         </div>
       </div>

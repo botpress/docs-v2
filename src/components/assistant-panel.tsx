@@ -86,7 +86,7 @@ export function AssistantPanel() {
 
   return (
     <TooltipProvider>
-      <div className="relative flex h-full w-full flex-col">
+      <div className="relative hidden lg:flex h-full w-full flex-col">
         {isOpen && (
           // Invisible resize handle sitting on the right border of <main>
           <div

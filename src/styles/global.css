@@ -308,8 +308,15 @@
    an inline script in <head> that reads localStorage before first paint.
    The React island only renders *inside* this pre-allocated space. */
 .ai-panel-container {
-  width: var(--assistant-panel-width, 48px);
-  flex-shrink: 0;
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .ai-panel-container {
+    display: block;
+    width: var(--assistant-panel-width, 48px);
+    flex-shrink: 0;
+  }
 }
 
 /* Hide the table of contents when the AI assistant panel is open */

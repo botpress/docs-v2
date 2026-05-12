@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { History, Maximize2, Minimize2, PanelRightClose, Plus, Trash2 } from 'lucide-react'
+import { History, Maximize2, Minimize2, PanelRightClose, Plus, Trash2, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -70,21 +70,21 @@ export function ChatHeader({
   }
 
   return (
-    <header className="relative pr-6 py-3 flex items-center justify-between shrink-0">
-      <div className="flex items-center gap-1">
+    <header className="relative pl-3 md:px-0 py-3 flex items-center justify-between shrink-0">
+      <div className="flex items-center gap-1 min-w-0">
         <Button
           variant="ghost"
           size="icon-lg"
           onClick={closePanel}
           aria-label="Close panel"
-          className="cursor-pointer hover:bg-stone-200"
+          className="hidden lg:flex cursor-pointer hover:bg-stone-200 shrink-0"
         >
           <PanelRightClose className="size-4 text-stone-500 dark:text-stone-400" />
         </Button>
-        <span className="text-sm font-medium text-foreground">{currentTitle}</span>
+        <span className="text-sm font-medium text-foreground truncate">{currentTitle}</span>
       </div>
 
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1 shrink-0">
         <Tooltip>
           <TooltipTrigger
             render={
@@ -93,7 +93,7 @@ export function ChatHeader({
                 size="icon-lg"
                 onClick={handleToggleWidth}
                 aria-label={isMaxed ? 'Collapse panel' : 'Expand panel'}
-                className="cursor-pointer  hover:bg-stone-200"
+                className="hidden lg:flex cursor-pointer hover:bg-stone-200"
               >
                 {isMaxed ? (
                   <Minimize2 className="size-4 text-stone-500 dark:text-stone-400" />
@@ -114,7 +114,7 @@ export function ChatHeader({
                 size="icon-lg"
                 onClick={onNewConversation}
                 aria-label="New conversation"
-                className="cursor-pointer  hover:bg-stone-200"
+                className="cursor-pointer hover:bg-stone-200"
               >
                 <Plus className="size-4 text-stone-500 dark:text-stone-400" />
               </Button>
@@ -135,7 +135,7 @@ export function ChatHeader({
                       aria-label="Conversation history"
                       aria-haspopup="menu"
                       aria-expanded={open}
-                      className="cursor-pointer  hover:bg-stone-200"
+                      className="cursor-pointer hover:bg-stone-200"
                     >
                       <History className="size-4 text-stone-500 dark:text-stone-400" />
                     </Button>
@@ -180,6 +180,16 @@ export function ChatHeader({
             )}
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <Button
+          variant="ghost"
+          size="icon-lg"
+          onClick={closePanel}
+          aria-label="Close assistant"
+          className="lg:hidden cursor-pointer hover:bg-stone-200"
+        >
+          <X className="size-4 text-stone-500 dark:text-stone-400" />
+        </Button>
       </div>
     </header>
   )

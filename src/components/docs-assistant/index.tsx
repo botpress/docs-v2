@@ -190,7 +190,7 @@ function AssistantInner() {
   const hasMessages = chatMessages.length > 0
 
   return (
-    <div className="h-full flex flex-col bg-background">
+    <div className="h-full flex flex-col bg-background p-2 md:p-0">
       <ChatHeader
         conversationIds={conversationIds}
         currentConversationId={conversationId}
