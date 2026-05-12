@@ -4,7 +4,7 @@ export const BOT_CONFIG = {
   description: 'Ask AI a question about the documentation. Powered by Botpress.',
 } as const
 
-export const CLIENT_ID = 'e039110d-a525-43a5-94ac-9c059c3a6df4'
+export const CLIENT_ID = '6cb7a42e-aeaa-4878-b6e4-3b53b1474f43'
 
 export const SUGGESTED_QUESTIONS: string[] = [
   'How do I add an AI agent to WhatsApp?',
