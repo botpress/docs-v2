@@ -218,7 +218,7 @@ export default function APIPage({ endpoint, title, breadcrumbs, markdownUrl }: A
     <div className="not-prose">
       <div className="flex flex-col gap-x-10 gap-y-6 xl:flex-row">
         {/* Left column: docs + endpoint bar */}
-        <div className="min-w-0 w-full xl:w-[40rem] xl:shrink-0 space-y-8">
+        <div className="min-w-0 w-full xl:flex-1 xl:max-w-[40rem] space-y-8">
           {/* Page header */}
           <div>
             <div className="hidden items-start justify-between gap-4 lg:flex">
@@ -286,7 +286,7 @@ export default function APIPage({ endpoint, title, breadcrumbs, markdownUrl }: A
         </div>
 
         {/* Right column: static examples */}
-        <aside className="hidden w-112 shrink-0 xl:block">
+        <aside className="api-examples-panel hidden w-112 shrink-0 xl:block">
           <div className="group/examples sticky top-10 flex max-h-[calc(100vh-8rem)] flex-col gap-4">
             <CodeExamples method={endpoint.method} path={endpoint.path} state={requestState} />
             {endpoint.responses && <ResponseExamples responses={endpoint.responses} />}
