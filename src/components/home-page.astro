@@ -2,6 +2,7 @@
 import SearchButton from "./SearchButton.tsx";
 import Card from "./Card.astro";
 import LinkCard from "./LinkCard.astro";
+import Footer from "./footer.astro";
 
 interface CardData {
   title: string;
@@ -110,5 +111,9 @@ const cards: CardData[] = [
         icon="Plug"
       />
     </div>
+  </div>
+
+  <div class="mx-auto max-w-[68rem] px-8 lg:px-16">
+    <Footer />
   </div>
 </div>

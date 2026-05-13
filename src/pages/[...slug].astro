@@ -3,6 +3,7 @@ import PageNavigation from "../components/page-navigation";
 import DocsLayout from "../layouts/DocsLayout.astro";
 import APIPage from "../components/api-page";
 import DocsPage from "../components/docs-page.astro";
+import Footer from "../components/footer.astro";
 import { toMarkdownPath } from "../lib/markdown-routes";
 import { site } from "@/site";
 
@@ -59,6 +60,9 @@ const markdownUrl = toMarkdownPath(Astro.url.pathname);
 
           <div class="max-w-[40rem] not-prose">
             <PageNavigation prev={prev} next={next} />
+          </div>
+          <div class="max-w-[40rem] not-prose pt-8">
+            <Footer />
           </div>
         </div>
       </div>
