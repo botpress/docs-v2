@@ -31,6 +31,7 @@ export default function SearchOverlay() {
 
   useEffect(() => {
     async function loadPagefind() {
+      if (!import.meta.env.PROD) return
       try {
         // Pagefind generates its JS at build time into /pagefind/.
         // We load it dynamically at runtime via a constructed URL to avoid
