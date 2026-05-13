@@ -11,5 +11,5 @@ export function PageStateBridge({ path, title }: PageStateBridgeProps) {
     currentPage.set({ path, title })
   }, [path, title])
 
-  return null
+  return <></>
 }
