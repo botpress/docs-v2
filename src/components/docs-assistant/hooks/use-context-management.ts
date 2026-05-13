@@ -8,7 +8,7 @@ const shouldSuggestContext = (currentContext: ContextItem[], path: string) => {
   if (!path) return false
   if (isLandingPage(path)) return false
   if (currentContext.length > 0) return false
-  return !currentContext.some((item) => item.path === path)
+  return true
 }
 
 export function useContextManagement() {
