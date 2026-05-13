@@ -4,5 +4,8 @@
       "fileMatch": ["**/src/content/docs/**/_category.json"],
       "url": "./src/schemas/category.schema.json"
     }
-  ]
+  ],
+  "files.associations": {
+    "Tiltfile": "tiltfile"
+  }
 }
