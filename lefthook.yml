@@ -6,7 +6,7 @@ pre-commit:
       run: bunx oxfmt --check {staged_files}
     format-astro:
       glob: '**/*.astro'
-      run: bunx biome check {staged_files}
+      run: bun check:format:biome {staged_files}
     lint:
       glob: '**/*.{ts,tsx}'
       run: bunx oxlint {staged_files}

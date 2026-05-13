@@ -1,6 +1,7 @@
-import { Check, ChevronDown, Copy, ArrowUpRight, FileText } from 'lucide-react'
+import { Check, ChevronDown, Copy, ArrowUpRight, FileText, Sparkles } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useRef, useState } from 'react'
+import { askAI, currentPage } from './docs-assistant/store'
 import { Button } from './ui/button'
 import { ButtonGroup } from './ui/button-group'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
@@ -49,6 +50,11 @@ export default function PageOptions({ markdownUrl }: PageOptionsProps) {
   const label =
     status === 'copying' ? 'Copying...' : isCopied ? 'Copied' : status === 'error' ? 'Retry copy' : 'Copy page'
 
+  const handleAskAI = () => {
+    const page = currentPage.get()
+    if (page.path && page.title) askAI(page)
+  }
+
   const actions: MenuAction[] = [
     {
       key: 'copy',
@@ -68,7 +74,7 @@ export default function PageOptions({ markdownUrl }: PageOptionsProps) {
   ]
 
   return (
-    <div className="not-prose" aria-live="polite">
+    <div className="not-prose flex items-center gap-2" aria-live="polite">
       <ButtonGroup>
         <Button
           variant="secondary"
@@ -108,6 +114,11 @@ export default function PageOptions({ markdownUrl }: PageOptionsProps) {
           </DropdownMenuContent>
         </DropdownMenu>
       </ButtonGroup>
+
+      <Button variant="secondary" size="lg" onClick={handleAskAI} className="active:translate-y-0!">
+        <Sparkles className="size-3.5" />
+        <span>Ask AI</span>
+      </Button>
     </div>
   )
 }
