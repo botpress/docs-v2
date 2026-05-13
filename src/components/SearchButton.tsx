@@ -1,12 +1,10 @@
-export default function SearchButton() {
-  const openSearch = () => {
-    window.dispatchEvent(new CustomEvent('hc:open-search'))
-  }
+import { openPanel } from './docs-assistant/store'
 
+export default function SearchButton() {
   return (
     <button
       type="button"
-      onClick={openSearch}
+      onClick={openPanel}
       className="flex cursor-pointer items-center gap-2 rounded-lg border border-primary bg-primary px-4 py-2 text-[0.9rem] font-medium leading-[130%] text-white transition-all hover:opacity-90"
     >
       <img
