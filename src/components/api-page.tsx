@@ -1,3 +1,4 @@
+import { useStore } from '@nanostores/react'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import { Badge } from '@/components/ui/badge'
@@ -13,6 +14,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import PageOptions from '@/components/page-options'
+import { panelOpen } from '@/components/docs-assistant/store'
 import CodeExamples, { resolveServerUrl } from '@/components/api/code-examples'
 import ResponseExamples from '@/components/api/response-examples'
 import ApiPlayground, { generateDefaultBody, DEFAULT_BASE_URL } from '@/components/api/playground'
@@ -21,7 +23,7 @@ import AuthRequirements from '@/components/api/auth-requirements'
 import ContentTypeSwitcher from '@/components/api/content-type-switcher'
 import type { Endpoint, Parameter } from '@/bach/schemas'
 import type { RequestState } from '@/components/api/types'
-import { badgeVariantForMethod } from '@/lib/utils'
+import { badgeVariantForMethod, cn } from '@/lib/utils'
 
 function EndpointBar({
   method,
@@ -173,6 +175,7 @@ interface APIPageProps {
 }
 
 export default function APIPage({ endpoint, title, breadcrumbs, markdownUrl }: APIPageProps) {
+  const isPanelOpen = useStore(panelOpen)
   const paramLocations = ['header', 'path', 'query', 'cookie']
   const [playgroundOpen, setPlaygroundOpen] = useState(false)
 
@@ -218,7 +221,7 @@ export default function APIPage({ endpoint, title, breadcrumbs, markdownUrl }: A
     <div className="not-prose">
       <div className="flex flex-col gap-x-10 gap-y-6 xl:flex-row">
         {/* Left column: docs + endpoint bar */}
-        <div className="min-w-0 w-full xl:w-[40rem] xl:shrink-0 space-y-8">
+        <div className="min-w-0 w-full xl:flex-1 xl:max-w-[40rem] space-y-8">
           {/* Page header */}
           <div>
             <div className="hidden items-start justify-between gap-4 lg:flex">
@@ -286,7 +289,7 @@ export default function APIPage({ endpoint, title, breadcrumbs, markdownUrl }: A
         </div>
 
         {/* Right column: static examples */}
-        <aside className="hidden w-112 shrink-0 xl:block">
+        <aside className={cn('hidden w-112 shrink-0 xl:block', isPanelOpen && 'xl:hidden')}>
           <div className="group/examples sticky top-10 flex max-h-[calc(100vh-8rem)] flex-col gap-4">
             <CodeExamples method={endpoint.method} path={endpoint.path} state={requestState} />
             {endpoint.responses && <ResponseExamples responses={endpoint.responses} />}
