@@ -8,8 +8,8 @@ export function makeGuardrails(onSearch?: () => void | Promise<void>) {
         if (onSearch) await onSearch()
       }
     },
-    onExit: async () => {
-      if (!hasSearched) {
+    onExit: async ({ exit }: { exit?: { name?: string } }) => {
+      if (!hasSearched && exit?.name === 'answer') {
         throw new Error(
           'Knowledge search is required for this question but was not performed. Use the search_knowledge tool before answering.'
         )

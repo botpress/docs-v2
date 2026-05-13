@@ -15,6 +15,18 @@ const AnswerExit = new Autonomous.Exit({
   }),
 })
 
+const OffTopicExit = new Autonomous.Exit({
+  name: 'offTopic',
+  description: 'Call this when the user asks something unrelated to Botpress or off-topic.',
+  schema: z.object({
+    message: z
+      .string()
+      .describe(
+        'A polite redirect message explaining you only handle Botpress questions and suggesting where they might find help.'
+      ),
+  }),
+})
+
 export default new Conversation({
   channel: ['webchat.channel'],
   handler: async ({ execute, state, message, conversation, client }) => {
@@ -100,7 +112,7 @@ If you search the knowledge base and cannot find a confident answer:
 
 ## Scope
 - Only answer questions related to Botpress and its products.
-- If someone asks something off-topic, politely let them know you're here specifically for Botpress help and suggest where they might find what they need. Do NOT use the reportUnanswered tool for off-topic questions — only report genuine Botpress questions you couldn't answer.
+- If someone asks something off-topic, use the offTopic exit with a polite redirect explaining you're here specifically for Botpress help and suggesting where they might find what they need. Do NOT use the reportUnanswered tool for off-topic questions — only report genuine Botpress questions you couldn't answer.
 
 ## Context
 If there are any pages in ${JSON.stringify(state.context)}, prioritize them when generating your answer.
@@ -108,10 +120,18 @@ If there are any pages in ${JSON.stringify(state.context)}, prioritize them when
       knowledge: [KnowledgeDocs],
       model: 'auto',
       tools: [reportUnanswered],
-      exits: [AnswerExit],
+      exits: [AnswerExit, OffTopicExit],
       mode: 'worker',
       hooks: guardrails,
     })
+
+    if (result.is(OffTopicExit)) {
+      await conversation.send({
+        type: 'text',
+        payload: { text: result.output.message },
+      })
+      return
+    }
 
     if (!result.is(AnswerExit)) {
       await conversation.send({
