@@ -26,7 +26,7 @@ local_resource(
     serve_dir=".",
     resource_deps=["install"],
     auto_init=False,
-    links=["http://localhost:4321"],
+    links=["http://localhost:4322"],
     labels=["services"],
 )
 
@@ -94,7 +94,7 @@ if _vale_installed:
         labels=["checks"],
     )
 else:
-    warn("vale not found in PATH. 'check:writing' resource disabled. Install with: brew install vale")
+    warn("vale not found in PATH. 'check:writing' resource disabled. See https://vale.sh/docs/vale-cli/installation/ for install instructions.")
 
 local_resource(
     "fix",
