@@ -9,7 +9,7 @@ import { useConversationHistory } from './hooks/use-conversation-history'
 import { Messages, type ChatMessage } from './messages'
 
 import { CLIENT_ID } from './config'
-import { pendingMessage, panelOpen } from './store'
+import { currentPage, pendingMessage, panelOpen } from './store'
 
 function AssistantInner() {
   const isOpen = useStore(panelOpen)
@@ -34,7 +34,8 @@ function AssistantInner() {
 
   const isReady = status === 'connected'
 
-  const { currentContext, setCurrentContext, suggestedContext, addSuggestedContext, inputRef } = useContextManagement()
+  const { currentContext, setCurrentContext, suggestedContext, addSuggestedContext, inputRef, lastSentMessagePathRef } =
+    useContextManagement()
 
   // Map BlockMessages → ChatMessage format with citation extraction
   const chatMessages = useMemo(() => {
@@ -122,6 +123,7 @@ function AssistantInner() {
 
       void sendMessageRaw(payload)
       setCurrentContext([])
+      lastSentMessagePathRef.current = currentPage.get().path
       trackConversation()
     },
     [isReady, sendMessageRaw, currentContext, setCurrentContext, trackConversation]
