@@ -1,4 +1,3 @@
-import { useStore } from '@nanostores/react'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import { Badge } from '@/components/ui/badge'
@@ -14,7 +13,6 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import PageOptions from '@/components/page-options'
-import { panelOpen } from '@/components/docs-assistant/store'
 import CodeExamples, { resolveServerUrl } from '@/components/api/code-examples'
 import ResponseExamples from '@/components/api/response-examples'
 import ApiPlayground, { generateDefaultBody, DEFAULT_BASE_URL } from '@/components/api/playground'
@@ -23,7 +21,7 @@ import AuthRequirements from '@/components/api/auth-requirements'
 import ContentTypeSwitcher from '@/components/api/content-type-switcher'
 import type { Endpoint, Parameter } from '@/bach/schemas'
 import type { RequestState } from '@/components/api/types'
-import { badgeVariantForMethod, cn } from '@/lib/utils'
+import { badgeVariantForMethod } from '@/lib/utils'
 
 function EndpointBar({
   method,
@@ -175,7 +173,6 @@ interface APIPageProps {
 }
 
 export default function APIPage({ endpoint, title, breadcrumbs, markdownUrl }: APIPageProps) {
-  const isPanelOpen = useStore(panelOpen)
   const paramLocations = ['header', 'path', 'query', 'cookie']
   const [playgroundOpen, setPlaygroundOpen] = useState(false)
 
@@ -289,7 +286,7 @@ export default function APIPage({ endpoint, title, breadcrumbs, markdownUrl }: A
         </div>
 
         {/* Right column: static examples */}
-        <aside className={cn('hidden w-112 shrink-0 xl:block', isPanelOpen && 'xl:hidden')}>
+        <aside className="api-examples-panel hidden w-112 shrink-0 xl:block">
           <div className="group/examples sticky top-10 flex max-h-[calc(100vh-8rem)] flex-col gap-4">
             <CodeExamples method={endpoint.method} path={endpoint.path} state={requestState} />
             {endpoint.responses && <ResponseExamples responses={endpoint.responses} />}
