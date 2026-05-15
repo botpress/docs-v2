@@ -150,7 +150,7 @@ function ChildNode({
         }`}
       >
         {node.icon && <TreeIcon name={node.icon} />}
-        <span className="min-w-0 truncate">{node.title}</span>
+        <span className="min-w-0 truncate">{node.sidebarTitle ?? node.title}</span>
         {node.method && <SidebarMethodBadge method={node.method} />}
       </a>
     </li>
