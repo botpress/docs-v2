@@ -56,6 +56,7 @@ export function buildSidebarEntryMap(
         id: entry.id,
         title: entry.data.title,
         method: 'method' in entry.data && typeof entry.data.method === 'string' ? entry.data.method : undefined,
+        icon: 'icon' in entry.data && typeof entry.data.icon === 'string' ? entry.data.icon : undefined,
         sortOrder:
           'sortOrder' in entry.data && typeof entry.data.sortOrder === 'number' ? entry.data.sortOrder : undefined,
       }))
@@ -74,6 +75,7 @@ export function buildSidebarEntryMap(
 export function buildCollectionsSidebarData(allEntries: Map<string, DynamicCollectionEntry[]>) {
   const titleMap = new Map<string, string>()
   const methodMap = new Map<string, string>()
+  const iconMap = new Map<string, string>()
   const articles: ArticleEntry[] = []
 
   for (const [, entries] of allEntries) {
@@ -86,6 +88,11 @@ export function buildCollectionsSidebarData(allEntries: Map<string, DynamicColle
         methodMap.set(entry.id, method)
         methodMap.set(slug, method)
       }
+      const icon = 'icon' in entry.data && typeof entry.data.icon === 'string' ? entry.data.icon : undefined
+      if (icon) {
+        iconMap.set(entry.id, icon)
+        iconMap.set(slug, icon)
+      }
       articles.push({
         slug,
         title: entry.data.title,
@@ -94,7 +101,7 @@ export function buildCollectionsSidebarData(allEntries: Map<string, DynamicColle
     }
   }
 
-  return { titleMap, methodMap, articles }
+  return { titleMap, methodMap, iconMap, articles }
 }
 
 /**
