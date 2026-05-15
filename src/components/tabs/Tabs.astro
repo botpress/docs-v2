@@ -1,0 +1,212 @@
+---
+interface Props {
+  defaultIndex?: number;
+  class?: string;
+}
+
+const { defaultIndex = 0, class: className } = Astro.props;
+---
+
+<div
+  class:list={["bp-tabs tab-container", className]}
+  data-default-index={defaultIndex}
+>
+  <ul
+    class="bp-tab-list not-prose mb-6 flex min-w-full flex-none gap-x-6 overflow-auto border-b border-stone-200 pb-px dark:border-stone-700"
+    role="tablist"
+    aria-label="Tabs"
+  >
+  </ul>
+  <div class="bp-tab-panels">
+    <slot />
+  </div>
+</div>
+
+<span
+  hidden
+  aria-hidden="true"
+  class="-mb-px max-w-max border-current border-transparent text-primary text-stone-900 hover:border-stone-300 dark:text-stone-200 dark:hover:border-stone-700"
+></span>
+
+<style is:global>
+  .bp-tabs .bp-tab-panel {
+    display: none;
+  }
+  .bp-tabs .bp-tab-panel:first-of-type {
+    display: block;
+  }
+  .bp-tabs .bp-tab-list:empty {
+    display: none;
+  }
+  .bp-tabs[data-ready="true"] .bp-tab-panel {
+    display: none;
+  }
+  .bp-tabs[data-ready="true"] .bp-tab-panel[data-active="true"] {
+    display: block;
+  }
+</style>
+
+<script>
+  const TAB_BUTTON_BASE =
+    "-mb-px flex max-w-max items-center gap-1.5 whitespace-nowrap border-b pt-3 pb-2.5 font-semibold text-sm leading-6";
+  const TAB_BUTTON_ACTIVE = "border-current text-primary";
+  const TAB_BUTTON_INACTIVE =
+    "border-transparent text-stone-900 hover:border-stone-300 dark:text-stone-200 dark:hover:border-stone-700";
+
+  const slugify = (input: string): string =>
+    input
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "") || "tab";
+
+  const initRoot = (root: HTMLElement): void => {
+    if (root.dataset.ready === "true") {
+      return;
+    }
+
+    const list = root.querySelector<HTMLUListElement>(":scope > .bp-tab-list");
+    const panelsContainer = root.querySelector<HTMLElement>(
+      ":scope > .bp-tab-panels",
+    );
+    if (!list || !panelsContainer) {
+      return;
+    }
+
+    const panels = Array.from(
+      panelsContainer.querySelectorAll<HTMLElement>(":scope > .bp-tab-panel"),
+    );
+    if (panels.length === 0) {
+      return;
+    }
+
+    const uid = (
+      typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : Math.random().toString(36).slice(2)
+    ).replace(/-/g, "");
+
+    const tabIds = panels.map((panel, i) => {
+      const title = panel.dataset.bpTabTitle ?? "tab";
+      return `bp-${uid}-${slugify(title)}-${i}`;
+    });
+
+    const tabs: HTMLLIElement[] = [];
+
+    panels.forEach((panel, i) => {
+      const title = panel.dataset.bpTabTitle ?? "Tab";
+      const iconSource = panel.querySelector<HTMLElement>(
+        ":scope > .bp-tab-icon-source",
+      );
+
+      const li = document.createElement("li");
+      li.id = tabIds[i];
+      li.setAttribute("role", "tab");
+      li.setAttribute("aria-controls", `panel-${tabIds[i]}`);
+      li.className = "cursor-pointer";
+
+      const button = document.createElement("div");
+      button.dataset.bpTabButton = "";
+
+      if (iconSource) {
+        const clone = iconSource.cloneNode(true) as HTMLElement;
+        clone.hidden = false;
+        clone.removeAttribute("aria-hidden");
+        clone.classList.remove("bp-tab-icon-source");
+        button.appendChild(clone);
+      }
+
+      const titleSpan = document.createElement("span");
+      titleSpan.textContent = title;
+      button.appendChild(titleSpan);
+
+      li.appendChild(button);
+
+      panel.id = `panel-${tabIds[i]}`;
+      panel.setAttribute("aria-labelledby", tabIds[i]);
+
+      list.appendChild(li);
+      tabs.push(li);
+    });
+
+    const parsedDefault = Number.parseInt(root.dataset.defaultIndex ?? "0", 10);
+    const defaultIndex = Number.isFinite(parsedDefault) ? parsedDefault : 0;
+    let activeIndex = Math.max(0, Math.min(defaultIndex, panels.length - 1));
+
+    const render = (): void => {
+      tabs.forEach((tab, i) => {
+        const isActive = i === activeIndex;
+        const button = tab.firstElementChild as HTMLElement;
+        tab.setAttribute("aria-selected", String(isActive));
+        tab.setAttribute("tabindex", isActive ? "0" : "-1");
+        tab.dataset.active = String(isActive);
+        button.className = `${TAB_BUTTON_BASE} ${
+          isActive ? TAB_BUTTON_ACTIVE : TAB_BUTTON_INACTIVE
+        }`;
+        button.dataset.active = String(isActive);
+      });
+
+      panels.forEach((panel, i) => {
+        const isActive = i === activeIndex;
+        panel.dataset.active = String(isActive);
+        panel.setAttribute("aria-hidden", String(!isActive));
+        panel.setAttribute("tabindex", isActive ? "0" : "-1");
+      });
+    };
+
+    const setActive = (newIndex: number): void => {
+      if (newIndex === activeIndex) {
+        return;
+      }
+      activeIndex = newIndex;
+      render();
+    };
+
+    render();
+
+    tabs.forEach((tab, i) => {
+      tab.addEventListener("click", (e) => {
+        e.stopPropagation();
+        setActive(i);
+      });
+
+      tab.addEventListener("keydown", (e) => {
+        const count = tabs.length;
+        let newIndex = activeIndex;
+        switch (e.key) {
+          case "ArrowLeft":
+            newIndex = (activeIndex - 1 + count) % count;
+            break;
+          case "ArrowRight":
+            newIndex = (activeIndex + 1) % count;
+            break;
+          case "Home":
+            newIndex = 0;
+            break;
+          case "End":
+            newIndex = count - 1;
+            break;
+          case "Enter":
+          case " ":
+            e.preventDefault();
+            return;
+          default:
+            return;
+        }
+        e.preventDefault();
+        setActive(newIndex);
+        window.setTimeout(() => tabs[newIndex]?.focus(), 0);
+      });
+    });
+
+    root.dataset.ready = "true";
+  };
+
+  const initAll = (): void => {
+    document
+      .querySelectorAll<HTMLElement>(".bp-tabs")
+      .forEach((root) => initRoot(root));
+  };
+
+  initAll();
+  document.addEventListener("astro:page-load", initAll);
+</script>

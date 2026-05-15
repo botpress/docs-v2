@@ -240,6 +240,60 @@
   opacity: 1;
 }
 
+@layer components {
+  .prose {
+    --tw-prose-headings: var(--color-stone-900);
+    --tw-prose-body: var(--color-stone-600);
+    --tw-prose-links: var(--color-stone-900);
+    --tw-prose-bold: var(--color-stone-800);
+    --tw-prose-code: var(--color-stone-700);
+  }
+  .dark .prose {
+    --tw-prose-invert-headings: var(--color-stone-100);
+    --tw-prose-invert-body: var(--color-stone-300);
+    --tw-prose-invert-links: var(--color-stone-100);
+    --tw-prose-invert-bold: var(--color-stone-200);
+    --tw-prose-invert-code: var(--color-stone-300);
+  }
+
+  .prose :is(h1, h2, h3, h4, h5, h6):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+    font-weight: 600;
+  }
+
+  .prose a:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-color: var(--color-stone-300);
+  }
+  .prose a:hover:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+    text-decoration-color: var(--color-stone-500);
+  }
+  .dark .prose a:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+    text-decoration-color: var(--color-stone-600);
+  }
+  .dark .prose a:hover:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+    text-decoration-color: var(--color-stone-400);
+  }
+
+  .prose code:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+    border-radius: var(--radius-md);
+    background-color: var(--color-stone-100);
+    padding-inline: 0.375rem;
+    padding-block: 0.125rem;
+  }
+  .prose code:not(:where([class~='not-prose'], [class~='not-prose'] *))::before,
+  .prose code:not(:where([class~='not-prose'], [class~='not-prose'] *))::after {
+    content: none;
+  }
+  .dark .prose code:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+    background-color: var(--color-stone-800);
+  }
+
+  .prose th:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+    text-align: left;
+  }
+}
+
 /* Docs assistant — shimmer text for in-flight tool indicators */
 @keyframes docs-assistant-shimmer {
   0% {
