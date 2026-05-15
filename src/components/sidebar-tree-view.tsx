@@ -136,7 +136,7 @@ function ChildNode({
             : 'text-stone-600 hover:bg-black/5 hover:text-stone-900 dark:text-stone-400 dark:hover:bg-white/5 dark:hover:text-stone-100'
         }`}
       >
-        <span className="min-w-0 truncate">{node.title}</span>
+        <span className="min-w-0 truncate">{node.sidebarTitle ?? node.title}</span>
         {node.method && <SidebarMethodBadge method={node.method} />}
       </a>
     </li>

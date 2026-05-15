@@ -49,6 +49,7 @@ function _collectFromPages<TCollection extends string>(pages: PageItem<TCollecti
 export interface CollectionEntryData {
   id: string
   title: string
+  sidebarTitle?: string
   method?: string
   sortOrder?: number
 }
@@ -67,6 +68,7 @@ export function buildPages<TCollection extends string>(
   parentPath: string,
   titleMap: Map<string, string>,
   methodMap: Map<string, string>,
+  sidebarTitleMap: Map<string, string>,
   collectionsMap?: Map<TCollection, CollectionEntryData[]>
 ): SidebarNode[] {
   const nodes: SidebarNode[] = []
@@ -81,6 +83,7 @@ export function buildPages<TCollection extends string>(
       const articleNode: SidebarArticleNode = {
         type: 'article',
         title,
+        sidebarTitle: sidebarTitleMap.get(normalizedPath),
         href,
         path: normalizedPath,
         method: methodMap.get(normalizedPath),
@@ -113,6 +116,7 @@ export function buildPages<TCollection extends string>(
           children: sortedEntries.map((entry) => ({
             type: 'article',
             title: entry.title,
+            sidebarTitle: entry.sidebarTitle,
             href: `/${entry.id}`,
             path: entry.id,
             method: entry.method,
@@ -136,7 +140,15 @@ export function buildPages<TCollection extends string>(
         childrenPages = item.pages
       }
 
-      const children = buildPages(childrenPages, depth + 1, groupPath, titleMap, methodMap, collectionsMap)
+      const children = buildPages(
+        childrenPages,
+        depth + 1,
+        groupPath,
+        titleMap,
+        methodMap,
+        sidebarTitleMap,
+        collectionsMap
+      )
 
       const categoryNode: SidebarCategoryNode = {
         type: 'category',
@@ -195,9 +207,11 @@ export async function buildSidebarTree<TCollection extends string>(
   config: DocsConfig<TCollection>,
   titleMap: Map<string, string>,
   methodMap?: Map<string, string>,
+  sidebarTitleMap?: Map<string, string>,
   collectionsMap?: Map<TCollection, CollectionEntryData[]>
 ): Promise<SidebarTreeResult> {
   const _methodMap = methodMap ?? new Map()
+  const _sidebarTitleMap = sidebarTitleMap ?? new Map()
 
   const tabs: TabInfo[] = []
   const trees: Record<string, SidebarNode[]> = {}
@@ -205,7 +219,7 @@ export async function buildSidebarTree<TCollection extends string>(
 
   for (const tabItem of config.navigation.tabs) {
     const tabSlug = slugify(tabItem.tab)
-    const tabTree = buildPages(tabItem.pages, 0, '', titleMap, _methodMap, collectionsMap)
+    const tabTree = buildPages(tabItem.pages, 0, '', titleMap, _methodMap, _sidebarTitleMap, collectionsMap)
 
     const firstHref = findFirstHref(tabTree) ?? '/'
 
