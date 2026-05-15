@@ -1,0 +1,51 @@
+---
+title: Execute Code
+---
+
+import { Note, Warning } from '@/components/callouts'
+import Frame from '@/components/Frame.astro'
+
+The Execute Code Card lets you **run custom [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) code within a Node**.
+
+You can use the Execute Code Card to extend the functionality of your bot beyond Studio's built-in Cards. For example, you can:
+
+- Perform complex calculations
+- Manipulate data and variables (see [variables in code](/studio/concepts/variables/in-code))
+- Call external APIs
+- Add guardrails such as custom error handling, rate limits, permission checks, and fallbacks
+
+<Note>
+  Execute Code Cards allow you to generate one-time code snippets at specific points in your Workflow. For reusable code
+  snippets, use [Actions](/studio/concepts/actions).
+</Note>
+
+<Warning>
+
+    You can't import external libraries within an Execute Code Card. To make API requests, you can use [Axios](https://axios-http.com/docs/intro).
+
+</Warning>
+
+## Generate code using AI
+
+The Execute Code card allows you to generate code using AI, so you don't have to write it all from scratch:
+
+<Frame>
+  <img
+    alt="Generate code using AI"
+    class="block dark:hidden"
+    src="/assets/studio/concepts/cards/assets/execute-code.png"
+  />
+  <img
+    alt="Generate code using AI"
+    class="hidden dark:block"
+    src="/assets/studio/concepts/cards/assets/execute-code-dark.png"
+  />
+</Frame>
+
+At the top of the code editor, write a prompt and hit enter to generate code using AI. You can then edit this code manually or ask AI to make revisions to it.
+
+<Note>
+
+    Review AI-generated code before production. Store secrets in [configuration variables](/studio/concepts/variables/scopes/configuration) (use `env` in code), and handle slow or failed requests with `try`/`catch`, timeouts, or fallback flows.
+
+</Note>

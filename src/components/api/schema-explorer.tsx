@@ -1,7 +1,7 @@
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { Field } from '@/components/field'
-import { Expandable } from '@/components/api/expandable'
+import { Expandable } from '@/components/Expandable'
 import type { Schema } from '@/bach/schemas'
 
 interface SchemaExplorerProps {

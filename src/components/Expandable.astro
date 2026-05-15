@@ -1,0 +1,12 @@
+---
+import { Expandable as ExpandableReact } from "./Expandable";
+interface Props {
+  title?: string;
+  defaultOpen?: boolean;
+}
+const { title, defaultOpen } = Astro.props;
+---
+
+<ExpandableReact client:load title={title} defaultOpen={defaultOpen}>
+  <slot />
+</ExpandableReact>
