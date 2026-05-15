@@ -18,6 +18,7 @@ export interface SiteContext {
   sidebar: SidebarTreeResult
   titleMap: Map<string, string>
   methodMap: Map<string, string>
+  iconMap: Map<string, string>
   articles: ArticleEntry[]
   defaultEntriesBySlug: Map<string, DynamicCollectionEntry>
 }
@@ -49,9 +50,9 @@ export class BachSite<TCollection extends string = string> {
 
     const defaultCollection = getDefaultCollection(this._config)
     const allEntries = await loadCollections(this._config)
-    const { titleMap, methodMap, articles } = buildCollectionsSidebarData(allEntries)
+    const { titleMap, methodMap, iconMap, articles } = buildCollectionsSidebarData(allEntries)
     const collectionsMap = buildSidebarEntryMap(allEntries)
-    const sidebar = await buildSidebarTree(this._config, titleMap, methodMap, collectionsMap)
+    const sidebar = await buildSidebarTree(this._config, titleMap, methodMap, iconMap, collectionsMap)
 
     const defaultEntriesBySlug = new Map<string, DynamicCollectionEntry>()
     for (const entry of allEntries.get(defaultCollection) ?? []) {
@@ -64,6 +65,7 @@ export class BachSite<TCollection extends string = string> {
       sidebar,
       titleMap,
       methodMap,
+      iconMap,
       articles,
       defaultEntriesBySlug,
     }
@@ -89,7 +91,13 @@ export class BachSite<TCollection extends string = string> {
     if (isApi) {
       breadcrumbs = [{ label: apiData!.apiLabel }]
     } else {
-      breadcrumbs = await buildBreadcrumbs(siteContext.config, entry.id, title, siteContext.titleMap)
+      breadcrumbs = await buildBreadcrumbs(
+        siteContext.config,
+        entry.id,
+        title,
+        siteContext.titleMap,
+        siteContext.iconMap
+      )
     }
 
     const { prev, next } = getAdjacentPages(sidebarTree, pathname)
