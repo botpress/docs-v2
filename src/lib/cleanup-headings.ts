@@ -5,29 +5,52 @@ interface ParsedHeading {
   insideTabs: boolean
 }
 
-function parseHeadings(body: string): ParsedHeading[] {
-  const out: ParsedHeading[] = []
+function stripFences(body: string): string {
   const lines = body.split('\n')
-  let tabsDepth = 0
-
+  const out: string[] = []
+  let opener: string | null = null
   for (const line of lines) {
-    const opens = line.match(/<Tabs\b[^>]*?(?<!\/)>/g)
-    const closes = line.match(/<\/Tabs>/g)
-
-    const headingMatch = line.match(/^\s*(#{2,3})\s+(.+)$/)
-    if (headingMatch) {
-      const rawText = headingMatch[2]
-        .trim()
-        .replace(/\{[^}]*\}/g, '')
-        .trim()
-      out.push({ text: rawText, insideTabs: tabsDepth > 0 })
+    const m = line.match(/^[ \t]{0,3}(`{3,}|~{3,})/)
+    if (opener === null) {
+      if (m) {
+        opener = m[1]
+        out.push('')
+        continue
+      }
+      out.push(line)
+    } else {
+      if (m && m[1][0] === opener[0] && m[1].length >= opener.length) {
+        opener = null
+      }
+      out.push('')
     }
-
-    if (opens) tabsDepth += opens.length
-    if (closes) tabsDepth -= closes.length
-    if (tabsDepth < 0) tabsDepth = 0
   }
+  return out.join('\n')
+}
 
+const TOKEN_RE = /<Tabs\b[\s\S]*?(?<!\/)>|<\/Tabs>|^[ \t]*#{2,3}[ \t]+.+$/gm
+
+function parseHeadings(body: string): ParsedHeading[] {
+  const cleaned = stripFences(body)
+  const out: ParsedHeading[] = []
+  let tabsDepth = 0
+  for (const match of cleaned.matchAll(TOKEN_RE)) {
+    const tok = match[0]
+    if (tok.startsWith('</Tabs')) {
+      tabsDepth = Math.max(0, tabsDepth - 1)
+    } else if (tok.startsWith('<Tabs')) {
+      if (!/\/[ \t\r\n]*>$/.test(tok)) tabsDepth++
+    } else {
+      const hm = tok.match(/^[ \t]*(#{2,3})[ \t]+(.+)$/)
+      if (hm) {
+        const rawText = hm[2]
+          .trim()
+          .replace(/\{[^}]*\}/g, '')
+          .trim()
+        out.push({ text: rawText, insideTabs: tabsDepth > 0 })
+      }
+    }
+  }
   return out
 }
 
