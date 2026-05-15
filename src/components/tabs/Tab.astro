@@ -1,0 +1,27 @@
+---
+import type { icons } from "lucide-react";
+import Icon from "../Icon.astro";
+
+interface Props {
+  title: string;
+  icon?: keyof typeof icons;
+  class?: string;
+}
+
+const { title, icon, class: className } = Astro.props;
+---
+
+<div
+  class:list={["bp-tab-panel overflow-x-auto", className]}
+  data-bp-tab-title={title}
+  role="tabpanel"
+>
+  {
+    icon && (
+      <span class="bp-tab-icon-source" hidden aria-hidden="true">
+        <Icon icon={icon} class="size-4 shrink-0" />
+      </span>
+    )
+  }
+  <slot />
+</div>
