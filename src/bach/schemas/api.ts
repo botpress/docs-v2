@@ -95,6 +95,7 @@ export const DEFAULT_API_DESCRIPTION =
 
 export const apiCollectionSchema = z.object({
   title: z.string(),
+  sidebarTitle: z.string().optional(),
   description: z.string().default(DEFAULT_API_DESCRIPTION),
   method: z.string(),
   apiSlug: z.string(),

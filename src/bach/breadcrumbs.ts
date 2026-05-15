@@ -12,6 +12,7 @@ export async function searchPagesForBreadcrumbs<TCollection extends string>(
   pages: PageItem<TCollection>[],
   prefix: { label: string; href: string }[],
   titleMap: Map<string, string>,
+  sidebarTitleMap: Map<string, string>,
   iconMap: Map<string, string>
 ): Promise<{ label: string; href: string }[] | null> {
   const normalizedTarget = normalizePagePath(pagePath)
@@ -41,11 +42,20 @@ export async function searchPagesForBreadcrumbs<TCollection extends string>(
           return groupPrefix
         }
       } else {
-        const firstChildHref = findFirstHref(buildPages(item.pages, 0, '', titleMap, new Map(), iconMap))
+        const firstChildHref = findFirstHref(
+          buildPages(item.pages, 0, '', titleMap, new Map(), sidebarTitleMap, iconMap)
+        )
         groupPrefix.push({ label: item.group, href: firstChildHref ?? '/' })
       }
 
-      const result = await searchPagesForBreadcrumbs(pagePath, item.pages, groupPrefix, titleMap, iconMap)
+      const result = await searchPagesForBreadcrumbs(
+        pagePath,
+        item.pages,
+        groupPrefix,
+        titleMap,
+        sidebarTitleMap,
+        iconMap
+      )
       if (result) return result
     }
   }
@@ -65,12 +75,13 @@ export async function buildBreadcrumbs<TCollection extends string>(
   entryId: string,
   pageTitle: string,
   titleMap: Map<string, string>,
+  sidebarTitleMap: Map<string, string>,
   iconMap: Map<string, string>
 ): Promise<{ label: string; href: string }[]> {
   const pagePath = normalizeEntryId(entryId)
 
   for (const tab of config.navigation.tabs) {
-    const crumbs = await searchPagesForBreadcrumbs(pagePath, tab.pages, [], titleMap, iconMap)
+    const crumbs = await searchPagesForBreadcrumbs(pagePath, tab.pages, [], titleMap, sidebarTitleMap, iconMap)
     if (crumbs) {
       // Remove the active page itself — breadcrumbs show only the parent path
       return crumbs.slice(0, -1)
