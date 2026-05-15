@@ -17,6 +17,7 @@ export interface SidebarCategoryNode {
   slug: string
   path: string
   href?: string
+  icon?: string
   children: SidebarNode[]
 }
 
@@ -27,6 +28,7 @@ export interface SidebarArticleNode {
   href: string
   path: string
   method?: string
+  icon?: string
 }
 
 export type SidebarNode = SidebarCategoryNode | SidebarArticleNode
@@ -34,12 +36,14 @@ export type SidebarNode = SidebarCategoryNode | SidebarArticleNode
 export interface GroupItem<TCollection extends string = string> {
   group: string
   root?: string
+  icon?: string
   pages: PageItem<TCollection>[]
 }
 
 export interface CollectionGroupItem<TCollection extends string = string> {
   group: string
   root?: string
+  icon?: string
   collection: TCollection
 }
 

@@ -19,6 +19,7 @@ export interface SiteContext {
   titleMap: Map<string, string>
   methodMap: Map<string, string>
   sidebarTitleMap: Map<string, string>
+  iconMap: Map<string, string>
   articles: ArticleEntry[]
   defaultEntriesBySlug: Map<string, DynamicCollectionEntry>
 }
@@ -50,9 +51,9 @@ export class BachSite<TCollection extends string = string> {
 
     const defaultCollection = getDefaultCollection(this._config)
     const allEntries = await loadCollections(this._config)
-    const { titleMap, methodMap, sidebarTitleMap, articles } = buildCollectionsSidebarData(allEntries)
+    const { titleMap, methodMap, sidebarTitleMap, iconMap, articles } = buildCollectionsSidebarData(allEntries)
     const collectionsMap = buildSidebarEntryMap(allEntries)
-    const sidebar = await buildSidebarTree(this._config, titleMap, methodMap, sidebarTitleMap, collectionsMap)
+    const sidebar = await buildSidebarTree(this._config, titleMap, methodMap, sidebarTitleMap, iconMap, collectionsMap)
 
     const defaultEntriesBySlug = new Map<string, DynamicCollectionEntry>()
     for (const entry of allEntries.get(defaultCollection) ?? []) {
@@ -66,6 +67,7 @@ export class BachSite<TCollection extends string = string> {
       titleMap,
       methodMap,
       sidebarTitleMap,
+      iconMap,
       articles,
       defaultEntriesBySlug,
     }
@@ -96,7 +98,8 @@ export class BachSite<TCollection extends string = string> {
         entry.id,
         title,
         siteContext.titleMap,
-        siteContext.sidebarTitleMap
+        siteContext.sidebarTitleMap,
+        siteContext.iconMap
       )
     }
 

@@ -51,6 +51,7 @@ export interface CollectionEntryData {
   title: string
   sidebarTitle?: string
   method?: string
+  icon?: string
   sortOrder?: number
 }
 
@@ -69,6 +70,7 @@ export function buildPages<TCollection extends string>(
   titleMap: Map<string, string>,
   methodMap: Map<string, string>,
   sidebarTitleMap: Map<string, string>,
+  iconMap: Map<string, string>,
   collectionsMap?: Map<TCollection, CollectionEntryData[]>
 ): SidebarNode[] {
   const nodes: SidebarNode[] = []
@@ -87,6 +89,7 @@ export function buildPages<TCollection extends string>(
         href,
         path: normalizedPath,
         method: methodMap.get(normalizedPath),
+        icon: iconMap.get(normalizedPath),
       }
       nodes.push(articleNode)
     } else {
@@ -113,6 +116,7 @@ export function buildPages<TCollection extends string>(
           slug: groupSlug,
           path: groupPath,
           href: depth > 0 ? href : undefined,
+          icon: item.icon,
           children: sortedEntries.map((entry) => ({
             type: 'article',
             title: entry.title,
@@ -120,6 +124,7 @@ export function buildPages<TCollection extends string>(
             href: `/${entry.id}`,
             path: entry.id,
             method: entry.method,
+            icon: entry.icon,
           })),
         }
         nodes.push(categoryNode)
@@ -147,6 +152,7 @@ export function buildPages<TCollection extends string>(
         titleMap,
         methodMap,
         sidebarTitleMap,
+        iconMap,
         collectionsMap
       )
 
@@ -156,6 +162,7 @@ export function buildPages<TCollection extends string>(
         slug: groupSlug,
         path: groupPath,
         href: depth > 0 ? href : undefined,
+        icon: item.icon,
         children,
       }
       nodes.push(categoryNode)
@@ -208,10 +215,12 @@ export async function buildSidebarTree<TCollection extends string>(
   titleMap: Map<string, string>,
   methodMap?: Map<string, string>,
   sidebarTitleMap?: Map<string, string>,
+  iconMap?: Map<string, string>,
   collectionsMap?: Map<TCollection, CollectionEntryData[]>
 ): Promise<SidebarTreeResult> {
   const _methodMap = methodMap ?? new Map()
   const _sidebarTitleMap = sidebarTitleMap ?? new Map()
+  const _iconMap = iconMap ?? new Map()
 
   const tabs: TabInfo[] = []
   const trees: Record<string, SidebarNode[]> = {}
@@ -219,7 +228,7 @@ export async function buildSidebarTree<TCollection extends string>(
 
   for (const tabItem of config.navigation.tabs) {
     const tabSlug = slugify(tabItem.tab)
-    const tabTree = buildPages(tabItem.pages, 0, '', titleMap, _methodMap, _sidebarTitleMap, collectionsMap)
+    const tabTree = buildPages(tabItem.pages, 0, '', titleMap, _methodMap, _sidebarTitleMap, _iconMap, collectionsMap)
 
     const firstHref = findFirstHref(tabTree) ?? '/'
 
