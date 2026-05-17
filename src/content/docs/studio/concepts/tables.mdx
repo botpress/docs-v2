@@ -588,7 +588,7 @@ const { table } = await client.deleteTable({ table: 'Data1Table' })
 
 ## Operations on Tables - via Code
 
-<img src="/assets/studio/concepts/assets/table-code-operations.png" />
+<img src="./assets/table-code-operations.png" />
 
 ### Create record
 
@@ -903,13 +903,13 @@ Columns can be marked as "Computed" which allows the <Tooltip tip="Happy bot bui
 
 To use computed columns, simply create a column and toggle the **Computed** field as shown below.
 
-<img src="/assets/studio/concepts/assets/computed-column-switch.png" />
+<img src="./assets/computed-column-switch.png" />
 
 ### Selecting the basis of computation
 
 To compute columns, you must select what information you will base your computed columns on. To do so, click the **Dependencies** field and select all column names that you will use.
 
-<img src="/assets/studio/concepts/assets/table-dependencies.png" />
+<img src="./assets/table-dependencies.png" />
 
 In the above example, we selected a column called **number**.
 
@@ -927,11 +927,11 @@ In the above example, for the number 3, you might get "The Three Clever Squirrel
 
 To run arbitrary code, select the **Execute code** tab. Then, click **Edit Code**.
 
-<img src="/assets/studio/concepts/assets/edit-code-button.png" />
+<img src="./assets/edit-code-button.png" />
 
 You will see a window with a code editor.
 
-<img src="/assets/studio/concepts/assets/code-editor.png" />
+<img src="./assets/code-editor.png" />
 
 Simply add your code above. The proper syntax for accessing columns you've identified as dependencies is row[propertyName], and the displayed cell value is what's returned by this function. You can call asynchronous functions within the function, and have the **Axios** library available to perform HTTP requests.
 
@@ -958,11 +958,11 @@ There is currently an execution timeout of two minutes these.
 
 To ensure computed values are always kept up to date, we recommend **Auto-compute** be toggled on.
 
-<img src="/assets/studio/concepts/assets/auto-compute.png" />
+<img src="./assets/auto-compute.png" />
 
 If you don't have **Auto-compute** enabled, a grey icon will appear next to stale table cells.
 
-<img src="/assets/studio/concepts/assets/stale-compute-row.png" />
+<img src="./assets/stale-compute-row.png" />
 
 To update the stale data, simply re-activate **Auto-compute**.
 

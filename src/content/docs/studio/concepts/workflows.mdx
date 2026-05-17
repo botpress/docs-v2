@@ -12,8 +12,8 @@ import Icon from '@/components/Icon.astro'
 <Icon icon="Workflow" /> Workflows are **sequences of steps that your bot takes**:
 
 <Frame>
-  <img alt="Workflow" class="block dark:hidden" src="/assets/studio/concepts/assets/workflow.png" />
-  <img alt="Workflow" class="hidden dark:block" src="/assets/studio/concepts/assets/workflow-dark.png" />
+  <img alt="Workflow" class="block dark:hidden" src="./assets/workflow.png" />
+  <img alt="Workflow" class="hidden dark:block" src="./assets/workflow-dark.png" />
 </Frame>
 
 Each Workflow represents a reusable, customizable section of your bot's logic. You can use them to organize your bot's behaviour. For example, you might want to:
@@ -49,12 +49,8 @@ You can put any amount of Nodes in between these two—they'll execute in order 
 Every bot comes with a few built-in Workflows to handle specific situations gracefully:
 
 <Frame>
-  <img alt="Default Workflows" class="block dark:hidden" src="/assets/studio/concepts/assets/default-workflows.png" />
-  <img
-    alt="Default Workflows"
-    class="hidden dark:block"
-    src="/assets/studio/concepts/assets/default-workflows-dark.png"
-  />
+  <img alt="Default Workflows" class="block dark:hidden" src="./assets/default-workflows.png" />
+  <img alt="Default Workflows" class="hidden dark:block" src="./assets/default-workflows-dark.png" />
 </Frame>
 
 You can modify the contents of each one to suit your needs. Here's a breakdown of each default Workflow.
@@ -64,8 +60,8 @@ You can modify the contents of each one to suit your needs. Here's a breakdown o
 The Main Workflow is the entry point for every conversation with your bot. It executes every time a new conversation begins:
 
 <Frame>
-  <img alt="Main Workflow" class="block dark:hidden" src="/assets/studio/concepts/assets/main-workflow.png" />
-  <img alt="Main Workflow" class="hidden dark:block" src="/assets/studio/concepts/assets/main-workflow-dark.png" />
+  <img alt="Main Workflow" class="block dark:hidden" src="./assets/main-workflow.png" />
+  <img alt="Main Workflow" class="hidden dark:block" src="./assets/main-workflow-dark.png" />
 </Frame>
 
 Unlike custom Workflows, the Main Workflow always contains:
@@ -78,8 +74,8 @@ Unlike custom Workflows, the Main Workflow always contains:
 The Error Workflow executes when there's an unexpected error in one of your other Workflows. You can use it to inform the user that something went wrong:
 
 <Frame>
-  <img alt="Error Workflow" class="block dark:hidden" src="/assets/studio/concepts/assets/error-workflow.png" />
-  <img alt="Error Workflow" class="hidden dark:block" src="/assets/studio/concepts/assets/error-workflow-dark.png" />
+  <img alt="Error Workflow" class="block dark:hidden" src="./assets/error-workflow.png" />
+  <img alt="Error Workflow" class="hidden dark:block" src="./assets/error-workflow-dark.png" />
 </Frame>
 
 Instead of an **Exit** Node, the Error Workflow contains an **End** Node. This ensures that the conversation ends after the error occurs.
@@ -89,12 +85,8 @@ Instead of an **Exit** Node, the Error Workflow contains an **End** Node. This e
 The Timeout Workflow executes after a period of prolonged inactivity from the user. You can use it to inform the user that the conversation timed out:
 
 <Frame>
-  <img alt="Timeout Workflow" class="block dark:hidden" src="/assets/studio/concepts/assets/timeout-workflow.png" />
-  <img
-    alt="Timeout Workflow"
-    class="hidden dark:block"
-    src="/assets/studio/concepts/assets/timeout-workflow-dark.png"
-  />
+  <img alt="Timeout Workflow" class="block dark:hidden" src="./assets/timeout-workflow.png" />
+  <img alt="Timeout Workflow" class="hidden dark:block" src="./assets/timeout-workflow-dark.png" />
 </Frame>
 
 Instead of an **Exit** Node, the Timeout Workflow contains an **End** Node. This ensures that the conversation ends after the timeout occurs.
@@ -106,8 +98,8 @@ Instead of an **Exit** Node, the Timeout Workflow contains an **End** Node. This
 The Conversation End Workflow executes right before the conversation ends explicitly. You can use it to summarize the conversation before it ends, or offer follow-up actions:
 
 <Frame>
-  <img alt="Conversation End" class="block dark:hidden" src="/assets/studio/concepts/assets/end-workflow.png" />
-  <img alt="Conversation End" class="hidden dark:block" src="/assets/studio/concepts/assets/end-workflow-dark.png" />
+  <img alt="Conversation End" class="block dark:hidden" src="./assets/end-workflow.png" />
+  <img alt="Conversation End" class="hidden dark:block" src="./assets/end-workflow-dark.png" />
 </Frame>
 
 Instead of an **Exit** Node, the **Conversation End** Workflow contains an **End** Node. This ensures that the conversation ends after the Workflow executes.
@@ -126,15 +118,15 @@ Since Autonomous Nodes don't transition to an End Node when the user ends the co
 To add a new Workflow, navigate to the **Workflows** menu in Studio:
 
 <Frame>
-  <img alt="Workflows section" class="block dark:hidden" src="/assets/studio/concepts/assets/workflows-menu.png" />
-  <img alt="Workflows section" class="hidden dark:block" src="/assets/studio/concepts/assets/workflows-menu-dark.png" />
+  <img alt="Workflows section" class="block dark:hidden" src="./assets/workflows-menu.png" />
+  <img alt="Workflows section" class="hidden dark:block" src="./assets/workflows-menu-dark.png" />
 </Frame>
 
 Then, select **Create Workflow** and enter a name for the new Workflow:
 
 <Frame>
-  <img alt="New Workflow" class="block dark:hidden" src="/assets/studio/concepts/assets/new-workflow.png" />
-  <img alt="New Workflow" class="hidden dark:block" src="/assets/studio/concepts/assets/new-workflow-dark.png" />
+  <img alt="New Workflow" class="block dark:hidden" src="./assets/new-workflow.png" />
+  <img alt="New Workflow" class="hidden dark:block" src="./assets/new-workflow-dark.png" />
 </Frame>
 
 ### From Botpress Hub
@@ -142,8 +134,8 @@ Then, select **Create Workflow** and enter a name for the new Workflow:
 You can also browse [Botpress Hub](/integrations/get-started/botpress-hub) for user-uploaded Workflows and add them to your bot. Just filter by Workflow to see all available Workflows:
 
 <Frame>
-  <img alt="Workflows on Hub" class="block dark:hidden" src="/assets/studio/concepts/assets/workflows-hub.png" />
-  <img alt="Workflows on Hub" class="hidden dark:block" src="/assets/studio/concepts/assets/workflows-hub-dark.png" />
+  <img alt="Workflows on Hub" class="block dark:hidden" src="./assets/workflows-hub.png" />
+  <img alt="Workflows on Hub" class="hidden dark:block" src="./assets/workflows-hub-dark.png" />
 </Frame>
 
 To add any Workflow, select it, then select **Install Workflow**.
@@ -160,15 +152,15 @@ To add any Workflow, select it, then select **Install Workflow**.
 Any Workflows you add are available as a [Card](/studio/concepts/cards/introduction) from the **Flow Logic** section of the Card tray:
 
 <Frame>
-  <img alt="Flow Logic" class="block dark:hidden" src="/assets/studio/concepts/assets/flow-logic.png" />
-  <img alt="Flow Logic" class="hidden dark:block" src="/assets/studio/concepts/assets/flow-logic-dark.png" />
+  <img alt="Flow Logic" class="block dark:hidden" src="./assets/flow-logic.png" />
+  <img alt="Flow Logic" class="hidden dark:block" src="./assets/flow-logic-dark.png" />
 </Frame>
 
 To transition to a new Workflow, just add it to the Node you want to transition from:
 
 <Frame>
-  <img alt="Transition Card" class="block dark:hidden" src="/assets/studio/concepts/assets/transition-card.png" />
-  <img alt="Transition Card" class="hidden dark:block" src="/assets/studio/concepts/assets/transition-card-dark.png" />
+  <img alt="Transition Card" class="block dark:hidden" src="./assets/transition-card.png" />
+  <img alt="Transition Card" class="hidden dark:block" src="./assets/transition-card-dark.png" />
 </Frame>
 
 ---
@@ -178,12 +170,8 @@ To transition to a new Workflow, just add it to the Node you want to transition 
 You can group Workflows into folders to keep them organized:
 
 <Frame>
-  <img alt="Workflow folders" class="block dark:hidden" src="/assets/studio/concepts/assets/workflow-folders.png" />
-  <img
-    alt="Workflow folders"
-    class="hidden dark:block"
-    src="/assets/studio/concepts/assets/workflow-folders-dark.png"
-  />
+  <img alt="Workflow folders" class="block dark:hidden" src="./assets/workflow-folders.png" />
+  <img alt="Workflow folders" class="hidden dark:block" src="./assets/workflow-folders-dark.png" />
 </Frame>
 
 Just select **Add Folder** in the Workflows menu to create a new folder. Then, you can drag any Workflows (or sub-folders) you want into the folder.

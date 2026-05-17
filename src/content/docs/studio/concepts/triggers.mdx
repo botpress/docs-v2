@@ -10,7 +10,7 @@ import Frame from '@/components/Frame.astro'
 
 Triggers are a special kind of [Node](/studio/concepts/nodes/introduction) that only **execute when a certain event occurs**. You can recognize Triggers by their distinctive purple colour:
 
-<Frame>![Trigger](/assets/studio/concepts/assets/trigger.png)</Frame>
+<Frame>![Trigger](./assets/trigger.png)</Frame>
 
 Triggers are useful if you want your bot to:
 
@@ -37,7 +37,7 @@ Triggers are different from regular Nodes in a few ways:
 
 To add a Trigger, just right-click anywhere in a Workflow:
 
-<Frame>![Add a Trigger](/assets/studio/concepts/assets/add-trigger.png)</Frame>
+<Frame>![Add a Trigger](./assets/add-trigger.png)</Frame>
 
 ## Test a Trigger
 
@@ -50,20 +50,20 @@ For example, to test the [Conversation Started](#conversation-started) Trigger:
         Right-click anywhere in your Workflow. Select **Trigger**, then **Conversation Started**:
 
             <Frame>
-                ![Conversation Started](/assets/studio/concepts/assets/conversation-started.png)
+                ![Conversation Started](./assets/conversation-started.png)
             </Frame>
     </Step>
     <Step title="Configure a test">
         Select **Test** in the bottom-left corner of the Trigger:
 
             <Frame>
-                ![Test Trigger](/assets/studio/concepts/assets/test-trigger.png)
+                ![Test Trigger](./assets/test-trigger.png)
             </Frame>
 
             Then, select **Show last received events**. This will display a list of past events that would set off your Trigger:
 
             <Frame>
-                ![Test events](/assets/studio/concepts/assets/test-events.png)
+                ![Test events](./assets/test-events.png)
             </Frame>
 
         For the **Conversation Started** Trigger, each of these is a `conversationStarted` event, which fires every time a user starts a new conversation with your bot.
@@ -79,13 +79,13 @@ For example, to test the [Conversation Started](#conversation-started) Trigger:
         Now, you should see the name of the event in the Trigger:
 
             <Frame>
-                ![Fire Trigger](/assets/studio/concepts/assets/fire-trigger.png)
+                ![Fire Trigger](./assets/fire-trigger.png)
             </Frame>
 
         Just press the play icon to fire the Trigger. Any logic you have connected to the Trigger will execute in the emulator:
 
             <Frame>
-                ![Trigger fires in emulator](/assets/studio/concepts/assets/trigger-emulator.png)
+                ![Trigger fires in emulator](./assets/trigger-emulator.png)
             </Frame>
     </Step>
 
@@ -106,7 +106,7 @@ The **Conversation Started** Trigger only executes when a user starts a new conv
 
 For example, sending a welcome message:
 
-<Frame>![Welcome message](/assets/studio/concepts/assets/welcome-message.png)</Frame>
+<Frame>![Welcome message](./assets/welcome-message.png)</Frame>
 
 ### Custom Trigger
 
@@ -119,7 +119,7 @@ You can use **Custom Triggers** to make Webchat react to custom events from your
 
 For example, if you want your bot to respond when a user clicks a button:
 
-<Frame>![Custom Trigger reacting to buttons](/assets/studio/concepts/assets/custom-trigger-buttons.png)</Frame>
+<Frame>![Custom Trigger reacting to buttons](./assets/custom-trigger-buttons.png)</Frame>
 
 ## Fixed Schedule
 
@@ -139,6 +139,6 @@ For example, the [Zendesk integration](/integrations/integration-guides/zendesk)
 
 <Frame>
 
-![Zendesk Triggers](/assets/studio/concepts/assets/zendesk-triggers.png)
+![Zendesk Triggers](./assets/zendesk-triggers.png)
 
 </Frame>
