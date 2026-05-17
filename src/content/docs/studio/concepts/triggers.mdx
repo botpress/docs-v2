@@ -8,7 +8,7 @@ import Steps from '@/components/Steps.astro'
 import { Tip, Note, Warning } from '@/components/callouts'
 import Frame from '@/components/Frame.astro'
 
-Triggers are a special kind of [Node](/studio/concepts/nodes) that only **execute when a certain event occurs**. You can recognize Triggers by their distinctive purple colour:
+Triggers are a special kind of [Node](/studio/concepts/nodes/introduction) that only **execute when a certain event occurs**. You can recognize Triggers by their distinctive purple colour:
 
 <Frame>![Trigger](/assets/studio/concepts/assets/trigger.png)</Frame>
 
@@ -31,7 +31,7 @@ Triggers are useful if you want your bot to:
 Triggers are different from regular Nodes in a few ways:
 
 - You **can't transition** from a regular Node to a Trigger. Any Triggers in your Workflow will only execute when the event they listen for occurs.
-- Unlike other Nodes, **you can't add or remove [Cards](/studio/concepts/cards)** from a Trigger. Each Trigger is built around a single Card that determines when it executes.
+  - Unlike other Nodes, **you can't add or remove [Cards](/studio/concepts/cards/introduction)** from a Trigger. Each Trigger is built around a single Card that determines when it executes.
 
 ## Add a Trigger
 
