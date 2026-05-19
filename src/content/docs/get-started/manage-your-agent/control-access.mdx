@@ -3,6 +3,10 @@ title: Control access to your agent
 description: Restrict which workspace members can access your agent.
 ---
 
+import { Picture } from 'astro:assets'
+import accessControlDarkImg from './assets/access-control-dark.png'
+import accessControlImg from './assets/access-control.png'
+
 import { Info, Note } from '@/components/callouts'
 import Steps from '@/components/Steps.astro'
 import Step from '@/components/Step.astro'
@@ -24,8 +28,8 @@ If you're an owner or administrator in your workspace, you can restrict who in y
 Here, you can select which members of your Workspace have access to your agent:
 
 <Frame>
-  <img alt="Access control" class="block dark:hidden" src="/assets/manage-your-agent/access-control.png" />
-  <img alt="Access control" class="hidden dark:block" src="/assets/manage-your-agent/access-control-dark.png" />
+  <Picture alt="Access control" class="block dark:hidden" src={accessControlImg} />
+  <Picture alt="Access control" class="hidden dark:block" src={accessControlDarkImg} />
 </Frame>
 
 When you're done, select **Save**.

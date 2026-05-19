@@ -3,6 +3,16 @@ title: Configure Human Handoff
 description: Set up live agent support with the Human-in-the-Loop integration.
 ---
 
+import { Picture } from 'astro:assets'
+import assignConversationDarkImg from './assets/assign-conversation-dark.png'
+import assignConversationImg from './assets/assign-conversation.png'
+import pendingConversationDarkImg from './assets/pending-conversation-dark.png'
+import pendingConversationImg from './assets/pending-conversation.png'
+import respondToUserDarkImg from './assets/respond-to-user-dark.png'
+import respondToUserImg from './assets/respond-to-user.png'
+import triggerHumanHandoffDarkImg from './assets/trigger-human-handoff-dark.png'
+import triggerHumanHandoffImg from './assets/trigger-human-handoff.png'
+
 import { Tip } from '@/components/callouts'
 import Steps from '@/components/Steps.astro'
 import Step from '@/components/Step.astro'
@@ -40,12 +50,8 @@ When you've finished setting up the integration, you'll have access to the Human
 When a user triggers Human Handoff, a ticket is opened. You can view your tickets in the left sidebar:
 
 <Frame>
-  <img alt="Pending conversation" class="block dark:hidden" src="/assets/manage-your-agent/pending-conversation.png" />
-  <img
-    alt="Pending conversation"
-    class="hidden dark:block"
-    src="/assets/manage-your-agent/pending-conversation-dark.png"
-  />
+  <Picture alt="Pending conversation" class="block dark:hidden" src={pendingConversationImg} />
+  <Picture alt="Pending conversation" class="hidden dark:block" src={pendingConversationDarkImg} />
 </Frame>
 
 Select any ticket to view the conversation with the user.
@@ -57,19 +63,15 @@ Select any ticket to view the conversation with the user.
 You can assign a ticket to anyone in your Workspace, including yourself. For example, select **<Icon icon="UserRound"/> Assign to me**:
 
 <Frame>
-  <img alt="Assign conversation" class="block dark:hidden" src="/assets/manage-your-agent/assign-conversation.png" />
-  <img
-    alt="Assign conversation"
-    class="hidden dark:block"
-    src="/assets/manage-your-agent/assign-conversation-dark.png"
-  />
+  <Picture alt="Assign conversation" class="block dark:hidden" src={assignConversationImg} />
+  <Picture alt="Assign conversation" class="hidden dark:block" src={assignConversationDarkImg} />
 </Frame>
 
 Now you can chat directly with the user:
 
 <Frame>
-  <img alt="Respond to user" class="block dark:hidden" src="/assets/manage-your-agent/respond-to-user.png" />
-  <img alt="Respond to user" class="hidden dark:block" src="/assets/manage-your-agent/respond-to-user-dark.png" />
+  <Picture alt="Respond to user" class="block dark:hidden" src={respondToUserImg} />
+  <Picture alt="Respond to user" class="hidden dark:block" src={respondToUserDarkImg} />
 </Frame>
 
 ### Close a ticket
@@ -88,15 +90,15 @@ You can test Human Handoff by using your agent's preview to simulate an escalati
     Chat with your agent until it triggers Human Handoff:
 
     <Frame>
-      <img
+      <Picture
         alt="Trigger Human Handoff"
         class="block dark:hidden"
-        src="/assets/manage-your-agent/trigger-human-handoff.png"
+        src={triggerHumanHandoffImg}
       />
-      <img
+      <Picture
         alt="Trigger Human Handoff"
         class="hidden dark:block"
-        src="/assets/manage-your-agent/trigger-human-handoff-dark.png"
+        src={triggerHumanHandoffDarkImg}
       />
     </Frame>
 

@@ -22,6 +22,9 @@ function SidebarMethodBadge({ method }: { method: string }) {
   )
 }
 
+/** Progressive indentation for nested sidebar items. */
+const PAD = ['pl-2', 'pl-5', 'pl-8', 'pl-11'] as const
+
 interface Props {
   nodes: SidebarNode[]
   currentPath: string
@@ -32,12 +35,12 @@ function NestedCategory({
   node,
   currentPath,
   textSize = 'sm',
-  nested = false,
+  depth = 0,
 }: {
   node: SidebarCategoryNode
   currentPath: string
   textSize?: 'sm' | 'base'
-  nested?: boolean
+  depth?: number
 }) {
   const selfActive = !!node.href && isPathActive(node.href, currentPath)
   const childActive = hasActiveChild(node, currentPath)
@@ -55,7 +58,8 @@ function NestedCategory({
     </svg>
   )
 
-  const labelClass = `flex w-full items-center justify-between rounded-md ${nested ? 'pl-3' : 'pl-2'} pr-2 py-1.5 ${textSize === 'base' ? 'text-base' : 'text-sm'} transition-colors`
+  const pad = PAD[depth] ?? PAD[PAD.length - 1]
+  const labelClass = `flex w-full items-center justify-between rounded-md ${pad} pr-2 py-1.5 ${textSize === 'base' ? 'text-base' : 'text-sm'} transition-colors`
 
   return (
     <li>
@@ -105,14 +109,16 @@ function NestedCategory({
         }}
       >
         <div className="overflow-hidden">
-          <ul className="relative space-y-0.5 before:absolute before:left-2.5 before:top-0.5 before:bottom-1 before:w-px before:bg-stone-300 dark:before:bg-stone-700">
+          <ul
+            className={`relative space-y-0.5 ${depth === 0 ? 'before:absolute before:left-2.5 before:top-0.5 before:bottom-1 before:w-px before:bg-stone-300 dark:before:bg-stone-700' : ''}`}
+          >
             {node.children.map((child) => (
               <ChildNode
                 key={child.type === 'article' ? child.href : child.path}
                 node={child}
                 currentPath={currentPath}
                 textSize={textSize}
-                nested
+                depth={depth + 1}
               />
             ))}
           </ul>
@@ -126,26 +132,31 @@ function ChildNode({
   node,
   currentPath,
   textSize = 'sm',
-  nested = false,
+  depth = 0,
 }: {
   node: SidebarNode
   currentPath: string
   textSize?: 'sm' | 'base'
-  nested?: boolean
+  depth?: number
 }) {
   if (node.type === 'category') {
-    return <NestedCategory node={node} currentPath={currentPath} textSize={textSize} nested={nested} />
+    return <NestedCategory node={node} currentPath={currentPath} textSize={textSize} depth={depth} />
   }
 
   const active = isPathActive(node.href, currentPath)
+  const pad = PAD[depth] ?? PAD[PAD.length - 1]
+  const activeLine =
+    depth === 1
+      ? ' relative before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-px before:bg-primary'
+      : ''
 
   return (
     <li>
       <a
         href={node.href}
-        className={`flex items-center gap-1.5 rounded-md ${nested ? 'pl-5' : 'pl-2'} pr-2 py-1.5 ${textSize === 'base' ? 'text-base' : 'text-sm'} transition-colors ${
+        className={`flex items-center gap-1.5 rounded-md ${pad} pr-2 py-1.5 ${textSize === 'base' ? 'text-base' : 'text-sm'} transition-colors ${
           active
-            ? `text-primary bg-primary/10 dark:bg-primary/15 font-medium${nested ? ' relative before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-px before:bg-primary' : ''}`
+            ? `text-primary bg-primary/10 dark:bg-primary/15 font-medium${activeLine}`
             : 'text-stone-600 hover:bg-black/5 hover:text-stone-900 dark:text-stone-400 dark:hover:bg-white/5 dark:hover:text-stone-100'
         }`}
       >
@@ -177,6 +188,7 @@ export default function SidebarTreeView({ nodes, currentPath, textSize = 'sm' }:
                     node={child}
                     currentPath={currentPath}
                     textSize={textSize}
+                    depth={0}
                   />
                 ))}
               </ul>
@@ -186,7 +198,7 @@ export default function SidebarTreeView({ nodes, currentPath, textSize = 'sm' }:
 
         return (
           <ul key={node.href} className="mb-8 space-y-0.5">
-            <ChildNode node={node} currentPath={currentPath} textSize={textSize} />
+            <ChildNode node={node} currentPath={currentPath} textSize={textSize} depth={0} />
           </ul>
         )
       })}
