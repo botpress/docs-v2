@@ -3,6 +3,20 @@ title: Inspect behaviour
 description: View logs, events, files, and errors to debug your agent's behaviour.
 ---
 
+import { Picture } from 'astro:assets'
+import eventJsonDataDarkImg from './assets/event-json-data-dark.png'
+import eventJsonDataImg from './assets/event-json-data.png'
+import eventsDarkImg from './assets/events-dark.png'
+import eventsImg from './assets/events.png'
+import fileJsonDataDarkImg from './assets/file-json-data-dark.png'
+import fileJsonDataImg from './assets/file-json-data.png'
+import issueEventsDarkImg from './assets/issue-events-dark.png'
+import issueEventsImg from './assets/issue-events.png'
+import issuesDarkImg from './assets/issues-dark.png'
+import issuesImg from './assets/issues.png'
+import logsDarkImg from './assets/logs-dark.png'
+import logsImg from './assets/logs.png'
+
 import Icon from '@/components/Icon.astro'
 import Frame from '@/components/Frame.astro'
 
@@ -13,8 +27,8 @@ You can inspect your agent's behaviour in the **<Icon icon="Bug"/> Inspect** sec
 You can view logs from all your agent's conversations in the **Logs** sub-section. This includes system logs that provide updates on your agent's status, as well as logs from any integrations you have installed:
 
 <Frame>
-  <img alt="Logs" class="block dark:hidden" src="./assets/logs.png" />
-  <img alt="Logs" class="hidden dark:block" src="./assets/logs-dark.png" />
+  <Picture alt="Logs" class="block dark:hidden" src={logsImg} />
+  <Picture alt="Logs" class="hidden dark:block" src={logsDarkImg} />
 </Frame>
 
 You can filter logs by date and time to narrow down your search for a specific event or conversation.
@@ -36,8 +50,8 @@ Once you've published your changes, your bot will print that statement to its lo
 Events represent anything that happens within the bot, such as messages from users, bot replies, and system-level occurrences. You can view all incoming events processed by your agent in the **Events** section:
 
 <Frame>
-  <img alt="Events" class="block dark:hidden" src="./assets/events.png" />
-  <img alt="Events" class="hidden dark:block" src="./assets/events-dark.png" />
+  <Picture alt="Events" class="block dark:hidden" src={eventsImg} />
+  <Picture alt="Events" class="hidden dark:block" src={eventsDarkImg} />
 </Frame>
 
 ### Event data
@@ -45,8 +59,8 @@ Events represent anything that happens within the bot, such as messages from use
 Select any event to view a detailed JSON representation of all its associated data:
 
 <Frame>
-  <img alt="Event JSON data" class="block dark:hidden" src="./assets/event-json-data.png" />
-  <img alt="Event JSON data" class="hidden dark:block" src="./assets/event-json-data-dark.png" />
+  <Picture alt="Event JSON data" class="block dark:hidden" src={eventJsonDataImg} />
+  <Picture alt="Event JSON data" class="hidden dark:block" src={eventJsonDataDarkImg} />
 </Frame>
 
 ### Quota
@@ -69,8 +83,8 @@ You can view all files uploaded to your agent in the **Files** section. This inc
 Select any file to view a detailed JSON representation of all its associated data:
 
 <Frame>
-  <img alt="File JSON data" class="block dark:hidden" src="./assets/file-json-data.png" />
-  <img alt="File JSON data" class="hidden dark:block" src="./assets/file-json-data-dark.png" />
+  <Picture alt="File JSON data" class="block dark:hidden" src={fileJsonDataImg} />
+  <Picture alt="File JSON data" class="hidden dark:block" src={fileJsonDataDarkImg} />
 </Frame>
 
 ### View a file
@@ -96,15 +110,15 @@ Any files you store count against your File Storage quota. You can increase your
 You can view any problems or errors your agent encountered in the **Issues** sub-section:
 
 <Frame>
-  <img alt="Issues" class="block dark:hidden" src="./assets/issues.png" />
-  <img alt="Issues" class="hidden dark:block" src="./assets/issues-dark.png" />
+  <Picture alt="Issues" class="block dark:hidden" src={issuesImg} />
+  <Picture alt="Issues" class="hidden dark:block" src={issuesDarkImg} />
 </Frame>
 
 The **Category** field tells you where the issue came from, while the **Events** field tells you how many times it occurred. Select any issue to view a list of all occurrences:
 
 <Frame>
-  <img alt="Issue events" class="block dark:hidden" src="./assets/issue-events.png" />
-  <img alt="Issue events" class="hidden dark:block" src="./assets/issue-events-dark.png" />
+  <Picture alt="Issue events" class="block dark:hidden" src={issueEventsImg} />
+  <Picture alt="Issue events" class="hidden dark:block" src={issueEventsDarkImg} />
 </Frame>
 
 This gives you detailed information about each occurrence, like:

@@ -3,6 +3,12 @@ title: Cards
 sidebarTitle: Overview
 ---
 
+import { Picture } from 'astro:assets'
+import cardInspectorDarkImg from './assets/card-inspector-dark.png'
+import cardInspectorImg from './assets/card-inspector.png'
+import cardsDarkImg from './assets/cards-dark.png'
+import cardsImg from './assets/cards.png'
+
 import { Tip, Note } from '@/components/callouts'
 import CardGroup from '@/components/CardGroup.astro'
 import Card from '@/components/Card.astro'
@@ -11,8 +17,8 @@ import Frame from '@/components/Frame.astro'
 Cards are drag-and-drop elements that **perform tasks within a [Node](/studio/concepts/nodes/introduction)**:
 
 <Frame>
-  <img alt="Cards" class="block dark:hidden" src="./assets/cards.png" />
-  <img alt="Cards" class="hidden dark:block" src="./assets/cards-dark.png" />
+  <Picture alt="Cards" class="block dark:hidden" src={cardsImg} />
+  <Picture alt="Cards" class="hidden dark:block" src={cardsDarkImg} />
 </Frame>
 
 You can use Cards to:
@@ -51,8 +57,8 @@ This section contains documentation for all Cards in the Studio.
 You can access a Card's configuration options by selecting the Card after adding it to your Workflow. This will open the Card's inspector in the Studio's right panel:
 
 <Frame>
-  <img alt="Card inspector" class="block dark:hidden" src="./assets/card-inspector.png" />
-  <img alt="Card inspector" class="hidden dark:block" src="./assets/card-inspector-dark.png" />
+  <Picture alt="Card inspector" class="block dark:hidden" src={cardInspectorImg} />
+  <Picture alt="Card inspector" class="hidden dark:block" src={cardInspectorDarkImg} />
 </Frame>
 
 The Card's configuration fields could be either mandatory or optional—mandatory fields are marked with <span style={{ color: 'rgba(189, 59, 56, 1)' }}>\*</span>.

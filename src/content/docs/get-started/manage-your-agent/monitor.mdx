@@ -3,6 +3,16 @@ title: Monitor performance
 description: Track conversations, users, and performance analytics for your agent.
 ---
 
+import { Picture } from 'astro:assets'
+import aiInsightsDarkImg from './assets/ai-insights-dark.png'
+import aiInsightsImg from './assets/ai-insights.png'
+import analyticsDarkImg from './assets/analytics-dark.png'
+import analyticsImg from './assets/analytics.png'
+import conversationDarkImg from './assets/conversation-dark.png'
+import conversationImg from './assets/conversation.png'
+import messageJsonDataDarkImg from './assets/message-json-data-dark.png'
+import messageJsonDataImg from './assets/message-json-data.png'
+
 import Icon from '@/components/Icon.astro'
 import Frame from '@/components/Frame.astro'
 import { Badge } from '@/components/ui/badge'
@@ -14,8 +24,8 @@ You can monitor your agent's performance in the **<Icon icon="ChartSpline"/> Mon
 You can view a list of all your agent's conversations in the **Conversations** sub-section. Just select any conversation to view its details:
 
 <Frame>
-  <img alt="Conversation" class="block dark:hidden" src="./assets/conversation.png" />
-  <img alt="Conversation" class="hidden dark:block" src="./assets/conversation-dark.png" />
+  <Picture alt="Conversation" class="block dark:hidden" src={conversationImg} />
+  <Picture alt="Conversation" class="hidden dark:block" src={conversationDarkImg} />
 </Frame>
 
 In this menu, you can access:
@@ -32,8 +42,8 @@ In this menu, you can access:
 You can select any message in the conversation to get a detailed JSON representation of all its associated data:
 
 <Frame>
-  <img alt="Message JSON data" class="block dark:hidden" src="./assets/message-json-data.png" />
-  <img alt="Message JSON data" class="hidden dark:block" src="./assets/message-json-data-dark.png" />
+  <Picture alt="Message JSON data" class="block dark:hidden" src={messageJsonDataImg} />
+  <Picture alt="Message JSON data" class="hidden dark:block" src={messageJsonDataDarkImg} />
 </Frame>
 
 ### AI insights {<Badge variant="deprecated">BETA</Badge>}
@@ -41,8 +51,8 @@ You can select any message in the conversation to get a detailed JSON representa
 Select **<Icon icon="Sparkles"/> Enable AI** to enable sentiment analysis and AI summaries for incoming conversations:
 
 <Frame>
-  <img alt="AI insights" class="block dark:hidden" src="./assets/ai-insights.png" />
-  <img alt="AI insights" class="hidden dark:block" src="./assets/ai-insights-dark.png" />
+  <Picture alt="AI insights" class="block dark:hidden" src={aiInsightsImg} />
+  <Picture alt="AI insights" class="hidden dark:block" src={aiInsightsDarkImg} />
 </Frame>
 
 ---
@@ -56,8 +66,8 @@ You can view all your agent's unique users in the **Users** sub-section. Select 
 You can view detailed analytics about your agent's performance in the **Analytics** sub-section:
 
 <Frame>
-  <img alt="Analytics" class="block dark:hidden" src="./assets/analytics.png" />
-  <img alt="Analytics" class="hidden dark:block" src="./assets/analytics-dark.png" />
+  <Picture alt="Analytics" class="block dark:hidden" src={analyticsImg} />
+  <Picture alt="Analytics" class="hidden dark:block" src={analyticsDarkImg} />
 </Frame>
 
 For any tile, you can:

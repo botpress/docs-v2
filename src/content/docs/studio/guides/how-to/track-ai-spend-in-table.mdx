@@ -2,6 +2,12 @@
 title: Track AI spend in a table
 ---
 
+import { Picture } from 'astro:assets'
+import tableDarkImg from './assets/table-dark.png'
+import tableFullDarkImg from './assets/table-full-dark.png'
+import tableFullImg from './assets/table-full.png'
+import tableImg from './assets/table.png'
+
 import { Check, Info, Warning } from '@/components/callouts'
 import Frame from '@/components/Frame.astro'
 
@@ -26,8 +32,8 @@ You can store data about your bot's AI spend in a table that automatically updat
    - **ConversationID** (set the type to **String**)
 
 <Frame>
-  <img alt="Table" class="block dark:hidden" src="./assets/table.png" />
-  <img alt="Table" class="hidden dark:block" src="./assets/table-dark.png" />
+  <Picture alt="Table" class="block dark:hidden" src={tableImg} />
+  <Picture alt="Table" class="hidden dark:block" src={tableDarkImg} />
 </Frame>
 
 ## Step 2: Add a Hook to track AI spend
@@ -62,8 +68,8 @@ This Hook runs after each turn—that is, after the bot has received a message, 
 Try chatting with your bot in the emulator. After every message your bot sends, your table should automatically create a new row. The AI spend will display in the **Cost** column:
 
 <Frame>
-  <img alt="Table with AI spend" class="block dark:hidden" src="./assets/table-full.png" />
-  <img alt="Table with AI spend" class="hidden dark:block" src="./assets/table-full-dark.png" />
+  <Picture alt="Table with AI spend" class="block dark:hidden" src={tableFullImg} />
+  <Picture alt="Table with AI spend" class="hidden dark:block" src={tableFullDarkImg} />
 </Frame>
 
 <Check>Your table will now keep a record of your bot's AI spend for each turn.</Check>

@@ -2,9 +2,13 @@
 title: Languages
 ---
 
+import { Picture } from 'astro:assets'
+import languagesImg from './assets/languages.png'
+import translatorAgentImg from './assets/translator-agent.png'
+
 import YouTube from '@/components/YouTube.astro'
 
-<img src="./assets/languages.png" />
+<Picture src={languagesImg} alt="" />
 
 ## Supported Languages
 
@@ -750,7 +754,7 @@ With Botpress, you can build bots that are able to converse with people in more 
 
 <YouTube url="https://www.youtube.com/embed/SIrmuihqNhs?si=FXZQJ59rRLW07D2D" />
 
-<img src="./assets/translator-agent.png" />
+<Picture src={translatorAgentImg} alt="" />
 
 The Translator Agent allows your bot to interact with users in different languages, breaking language barriers and expanding the range of your bot's audience.
 

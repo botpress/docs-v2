@@ -3,6 +3,15 @@ title: Tables
 icon: Table
 ---
 
+import { Picture } from 'astro:assets'
+import autoComputeImg from './assets/auto-compute.png'
+import codeEditorImg from './assets/code-editor.png'
+import computedColumnSwitchImg from './assets/computed-column-switch.png'
+import editCodeButtonImg from './assets/edit-code-button.png'
+import staleComputeRowImg from './assets/stale-compute-row.png'
+import tableCodeOperationsImg from './assets/table-code-operations.png'
+import tableDependenciesImg from './assets/table-dependencies.png'
+
 import Accordion from '@/components/Accordion.astro'
 import AccordionGroup from '@/components/AccordionGroup.astro'
 import Tooltip from '@/components/Tooltip.astro'
@@ -588,7 +597,7 @@ const { table } = await client.deleteTable({ table: 'Data1Table' })
 
 ## Operations on Tables - via Code
 
-<img src="./assets/table-code-operations.png" />
+<Picture src={tableCodeOperationsImg} alt="" />
 
 ### Create record
 
@@ -903,13 +912,13 @@ Columns can be marked as "Computed" which allows the <Tooltip tip="Happy bot bui
 
 To use computed columns, simply create a column and toggle the **Computed** field as shown below.
 
-<img src="./assets/computed-column-switch.png" />
+<Picture src={computedColumnSwitchImg} alt="" />
 
 ### Selecting the basis of computation
 
 To compute columns, you must select what information you will base your computed columns on. To do so, click the **Dependencies** field and select all column names that you will use.
 
-<img src="./assets/table-dependencies.png" />
+<Picture src={tableDependenciesImg} alt="" />
 
 In the above example, we selected a column called **number**.
 
@@ -927,11 +936,11 @@ In the above example, for the number 3, you might get "The Three Clever Squirrel
 
 To run arbitrary code, select the **Execute code** tab. Then, click **Edit Code**.
 
-<img src="./assets/edit-code-button.png" />
+<Picture src={editCodeButtonImg} alt="" />
 
 You will see a window with a code editor.
 
-<img src="./assets/code-editor.png" />
+<Picture src={codeEditorImg} alt="" />
 
 Simply add your code above. The proper syntax for accessing columns you've identified as dependencies is row[propertyName], and the displayed cell value is what's returned by this function. You can call asynchronous functions within the function, and have the **Axios** library available to perform HTTP requests.
 
@@ -958,11 +967,11 @@ There is currently an execution timeout of two minutes these.
 
 To ensure computed values are always kept up to date, we recommend **Auto-compute** be toggled on.
 
-<img src="./assets/auto-compute.png" />
+<Picture src={autoComputeImg} alt="" />
 
 If you don't have **Auto-compute** enabled, a grey icon will appear next to stale table cells.
 
-<img src="./assets/stale-compute-row.png" />
+<Picture src={staleComputeRowImg} alt="" />
 
 To update the stale data, simply re-activate **Auto-compute**.
 

@@ -3,6 +3,12 @@ title: Nodes
 sidebarTitle: Introduction
 ---
 
+import { Picture } from 'astro:assets'
+import nodeDarkImg from './assets/node-dark.png'
+import nodeImg from './assets/node.png'
+import transitionDarkImg from './assets/transition-dark.png'
+import transitionImg from './assets/transition.png'
+
 import { Tip, Note } from '@/components/callouts'
 import Frame from '@/components/Frame.astro'
 import Icon from '@/components/Icon.astro'
@@ -14,8 +20,8 @@ Nodes are the **primary units of conversational logic** in your bot.
 Think of a Node as a single step in a conversation. It executes a sequence of actions—like sending a message, capturing information from a user, or performing a task—then transitions to the next Node.
 
 <Frame>
-  <img alt="Nodes" class="block dark:hidden" src="./assets/node.png" />
-  <img alt="Nodes" class="hidden dark:block" src="./assets/node-dark.png" />
+  <Picture alt="Nodes" class="block dark:hidden" src={nodeImg} />
+  <Picture alt="Nodes" class="hidden dark:block" src={nodeDarkImg} />
 </Frame>
 
 ---
@@ -60,8 +66,8 @@ To create a transition between two Nodes:
 2. Drag outwards, then release on the left edge of the Node you want to transition _to_. This will create a transition between the two Nodes:
 
 <Frame>
-  <img alt="Transition" class="block dark:hidden" src="./assets/transition.png" />
-  <img alt="Transition" class="hidden dark:block" src="./assets/transition-dark.png" />
+  <Picture alt="Transition" class="block dark:hidden" src={transitionImg} />
+  <Picture alt="Transition" class="hidden dark:block" src={transitionDarkImg} />
 </Frame>
 
 ### Move a Node

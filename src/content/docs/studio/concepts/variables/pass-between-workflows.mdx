@@ -3,6 +3,18 @@ title: Pass variables between Workflows
 sidebarTitle: Pass between Workflows
 ---
 
+import { Picture } from 'astro:assets'
+import inputVarFieldDarkImg from './assets/input-var-field-dark.png'
+import inputVarFieldImg from './assets/input-var-field.png'
+import readVariableDarkImg from './assets/read-variable-dark.png'
+import readVariableImg from './assets/read-variable.png'
+import toggleInputVariableDarkImg from './assets/toggle-input-variable-dark.png'
+import toggleInputVariableImg from './assets/toggle-input-variable.png'
+import toggleOutputVariableDarkImg from './assets/toggle-output-variable-dark.png'
+import toggleOutputVariableImg from './assets/toggle-output-variable.png'
+import workflowCardDarkImg from './assets/workflow-card-dark.png'
+import workflowCardImg from './assets/workflow-card.png'
+
 import Step from '@/components/Step.astro'
 import Steps from '@/components/Steps.astro'
 import { Note, Check } from '@/components/callouts'
@@ -28,15 +40,15 @@ You can pass variables between Workflows. This is useful if you want to use a pr
     3. Under **Toggle Variables**, select the variable you just created:
 
     <Frame>
-      <img
+      <Picture
         alt="Toggle input variable"
         class="block dark:hidden"
-        src="./assets/toggle-input-variable.png"
+        src={toggleInputVariableImg}
       />
-      <img
+      <Picture
         alt="Toggle input variable"
         class="hidden dark:block"
-        src="./assets/toggle-input-variable-dark.png"
+        src={toggleInputVariableDarkImg}
       />
     </Frame>
 
@@ -47,15 +59,15 @@ You can pass variables between Workflows. This is useful if you want to use a pr
     In your parent Workflow, select the Card that transitions to the sub-Workflow. It should display the input variable you just created:
 
     <Frame>
-      <img
+      <Picture
         alt="Input variable field"
         class="block dark:hidden"
-        src="./assets/input-var-field.png"
+        src={inputVarFieldImg}
       />
-      <img
+      <Picture
         alt="Input variable field"
         class="hidden dark:block"
-        src="./assets/input-var-field-dark.png"
+        src={inputVarFieldDarkImg}
       />
     </Frame>
 
@@ -76,15 +88,15 @@ You can pass variables between Workflows. This is useful if you want to use a pr
     2. Under **Toggle Variables**, select the variable you want to pass:
 
     <Frame>
-      <img
+      <Picture
         alt="Toggle output variable"
         class="block dark:hidden"
-        src="./assets/toggle-output-variable.png"
+        src={toggleOutputVariableImg}
       />
-      <img
+      <Picture
         alt="Toggle output variable"
         class="hidden dark:block"
-        src="./assets/toggle-output-variable-dark.png"
+        src={toggleOutputVariableDarkImg}
       />
     </Frame>
 
@@ -99,15 +111,15 @@ You can pass variables between Workflows. This is useful if you want to use a pr
     1. In the parent Workflow, select the Card that transitions to the sub-Workflow:
 
     <Frame>
-      <img
+      <Picture
         alt="Workflow Card"
         class="block dark:hidden"
-        src="./assets/workflow-card.png"
+        src={workflowCardImg}
       />
-      <img
+      <Picture
         alt="Workflow Card"
         class="hidden dark:block"
-        src="./assets/workflow-card-dark.png"
+        src={workflowCardDarkImg}
       />
     </Frame>
 
@@ -120,15 +132,15 @@ You can pass variables between Workflows. This is useful if you want to use a pr
     `workflow.<cardName>.<variableName>`
 
     <Frame>
-      <img
+      <Picture
         alt="Read output variable"
         class="block dark:hidden"
-        src="./assets/read-variable.png"
+        src={readVariableImg}
       />
-      <img
+      <Picture
         alt="Read output variable"
         class="hidden dark:block"
-        src="./assets/read-variable-dark.png"
+        src={readVariableDarkImg}
       />
     </Frame>
 

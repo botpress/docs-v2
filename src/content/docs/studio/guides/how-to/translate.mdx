@@ -2,6 +2,10 @@
 title: Translate Webchat UI
 ---
 
+import { Picture } from 'astro:assets'
+import deliveryStatusDarkImg from './assets/delivery-status-dark.png'
+import deliveryStatusImg from './assets/delivery-status.png'
+
 import { Tip, Check, Info } from '@/components/callouts'
 import Frame from '@/components/Frame.astro'
 
@@ -132,8 +136,8 @@ div.bpMessageContainer[data-direction='system'] > p.bpMessageBlocksTextText::bef
 You can change the "Delivered" label that appears after a user message is received:
 
 <Frame>
-  <img alt="Delivery status" class="block dark:hidden" src="./assets/delivery-status.png" />
-  <img alt="Delivery status" class="hidden dark:block" src="./assets/delivery-status-dark.png" />
+  <Picture alt="Delivery status" class="block dark:hidden" src={deliveryStatusImg} />
+  <Picture alt="Delivery status" class="hidden dark:block" src={deliveryStatusDarkImg} />
 </Frame>
 
 Just copy and paste the following CSS to the **Styles** section of your bot's Webchat settings, then modify the highlighted lines as needed:

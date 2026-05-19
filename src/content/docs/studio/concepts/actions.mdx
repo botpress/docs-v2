@@ -3,6 +3,18 @@ title: Actions
 icon: Bolt
 ---
 
+import { Picture } from 'astro:assets'
+import actionPromptDarkImg from './assets/action-prompt-dark.png'
+import actionPromptExampleDarkImg from './assets/action-prompt-example-dark.png'
+import actionPromptExampleImg from './assets/action-prompt-example.png'
+import actionPromptImg from './assets/action-prompt.png'
+import generatedActionCodeDarkImg from './assets/generated-action-code-dark.png'
+import generatedActionCodeImg from './assets/generated-action-code.png'
+import generatedActionDarkImg from './assets/generated-action-dark.png'
+import generatedActionImg from './assets/generated-action.png'
+import manualInputsDarkImg from './assets/manual-inputs-dark.png'
+import manualInputsImg from './assets/manual-inputs.png'
+
 import Tab from '@/components/tabs/Tab.astro'
 import Tabs from '@/components/tabs/Tabs.astro'
 import { Tip, Note } from '@/components/callouts'
@@ -14,14 +26,14 @@ import Icon from '@/components/Icon.astro'
 <Tabs>
   <Tab title="Just write your prompt...">
     <Frame>
-      <img alt="Action prompt" class="block dark:hidden" src="./assets/action-prompt.png" />
-      <img alt="Action prompt" class="hidden dark:block" src="./assets/action-prompt-dark.png" />
+      <Picture alt="Action prompt" class="block dark:hidden" src={actionPromptImg} />
+      <Picture alt="Action prompt" class="hidden dark:block" src={actionPromptDarkImg} />
     </Frame>
   </Tab>
   <Tab title="then use the generated Action.">
     <Frame>
-      <img alt="Generated action" class="block dark:hidden" src="./assets/generated-action.png" />
-      <img alt="Actions" class="hidden dark:block" src="./assets/generated-action-dark.png" />
+      <Picture alt="Generated action" class="block dark:hidden" src={generatedActionImg} />
+      <Picture alt="Actions" class="hidden dark:block" src={generatedActionDarkImg} />
     </Frame>
   </Tab>
 </Tabs>
@@ -63,15 +75,15 @@ This opens the editor for your new Action. From here, you have two options:
 You can generate the entire Action using AI. In the bottom-left corner, write a prompt that describes what you want your Action to do:
 
 <Frame>
-  <img alt="Action prompt example" class="block dark:hidden" src="./assets/action-prompt-example.png" />
-  <img alt="Action prompt example" class="hidden dark:block" src="./assets/action-prompt-example-dark.png" />
+  <Picture alt="Action prompt example" class="block dark:hidden" src={actionPromptExampleImg} />
+  <Picture alt="Action prompt example" class="hidden dark:block" src={actionPromptExampleDarkImg} />
 </Frame>
 
 Your bot will generate code based on your prompt:
 
 <Frame>
-  <img alt="Generated Action code" class="block dark:hidden" src="./assets/generated-action-code.png" />
-  <img alt="Generated Action code" class="hidden dark:block" src="./assets/generated-action-code-dark.png" />
+  <Picture alt="Generated Action code" class="block dark:hidden" src={generatedActionCodeImg} />
+  <Picture alt="Generated Action code" class="hidden dark:block" src={generatedActionCodeDarkImg} />
 </Frame>
 
 If you want to refine the code, you can keep prompting to make updates.
@@ -122,8 +134,8 @@ By default, the Autonomous Node decides how to fill in the Action's input fields
 Now, you can manually fill in the field. For example, with data stored in a variable:
 
 <Frame>
-  <img alt="Manually provide inputs" class="block dark:hidden" src="./assets/manual-inputs.png" />
-  <img alt="Manually provide inputs" class="hidden dark:block" src="./assets/manual-inputs-dark.png" />
+  <Picture alt="Manually provide inputs" class="block dark:hidden" src={manualInputsImg} />
+  <Picture alt="Manually provide inputs" class="hidden dark:block" src={manualInputsDarkImg} />
 </Frame>
 
 ---

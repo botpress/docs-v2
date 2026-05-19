@@ -2,6 +2,16 @@
 title: Use different LLM for Autonomous Nodes
 ---
 
+import { Picture } from 'astro:assets'
+import anTransitionDarkImg from './assets/an-transition-dark.png'
+import anTransitionImg from './assets/an-transition.png'
+import currentIdsDarkImg from './assets/current-ids-dark.png'
+import currentIdsImg from './assets/current-ids.png'
+import gpt41DarkImg from './assets/gpt-4-1-dark.png'
+import gpt41Img from './assets/gpt-4-1.png'
+import modelChangeLogsDarkImg from './assets/model-change-logs-dark.png'
+import modelChangeLogsImg from './assets/model-change-logs.png'
+
 import { Check, Info, Warning } from '@/components/callouts'
 import Frame from '@/components/Frame.astro'
 import Icon from '@/components/Icon.astro'
@@ -39,16 +49,16 @@ First, you need to find:
 2. Continue until the bot transitions to the Autonomous Node whose model you want to change:
 
 <Frame>
-  <img alt="Transition to new Autonomous Node" class="block dark:hidden" src="./assets/an-transition.png" />
-  <img alt="Transition to new Autonomous Node" class="hidden dark:block" src="./assets/an-transition-dark.png" />
+  <Picture alt="Transition to new Autonomous Node" class="block dark:hidden" src={anTransitionImg} />
+  <Picture alt="Transition to new Autonomous Node" class="hidden dark:block" src={anTransitionDarkImg} />
 </Frame>
 
 3. Select one of your messages from after the bot transitioned to the new Autonomous Node. Then, open the [JSON tab](/studio/concepts/debugger-logs-json#json) in the bottom panel.
 4. Under **Payload**, navigate to `state > context`:
 
 <Frame>
-  <img alt="Current Workflow and Node IDs" class="block dark:hidden" src="./assets/current-ids.png" />
-  <img alt="Current Workflow and Node IDs" class="hidden dark:block" src="./assets/current-ids-dark.png" />
+  <Picture alt="Current Workflow and Node IDs" class="block dark:hidden" src={currentIdsImg} />
+  <Picture alt="Current Workflow and Node IDs" class="hidden dark:block" src={currentIdsDarkImg} />
 </Frame>
 
 5. Copy the values of `currentFlow` and `currentNode`—these are your Workflow's ID and Autonomous Node's ID.
@@ -62,8 +72,8 @@ First, you need to find:
 5. Find the model you want to switch to. Expand it, then copy its full `id`. For example, for GPT-4.1:
 
 <Frame>
-  <img alt="GPT 4.1" class="block dark:hidden" src="./assets/gpt-4-1.png" />
-  <img alt="GPT 4.1" class="hidden dark:block" src="./assets/gpt-4-1-dark.png" />
+  <Picture alt="GPT 4.1" class="block dark:hidden" src={gpt41Img} />
+  <Picture alt="GPT 4.1" class="hidden dark:block" src={gpt41DarkImg} />
 </Frame>
 
 ## Step 2: Add a Hook to change models
@@ -113,8 +123,8 @@ If the `state` property from [Step 1](#node-and-workflow-ids) is `undefined`, ma
 You can check if the Node and Workflow IDs matched by checking your bot's [logs](/studio/concepts/debugger-logs-json) after transitioning to the Autonomous Node in the Emulator:
 
 <Frame>
-  <img alt="Model change logs" class="block dark:hidden" src="./assets/model-change-logs.png" />
-  <img alt="Model change logs" class="hidden dark:block" src="./assets/model-change-logs-dark.png" />
+  <Picture alt="Model change logs" class="block dark:hidden" src={modelChangeLogsImg} />
+  <Picture alt="Model change logs" class="hidden dark:block" src={modelChangeLogsDarkImg} />
 </Frame>
 
 ### Check if model actually changed

@@ -5,6 +5,10 @@ description: >-
   clearing unused variables, and minimizing large data usage.
 ---
 
+import { Picture } from 'astro:assets'
+import improperWorkflowExitImg from './assets/improper-workflow-exit.png'
+import workflowExampleImg from './assets/workflow-example.png'
+
 ## Overview
 
 Efficient state management is crucial for optimizing bot performance in Botpress. This guide outlines best practices to avoid performance degradation and errors caused by exceeding the **128 KB state size limit**, ensuring your bot operates seamlessly.
@@ -39,7 +43,7 @@ How Workflows are designed impacts the state management. Consider two scenarios:
 
 Workflow 1 → **End** → Workflow 2 → **End**
 
-<img src="./assets/workflow-example.png" />
+<Picture src={workflowExampleImg} alt="" />
 
 ### Scenario 2: Improper Workflow Exit
 
@@ -51,7 +55,7 @@ Workflow 1 → **End** → Workflow 2 → **End**
 
 Workflow 1 → Workflow 2 → Workflow 3 → **End**
 
-<img src="./assets/improper-workflow-exit.png" />
+<Picture src={improperWorkflowExitImg} alt="" />
 
 ---
 

@@ -2,6 +2,12 @@
 title: Send reminders to conversations
 ---
 
+import { Picture } from 'astro:assets'
+import executeCodeDarkImg from './assets/execute-code-dark.png'
+import executeCodeImg from './assets/execute-code.png'
+import fixedScheduleDarkImg from './assets/fixed-schedule-dark.png'
+import fixedScheduleImg from './assets/fixed-schedule.png'
+
 import { Check, Info } from '@/components/callouts'
 import Frame from '@/components/Frame.astro'
 
@@ -35,8 +41,8 @@ Next, [create a configuration variable](/studio/concepts/variables/scopes/config
 Add a [Fixed Schedule](/studio/concepts/cards/fixed-schedule) Trigger to your bot's [Workflow](/studio/concepts/workflows). This will make sure your reminder sends on a set interval.
 
 <Frame>
-  <img alt="Fixed Schedule Trigger" class="block dark:hidden" src="./assets/fixed-schedule.png" />
-  <img alt="Fixed Schedule Trigger" class="hidden dark:block" src="./assets/fixed-schedule-dark.png" />
+  <Picture alt="Fixed Schedule Trigger" class="block dark:hidden" src={fixedScheduleImg} />
+  <Picture alt="Fixed Schedule Trigger" class="hidden dark:block" src={fixedScheduleDarkImg} />
 </Frame>
 
 You can configure the Trigger to execute at whatever interval you'd like.
@@ -46,8 +52,8 @@ You can configure the Trigger to execute at whatever interval you'd like.
 Connect an [Execute Code](/studio/concepts/cards/execute-code) Card to your Trigger:
 
 <Frame>
-  <img alt="Execute code" class="block dark:hidden" src="./assets/execute-code.png" />
-  <img alt="Execute code" class="hidden dark:block" src="./assets/execute-code-dark.png" />
+  <Picture alt="Execute code" class="block dark:hidden" src={executeCodeImg} />
+  <Picture alt="Execute code" class="hidden dark:block" src={executeCodeDarkImg} />
 </Frame>
 
 ## Step 4: Apply the custom code

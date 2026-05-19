@@ -3,6 +3,14 @@ title: Knowledge Bases
 sidebarTitle: Overview
 ---
 
+import { Picture } from 'astro:assets'
+import exampleInstructionsPolicyDarkImg from './assets/example-instructions-policy-dark.png'
+import exampleInstructionsPolicyImg from './assets/example-instructions-policy.png'
+import exampleInstructionsPricingDarkImg from './assets/example-instructions-pricing-dark.png'
+import exampleInstructionsPricingImg from './assets/example-instructions-pricing.png'
+import knowledgeBaseDarkImg from './assets/knowledge-base-dark.png'
+import knowledgeBaseImg from './assets/knowledge-base.png'
+
 import { Tip, Note, Warning } from '@/components/callouts'
 import CardGroup from '@/components/CardGroup.astro'
 import Card from '@/components/Card.astro'
@@ -12,8 +20,8 @@ import Icon from '@/components/Icon.astro'
 <Icon icon="BookOpen" /> Knowledge Bases are **sources of information you provide to your bot**.
 
 <Frame>
-  <img alt="Knowledge Base" class="block dark:hidden" src="./assets/knowledge-base.png" />
-  <img alt="Knowledge Base" class="hidden dark:block" src="./assets/knowledge-base-dark.png" />
+  <Picture alt="Knowledge Base" class="block dark:hidden" src={knowledgeBaseImg} />
+  <Picture alt="Knowledge Base" class="hidden dark:block" src={knowledgeBaseDarkImg} />
 </Frame>
 
 You can use a Knowledge Base to make your bot reference a specific source when answering a user. For example, you might want to:
@@ -140,30 +148,30 @@ With this configuration, the Autonomous Node views each Search Knowledge Card as
 For example, you could add these instructions for questions about company policies:
 
 <Frame>
-  <img
+  <Picture
     alt="Example instructions for company policy search"
     class="block dark:hidden"
-    src="./assets/example-instructions-policy.png"
+    src={exampleInstructionsPolicyImg}
   />
-  <img
+  <Picture
     alt="Example instructions for company policy search"
     class="hidden dark:block"
-    src="./assets/example-instructions-policy-dark.png"
+    src={exampleInstructionsPolicyDarkImg}
   />
 </Frame>
 
 And these instructions for questions about pricing:
 
 <Frame>
-  <img
+  <Picture
     alt="Example instructions for pricing search"
     class="block dark:hidden"
-    src="./assets/example-instructions-pricing.png"
+    src={exampleInstructionsPricingImg}
   />
-  <img
+  <Picture
     alt="Example instructions for pricing search"
     class="hidden dark:block"
-    src="./assets/example-instructions-pricing-dark.png"
+    src={exampleInstructionsPricingDarkImg}
   />
 </Frame>
 

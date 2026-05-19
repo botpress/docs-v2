@@ -2,6 +2,10 @@
 title: Autonomous Node
 ---
 
+import { Picture } from 'astro:assets'
+import anDarkImg from './assets/an-dark.png'
+import anImg from './assets/an.png'
+
 import Accordion from '@/components/Accordion.astro'
 import AccordionGroup from '@/components/AccordionGroup.astro'
 import Tab from '@/components/tabs/Tab.astro'
@@ -15,8 +19,8 @@ The Autonomous Node **uses AI to make decisions**—like what your bot should sa
 Unlike a [standard Node](/studio/concepts/nodes/introduction#standard-node), which executes its [Cards](/studio/concepts/cards/introduction) one by one, the Autonomous Node uses a Large Language Model (LLM) to decide when to execute tools. It can understand the conversation's context, write responses to users, and leverage the tools you give it.
 
 <Frame>
-  <img alt="alt" class="block dark:hidden" src="./assets/an.png" />
-  <img alt="alt" class="hidden dark:block" src="./assets/an-dark.png" />
+  <Picture alt="alt" class="block dark:hidden" src={anImg} />
+  <Picture alt="alt" class="hidden dark:block" src={anDarkImg} />
 </Frame>
 
 You can use the Autonomous Node to build an independent AI agent that:

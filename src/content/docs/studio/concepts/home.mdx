@@ -5,6 +5,22 @@ description: >-
 icon: House
 ---
 
+import { Picture } from 'astro:assets'
+import commChannelsDarkImg from './assets/comm-channels-dark.png'
+import commChannelsImg from './assets/comm-channels.png'
+import homeInstructionsDarkImg from './assets/home-instructions-dark.png'
+import homeInstructionsImg from './assets/home-instructions.png'
+import knowledgeBaseDarkImg from './assets/knowledge-base-dark.png'
+import knowledgeBaseImg from './assets/knowledge-base.png'
+import learningExperiencesDarkImg from './assets/learning-experiences-dark.png'
+import learningExperiencesImg from './assets/learning-experiences.png'
+import nodeCardsDarkImg from './assets/node-cards-dark.png'
+import nodeCardsImg from './assets/node-cards.png'
+import nodeInstructionsDarkImg from './assets/node-instructions-dark.png'
+import nodeInstructionsImg from './assets/node-instructions.png'
+import toolsDarkImg from './assets/tools-dark.png'
+import toolsImg from './assets/tools.png'
+
 import { Tip, Note } from '@/components/callouts'
 import Frame from '@/components/Frame.astro'
 import Icon from '@/components/Icon.astro'
@@ -23,15 +39,15 @@ Most of the options on the **Home** page are shortcuts to configure your main Wo
 You can define a global prompt for your bot in the **Instructions** field. This prompt influences how the bot interprets and responds to user input by giving it a specific context or role to operate within:
 
 <Frame>
-  <img alt="Instructions" class="block dark:hidden" src="./assets/home-instructions.png" />
-  <img alt="Instructions" class="hidden dark:block" src="./assets/home-instructions-dark.png" />
+  <Picture alt="Instructions" class="block dark:hidden" src={homeInstructionsImg} />
+  <Picture alt="Instructions" class="hidden dark:block" src={homeInstructionsDarkImg} />
 </Frame>
 
 The **Instructions** field directly maps to the **Instructions** for your main Workflow's Autonomous Node. When you update one, the other will also update:
 
 <Frame>
-  <img alt="Instructions for Autonomous Node" class="block dark:hidden" src="./assets/node-instructions.png" />
-  <img alt="Instructions for Autonomous Node" class="hidden dark:block" src="./assets/node-instructions-dark.png" />
+  <Picture alt="Instructions for Autonomous Node" class="block dark:hidden" src={nodeInstructionsImg} />
+  <Picture alt="Instructions for Autonomous Node" class="hidden dark:block" src={nodeInstructionsDarkImg} />
 </Frame>
 
 ## Knowledge Bases
@@ -44,8 +60,8 @@ The **Instructions** field directly maps to the **Instructions** for your main W
 You can add [Knowledge Bases](/studio/concepts/knowledge-base/introduction) to give your bot sources it can reference when answering questions:
 
 <Frame>
-  <img alt="Knowledge Bases" class="block dark:hidden" src="./assets/knowledge-base.png" />
-  <img alt="Knowledge Bases" class="hidden dark:block" src="./assets/knowledge-base-dark.png" />
+  <Picture alt="Knowledge Bases" class="block dark:hidden" src={knowledgeBaseImg} />
+  <Picture alt="Knowledge Bases" class="hidden dark:block" src={knowledgeBaseDarkImg} />
 </Frame>
 
 These sources can include documents, websites, tables, and other forms of structured (or unstructured) data. When you add Knowledge Bases, this section will display a summary of them.
@@ -60,15 +76,15 @@ These sources can include documents, websites, tables, and other forms of struct
 You can use the **Tools** section to quickly add resources and actions your bot can use:
 
 <Frame>
-  <img alt="Tools" class="block dark:hidden" src="./assets/tools.png" />
-  <img alt="Tools" class="hidden dark:block" src="./assets/tools-dark.png" />
+  <Picture alt="Tools" class="block dark:hidden" src={toolsImg} />
+  <Picture alt="Tools" class="hidden dark:block" src={toolsDarkImg} />
 </Frame>
 
 The **Tools** section directly maps to the Cards in your main Workflow's Autonomous Node. When you update one, the other will also update:
 
 <Frame>
-  <img alt="Autonomous Node Cards" class="block dark:hidden" src="./assets/node-cards.png" />
-  <img alt="Autonomous Node Cards" class="hidden dark:block" src="./assets/node-cards-dark.png" />
+  <Picture alt="Autonomous Node Cards" class="block dark:hidden" src={nodeCardsImg} />
+  <Picture alt="Autonomous Node Cards" class="hidden dark:block" src={nodeCardsDarkImg} />
 </Frame>
 
 ## Communication Channels
@@ -80,8 +96,8 @@ The **Tools** section directly maps to the Cards in your main Workflow's Autonom
 You can deploy your bot in different channels the **Communication Channels** section:
 
 <Frame>
-  <img alt="Communication Channels" class="block dark:hidden" src="./assets/comm-channels.png" />
-  <img alt="Communication Channels" class="hidden dark:block" src="./assets/comm-channels-dark.png" />
+  <Picture alt="Communication Channels" class="block dark:hidden" src={commChannelsImg} />
+  <Picture alt="Communication Channels" class="hidden dark:block" src={commChannelsDarkImg} />
 </Frame>
 
 ## Conversation analysis
@@ -98,6 +114,6 @@ You can view a summary of your bot's conversations in the **Conversation Analysi
 You can provide feedback on your bot's responses in the [Emulator](/studio/concepts/emulator). Then, you can view a summary of your feedback in the **Learning Experiences** section:
 
 <Frame>
-  <img alt="Learning experiences" class="block dark:hidden" src="./assets/learning-experiences.png" />
-  <img alt="Learning experiences" class="hidden dark:block" src="./assets/learning-experiences-dark.png" />
+  <Picture alt="Learning experiences" class="block dark:hidden" src={learningExperiencesImg} />
+  <Picture alt="Learning experiences" class="hidden dark:block" src={learningExperiencesDarkImg} />
 </Frame>
