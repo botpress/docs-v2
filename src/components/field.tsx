@@ -36,7 +36,7 @@ function Field({ name, type, required, default: defaultValue, deprecated, hidden
   if (hidden) return null
 
   return (
-    <div className="border-b border-stone-100 py-6 last:border-b-0 dark:border-stone-800/50">
+    <div className="not-prose border-b border-stone-100 py-6 last:border-b-0 dark:border-stone-800/50">
       <div className="flex flex-wrap items-center gap-2">
         <code className="text-sm font-semibold">
           {parentPath && <span className="text-stone-500 dark:text-stone-400">{parentPath}.</span>}

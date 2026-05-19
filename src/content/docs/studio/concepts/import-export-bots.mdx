@@ -1,0 +1,86 @@
+---
+title: Import & Export
+icon: FolderSync
+---
+
+import YouTube from '@/components/YouTube.astro'
+import { Tip, Note, Info, Warning } from '@/components/callouts'
+
+You may want to import or export a bot for various reasons, such as:
+
+- Sharing the bot with others - friends, clients, etc.
+- Contributing the bot to the community
+- Seeking help to fix issues
+- Creating a backup of the bot
+- Transferring the bot to a different workspace or account
+
+And with Botpress Cloud, you can do that with just a few clicks!
+
+## How to Export a Bot
+
+On the left panel in your Botpress Studio, click the Botpress icon and select Import / Export. Then click Export as.
+
+Studio will start preparing the export, which may take some time, depending on the amount of content in your tables and knowledge bases. When it's done, the download will start automatically.
+
+<Info>
+Info
+
+Bots \~3gb or larger **can't** be exported!
+
+</Info>
+
+The exported file will be a `.bpz` file (which is a special archive format for Botpress Cloud bots). It will have the name of your bot and the current date (for example: recipe-bot - 2023 Sep 06.bpz).
+
+<Warning>
+Warning
+
+Don't attempt to extract the file or modify its content; otherwise, you may not be able to import your bot again!
+
+</Warning>
+
+The exported file contains your whole bot, including:
+
+- Bot information and settings
+- Agents settings
+- Knowledge bases - with sources (files are stored on our servers and only linked in the export to keep it small)
+- Tables - with records
+- Intents and entities
+- Hooks
+- Variables (Workflow, user, bot, configuration) - names and default values
+- Folders
+- Workflows and nodes
+- Cards - with content
+- Transition lines
+
+So you can rest assured that all of your data is included!
+
+## How to Import a Bot
+
+<Warning>
+Warning
+
+Importing a bot will overwrite the current bot, including media, knowledge bases, documents and tables. Proceed with caution!
+
+</Warning>
+
+On the left panel in your Botpress Studio, click the Botpress icon and select Import / Export. Then click Import. Next, click "Select bot archive to upload" and the explorer window will open. Find the `.bpz` file you want to import on your computer and click Open.
+
+You have now successfully imported your bot! Test it using the Emulator or publish it to make it available to your users.
+
+<Tip>
+Good to know
+
+You can import bots up to 120 MB!
+
+</Tip>
+
+<Note>
+Restoring the Integrations
+
+Remember to set up the desired integrations again in the Dashboard, so that it works on the channels exactly as it did before you exported it!
+
+</Note>
+
+## Video tutorial
+
+<YouTube url="https://www.youtube.com/embed/garalsWay1U?si=S9J8kk6WckEAmxaw" />

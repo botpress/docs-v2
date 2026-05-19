@@ -3,6 +3,10 @@ title: Preview
 description: Test your published agent's behaviour using the built-in preview.
 ---
 
+import { Picture } from 'astro:assets'
+import previewDarkImg from './assets/preview-dark.png'
+import previewImg from './assets/preview.png'
+
 import Steps from '@/components/Steps.astro'
 import Step from '@/components/Step.astro'
 import Icon from '@/components/Icon.astro'
@@ -27,8 +31,8 @@ You can chat with a preview of your published agent at any time:
 Start a conversation with your agent and test its behaviour:
 
 <Frame>
-  <img alt="Preview" class="block dark:hidden" src="/assets/manage-your-agent/preview.png" />
-  <img alt="Preview" class="hidden dark:block" src="/assets/manage-your-agent/preview-dark.png" />
+  <Picture alt="Preview" class="block dark:hidden" src={previewImg} />
+  <Picture alt="Preview" class="hidden dark:block" src={previewDarkImg} />
 </Frame>
 
 ## Styling

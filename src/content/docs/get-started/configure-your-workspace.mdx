@@ -3,6 +3,12 @@ title: Configure your workspace
 description: Manage agents, billing, usage quotas, and member roles in your Botpress workspace.
 ---
 
+import { Picture } from 'astro:assets'
+import homeDarkImg from './assets/home-dark.png'
+import homeImg from './assets/home.png'
+import usageDarkImg from './assets/usage-dark.png'
+import usageImg from './assets/usage.png'
+
 import { Note, Tip } from '@/components/callouts'
 import Steps from '@/components/Steps.astro'
 import Step from '@/components/Step.astro'
@@ -39,8 +45,8 @@ To add a new workspace:
 You can manage all your agents in your workspace's **<Icon icon="House"/> Home** menu:
 
 <Frame>
-  <img alt="Home" class="block dark:hidden" src="/assets/get-started/home.png" />
-  <img alt="Home" class="hidden dark:block" src="/assets/get-started/home-dark.png" />
+  <Picture alt="Home" class="block dark:hidden" src={homeImg} />
+  <Picture alt="Home" class="hidden dark:block" src={homeDarkImg} />
 </Frame>
 
 ### Create a new agent
@@ -96,8 +102,8 @@ To learn more about building and deploying your own integrations:
 You can track information about usage across your workspace in the **<Icon icon="ChartPie"/> Usage** menu.
 
 <Frame>
-  <img alt="Usage" class="block dark:hidden" src="/assets/get-started/usage.png" />
-  <img alt="Usage" class="hidden dark:block" src="/assets/get-started/usage-dark.png" />
+  <Picture alt="Usage" class="block dark:hidden" src={usageImg} />
+  <Picture alt="Usage" class="hidden dark:block" src={usageDarkImg} />
 </Frame>
 
 This page contains a breakdown of each type of usage quota.
