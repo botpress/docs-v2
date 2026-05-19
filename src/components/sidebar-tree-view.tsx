@@ -73,7 +73,7 @@ function NestedCategory({
               : 'text-stone-600 hover:bg-black/5 hover:text-stone-900 dark:text-stone-400 dark:hover:bg-white/5 dark:hover:text-stone-100'
           }`}
         >
-          <span className="flex items-center gap-1.5">
+          <span className="flex items-center gap-2">
             {node.icon && <TreeIcon name={node.icon} />}
             {node.label}
           </span>
@@ -93,7 +93,7 @@ function NestedCategory({
           onClick={() => setExpanded((v) => !v)}
           className={`${labelClass} cursor-pointer text-stone-600 hover:bg-black/5 hover:text-stone-900 dark:text-stone-400 dark:hover:bg-white/5 dark:hover:text-stone-100`}
         >
-          <span className="flex items-center gap-1.5">
+          <span className="flex items-center gap-2">
             {node.icon && <TreeIcon name={node.icon} />}
             {node.label}
           </span>
@@ -146,7 +146,7 @@ function ChildNode({
   const active = isPathActive(node.href, currentPath)
   const pad = PAD[depth] ?? PAD[PAD.length - 1]
   const activeLine =
-    depth === 1
+    depth >= 1
       ? ' relative before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-px before:bg-primary'
       : ''
 
@@ -154,7 +154,7 @@ function ChildNode({
     <li>
       <a
         href={node.href}
-        className={`flex items-center gap-1.5 rounded-md ${pad} pr-2 py-1.5 ${textSize === 'base' ? 'text-base' : 'text-sm'} transition-colors ${
+        className={`flex items-center gap-2 rounded-md ${pad} pr-2 py-1.5 ${textSize === 'base' ? 'text-base' : 'text-sm'} transition-colors ${
           active
             ? `text-primary bg-primary/10 dark:bg-primary/15 font-medium${activeLine}`
             : 'text-stone-600 hover:bg-black/5 hover:text-stone-900 dark:text-stone-400 dark:hover:bg-white/5 dark:hover:text-stone-100'
@@ -176,7 +176,7 @@ export default function SidebarTreeView({ nodes, currentPath, textSize = 'sm' }:
           return (
             <div key={node.path} className="mb-8">
               <h3
-                className={`mb-[.625rem] flex items-center gap-1.5 pl-2 pr-2 ${textSize === 'base' ? 'text-base' : 'text-sm'} font-semibold text-[rgb(22,27,30)] dark:text-[rgb(222,226,230)]`}
+                className={`mb-[.625rem] flex items-center gap-2 pl-2 pr-2 ${textSize === 'base' ? 'text-base' : 'text-sm'} font-semibold text-[rgb(22,27,30)] dark:text-[rgb(222,226,230)]`}
               >
                 {node.icon && <TreeIcon name={node.icon} />}
                 {node.label}

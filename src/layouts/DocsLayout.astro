@@ -54,6 +54,7 @@ const navItems: { label: string; href: string; icon?: string }[] = [
 
     <MobileSidebar
       client:load
+      transition:persist
       navItems={navItems}
       tree={sidebarTree}
       currentPath={currentPath}
@@ -70,6 +71,7 @@ const navItems: { label: string; href: string; icon?: string }[] = [
       <div class="hidden lg:flex">
         <Sidebar
           client:load
+          transition:persist
           currentPath={currentPath}
           navItems={navItems}
           tree={sidebarTree}
