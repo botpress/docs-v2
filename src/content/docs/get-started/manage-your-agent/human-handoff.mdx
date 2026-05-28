@@ -1,6 +1,5 @@
 ---
 title: Configure Human Handoff
-description: Set up live agent support with the Human-in-the-Loop integration.
 ---
 
 import { Picture } from 'astro:assets'
@@ -13,7 +12,7 @@ import respondToUserImg from './assets/respond-to-user.png'
 import triggerHumanHandoffDarkImg from './assets/trigger-human-handoff-dark.png'
 import triggerHumanHandoffImg from './assets/trigger-human-handoff.png'
 
-import { Tip } from '@/components/callouts'
+import { Tip, Warning } from '@/components/callouts'
 import Steps from '@/components/Steps.astro'
 import Step from '@/components/Step.astro'
 import Icon from '@/components/Icon.astro'
@@ -24,6 +23,13 @@ import Tooltip from '@/components/Tooltip.astro'
 
 If you want to allow a live agent to join your agent's conversations, you can configure this in the **<Icon icon="message-square-reply"/> Human Handoff** section of your bot's menu.
 
+<Warning>
+  For new workspaces, Human Handoff has moved to [Botpress Desk](https://botpress.com/desk), our new AI helpdesk for modern support teams. Go to **Human Handoff > Open Botpress Desk** to get started setting up your workspace.
+
+Users on existing workspaces can follow the steps below and continue using the legacy HITL integration.
+
+</Warning>
+
 ## Setup
 
 To get started using Human Handoff, you need to install and configure the official Human-in-the-Loop (HITL) integration:
@@ -31,7 +37,7 @@ To get started using Human Handoff, you need to install and configure the offici
 <Card title="Configure HITL" href="/integrations/integration-guides/hitl/introduction" icon="plug" horizontal>
   Install and configure the official integration{' '}
   <Tooltip tip="This feature requires a Botpress Plus plan or higher.">
-    <Badge variant="outline">Plus</Badge>
+    <Badge variant="plus">Plus</Badge>
   </Tooltip>
 </Card>
 
