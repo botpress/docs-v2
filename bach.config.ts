@@ -186,6 +186,14 @@ export default defineConfig(collections, {
               },
             ],
           },
+          {
+            group: 'ADK',
+            pages: ['adk/quickstart'],
+          },
+          {
+            group: 'Desk',
+            pages: ['desk/introduction'],
+          },
         ],
       },
       { tab: 'Tutorial', pages: ['tutorial/index'] },
