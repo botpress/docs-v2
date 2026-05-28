@@ -100,6 +100,8 @@ prose: boolean # optional — default true; set false for custom layout pages
 - `mode: frame` (Mintlify homepage) → `prose: false` + import a custom Astro component
 - `openapi:` frontmatter field does not exist in Astro; API pages come from content collections
 - All other standard fields (`title`, `description`, `sidebarTitle`, `icon`) are identical
+- If the source page has no `description` frontmatter, leave it absent — do **not** generate or invent one
+- Do **not** add descriptive text paragraphs beneath page or section titles when none exist in the source
 
 ---
 
@@ -298,7 +300,7 @@ Mintlify uses `openapi:` frontmatter to auto-generate pages from OpenAPI specs. 
 ## 9. Checklist for migrating a single page
 
 1. **Copy the MDX file** from `docs/<path>.mdx` → `docs-v2/src/content/docs/<path>.mdx`
-2. **Update frontmatter**: remove `mode:`, `openapi:` fields; add `prose: false` only for full-custom layout pages
+2. **Update frontmatter**: remove `mode:`, `openapi:` fields; add `prose: false` only for full-custom layout pages; do not generate a `description` if the source doesn't have one
 3. **Add component imports** — every Mintlify component used needs an explicit import (see §4)
 4. **Fix image tags** — replace raw `<img>` / `<Image snippet>` with `<Picture>` imports (see §5)
 5. **Replace snippet imports** — map to `@/components/` equivalents (see §6)
