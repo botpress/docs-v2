@@ -35,7 +35,7 @@ function Expandable({
         </span>
       </CollapsibleTrigger>
       <CollapsibleContent>
-        <div className="border-t border-stone-100 px-4 dark:border-stone-800/50">{children}</div>
+        <div className="expandable-content border-t border-stone-100 px-4 dark:border-stone-800/50">{children}</div>
       </CollapsibleContent>
     </Collapsible>
   )

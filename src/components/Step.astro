@@ -5,11 +5,24 @@ interface Props {
 }
 
 const { title, class: className } = Astro.props;
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+const stepId = title ? slugify(title) : undefined;
 ---
 
 <div
+  id={stepId}
   class:list={[
-    "group/step relative flex items-start pb-5 [counter-increment:step]",
+    "group/step relative flex items-start pb-5 [counter-increment:step] scroll-mt-20",
     className,
   ]}
 >
@@ -17,16 +30,46 @@ const { title, class: className } = Astro.props;
     class="absolute top-11 h-[calc(100%-2.75rem)] w-px bg-stone-200/70 last:bg-gradient-to-b last:from-stone-200 last:via-stone-200 last:via-80% last:to-transparent dark:bg-white/10 dark:last:from-white/10 dark:last:via-white/10"
   >
   </div>
-  <div class="absolute ml-[-13px] py-2">
+  <a
+    href={stepId ? `#${stepId}` : undefined}
+    class="group/stepnum absolute ml-[-13px] py-2 step-anchor no-underline"
+    aria-hidden="true"
+    tabindex="-1"
+  >
     <div
-      class="flex size-7 shrink-0 items-center justify-center rounded-full bg-stone-50 font-semibold text-stone-900 text-xs before:content-[counter(step)] dark:bg-white/10 dark:text-stone-50"
+      class="relative flex size-7 shrink-0 items-center justify-center rounded-full bg-stone-50 font-semibold text-stone-900 dark:bg-white/10 dark:text-stone-50"
     >
+      <span
+        class:list={[
+          "text-xs leading-none before:content-[counter(step)] transition-opacity duration-100",
+          stepId && "group-hover/stepnum:opacity-0",
+        ]}
+      ></span>
+      {stepId && (
+        <span
+          class="absolute inset-0 flex items-center justify-center opacity-0 group-hover/stepnum:opacity-100 transition-opacity duration-100 text-stone-500 dark:text-stone-400"
+        >
+          <svg
+            class="size-3"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+          </svg>
+        </span>
+      )}
     </div>
-  </div>
+  </a>
   <div class="w-full overflow-hidden pr-px pl-8">
     {
       title && (
-        <p class="mt-2 font-semibold text-stone-900 dark:text-stone-200">
+        <p class="mt-2 font-heading text-xl font-semibold text-stone-900 dark:text-stone-200">
           {title}
         </p>
       )

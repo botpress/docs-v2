@@ -1,0 +1,74 @@
+---
+title: StylesheetProvider
+---
+
+```jsx App.jsx
+import { StylesheetProvider } from '@botpress/webchat'
+
+const config = {
+  color: '#3778f0',
+  fontFamily: 'Inter',
+  radius: 1,
+  variant: 'soft',
+  themeMode: 'light',
+  headerVariant: 'solid',
+}
+
+function App() {
+  return (
+    <StylesheetProvider
+      color={config.color}
+      fontFamily={config.fontFamily}
+      radius={config.radius}
+      variant={config.variant}
+      themeMode={config.themeMode}
+    />
+  )
+}
+```
+
+The `StylesheetProvider` component dynamically generates and injects a custom Webchat theme based on your configuration.
+This includes styling variables like:
+
+- Colors
+- Border radius
+- Font family
+- Theme variant
+
+The generated theme is automatically injected into the page using a `<style>` tag and supports both light and dark modes.
+
+## Props
+
+**`color`** `string`
+
+Primary theme color in hex format.
+
+---
+
+**`radius`** `number`
+
+Corner radius for UI elements. Can be `0.5` - `4`
+
+---
+
+**`themeMode`** `'light' | 'dark'`
+
+Light or dark mode theme.
+
+---
+
+**`variant`** `'solid' | 'soft'`
+
+Visual style of the chat window.
+
+---
+
+**`fontFamily`** `'rubik' | 'inter' | 'ibm' | 'fira'`
+
+Font family used in Webchat.
+
+---
+
+**`headerVariant`** `'solid' | 'glass'`
+
+Style variant of the header.

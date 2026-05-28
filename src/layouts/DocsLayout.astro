@@ -60,7 +60,7 @@ const navItems: { label: string; href: string; icon?: string }[] = [
       siteName={siteConfig.name}
       siteLogo={siteConfig.logo}
       siteLogoDark={siteConfig.logoDark}
-      breadcrumbs={breadcrumbs}
+      breadcrumbs={[...(breadcrumbs ?? []), { label: title }]}
       tabs={sidebar.tabs}
       activeTab={activeTab}
       allTrees={sidebar.tabs.length > 0 ? sidebar.trees : undefined}
@@ -98,3 +98,82 @@ const navItems: { label: string; href: string; icon?: string }[] = [
     <SearchOverlay client:load />
   </div>
 </BaseLayout>
+
+<script>
+  const COPY_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`
+  const CHECK_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
+  const CHEVRON_DOWN = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`
+  const CHEVRON_UP = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>`
+
+  const EXPAND_LINE_THRESHOLD = 15
+
+  function initCopyButtons() {
+    document.querySelectorAll('pre.astro-code').forEach((pre) => {
+      if (pre.closest('.code-block-wrapper') || pre.closest('.code-group')) return
+
+      const wrapper = document.createElement('div')
+      wrapper.className = 'code-block-wrapper'
+      pre.parentNode?.insertBefore(wrapper, pre)
+      wrapper.appendChild(pre)
+
+      const btn = document.createElement('button')
+      btn.className = 'code-copy-btn'
+      btn.setAttribute('aria-label', 'Copy code')
+      btn.setAttribute('data-tooltip', 'Copy')
+      btn.innerHTML = COPY_ICON
+
+      btn.addEventListener('click', async () => {
+        const code = pre.querySelector('code')?.textContent ?? ''
+        await navigator.clipboard.writeText(code)
+        btn.innerHTML = CHECK_ICON
+        btn.setAttribute('data-tooltip', 'Copied!')
+        setTimeout(() => {
+          btn.innerHTML = COPY_ICON
+          btn.setAttribute('data-tooltip', 'Copy')
+        }, 2000)
+      })
+
+      wrapper.appendChild(btn)
+
+      const lineCount = pre.querySelectorAll('.line').length
+      if (pre.hasAttribute('data-expandable') || lineCount > EXPAND_LINE_THRESHOLD) {
+        wrapper.classList.add('is-collapsible')
+
+        const expandBtn = document.createElement('button')
+        expandBtn.className = 'code-expand-btn'
+        expandBtn.innerHTML = `See all ${lineCount} lines ${CHEVRON_DOWN}`
+
+        expandBtn.addEventListener('click', () => {
+          const expanded = wrapper.classList.toggle('is-expanded')
+          expandBtn.innerHTML = expanded ? `Show fewer lines ${CHEVRON_UP}` : `See all ${lineCount} lines ${CHEVRON_DOWN}`
+        })
+
+        wrapper.appendChild(expandBtn)
+      }
+    })
+  }
+
+  document.addEventListener('DOMContentLoaded', initCopyButtons)
+  document.addEventListener('astro:page-load', initCopyButtons)
+
+  function initStepAnchors() {
+    document.querySelectorAll('a.step-anchor').forEach((anchor) => {
+      anchor.addEventListener('click', async (e) => {
+        e.preventDefault()
+        const href = anchor.getAttribute('href')
+        if (!href) return
+        history.pushState(null, '', href)
+        const target = document.querySelector(href)
+        target?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        try {
+          await navigator.clipboard.writeText(window.location.href)
+        } catch {
+          // clipboard access denied
+        }
+      })
+    })
+  }
+
+  document.addEventListener('DOMContentLoaded', initStepAnchors)
+  document.addEventListener('astro:page-load', initStepAnchors)
+</script>

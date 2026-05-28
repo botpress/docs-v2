@@ -1,0 +1,67 @@
+---
+---
+<div class="code-group not-prose">
+  <slot />
+</div>
+
+<script>
+  const COPY_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`
+  const CHECK_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
+
+  function initCodeGroups() {
+    document.querySelectorAll<HTMLElement>('.code-group:not([data-ready])').forEach((group) => {
+      const pres = Array.from(group.querySelectorAll<HTMLElement>(':scope > pre.astro-code'))
+      if (pres.length === 0) return
+
+      const tabBar = document.createElement('div')
+      tabBar.className = 'code-group-tabs'
+
+      const copyBtn = document.createElement('button')
+      copyBtn.className = 'code-group-copy'
+      copyBtn.setAttribute('aria-label', 'Copy code')
+      copyBtn.innerHTML = COPY_ICON
+
+      let activeIndex = 0
+
+      const tabs: HTMLButtonElement[] = []
+
+      pres.forEach((pre, i) => {
+        const title = pre.getAttribute('data-title') || `File ${i + 1}`
+        const tab = document.createElement('button')
+        tab.className = 'code-group-tab'
+        tab.textContent = title
+        if (i === 0) tab.dataset.active = 'true'
+        tab.addEventListener('click', () => {
+          activeIndex = i
+          tabs.forEach((t, j) => {
+            t.dataset.active = j === i ? 'true' : 'false'
+          })
+          pres.forEach((p, j) => {
+            p.hidden = j !== i
+          })
+        })
+        tabs.push(tab)
+        tabBar.appendChild(tab)
+      })
+
+      tabBar.appendChild(copyBtn)
+
+      copyBtn.addEventListener('click', async () => {
+        const code = pres[activeIndex]?.querySelector('code')?.textContent ?? ''
+        await navigator.clipboard.writeText(code)
+        copyBtn.innerHTML = CHECK_ICON
+        setTimeout(() => { copyBtn.innerHTML = COPY_ICON }, 2000)
+      })
+
+      pres.forEach((pre, i) => {
+        if (i > 0) pre.hidden = true
+      })
+
+      group.insertBefore(tabBar, group.firstChild)
+      group.dataset.ready = 'true'
+    })
+  }
+
+  document.addEventListener('DOMContentLoaded', initCodeGroups)
+  document.addEventListener('astro:page-load', initCodeGroups)
+</script>

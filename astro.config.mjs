@@ -8,6 +8,33 @@ import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 
 import sitemap from '@astrojs/sitemap'
+import icon from 'astro-icon'
+import { transformerMetaHighlight } from '@shikijs/transformers'
+
+function transformerFilename() {
+  return {
+    name: 'transformer:filename',
+    pre(node) {
+      const meta = this.options?.meta?.__raw ?? ''
+      const match = meta.trim().match(/^([^\s{[\]]+)/)
+      if (match?.[1]) {
+        node.properties['data-title'] = match[1]
+      }
+    },
+  }
+}
+
+function transformerExpandable() {
+  return {
+    name: 'transformer:expandable',
+    pre(node) {
+      const meta = this.options?.meta?.__raw ?? ''
+      if (/\bexpandable\b/.test(meta)) {
+        node.properties['data-expandable'] = 'true'
+      }
+    },
+  }
+}
 
 export default defineConfig({
   site: 'https://botpress.com/docs',
@@ -16,7 +43,7 @@ export default defineConfig({
     prefetchAll: true,
     defaultStrategy: 'hover',
   },
-  integrations: [react(), mdx(), sitemap()],
+  integrations: [react(), mdx(), sitemap(), icon()],
   vite: {
     plugins: [tailwindcss()],
     resolve: {
@@ -33,8 +60,41 @@ export default defineConfig({
       [
         rehypeAutolinkHeadings,
         {
-          behavior: 'wrap',
-          properties: { className: ['heading-anchor'] },
+          behavior: 'prepend',
+          properties: {
+            className: ['heading-anchor'],
+            ariaHidden: 'true',
+            tabIndex: -1,
+          },
+          content: {
+            type: 'element',
+            tagName: 'svg',
+            properties: {
+              xmlns: 'http://www.w3.org/2000/svg',
+              width: '12',
+              height: '12',
+              viewBox: '0 0 24 24',
+              fill: 'none',
+              stroke: 'currentColor',
+              strokeWidth: '2',
+              strokeLinecap: 'round',
+              strokeLinejoin: 'round',
+            },
+            children: [
+              {
+                type: 'element',
+                tagName: 'path',
+                properties: { d: 'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71' },
+                children: [],
+              },
+              {
+                type: 'element',
+                tagName: 'path',
+                properties: { d: 'M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71' },
+                children: [],
+              },
+            ],
+          },
         },
       ],
     ],
@@ -43,6 +103,7 @@ export default defineConfig({
         light: 'github-light',
         dark: 'github-dark',
       },
+      transformers: [transformerFilename(), transformerExpandable(), transformerMetaHighlight()],
     },
   },
 })

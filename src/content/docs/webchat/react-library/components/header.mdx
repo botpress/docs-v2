@@ -1,0 +1,144 @@
+---
+title: Header
+---
+
+import { Note } from '@/components/callouts'
+import { Tabs, Tab } from '@/components/tabs'
+import Expandable from '@/components/Expandable.astro'
+import LazyIframe from '@/components/LazyIframe.astro'
+
+The `Header` component sits at the top of the Webchat UI. It displays the bot's name, avatar, and description. It also provides access to key actions like restarting the conversation or closing the chat window.
+
+<Tabs>
+    <Tab title="Example">
+        <LazyIframe
+            src="https://botpress.github.io/docs-examples/iframe.html?args=&globals=&id=header--primary"
+            title="Header component"
+            height="500px"
+        />
+    </Tab>
+    <Tab title="Code">
+        ```jsx App.jsx
+        import { Header, useWebchat } from '@botpress/webchat'
+
+        // Every attribute that the header component can take
+        const headerConfig = {
+          botName: 'SupportBot',
+          botAvatar: 'https://cdn.botpress.cloud/bot-avatar.png',
+          botDescription: 'Your virtual assistant for all things support.',
+
+          phone: {
+            title: 'Call Support',
+            link: 'tel:+1234567890',
+          },
+
+          email: {
+            title: 'Email Us',
+            link: 'mailto:support@example.com',
+          },
+
+          website: {
+            title: 'Visit our website',
+            link: 'https://www.example.com',
+          },
+
+          termsOfService: {
+            title: 'Terms of Service',
+            link: 'https://www.example.com/terms',
+          },
+
+          privacyPolicy: {
+            title: 'Privacy Policy',
+            link: 'https://www.example.com/privacy',
+          },
+        }
+
+        function App() {
+          const [isWebchatOpen, setIsWebchatOpen] = useState(false)
+
+          const { newConversation } = useWebchat({
+            clientId: '$CLIENT_ID$', // Insert your client id here
+          })
+
+          return (
+            <Header
+              onOpenChange={() => console.log('Override the header open change')}
+              defaultOpen={true}
+              closeWindow={() => setIsWebchatOpen(false)}
+              restartConversation={newConversation}
+              disabled={false}
+              configuration={headerConfig}
+            />
+          )
+        }
+        ```
+    </Tab>
+
+</Tabs>
+
+<Note>
+  Although you can use the `Header` as a standalone component, we recommend using it within the [Container](./container)
+  component and alongside the [Composer](./composer) and [MessageList](./message-list) components.
+</Note>
+
+## Props
+
+**`defaultOpen`** `boolean`
+
+Controls whether the header is expanded by default. Only used when the `open` prop is uncontrolled.
+
+---
+
+**`open`** `boolean`
+
+Explicitly controls whether the header is open. Useful for managing the open state from a parent component.
+
+---
+
+**`onOpenChange`** `(open: boolean) => void`
+
+Callback triggered when the open state changes. It overrides the default behavior of expanding the header. Receives the new open state as an argument.
+
+---
+
+**`disabled`** `boolean`
+
+Disables the header toggle functionality when set to `true`.
+
+---
+
+**`restartConversation`** `() => void`
+
+Optional function to restart the current conversation. Typically resets the conversation state to the beginning. The header must be within a `ModalProvider` for this to work. A ModalProvider is provided automatically with the `Container` component.
+
+---
+
+**`closeWindow`** `() => void`
+
+Optional function to close the chat window. Useful for embedding scenarios or controlled UIs.
+
+---
+
+**`configuration`** `Pick<Configuration, 'email' | 'phone' | 'privacyPolicy' | 'website' | 'termsOfService' | 'botAvatar' | 'botDescription' | 'botName'>` (required)
+
+A configuration object containing bot identity and contact details. To enable the expanded header with additional links (e.g., website, terms of service), include the following fields: `email`, `phone`, `privacyPolicy`, `website`, and `termsOfService`.
+
+<Expandable>
+
+**`botName`** `string` — Name of the bot displayed in the header.
+
+**`botAvatar`** `string` — URL to the bot avatar image.
+
+**`botDescription`** `string` — Description text shown in the Webchat header.
+
+**`phone`** `{ title?: string, link?: string }` — Phone contact information with title and link.
+
+**`email`** `{ title?: string, link?: string }` — Email contact information with title and link.
+
+**`website`** `{ title?: string, link?: string }` — Website link information with title and URL.
+
+**`termsOfService`** `{ title?: string, link?: string }` — Terms of Service link with title and URL.
+
+**`privacyPolicy`** `{ title?: string, link?: string }` — Privacy Policy link with title and URL.
+
+</Expandable>

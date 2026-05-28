@@ -1,0 +1,73 @@
+---
+title: Quickstart
+description: Use the Webchat embed code to add a bot to your website.
+---
+
+import { Note, Info, Check } from '@/components/callouts'
+import Steps from '@/components/Steps.astro'
+import Step from '@/components/Step.astro'
+import Frame from '@/components/Frame.astro'
+import { Picture } from 'astro:assets'
+import webchatImg from './assets/webchat.png'
+import webchatDarkImg from './assets/webchat-dark.png'
+import embedCodeDashboardImg from './assets/embed-code-dashboard.png'
+import embedCodeDashboardDarkImg from './assets/embed-code-dashboard-dark.png'
+
+Webchat makes it easy to embed a bot on your website. If you self-host your website, just follow the instructions on this page.
+
+<Note>
+
+If you use a website-building tool like [WordPress](/webchat/integrations/wordpress), [Wix](/webchat/integrations/wix) or [Webflow](/webchat/integrations/webflow), see the other pages in this section for instructions on how to add your bot.
+
+</Note>
+
+<Info>You will need: - A [published bot](/get-started/quick-start) - Basic familiarity with HTML</Info>
+
+<Steps titleSize='h2'>
+  <Step title="Get your embed code">
+
+    To embed a bot on your website, you need the bot's Webchat embed code. You can get the embed code from the Dashboard:
+
+    1. Open your bot's Workspace and select the bot you want to embed.
+    2. In the left sidebar, go to **Webchat** > **Deploy Settings**.
+    3. Copy the **Embed code**:
+
+    <Frame>
+      <Picture alt="Embed code from Dashboard" class="block dark:hidden" src={embedCodeDashboardImg} />
+      <Picture alt="Embed code from Dashboard" class="hidden dark:block" src={embedCodeDashboardDarkImg} />
+    </Frame>
+
+  </Step>
+  <Step title="Add to your website">
+    Next, add the Webchat embed code to the `head` section of your website's HTML. For example:
+
+    ```html index.html {4-5}
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <script src="https://cdn.botpress.cloud/webchat/vX.X/inject.js"></script>
+      <script src="https://files.bpcontent.cloud/xxxx/xx/xx/xx/xxxxxxxxxxxxx-xxxxxxxx.js" defer></script>
+    </head>
+    <body>
+      <!-- Website content -->
+    </body>
+    </html>
+    ```
+
+  </Step>
+  <Step>
+    You're all set! Open your website and start chatting with your bot. It should look something like this:
+
+    <Frame>
+      <Picture alt="Webchat" class="block dark:hidden" src={webchatImg} />
+      <Picture alt="Webchat" class="hidden dark:block" src={webchatDarkImg} />
+    </Frame>
+
+  </Step>
+</Steps>
+
+<Check>Done! Your bot is now live on your website.</Check>
+
+## Next steps
+
+Now that you've added your bot, try [styling it](./configure-your-webchat) to match the rest of your website's user interface.

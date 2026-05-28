@@ -1,0 +1,117 @@
+---
+title: useWebchat
+---
+
+import { Warning } from '@/components/callouts'
+import Expandable from '@/components/Expandable.astro'
+
+The `useWebchat` hook provides access to the Webchat client and its state. It allows you to:
+
+- Interact with your bot
+- Listen to real-time events
+- Manage conversation lifecycle, user info, and messages
+
+<Warning>
+  The `useWebchat` hook is incompatible with the batteries-included [`<Webchat>` component](/webchat/react-library/components/webchat)—using them together will cause issues and unexpected behaviour.
+
+If you need to use the hook, make sure you're [manually building Webchat](/webchat/react-library/get-started#option-2%3A-build-webchat-manually).
+
+</Warning>
+
+## Usage
+
+```tsx App.tsx
+import { useWebchat } from '@botpress/webchat'
+
+function App() {
+  const { client, clientState, on, user, conversationId, newConversation, messages, isFetchingMessages, isTyping } =
+    useWebchat({
+      clientId: '$CLIENT_ID$', // Insert your Client ID here
+    })
+}
+```
+
+## Parameters
+
+**`clientId`** `string`
+
+Your Botpress project Client ID. Required to initialize the client and establish communication with the server.
+
+## Returned Values
+
+**`client`** `WebchatClient`
+
+The underlying client instance. Can be used to manually send events, fetch data, or interact with the server.
+
+---
+
+**`clientState`** `'connecting' | 'connected' | 'error' | 'disconnected'`
+
+Represents the current connection state of the client.
+
+---
+
+**`on`** `(event: string, callback: Function) => void`
+
+Allows you to listen to client events such as incoming messages, typing indicators, or custom events. Here are the native Webchat events that you can listen to:
+
+| Events              | Description                                                                   |
+| ------------------- | ----------------------------------------------------------------------------- |
+| `conversation`      | Triggered when a new conversation is started.                                 |
+| `message`           | Triggered when a new message is sent or received.                             |
+| `error`             | Triggered when an error occurs.                                               |
+| `webchatVisibility` | Triggered when the Webchat visibility changes. ('show' or 'hide' or 'toggle') |
+| `webchatConfig`     | Triggered when the Webchat configuration changes.                             |
+| `customEvent`       | Triggered when a custom event is received.                                    |
+| `isTyping`          | Triggered when the bot is typing.                                             |
+
+---
+
+**`user`** `User`
+
+The current user's profile object:
+
+```ts [expandable]
+const user:
+  | {
+      name?: string
+      pictureUrl?: string
+      data?: {
+        [k: string]: any
+      }
+      id: string
+      createdAt: string
+      updatedAt: string
+    }
+  | undefined
+```
+
+---
+
+**`conversationId`** `string`
+
+The active conversation's unique identifier.
+
+---
+
+**`newConversation`** `() => void`
+
+A function to start a new conversation. Resets the current chat session.
+
+---
+
+**`messages`** `BlockMessage[]`
+
+An array of messages for the active conversation. Includes user and bot messages.
+
+---
+
+**`isFetchingMessages`** `boolean`
+
+Indicates whether messages are currently being fetched from the server.
+
+---
+
+**`isTyping`** `boolean`
+
+Reflects whether the bot is currently "typing," as indicated by typing events from the server.

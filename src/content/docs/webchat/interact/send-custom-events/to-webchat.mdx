@@ -1,0 +1,166 @@
+---
+title: Send custom events from your website to Webchat
+sidebarTitle: From your website to Webchat
+---
+
+import { Info, Tip, Warning, Check } from '@/components/callouts'
+import Steps from '@/components/Steps.astro'
+import Step from '@/components/Step.astro'
+import Frame from '@/components/Frame.astro'
+import Icon from '@/components/Icon.astro'
+import { Picture } from 'astro:assets'
+import customTriggerImg from './assets/custom-trigger.png'
+import customTriggerDarkImg from './assets/custom-trigger-dark.png'
+import testTriggerImg from './assets/test-trigger.png'
+import testTriggerDarkImg from './assets/test-trigger-dark.png'
+
+You can send custom events from your website to Webchat. This is useful if you want your bot to transition to a certain Node or Workflow when something happens on your website.
+
+## With embedded Webchat
+
+If you added Webchat to your website [using the embed code](/webchat/get-started/quick-start), follow the steps below to send custom events:
+
+<Info>
+    You will need:
+
+    - A website with an [embedded bot](/webchat/get-started/quick-start)
+    - Familiarity with JavaScript
+
+</Info>
+
+<Tip>
+  Visual learner? Check out our [YouTube guide](https://www.youtube.com/watch?v=dDGY_wHFt3s&pp=0gcJCY0JAYcqIYzv) on
+  sending custom events.
+</Tip>
+
+<Steps>
+    <Step title="Send an event to Webchat">
+
+        First, set up an event to send Webchat from your website's source code. Use the [`window.botpress.sendEvent`](/webchat/interact/reference#sendevent) method:
+
+        ``` javascript index.js
+        const customPayload = {
+            "test": "test"
+        }
+
+        window.botpress.sendEvent(customPayload)
+        ```
+
+        You can replace the data in `customPayload` with anything you like.
+
+    </Step>
+    <Step title="Add a Custom Trigger">
+
+      Next, add a [Custom Trigger](/studio/concepts/triggers#custom-trigger) to your bot's Workflow:
+
+      1. In your Workflow, right-click and select **Trigger**, then **Custom Trigger**:
+
+      <Frame>
+        <Picture alt="Custom Trigger" class="block dark:hidden" src={customTriggerImg} />
+        <Picture alt="Custom Trigger" class="hidden dark:block" src={customTriggerDarkImg} />
+      </Frame>
+
+      2. In the **Event Filter** field, enter `{{event.payload}}`. This will capture the most recent event you send.
+      3. Select **Test**, then **Show last received events**. This will display any events you've sent from your website.
+      4. If you've already sent your event, it should show up here. Select **Add as Test**, then **Save**.
+
+      <Warning>
+        This step is mandatory. The Custom Trigger won't work until you've successfully tested it.
+      </Warning>
+
+    </Step>
+    <Step title="Test your trigger">
+        Now you can test your Custom Trigger:
+
+        1. Add a transition from the Custom Trigger to another Node. For example:
+
+        <Frame>
+          <Picture alt="Test Trigger" class="block dark:hidden" src={testTriggerImg} />
+          <Picture alt="Test Trigger" class="hidden dark:block" src={testTriggerDarkImg} />
+        </Frame>
+
+        2. Select the <Icon icon="play" /> button to test the Custom Trigger's behaviour in the Studio's [Emulator](/studio/concepts/emulator).
+    </Step>
+
+</Steps>
+
+<Check>Once you've re-published your bot, it'll respond to custom events.</Check>
+
+## With the Webchat React library
+
+If you're using the [Webchat React library](/webchat/react-library/get-started), follow the steps below to send custom events:
+
+<Info>
+  You will need:
+
+- A working React app that [implements Webchat](/webchat/react-library/get-started#step-2%3A-build-a-component)
+  </Info>
+
+<Steps>
+  <Step title="Add the useWebchat hook">
+    At the top level of your React component that renders Webchat, add the [`useWebchat`](/webchat/react-library/hooks/use-webchat-client) hook and destructure the `client` object:
+
+    ```jsx
+    const { client } =
+      useWebchat({
+        clientId: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+        // Replace with your actual client ID
+    })
+    ```
+
+    Remember to replace the placeholder `clientId` with your bot's actual client ID.
+
+  </Step>
+  <Step title="Send an event to Webchat">
+    Now, use the `client` instance to send an event to Webchat. First, define a payload object with any data you'd like. For example:
+
+    ```jsx
+    const customPayload = {
+        "test": "test"
+    }
+    ```
+
+    Then, send the event using `client.sendEvent(customPayload)`. For example, in a button:
+
+    ```jsx
+    <button onClick={() => client.sendEvent(customPayload)}>
+      Send custom event
+    </button>
+    ```
+
+  </Step>
+  <Step title="Add a Custom Trigger">
+    Next, add a [Custom Trigger](/studio/concepts/triggers#custom-trigger) to your bot's Workflow:
+
+    1. In your Workflow, right-click and select **Trigger**, then **Custom Trigger**:
+
+    <Frame>
+      <Picture alt="Custom Trigger" class="block dark:hidden" src={customTriggerImg} />
+      <Picture alt="Custom Trigger" class="hidden dark:block" src={customTriggerDarkImg} />
+    </Frame>
+
+    2. In the **Event Filter** field, enter `{{event.payload}}`. This will capture the most recent event you send.
+    3. Select **Test**, then **Show last received events**. This will display any events you've sent from your website.
+    4. If you've already sent your event, it should show up here. Select **Add as Test**, then **Save**.
+
+    <Warning>
+      This step is mandatory. The Custom Trigger won't work until you've successfully tested it.
+    </Warning>
+
+  </Step>
+  <Step title="Test your Custom Trigger">
+    Now you can test your Custom Trigger:
+
+    1. Add a transition from the Custom Trigger to another Node. For example:
+
+    <Frame>
+      <Picture alt="Test Trigger" class="block dark:hidden" src={testTriggerImg} />
+      <Picture alt="Test Trigger" class="hidden dark:block" src={testTriggerDarkImg} />
+    </Frame>
+
+    2. Select the <Icon icon="play" /> button to test the Custom Trigger's behaviour in the Studio's [Emulator](/studio/concepts/emulator).
+
+  </Step>
+</Steps>
+
+<Check>Once you've re-published your bot, it'll respond to custom events.</Check>

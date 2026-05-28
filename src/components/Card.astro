@@ -1,10 +1,10 @@
 ---
-import { ArrowUpRight, ChevronRight, type icons } from "lucide-react";
+import { ArrowUpRight, ChevronRight } from "lucide-react";
 import Icon from "./Icon.astro";
 
 interface Props {
   title?: string;
-  icon?: keyof typeof icons;
+  icon?: string;
   img?: string;
   href?: string;
   cta?: string;
@@ -68,7 +68,7 @@ const linkProps = isExternal ? { target: "_blank", rel: "noreferrer" } : {};
 
     {
       icon && (
-        <div class="size-6 fill-stone-800 text-stone-800 dark:fill-stone-100 dark:text-stone-100">
+        <div class="size-6 fill-primary text-primary">
           <Icon icon={icon} class="size-5" />
         </div>
       )

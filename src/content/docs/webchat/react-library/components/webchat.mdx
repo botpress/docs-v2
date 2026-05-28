@@ -1,0 +1,168 @@
+---
+title: Webchat
+---
+
+import { Note, Warning } from '@/components/callouts'
+import { Tabs, Tab } from '@/components/tabs'
+import Expandable from '@/components/Expandable.astro'
+import LazyIframe from '@/components/LazyIframe.astro'
+
+The `Webchat` component is a batteries-included implementation of the Webchat window. It contains most of what you'd expect when [injecting Webchat](/webchat/get-started/quick-start).
+
+<Tabs>
+    <Tab title="Example">
+        <LazyIframe
+            src="https://botpress.github.io/docs-examples/iframe.html?args=&globals=&id=webchat--primary"
+            title="Webchat component"
+            height="600px"
+            />
+    </Tab>
+    <Tab title="Code">
+    ``` jsx App.jsx
+    import { Fab, Webchat } from '@botpress/webchat'
+    import { useState } from 'react'
+
+    function App() {
+    const [isWebchatOpen, setIsWebchatOpen] = useState(false)
+    const toggleWebchat = () => {
+        setIsWebchatOpen((prevState) => !prevState)
+    }
+    return (
+        <>
+        <Webchat
+            clientId="$CLIENT_ID$" // Your client ID here
+            style={{
+            width: '400px',
+            height: '600px',
+            display: isWebchatOpen ? 'flex' : 'none',
+            position: 'fixed',
+            bottom: '90px',
+            right: '20px',
+            }}
+        />
+        <Fab
+            onClick={() => toggleWebchat()}
+            style={{
+            position: 'fixed',
+            bottom: '20px',
+            right: '20px',
+            width: '64px',
+            height: '64px'
+            }}
+        />
+        </>
+    )
+    }
+
+    export default App
+    ```
+    </Tab>
+
+</Tabs>
+
+<Note>
+  The `Webchat` component doesn't use the configuration set in your bot's
+  [Dashboard](/webchat/get-started/configure-your-webchat). Instead, configure it using the
+  [configuration](#configuration) prop.
+</Note>
+
+<Warning>
+  The `<Webchat>` component is incompatible with the [`useWebchat` hook](/webchat/react-library/hooks/use-webchat-client)—using them together will cause issues and unexpected behaviour.
+
+If you need to use the hook, make sure you're [manually building Webchat](/webchat/react-library/get-started#option-2%3A-build-webchat-manually).
+
+</Warning>
+
+## Props
+
+**`clientId`** `string` (required)
+
+Your bot's [client ID](/webchat/react-library/get-started#obtain-your-client-id).
+
+---
+
+**`storageKey`** `string`
+
+Custom key for Webchat's local storage ([if your bot's configuration uses local storage](#param-storage-location))
+
+---
+
+**`user`** `UserCredentials`
+
+User to load Webchat with.
+
+<Expandable>
+
+**`userId`** `string`
+
+The user's ID.
+
+---
+
+**`userToken`** `string`
+
+The user's token.
+
+</Expandable>
+
+---
+
+**`conversationId`** `string`
+
+Conversation ID to load Webchat with.
+
+---
+
+**`configuration`** `Configuration`
+
+Configuration for Webchat's appearance and style. This object's properties are similar to the Webchat configuration options available in the [Dashboard](/webchat/get-started/configure-your-webchat).
+
+<Expandable>
+
+**`botName`** `string` — Name of the bot displayed in the header.
+
+**`botAvatar`** `string` — URL to the bot avatar image.
+
+**`botDescription`** `string` — Description text shown in the Webchat header.
+
+**`fabImage`** `string` — Image for the [Fab](/webchat/react-library/components/fab).
+
+**`phone`** `{ title?: string, link?: string }` — Phone contact information with title and link.
+
+**`email`** `{ title?: string, link?: string }` — Email contact information with title and link.
+
+**`website`** `{ title?: string, link?: string }` — Website link information with title and URL.
+
+**`termsOfService`** `{ title?: string, link?: string }` — Terms of Service link with title and URL.
+
+**`privacyPolicy`** `{ title?: string, link?: string }` — Privacy Policy link with title and URL.
+
+**`composerPlaceholder`** `string` — Placeholder text for the input composer.
+
+**`color`** `string` — Primary theme color in hex format.
+
+**`radius`** `number` — Corner radius for UI elements. Can be `0.5` - `4`
+
+**`themeMode`** `'light' | 'dark'` — Light or dark mode theme.
+
+**`variant`** `'solid' | 'soft'` — Visual style of the chat window.
+
+**`fontFamily`** `'rubik' | 'inter' | 'ibm' | 'fira'` — Font family used in Webchat.
+
+**`showPoweredBy`** `boolean` — Flag to show or hide the "Powered by Botpress" footer.
+
+**`additionalStylesheet`** `string` — Custom inline CSS to apply to the Webchat.
+
+**`additionalStylesheetUrl`** `string` — URL pointing to an external stylesheet.
+
+**`allowFileUpload`** `boolean` — Flag to enable file uploads in the chat.
+
+**`storageLocation`** `'localStorage' | 'sessionStorage'` — Location to store Webchat session data.
+
+**`footer`** `string` — Footer content in Markdown.
+
+**`headerVariant`** `'solid' | 'glass'` — Style variant of the header.
+
+**`feedbackEnabled`** `boolean` — Toggle for user feedback feature.
+
+</Expandable>

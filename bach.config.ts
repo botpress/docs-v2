@@ -38,12 +38,12 @@ export default defineConfig(collections, {
                   'studio/concepts/home',
                   {
                     group: 'Nodes',
-                    icon: 'SquareMousePointer',
+                    icon: 'square-mouse-pointer',
                     pages: ['studio/concepts/nodes/introduction', 'studio/concepts/nodes/autonomous-node'],
                   },
                   {
                     group: 'Cards',
-                    icon: 'Rows3',
+                    icon: 'rows-3',
                     pages: [
                       'studio/concepts/cards/introduction',
                       'studio/concepts/cards/send-messages',
@@ -70,7 +70,7 @@ export default defineConfig(collections, {
                   'studio/concepts/workflows',
                   {
                     group: 'Knowledge Bases',
-                    icon: 'BookOpen',
+                    icon: 'book-open',
                     pages: [
                       'studio/concepts/knowledge-base/introduction',
                       'studio/concepts/knowledge-base/add-sources',
@@ -81,7 +81,7 @@ export default defineConfig(collections, {
                   'studio/concepts/actions',
                   {
                     group: 'Agents',
-                    icon: 'Bot',
+                    icon: 'bot',
                     pages: [
                       'studio/concepts/agents/introduction',
                       'studio/concepts/agents/summary-agent',
@@ -103,7 +103,7 @@ export default defineConfig(collections, {
                   'studio/concepts/find',
                   {
                     group: 'Variables',
-                    icon: 'Variable',
+                    icon: 'variable',
                     pages: [
                       'studio/concepts/variables/overview',
                       {
@@ -128,7 +128,7 @@ export default defineConfig(collections, {
                   'studio/concepts/copy-to-bot',
                   {
                     group: 'Controls and Settings',
-                    icon: 'Wrench',
+                    icon: 'wrench',
                     pages: [
                       'studio/concepts/controls-and-settings/keyboard-shortcuts',
                       'studio/concepts/controls-and-settings/studio-commands',
@@ -181,6 +181,70 @@ export default defineConfig(collections, {
                       'studio/guides/advanced/retention-period',
                       'studio/guides/advanced/v12',
                     ],
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            group: 'Webchat',
+            pages: [
+              'webchat/get-started/introduction',
+              'webchat/get-started/quick-start',
+              'webchat/get-started/embed-in-element',
+              'webchat/get-started/configure-your-webchat',
+              {
+                group: 'Interact with Webchat',
+                pages: [
+                  'webchat/interact/open-close-webchat',
+                  'webchat/interact/use-custom-toggle',
+                  'webchat/interact/proactive-message-bubble',
+                  'webchat/interact/open-webchat-on-page-load',
+                  'webchat/interact/send-user-data',
+                  'webchat/interact/listen-to-events',
+                  'webchat/interact/start-trigger',
+                  'webchat/interact/webchat-notification',
+                  'webchat/interact/send-message',
+                  {
+                    group: 'Send custom events',
+                    pages: [
+                      'webchat/interact/send-custom-events/from-webchat',
+                      'webchat/interact/send-custom-events/to-webchat',
+                    ],
+                  },
+                  'webchat/interact/update-config',
+                  'webchat/interact/error-handling',
+                  'webchat/interact/reference',
+                ],
+              },
+              {
+                group: 'Integrations',
+                pages: [
+                  'webchat/integrations/wordpress',
+                  'webchat/integrations/wix',
+                  'webchat/integrations/webflow',
+                  'webchat/integrations/react-native',
+                ],
+              },
+              {
+                group: 'React library',
+                pages: [
+                  'webchat/react-library/get-started',
+                  {
+                    group: 'Components',
+                    pages: [
+                      'webchat/react-library/components/webchat',
+                      'webchat/react-library/components/fab',
+                      'webchat/react-library/components/container',
+                      'webchat/react-library/components/header',
+                      'webchat/react-library/components/message-list',
+                      'webchat/react-library/components/composer',
+                      'webchat/react-library/components/stylesheet-provider',
+                    ],
+                  },
+                  {
+                    group: 'Hooks',
+                    pages: ['webchat/react-library/hooks/use-webchat-client'],
                   },
                 ],
               },

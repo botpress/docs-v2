@@ -55,6 +55,21 @@ export default defineConfig(collections, {
 - API reference tabs reference a `collection` property instead of page paths
 - The `sidebarTitle` frontmatter field works the same in both
 
+**Tab vs Group — critical type distinction:**
+
+The `tabs` array accepts only `TabItem` objects. A `TabItem` must have `tab: string`, not `group`. Using `group` at the top level of `tabs` is a TypeScript error that will break the build.
+
+```typescript
+// TabItem — top-level entry in `tabs`
+{ tab: 'Webchat', pages: [...] }   // ✓ correct
+{ group: 'Webchat', pages: [...] } // ✗ wrong — causes TS error
+
+// GroupItem — used inside a tab's pages array
+{ group: 'Get started', icon: 'Rocket', pages: [...] } // ✓ correct
+```
+
+`TabItem` does **not** support an `icon` field — icons are only valid on `GroupItem` (nested groups inside a tab).
+
 ---
 
 ## 2. Content file location
@@ -120,6 +135,34 @@ All callout components accept children as body content — usage syntax is uncha
 | `<Frame>`          | `import Frame from '@/components/Frame.astro'`                   |            |
 | `<Tooltip>`        | `import Tooltip from '@/components/Tooltip.astro'`               |            |
 
+### Icons
+
+Mintlify accepts kebab-case icon names (e.g. `icon="message-square"`). The Bach framework uses `Icon.astro`, which requires **PascalCase Lucide icon names** (e.g. `icon="MessageSquare"`). Passing a kebab-case name throws a runtime error.
+
+**Conversion rule:** kebab-case → PascalCase. Examples:
+
+- `message-square` → `MessageSquare`
+- `arrow-right` → `ArrowRight`
+- `chevron-down` → `ChevronDown`
+
+**Brand icons** (e.g. `react`, `wordpress`, `wix`, `webflow`, `github`) are **not in lucide-react**. Substitute with a semantically close Lucide icon:
+
+| Mintlify icon                                              | Lucide substitute     |
+| ---------------------------------------------------------- | --------------------- |
+| `react`                                                    | `Atom`                |
+| `wordpress`, `wix`, `webflow`, or any CMS/website platform | `Globe`               |
+| `github`, `gitlab`                                         | `GitBranch` or `Code` |
+| `slack`, `discord`                                         | `MessageSquare`       |
+| `database`, `supabase`, `mongo`                            | `Database`            |
+
+When in doubt, verify an icon exists before using it:
+
+```bash
+node -e "const { icons } = require('lucide-react'); console.log(!!icons['IconName'])"
+```
+
+This applies to `icon=` props on `<Card>`, `<Tab>`, and group-level `icon:` in `bach.config.ts`.
+
 ### Tabs
 
 | Mintlify            | Astro import                                      |
@@ -157,13 +200,18 @@ import Tab from '@/components/tabs/Tab.astro'
 ### Astro pattern
 
 ```mdx
+import Frame from '@/components/Frame.astro'
 import { Picture } from 'astro:assets'
 import fooImg from './assets/foo.png'
 import fooDarkImg from './assets/foo-dark.png'
 
-<Picture alt="description" class="block dark:hidden" src={fooImg} />
-<Picture alt="description" class="hidden dark:block" src={fooDarkImg} />
+<Frame>
+  <Picture alt="description" class="block dark:hidden" src={fooImg} />
+  <Picture alt="description" class="hidden dark:block" src={fooDarkImg} />
+</Frame>
 ```
+
+Always wrap `<Picture>` elements in `<Frame>`. This gives images rounded corners and a contained display — every existing image in the repo follows this convention. A bare `<Picture>` without `<Frame>` is incorrect.
 
 **Key differences:**
 
