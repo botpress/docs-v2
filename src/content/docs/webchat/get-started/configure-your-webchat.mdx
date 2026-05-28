@@ -1,0 +1,305 @@
+---
+title: Configure Webchat
+---
+
+import { Info, Warning, Note } from '@/components/callouts'
+import Accordion from '@/components/Accordion.astro'
+import Steps from '@/components/Steps.astro'
+import Step from '@/components/Step.astro'
+import Tooltip from '@/components/Tooltip.astro'
+import { Badge } from '@/components/ui/badge'
+import Icon from '@/components/Icon.astro'
+
+<Info>
+
+You will need:
+
+- A [published bot](/get-started/quick-start/)
+- Familiarity with CSS (if you want to use custom styles)
+
+</Info>
+
+You can configure your bot in the Dashboard:
+
+1. Open your Botpress workspace.
+2. Select the bot you want to configure, then go to **<Icon icon="settings-2" /> Webchat**.
+
+Here's a breakdown of each configuration section:
+
+## Bot identity
+
+This section lets you configure general information about your bot:
+
+- Your bot's avatar (defaults to the first letter of your bot's name)
+- Your bot's display name (defaults to `Bot`)
+- Your bot's description (optional)
+- A placeholder for your bot's composer (defaults to `Type your message...`)
+- A custom footer for your bot (requires a [Plus plan](https://botpress.com/pricing))
+- A custom avatar for the Floating Action Button (FAB)
+
+### Contact
+
+You can also configure optional contact information for your bot:
+
+- Email address
+- Phone number
+- Website
+- Terms of service
+- Privacy policy
+
+## Bot appearance
+
+This section contains styling options for Webchat:
+
+- Primary colour (defaults to `#3276EA`). Choose a recommended colour, or use the colour picker to specify a hex code.
+- Font (defaults to **Inter**). Use the search bar to choose any available Google Font.
+- Theme mode (defaults to **Light**)
+- Header style (defaults to **Glass**)
+- Message styling (defaults to **Solid**)
+- Corner radius (defaults to fully rounded)
+
+You can view your changes in the Webchat preview on the right side of the screen. Whenever you want to update the bot's configuration, select **Publish Configuration** in the upper-right corner.
+
+<Warning>
+  Styles from this section won't apply if you're using the [Webchat React library](/webchat/react-library/get-started).
+  In this case, use the [configuration prop](/webchat/react-library/components/webchat#param-configuration) to configure
+  Webchat.
+</Warning>
+
+### Use custom styles
+
+If you want to customize your bot's appearance further, you can modify the built-in CSS classes in the **Styles** section. Here's a list of all CSS classes available:
+
+<Accordion
+  title="CSS Classes"
+>
+| CSS Class | Element description |
+| :--- | :--- |
+| `bpContainer` | Main Webchat container |
+| `bpDropzoneOverlay` | Overlay shown when dragging files into the chat |
+| `bpLoader` | Loader/spinner container for loading states |
+| `bpModalOverlay` | Background overlay behind modals |
+| `bpModalContainer` | Wrapper for the modal dialog |
+| `bpModalTitle` | Styles the title text in modals |
+| `bpModalDescription` | Styles the description text in modals |
+| `bpModalContentContainer` | Container for content inside the modal |
+| `bpModalContentTextArea` | Text area element inside modals |
+| `bpModalButtonContainer` | Wrapper for modal action buttons |
+| `bpModalButtonConfirm` | Styles the confirm button in modals |
+| `bpModalButtonCancel` | Styles the cancel button in modals |
+| `bpMessagePreviewContainer` | Container for message preview popups |
+| `bpMessagePreviewMessage` | Message text in preview popups |
+| `bpMessagePreviewDescription` | Description text in preview popups |
+| `bpMessagePreviewCloseButton` | Close button for message preview |
+| `bpMessagePreviewAvatarContainer` | Container for avatar in message preview |
+| `bpMessagePreviewAvatarImage` | Avatar image in message preview |
+| `bpMessagePreviewAvatarFallback` | Fallback avatar styling in message preview |
+| `bpFabContainer` | Container for the floating action button |
+| `bpFabIcon` | Icon inside the FAB |
+| `bpFabImage` | Image inside the FAB (when using custom images) |
+| `bpNotificationContainer` | Wrapper for notification messages |
+| `bpNotificationTitle` | Title text in notifications |
+| `bpNotificationDescription` | Description text in notifications |
+| `bpNotificationIcon` | Icon displayed in notifications |
+| `bpNotificationCloseIcon` | Close icon/button on notifications |
+| `bpHeaderContainer` | Container for the chat header |
+| `bpHeaderContentContainer` | Wrapper for header content (title, avatar, actions) |
+| `bpHeaderContentTitle` | Title text in the header |
+| `bpHeaderContentDescription` | Description text in the header |
+| `bpHeaderContentAvatarContainer` | Container for the header avatar |
+| `bpHeaderContentAvatarImage` | Styles the avatar image in the header |
+| `bpHeaderContentAvatarFallback` | Fallback avatar styling if image fails |
+| `bpHeaderSoundToggleButton` | Button to toggle sound notifications in header |
+| `bpHeaderContentActionsContainer` | Wrapper for header action icons |
+| `bpHeaderContentActionsIcons` | Styles the action icons in the header |
+| `bpHeaderExpandedContentContainer` | Container for expanded header content |
+| `bpHeaderExpandedContentDescriptionItemsContainer` | Wrapper for description items in expanded header |
+| `bpHeaderExpandedContentDescriptionItemsIcon` | Icon for each expanded header description item |
+| `bpHeaderExpandedContentDescriptionItemsText` | Text for expanded header description items |
+| `bpHeaderExpandedContentDescriptionItemsLink` | Link styling for expanded header description items |
+| `bpHeaderExpandedContentGroup` | Grouping container for expanded header items |
+| `bpHeaderNewConversationIcon` | Icon for starting a new conversation in the header |
+| `bpComposerWrapper` | Wrapper around the entire composer area |
+| `bpComposerContainer` | Container for the composer |
+| `bpComposerFooter` | Footer area of the composer (for example: upload/voice buttons) |
+| `bpComposerInputContainer` | Container for the text input field |
+| `bpComposerInput` | Text input field styling |
+| `bpComposerInputLoader` | Loader shown while input is processing |
+| `bpComposerSendButton` | Send button styling in the composer |
+| `bpComposerUploadButton` | File upload button in the composer |
+| `bpComposerVoiceButton` | Voice recording button in the composer |
+| `bpComposerFileContainer` | Container for attached files in the composer |
+| `bpComposerFileAttachement` | Wrapper for each file attachment |
+| `bpComposerFileLoader` | Loader shown during file upload in composer |
+| `bpComposerFileIconWrapper` | Container for the file type icon |
+| `bpComposerFileIcon` | Icon representing the file type |
+| `bpComposerFileMetadata` | Container for file metadata (name and type) |
+| `bpComposerFileName` | Styles the file name text |
+| `bpComposerFileExtension` | Styles the file extension/type text |
+| `bpComposerFileRemoveIcon` | Icon/button to remove an attached file |
+| `bpComposerFileErrorIcon` | Icon indicating an error with the attached file |
+| `bpComposerFilePreviewImage` | Thumbnail preview image for attachments |
+| `bpMessageListScrollDownButton` | Button to scroll to the latest message |
+| `bpMessageListContainer` | Container for the message list |
+| `bpMessageListViewport` | Viewport area for scrolling messages |
+| `bpMessageListMarqueeContainer` | Container for marquee/announcement banners |
+| `bpMessageListMarqueeContent` | Content area for marquee messages |
+| `bpMessageListMarqueeTitle` | Title text in marquee banners |
+| `bpMessageListMarqueeDescription` | Description text in marquee banners |
+| `bpMessageListMarqueeAvatarContainer` | Container for avatars in marquee banners |
+| `bpMessageListMarqueeAvatarImage` | Avatar image in marquee banners |
+| `bpMessageListMarqueeAvatarFallback` | Fallback avatar styling in marquee banners |
+| `bpMessageListHeaderMessage` | Header message block styling |
+| `bpMessageContainer` | Container for individual messages |
+| `bpMessageAvatarContainer` | Container for the message avatar |
+| `bpMessageAvatarImage` | Styles the avatar image in messages |
+| `bpMessageAvatarFallback` | Fallback styling for missing message avatars |
+| `bpMessageDeliveryStatus` | Delivery status indicator for messages |
+| `bpMessageBlocksTextHeading1` | H1 text block within messages |
+| `bpMessageBlocksTextHeading2` | H2 text block within messages |
+| `bpMessageBlocksTextHeading3` | H3 text block within messages |
+| `bpMessageBlocksTextHeading4` | H4 text block within messages |
+| `bpMessageBlocksTextUnorderedList` | Unordered list text block |
+| `bpMessageBlocksTextOrderedList` | Ordered list text block |
+| `bpMessageBlocksTextListItem` | List item text block |
+| `bpMessageBlocksTextLink` | Hyperlink text block |
+| `bpMessageBlocksTextItalic` | Italic text styling |
+| `bpMessageBlocksTextBold` | Bold text styling |
+| `bpMessageBlocksTextText` | Standard paragraph text block |
+| `bpMessageBlocksTextImage` | Inline image block within text |
+| `bpMessageBlocksTextImageError` | Error state for failed inline images |
+| `bpMessageBlocksTextHorizontalRule` | Horizontal rule within text |
+| `bpMessageBlocksTextLineBreak` | Line break within text |
+| `bpMessageBlocksTextInput` | Input field block within messages |
+| `bpMessageBlocksTextCodeBlockContainer` | Container for code block elements |
+| `bpMessageBlocksTextCodeBlockTitle` | Title area for code blocks |
+| `bpMessageBlocksTextCodeBlockCopyIcon` | Copy-to-clipboard icon in code blocks |
+| `bpMessageBlocksTextCodeBlock` | Code block styling |
+| `bpMessageBlocksTextCode` | Inline code text styling |
+| `bpMessageBlocksTextTableContainer` | Container for tables within messages |
+| `bpMessageBlocksTextTable` | Table element styling |
+| `bpMessageBlocksTextTableHeader` | Table header cell styling |
+| `bpMessageBlocksTextTableData` | Table data cell styling |
+| `bpMessageBlocksTextTableRow` | Table row styling |
+| `bpMessageBlocksAudio` | Audio player block styling |
+| `bpMessageBlocksImageImage` | Image block styling |
+| `bpMessageBlocksImagePlaceholder` | Placeholder for loading images |
+| `bpSkeleton` | Skeleton loader for images |
+| `bpMessageBlocksVideo` | Video player block styling |
+| `bpMessageBlocksLocationContainer` | Container for location blocks |
+| `bpMessageBlocksLocationTitle` | Title text for location blocks |
+| `bpMessageBlocksLocationIcon` | Icon for location blocks |
+| `bpMessageBlocksFileContainer` | Container for file blocks |
+| `bpMessageBlocksFileTitle` | Title text for file blocks |
+| `bpMessageBlocksFileIcon` | Icon for file blocks |
+| `bpMessageBlocksRow` | Row layout block within messages |
+| `bpMessageBlocksColumn` | Column layout block within messages |
+| `bpMessageBlocksBubble` | Chat bubble container |
+| `bpMessageBlocksBubbleFeedbackContainer` | Container for bubble feedback icons |
+| `bpMessageBlocksBubbleFeedbackIcon` | Feedback icon inside bubbles |
+| `bpMessageBlocksCarouselContainer` | Container for carousel blocks |
+| `bpMessageBlocksCarouselSlidesContainer` | Slides container within carousels |
+| `bpMessageBlocksCarouselBackButton` | Back button in carousel blocks |
+| `bpMessageBlocksCarouselNextButton` | Next button in carousel blocks |
+| `bpMessageBlocksDropdownButtonContainer` | Dropdown button container |
+| `bpMessageBlocksDropdownButtonText` | Text inside dropdown buttons |
+| `bpMessageBlocksDropdownButtonIcon` | Icon inside dropdown buttons |
+| `bpMessageBlocksDropdownContentContainer` | Container for dropdown content |
+| `bpMessageBlocksDropdownContentItem` | Individual dropdown item styling |
+| `bpMessageBlocksButton` | Button block styling within messages |
+| `bpErrorContainer` | Container for error messages |
+| `bpErrorId` | Error ID text styling |
+| `bpErrorHeader` | Header area for error display |
+| `bpErrorHeaderActions` | Action buttons in error header |
+| `bpErrorContent` | Content area for error messages |
+| `bpErrorTitle` | Title text for error messages |
+| `bpErrorMessage` | Error message text styling |
+| `bpErrorIcon` | Icon displayed in error messages |
+| `bpTypingIndicatorContainer` | Container for typing indicator |
+| `bpTypingIndicatorLoader` | Loader animation for typing indicator |
+| `bpProactiveBubbleContainer` | Container for proactive message bubble |
+| `bpProactiveBubbleContent` | Content area of proactive bubble |
+| `bpProactiveBubbleLayout` | Layout wrapper for proactive bubble |
+| `bpProactiveBubbleIcon` | Icon in proactive bubble |
+| `bpProactiveBubbleMessage` | Message text in proactive bubble |
+| `bpProactiveBubbleCloseButton` | Close button for proactive bubble |
+| `bpProactiveBubbleArrow` | Arrow/pointer for proactive bubble |
+
+</Accordion>
+
+### Position Webchat on the left
+
+By default, the Webchat FAB and the chat window appear on the right side of the screen. You can move them to the left by overriding the default CSS.
+
+Add the following CSS to your website's stylesheet:
+
+```css
+.bpFabWrapper {
+  left: 20px !important;
+  right: auto !important;
+}
+
+.bpWebchat {
+  left: 20px !important;
+  right: auto !important;
+}
+```
+
+This will position both the FAB icon and the main Webchat window 20 pixels from the left edge of the viewport. You can adjust the `20px` value as needed.
+
+## Deploy settings
+
+This section lets you configure your bot's deployment settings:
+
+- **Chat interface**: Choose whether you want to use a toggle for the chat's visibility or [embed it in a specific element](/webchat/get-started/embedding-webchat)
+- **Where to show chat**: Enter the HTML ID of the container where the chat should appear (if **Chat interface** is set to **Embedded**)
+- **Chat launcher**: Choose how you want to toggle Webchat (using the default chat bubble or a custom element). Available if **Chat interface** is set to **Toggle**
+- **Button image**: Choose a custom image for the chat bubble (if **Chat launcher** is set to **Chat bubble**)
+- **Element selector**: Enter the HTML ID of the button or element that launches the chat (if **Chat launcher** is set to **Custom element**).
+
+### Proactive message bubble
+
+This section lets you configure and preview a [proactive message bubble](/webchat/interact/proactive-message-bubble) for Webchat. You can:
+
+- Set a proactive message
+- Set a trigger type
+- Set a delay time
+
+## Features
+
+This section lets you configure optional features for your bot:
+
+- **Message feedback**: Enable/disable message feedback. When enabled, you can view feedback data in the [Analytics](/get-started/manage-your-agent/monitor#analytics) menu
+- **Allow file upload**: Enable/disable user file upload
+- **Message notification sound**: Enable sound notifications for new messages. This requires Webchat v3.3+
+- **Conversation history**: Allow users to view and continue previous conversations. This requires Webchat v3.6+
+- **Chat history reset**: Choose whether users can continue conversations after the tab closes (local storage) or not (local storage)
+
+<Note>
+**Session storage vs. Local storage**
+
+Session storage creates a new user and conversation each time the page is re-opened. Local storage keeps them for your next visits.
+
+You can [learn more about local and session storage here](https://www.geeksforgeeks.org/javascript/difference-between-local-storage-session-storage-and-cookies/).
+
+</Note>
+
+### Advanced settings
+
+You can also access the following advanced settings:
+
+#### Client ID
+
+The client ID is used to identify your bot's Webchat instance. You can use it when building with our [Webchat React library](/webchat/react-library/get-started).
+
+#### Allowed origins {<Tooltip tip="This feature requires a Botpress Team plan or higher."><Badge variant="team">Team</Badge></Tooltip>}
+
+The **Allowed Origins** setting lets you manage which domains are allowed to access Webchat.
+
+By default, this is set to **All Origins**. To restrict the allowed origins:
+
+<Steps>
+  <Step>Select **Whitelist**.</Step>
+  <Step>Select **+ Add Origin**.</Step>
+  <Step>Type the domain you want to allow, then select **Publish Changes**.</Step>
+</Steps>
