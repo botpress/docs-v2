@@ -122,7 +122,24 @@ All callout components accept children as body content — usage syntax is uncha
 
 ### Tabs
 
-Mintlify uses `<Tabs>` + `<Tab>`. Astro does not yet have a native Tabs component — check `src/components/` for a current equivalent before migrating tabbed content.
+| Mintlify            | Astro import                                      |
+| ------------------- | ------------------------------------------------- |
+| `<Tabs>`            | `import Tabs from '@/components/tabs/Tabs.astro'` |
+| `<Tab title="...">` | `import Tab from '@/components/tabs/Tab.astro'`   |
+
+`<Tab>` accepts a required `title` string and an optional `icon` (Lucide icon name). Usage is otherwise identical:
+
+```mdx
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+
+<Tabs>
+  <Tab title="TypeScript">...</Tab>
+  <Tab title="Python" icon="Code">
+    ...
+  </Tab>
+</Tabs>
+```
 
 ---
 
