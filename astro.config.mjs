@@ -12,6 +12,10 @@ import sitemap from '@astrojs/sitemap'
 export default defineConfig({
   site: 'https://botpress.com/docs',
   output: 'static',
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'hover',
+  },
   integrations: [react(), mdx(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
