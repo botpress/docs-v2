@@ -21,6 +21,8 @@ const badgeVariants = cva(
         deprecated: 'rounded-md bg-amber-100/50 font-medium text-amber-600 dark:bg-amber-400/10 dark:text-amber-300',
         experimental:
           'rounded-md bg-violet-100/50 font-medium text-violet-600 dark:bg-violet-400/10 dark:text-violet-300',
+        team: 'rounded-md border-green-200 bg-green-50 font-medium text-green-800 dark:border-green-900 dark:bg-green-600/20 dark:text-green-300',
+        plus: 'rounded-md border-blue-200 bg-blue-50 font-medium text-blue-800 dark:border-blue-900 dark:bg-blue-600/20 dark:text-blue-300',
         get: 'rounded-md bg-emerald-100 font-bold uppercase tracking-wide text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300',
         post: 'rounded-md bg-blue-100 font-bold uppercase tracking-wide text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
         put: 'rounded-md bg-amber-100 font-bold uppercase tracking-wide text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',

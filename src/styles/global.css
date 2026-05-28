@@ -14,7 +14,7 @@
   --card-foreground: oklch(0.147 0.004 49.25);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.147 0.004 49.25);
-  --primary: oklch(0.486 0.132 278.221);
+  --primary: #0090ff;
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.97 0.001 106.424);
   --secondary-foreground: oklch(0.216 0.006 56.043);
@@ -48,7 +48,7 @@
   --card-foreground: oklch(0.985 0.001 106.423);
   --popover: oklch(0.216 0.006 56.043);
   --popover-foreground: oklch(0.985 0.001 106.423);
-  --primary: oklch(0.629 0.123 280.129);
+  --primary: #0090ff;
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.268 0.007 34.298);
   --secondary-foreground: oklch(0.985 0.001 106.423);
@@ -182,6 +182,277 @@
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 }
 
+/* Filename tab */
+.prose pre.astro-code[data-title]::before {
+  content: attr(data-title);
+  display: block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: oklch(0.553 0.013 58.07);
+  background-color: oklch(0.97 0.001 106.424);
+  border-bottom: 1px solid oklch(0.923 0.003 48.717);
+  border-radius: 0.75rem 0.75rem 0 0;
+  margin: -1rem -1rem 0.75rem -1rem;
+  padding: 0.5rem 1rem;
+}
+
+.dark .prose pre.astro-code[data-title]::before {
+  color: oklch(0.709 0.01 56.259);
+  background-color: oklch(0.268 0.007 34.298);
+  border-bottom-color: oklch(1 0 0 / 10%);
+}
+
+/* Prose bullet markers should match the list item text color, not the lighter --tw-prose-bullets default */
+.prose li::marker {
+  color: inherit;
+}
+
+/* Callout list items must inherit the callout's text color, not the prose body color.
+   !important needed because the Typography plugin sets ::marker color via an explicit
+   CSS custom property rule that overrides normal inheritance. */
+[role='alert'] li,
+[role='alert'] li::marker {
+  color: inherit !important;
+}
+
+/* Line highlighting */
+.prose pre.astro-code .line.highlighted {
+  display: inline-block;
+  width: calc(100% + 2rem);
+  background-color: rgb(0 144 255 / 0.1);
+  border-left: 2px solid #0090ff;
+  margin-left: -1rem;
+  padding-left: calc(1rem - 2px);
+  margin-right: -1rem;
+  padding-right: 1rem;
+}
+
+/* CodeGroup — multi-file tabbed code block */
+.code-group {
+  border: 1px solid oklch(0.923 0.003 48.717);
+  border-radius: 0.875rem;
+  margin: 1rem 0;
+  overflow: hidden;
+}
+
+.dark .code-group {
+  border-color: oklch(1 0 0 / 10%);
+}
+
+.code-group-tabs {
+  display: flex;
+  align-items: center;
+  background-color: oklch(0.97 0.001 106.424);
+  border-bottom: 1px solid oklch(0.923 0.003 48.717);
+  padding: 0 0.5rem;
+  overflow-x: auto;
+}
+
+.dark .code-group-tabs {
+  background-color: oklch(0.268 0.007 34.298);
+  border-bottom-color: oklch(1 0 0 / 10%);
+}
+
+.code-group-tab {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: oklch(0.553 0.013 58.07);
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 150ms ease;
+  margin-bottom: -1px;
+}
+
+.code-group-tab[data-active='true'] {
+  color: oklch(0.147 0.004 49.25);
+  border-bottom-color: #0090ff;
+}
+
+.dark .code-group-tab {
+  color: oklch(0.709 0.01 56.259);
+}
+
+.dark .code-group-tab[data-active='true'] {
+  color: oklch(0.985 0.001 106.423);
+}
+
+.code-group-copy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin-left: auto;
+  flex-shrink: 0;
+  border-radius: 0.375rem;
+  border: 1px solid oklch(0.923 0.003 48.717);
+  background-color: white;
+  color: oklch(0.553 0.013 58.07);
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity 150ms ease,
+    color 150ms ease;
+}
+
+.code-group:hover .code-group-copy {
+  opacity: 1;
+}
+
+.code-group-copy:hover {
+  color: oklch(0.216 0.006 56.043);
+}
+
+.dark .code-group-copy {
+  border-color: oklch(1 0 0 / 10%);
+  background-color: oklch(0.268 0.007 34.298);
+  color: oklch(0.709 0.01 56.259);
+}
+
+.dark .code-group-copy:hover {
+  color: oklch(0.985 0.001 106.423);
+}
+
+/* Strip code block's own border/radius/margin when inside a code group */
+.code-group > pre.astro-code {
+  border: none !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+}
+
+/* Suppress the filename header pseudo-element inside code groups (tab bar handles it) */
+.code-group > pre.astro-code[data-title]::before {
+  display: none !important;
+}
+
+/* Copy button */
+.code-block-wrapper {
+  position: relative;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Expandable code blocks */
+.code-block-wrapper.is-collapsible:not(.is-expanded) > pre.astro-code {
+  max-height: 320px;
+  overflow-y: hidden;
+  border-radius: 0.875rem 0.875rem 0 0;
+  border-bottom: none;
+}
+
+.code-expand-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  width: 100%;
+  padding: 0.45rem 1rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  color: oklch(0.553 0.013 58.07);
+  background-color: oklch(0.97 0.001 106.424);
+  border: 1px solid oklch(0.923 0.003 48.717);
+  border-top: none;
+  border-radius: 0 0 0.875rem 0.875rem;
+  cursor: pointer;
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+}
+
+.code-expand-btn:hover {
+  color: oklch(0.216 0.006 56.043);
+  background-color: oklch(0.94 0.001 106.424);
+}
+
+.dark .code-expand-btn {
+  color: oklch(0.709 0.01 56.259);
+  background-color: oklch(0.268 0.007 34.298);
+  border-color: oklch(1 0 0 / 10%);
+}
+
+.dark .code-expand-btn:hover {
+  color: oklch(0.985 0.001 106.423);
+  background-color: oklch(0.29 0.007 34.298);
+}
+
+.code-block-wrapper.is-collapsible.is-expanded > pre.astro-code {
+  border-radius: 0.875rem 0.875rem 0 0;
+  border-bottom: none;
+}
+
+.code-block-wrapper > pre.astro-code {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.code-copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 0.375rem;
+  border: 1px solid oklch(0.923 0.003 48.717);
+  background-color: white;
+  color: oklch(0.553 0.013 58.07);
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity 150ms ease,
+    color 150ms ease;
+}
+
+.code-copy-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 0.375rem);
+  transform: translateX(-50%);
+  background-color: var(--primary);
+  color: white;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease;
+}
+
+.code-copy-btn:hover {
+  color: oklch(0.216 0.006 56.043);
+}
+
+.code-copy-btn:hover::after {
+  opacity: 1;
+}
+
+.code-block-wrapper:hover .code-copy-btn {
+  opacity: 1;
+}
+
+.dark .code-copy-btn {
+  border-color: oklch(1 0 0 / 10%);
+  background-color: oklch(0.268 0.007 34.298);
+  color: oklch(0.709 0.01 56.259);
+}
+
+.dark .code-copy-btn:hover {
+  color: oklch(0.985 0.001 106.423);
+}
+
 .dark .astro-code,
 .dark .astro-code span {
   color: var(--shiki-dark) !important;
@@ -197,52 +468,110 @@
   background-color: transparent !important;
 }
 
+/* Inline code inside expandable blocks (not-prose context — restore prose code styles) */
+.expandable-content code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-size: 0.875em;
+  border-radius: var(--radius-md);
+  background-color: var(--color-stone-100);
+  padding-inline: 0.375rem;
+  padding-block: 0.125rem;
+  color: var(--color-stone-700);
+}
+
+.expandable-content code::before,
+.expandable-content code::after {
+  content: none;
+}
+
+.dark .expandable-content code {
+  background-color: var(--color-stone-800);
+  color: var(--color-stone-300);
+}
+
+/* Tables inside expandable content / field descriptions */
+.expandable-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875em;
+  margin: 0.75rem 0;
+}
+.expandable-content th {
+  text-align: left;
+  font-weight: 600;
+  padding: 0.5rem 1rem 0.5rem 0;
+  border-bottom: 1px solid var(--color-stone-200);
+  color: var(--color-stone-700);
+}
+.expandable-content td {
+  padding: 0.5rem 1rem 0.5rem 0;
+  border-bottom: 1px solid var(--color-stone-100);
+  vertical-align: top;
+}
+.expandable-content tr:last-child td {
+  border-bottom: none;
+}
+.dark .expandable-content th {
+  border-bottom-color: oklch(1 0 0 / 15%);
+  color: var(--color-stone-300);
+}
+.dark .expandable-content td {
+  border-bottom-color: oklch(1 0 0 / 8%);
+}
+
+/* Parameter names (bold code at the start of a param line) — primary blue, no background */
+.expandable-content p > strong:first-child > code {
+  color: var(--primary);
+  background-color: transparent;
+  padding-inline: 0;
+  padding-block: 0;
+}
+
 /* Heading permalink anchors */
 .prose :is(h1, h2, h3, h4, h5, h6) {
   font-family: var(--font-heading);
   scroll-margin-top: 5rem;
+  position: relative;
 }
 
 .prose .heading-anchor {
-  color: inherit !important;
+  position: absolute;
+  left: -2.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 0.25rem;
+  border-radius: 0.375rem;
+  border: 1px solid var(--color-stone-300);
+  background-color: var(--color-stone-50);
+  color: var(--color-stone-600);
   text-decoration: none !important;
-  font-weight: inherit;
-}
-
-.prose .heading-anchor:hover {
-  color: inherit !important;
-  text-decoration: none !important;
-}
-
-.prose .heading-anchor::after {
-  content: '';
-  display: inline-block;
-  width: 0.55em;
-  height: 0.55em;
-  margin-left: 0.375em;
-  vertical-align: middle;
   opacity: 0;
-  background-color: oklch(0.553 0.013 58.07);
   transition: opacity 150ms ease;
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/%3E%3Cpath d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/%3E%3Cpath d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/%3E%3C/svg%3E");
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
 }
 
-.dark .prose .heading-anchor::after {
-  background-color: oklch(0.7 0.013 58.07);
+.dark .prose .heading-anchor {
+  border-color: var(--color-stone-500);
+  background-color: var(--color-stone-800);
+  color: var(--color-stone-300);
 }
 
-.prose :is(h1, h2, h3, h4, h5, h6):hover .heading-anchor::after {
+.prose :is(h1, h2, h3, h4, h5, h6):hover .heading-anchor,
+.prose .heading-anchor:hover {
   opacity: 1;
+}
+
+a.step-anchor {
+  text-decoration: none !important;
 }
 
 @layer components {
   .prose {
-    --tw-prose-headings: var(--color-stone-900);
+    --tw-prose-headings: var(--color-stone-950);
     --tw-prose-body: var(--color-stone-600);
     --tw-prose-links: var(--color-stone-900);
     --tw-prose-bold: var(--color-stone-800);
@@ -256,23 +585,18 @@
     --tw-prose-invert-code: var(--color-stone-300);
   }
 
-  .prose :is(h1, h2, h3, h4, h5, h6):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-    font-weight: 600;
+  .prose :is(h1, h4, h5, h6):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+    font-weight: 800;
   }
 
   .prose a:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+    font-weight: 600;
     text-decoration: underline;
-    text-underline-offset: 2px;
-    text-decoration-color: var(--color-stone-300);
-  }
-  .prose a:hover:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-    text-decoration-color: var(--color-stone-500);
+    text-underline-offset: 4px;
+    text-decoration-color: var(--color-primary);
   }
   .dark .prose a:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-    text-decoration-color: var(--color-stone-600);
-  }
-  .dark .prose a:hover:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-    text-decoration-color: var(--color-stone-400);
+    text-decoration-color: var(--color-primary);
   }
 
   .prose code:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
@@ -292,6 +616,27 @@
   .prose th:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
     text-align: left;
   }
+}
+
+/* Heading font sizes and weights — outside @layer so they beat the typography plugin's addComponents() output */
+.prose :is(h2):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  font-size: 1.5em;
+  font-weight: 600;
+}
+
+.prose :is(h3):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  font-size: 1.25em;
+  font-weight: 600;
+}
+
+/* Code inside h2 headings — lighter background, match heading size and weight */
+.prose :is(h2) code:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  font-size: 1em;
+  font-weight: inherit;
+  background-color: var(--color-stone-50);
+}
+.dark .prose :is(h2) code:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  background-color: var(--color-stone-700);
 }
 
 /* Docs assistant — shimmer text for in-flight tool indicators */
@@ -363,6 +708,20 @@
    The React island only renders *inside* this pre-allocated space. */
 .ai-panel-container {
   display: none;
+}
+
+/* Unlayered — beats all Tailwind utilities so the hover thickness override wins */
+.prose a:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  text-decoration-thickness: 1px;
+  transition: text-decoration-thickness 0.15s ease;
+}
+.prose a:hover:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  text-decoration-thickness: 2px;
+}
+
+/* Links inside callout blocks use the block's text colour for the underline */
+[role='alert'] a {
+  text-decoration-color: currentColor;
 }
 
 @media (min-width: 1024px) {

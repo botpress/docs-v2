@@ -47,10 +47,10 @@ export default function Header({ tabs, activeTab, siteName, siteLogo, siteLogoDa
                 <a
                   key={tab.slug}
                   href={tab.href}
-                  className={`flex items-center text-sm font-semibold transition-colors ${
+                  className={`flex items-center self-stretch border-b-2 text-sm transition-colors ${
                     isActive
-                      ? 'text-stone-900 dark:text-stone-100'
-                      : 'text-stone-500 hover:text-stone-700 dark:text-stone-400 dark:hover:text-stone-200'
+                      ? 'border-primary font-bold text-stone-900 dark:text-stone-100'
+                      : 'border-transparent text-stone-500 hover:text-stone-700 dark:text-stone-400 dark:hover:text-stone-200'
                   }`}
                 >
                   {tab.label}

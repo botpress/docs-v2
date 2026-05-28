@@ -1,24 +1,26 @@
 ---
-import { icons } from "lucide-react";
+import { Icon as AstroIcon } from "astro-icon/components";
 import clsx from "clsx";
 
 interface Props {
-  icon: keyof typeof icons;
+  icon: string;
   class?: string;
 }
 
 const { icon, class: className } = Astro.props;
-const IconComponent = icons[icon];
 
-if (!IconComponent) {
-  throw new Error(`Icon "${icon}" not found in lucide-react`);
-}
+// Plain names (no prefix) are Lucide icons — prefix them for iconify.
+// Normalize PascalCase to kebab-case so legacy icon names keep working.
+const toLucideKebab = (name: string) =>
+  name.replace(/([a-z])([A-Z0-9])/g, "$1-$2").toLowerCase();
+const resolved = icon.includes(":") ? icon : `lucide:${toLucideKebab(icon)}`;
 ---
 
-<IconComponent className={clsx(className, "size-4", "icon")} />
+<AstroIcon name={resolved} class={clsx(className, "size-4", "icon")} />
 
 <style>
-  :global(p) .icon {
+  :global(:is(p, li, strong, em, a)) .icon {
     display: inline;
+    vertical-align: middle;
   }
 </style>
