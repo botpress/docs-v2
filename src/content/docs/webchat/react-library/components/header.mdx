@@ -6,6 +6,7 @@ import { Note } from '@/components/callouts'
 import { Tabs, Tab } from '@/components/tabs'
 import Expandable from '@/components/Expandable.astro'
 import LazyIframe from '@/components/LazyIframe.astro'
+import ResponseField from '@/components/ResponseField.astro'
 
 The `Header` component sits at the top of the Webchat UI. It displays the bot's name, avatar, and description. It also provides access to key actions like restarting the conversation or closing the chat window.
 
@@ -83,62 +84,65 @@ The `Header` component sits at the top of the Webchat UI. It displays the bot's 
 
 ## Props
 
-**`defaultOpen`** `boolean`
+<ResponseField name="defaultOpen" type="boolean">
+  Controls whether the header is expanded by default. Only used when the `open` prop is uncontrolled.
+</ResponseField>
 
-Controls whether the header is expanded by default. Only used when the `open` prop is uncontrolled.
+<ResponseField name="open" type="boolean">
+  Explicitly controls whether the header is open. Useful for managing the open state from a parent component.
+</ResponseField>
 
----
+<ResponseField name="onOpenChange" type="(open: boolean) => void">
+  Callback triggered when the open state changes. It overrides the default behavior of expanding the header. Receives
+  the new open state as an argument.
+</ResponseField>
 
-**`open`** `boolean`
+<ResponseField name="disabled" type="boolean">
+  Disables the header toggle functionality when set to `true`.
+</ResponseField>
 
-Explicitly controls whether the header is open. Useful for managing the open state from a parent component.
+<ResponseField name="restartConversation" type="() => void">
+  Optional function to restart the current conversation. Typically resets the conversation state to the beginning. The
+  header must be within a `ModalProvider` for this to work. A ModalProvider is provided automatically with the
+  `Container` component.
+</ResponseField>
 
----
+<ResponseField name="closeWindow" type="() => void">
+  Optional function to close the chat window. Useful for embedding scenarios or controlled UIs.
+</ResponseField>
 
-**`onOpenChange`** `(open: boolean) => void`
-
-Callback triggered when the open state changes. It overrides the default behavior of expanding the header. Receives the new open state as an argument.
-
----
-
-**`disabled`** `boolean`
-
-Disables the header toggle functionality when set to `true`.
-
----
-
-**`restartConversation`** `() => void`
-
-Optional function to restart the current conversation. Typically resets the conversation state to the beginning. The header must be within a `ModalProvider` for this to work. A ModalProvider is provided automatically with the `Container` component.
-
----
-
-**`closeWindow`** `() => void`
-
-Optional function to close the chat window. Useful for embedding scenarios or controlled UIs.
-
----
-
-**`configuration`** `Pick<Configuration, 'email' | 'phone' | 'privacyPolicy' | 'website' | 'termsOfService' | 'botAvatar' | 'botDescription' | 'botName'>` (required)
-
-A configuration object containing bot identity and contact details. To enable the expanded header with additional links (e.g., website, terms of service), include the following fields: `email`, `phone`, `privacyPolicy`, `website`, and `termsOfService`.
-
-<Expandable>
-
-**`botName`** `string` — Name of the bot displayed in the header.
-
-**`botAvatar`** `string` — URL to the bot avatar image.
-
-**`botDescription`** `string` — Description text shown in the Webchat header.
-
-**`phone`** `{ title?: string, link?: string }` — Phone contact information with title and link.
-
-**`email`** `{ title?: string, link?: string }` — Email contact information with title and link.
-
-**`website`** `{ title?: string, link?: string }` — Website link information with title and URL.
-
-**`termsOfService`** `{ title?: string, link?: string }` — Terms of Service link with title and URL.
-
-**`privacyPolicy`** `{ title?: string, link?: string }` — Privacy Policy link with title and URL.
-
-</Expandable>
+<ResponseField
+  name="configuration"
+  type="Pick<Configuration, 'email' | 'phone' | 'privacyPolicy' | 'website' | 'termsOfService' | 'botAvatar' | 'botDescription' | 'botName'>"
+  required
+>
+  A configuration object containing bot identity and contact details. To enable the expanded header with additional
+  links (e.g., website, terms of service), include the following fields: `email`, `phone`, `privacyPolicy`, `website`,
+  and `termsOfService`.
+  <Expandable>
+    <ResponseField name="botName" type="string">
+      Name of the bot displayed in the header.
+    </ResponseField>
+    <ResponseField name="botAvatar" type="string">
+      URL to the bot avatar image.
+    </ResponseField>
+    <ResponseField name="botDescription" type="string">
+      Description text shown in the Webchat header.
+    </ResponseField>
+    <ResponseField name="phone" type="{ title?: string, link?: string }">
+      Phone contact information with title and link.
+    </ResponseField>
+    <ResponseField name="email" type="{ title?: string, link?: string }">
+      Email contact information with title and link.
+    </ResponseField>
+    <ResponseField name="website" type="{ title?: string, link?: string }">
+      Website link information with title and URL.
+    </ResponseField>
+    <ResponseField name="termsOfService" type="{ title?: string, link?: string }">
+      Terms of Service link with title and URL.
+    </ResponseField>
+    <ResponseField name="privacyPolicy" type="{ title?: string, link?: string }">
+      Privacy Policy link with title and URL.
+    </ResponseField>
+  </Expandable>
+</ResponseField>

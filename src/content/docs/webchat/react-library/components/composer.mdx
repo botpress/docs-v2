@@ -5,6 +5,7 @@ title: Composer
 import { Note } from '@/components/callouts'
 import { Tabs, Tab } from '@/components/tabs'
 import LazyIframe from '@/components/LazyIframe.astro'
+import ResponseField from '@/components/ResponseField.astro'
 
 The `Composer` component is where the user writes messages before sending them to the bot. It provides a text area for input, file uploads, and a speech-to-text option.
 
@@ -49,54 +50,41 @@ The `Composer` component is where the user writes messages before sending them t
 
 ## Props
 
-**`disableComposer`** `boolean`
+<ResponseField name="disableComposer" type="boolean">
+  Disables the input field and sending capabilities when set to `true`. Disabling the composer is useful when you want
+  to prevent user input temporarily, such as during a loading state or when waiting for a response from the bot.
+</ResponseField>
 
-Disables the input field and sending capabilities when set to `true`. Disabling the composer is useful when you want to prevent user input temporarily, such as during a loading state or when waiting for a response from the bot.
+<ResponseField name="isReadOnly" type="boolean">
+  Removes the composer completely when set to `true`. This is useful for displaying messages without allowing user
+  input.
+</ResponseField>
 
----
+<ResponseField name="allowFileUpload" type="boolean">
+  Enables or disables the file upload button.
+</ResponseField>
 
-**`isReadOnly`** `boolean`
+<ResponseField name="connected" type="boolean">
+  Indicates whether Webchat is currently connected. When `false`, a modal appears prompting the user to retry by
+  reloading the page.
+</ResponseField>
 
-Removes the composer completely when set to `true`. This is useful for displaying messages without allowing user input.
+<ResponseField name="sendMessage" type="(payload: Message) => void">
+  A callback function for sending messages composed by the user.
+</ResponseField>
 
----
+<ResponseField name="uploadFile" type="(file: File) => Promise<{ fileUrl: string; name: string; type: FileType }>">
+  Handles the file upload logic and returns file metadata upon success.
+</ResponseField>
 
-**`allowFileUpload`** `boolean`
+<ResponseField name="composerPlaceholder" type="string">
+  Placeholder text displayed in the input area. Comes from the configuration.
+</ResponseField>
 
-Enables or disables the file upload button.
+<ResponseField name="footer" type="string">
+  Displays a footer at the bottom of the Composer.
+</ResponseField>
 
----
-
-**`connected`** `boolean`
-
-Indicates whether Webchat is currently connected. When `false`, a modal appears prompting the user to retry by reloading the page.
-
----
-
-**`sendMessage`** `(payload: Message) => void`
-
-A callback function for sending messages composed by the user.
-
----
-
-**`uploadFile`** `(file: File) => Promise<{ fileUrl: string; name: string; type: FileType }>`
-
-Handles the file upload logic and returns file metadata upon success.
-
----
-
-**`composerPlaceholder`** `string`
-
-Placeholder text displayed in the input area. Comes from the configuration.
-
----
-
-**`footer`** `string`
-
-Displays a footer at the bottom of the Composer.
-
----
-
-**`inputRef`** `Ref<HTMLTextAreaElement>`
-
-Provides a ref to the text input element. Useful for focusing or manipulating the input programmatically.
+<ResponseField name="inputRef" type="Ref<HTMLTextAreaElement>">
+  Provides a ref to the text input element. Useful for focusing or manipulating the input programmatically.
+</ResponseField>

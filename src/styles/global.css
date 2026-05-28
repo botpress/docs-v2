@@ -489,6 +489,36 @@
   color: var(--color-stone-300);
 }
 
+/* Tables inside expandable content / field descriptions */
+.expandable-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875em;
+  margin: 0.75rem 0;
+}
+.expandable-content th {
+  text-align: left;
+  font-weight: 600;
+  padding: 0.5rem 1rem 0.5rem 0;
+  border-bottom: 1px solid var(--color-stone-200);
+  color: var(--color-stone-700);
+}
+.expandable-content td {
+  padding: 0.5rem 1rem 0.5rem 0;
+  border-bottom: 1px solid var(--color-stone-100);
+  vertical-align: top;
+}
+.expandable-content tr:last-child td {
+  border-bottom: none;
+}
+.dark .expandable-content th {
+  border-bottom-color: oklch(1 0 0 / 15%);
+  color: var(--color-stone-300);
+}
+.dark .expandable-content td {
+  border-bottom-color: oklch(1 0 0 / 8%);
+}
+
 /* Parameter names (bold code at the start of a param line) — primary blue, no background */
 .expandable-content p > strong:first-child > code {
   color: var(--primary);
@@ -596,7 +626,17 @@ a.step-anchor {
 
 .prose :is(h3):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
   font-size: 1.25em;
-  font-weight: 500;
+  font-weight: 600;
+}
+
+/* Code inside h2 headings — lighter background, match heading size and weight */
+.prose :is(h2) code:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  font-size: 1em;
+  font-weight: inherit;
+  background-color: var(--color-stone-50);
+}
+.dark .prose :is(h2) code:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+  background-color: var(--color-stone-700);
 }
 
 /* Docs assistant — shimmer text for in-flight tool indicators */

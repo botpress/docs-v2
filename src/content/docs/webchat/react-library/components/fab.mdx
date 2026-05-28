@@ -5,6 +5,7 @@ sidebarTitle: Fab
 
 import { Tabs, Tab } from '@/components/tabs'
 import LazyIframe from '@/components/LazyIframe.astro'
+import ResponseField from '@/components/ResponseField.astro'
 
 You can use the `Fab` (Floating Action Button) component to toggle the visibility of the Webchat UI in your application.
 
@@ -46,12 +47,10 @@ You can use the `Fab` (Floating Action Button) component to toggle the visibilit
 
 ## Props
 
-**`imgUrl`** `string`
+<ResponseField name="imgUrl" type="string">
+  URL to a custom icon image.
+</ResponseField>
 
-URL to a custom icon image.
-
----
-
-**`onClick`** `MouseEventHandler<HTMLButtonElement>`
-
-A callback function triggered when the `Fab` is clicked. Commonly used to toggle the Webchat visibility.
+<ResponseField name="onClick" type="MouseEventHandler<HTMLButtonElement>">
+  A callback function triggered when the `Fab` is clicked. Commonly used to toggle the Webchat visibility.
+</ResponseField>

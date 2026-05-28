@@ -1,6 +1,5 @@
 ---
 title: Configure Human Handoff
-description: Set up live agent support with the Human-in-the-Loop integration.
 ---
 
 import { Picture } from 'astro:assets'
@@ -13,7 +12,7 @@ import respondToUserImg from './assets/respond-to-user.png'
 import triggerHumanHandoffDarkImg from './assets/trigger-human-handoff-dark.png'
 import triggerHumanHandoffImg from './assets/trigger-human-handoff.png'
 
-import { Tip } from '@/components/callouts'
+import { Tip, Warning } from '@/components/callouts'
 import Steps from '@/components/Steps.astro'
 import Step from '@/components/Step.astro'
 import Icon from '@/components/Icon.astro'
@@ -23,6 +22,13 @@ import { Badge } from '@/components/ui/badge'
 import Tooltip from '@/components/Tooltip.astro'
 
 If you want to allow a live agent to join your agent's conversations, you can configure this in the **<Icon icon="message-square-reply"/> Human Handoff** section of your bot's menu.
+
+<Warning>
+  For new workspaces, Human Handoff has moved to [Botpress Desk](https://botpress.com/desk), our new AI helpdesk for modern support teams. Go to **Human Handoff > Open Botpress Desk** to get started setting up your workspace.
+
+Users on existing workspaces can follow the steps below and continue using the legacy HITL integration.
+
+</Warning>
 
 ## Setup
 
