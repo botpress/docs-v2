@@ -7,13 +7,18 @@
 <script>
   import { COPY_ICON, CHECK_ICON } from '@/scripts/code-icons'
 
+  let groupCounter = 0
+
   function initCodeGroups() {
     document.querySelectorAll<HTMLElement>('.code-group:not([data-ready])').forEach((group) => {
       const pres = Array.from(group.querySelectorAll<HTMLElement>(':scope > pre.astro-code'))
       if (pres.length === 0) return
 
+      const groupId = groupCounter++
+
       const tabBar = document.createElement('div')
       tabBar.className = 'code-group-tabs'
+      tabBar.setAttribute('role', 'tablist')
 
       const copyBtn = document.createElement('button')
       copyBtn.className = 'code-group-copy'
@@ -26,14 +31,27 @@
 
       pres.forEach((pre, i) => {
         const title = pre.getAttribute('data-title') || `File ${i + 1}`
+        const tabId = `cg-tab-${groupId}-${i}`
+        const panelId = `cg-panel-${groupId}-${i}`
+
         const tab = document.createElement('button')
         tab.className = 'code-group-tab'
+        tab.id = tabId
         tab.textContent = title
+        tab.setAttribute('role', 'tab')
+        tab.setAttribute('aria-selected', i === 0 ? 'true' : 'false')
+        tab.setAttribute('aria-controls', panelId)
+
+        pre.id = panelId
+        pre.setAttribute('role', 'tabpanel')
+        pre.setAttribute('aria-labelledby', tabId)
+
         if (i === 0) tab.dataset.active = 'true'
         tab.addEventListener('click', () => {
           activeIndex = i
           tabs.forEach((t, j) => {
             t.dataset.active = j === i ? 'true' : 'false'
+            t.setAttribute('aria-selected', j === i ? 'true' : 'false')
           })
           pres.forEach((p, j) => {
             p.hidden = j !== i

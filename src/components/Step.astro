@@ -1,5 +1,6 @@
 ---
 import Icon from "./Icon.astro";
+import { slugify } from "@/lib/icon-utils";
 
 interface Props {
   title?: string;
@@ -7,17 +8,6 @@ interface Props {
 }
 
 const { title, class: className } = Astro.props;
-
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/[\s_]+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
-}
-
 const stepId = title ? slugify(title) : undefined;
 ---
 

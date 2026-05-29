@@ -189,18 +189,12 @@
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   font-size: 0.75rem;
   font-weight: 500;
-  color: oklch(0.553 0.013 58.07);
-  background-color: oklch(0.97 0.001 106.424);
-  border-bottom: 1px solid oklch(0.923 0.003 48.717);
+  color: var(--muted-foreground);
+  background-color: var(--secondary);
+  border-bottom: 1px solid var(--border);
   border-radius: 0.75rem 0.75rem 0 0;
   margin: -1rem -1rem 0.75rem -1rem;
   padding: 0.5rem 1rem;
-}
-
-.dark .prose pre.astro-code[data-title]::before {
-  color: oklch(0.709 0.01 56.259);
-  background-color: oklch(0.268 0.007 34.298);
-  border-bottom-color: oklch(1 0 0 / 10%);
 }
 
 /* Prose bullet markers should match the list item text color, not the lighter --tw-prose-bullets default */
@@ -230,35 +224,26 @@
 
 /* CodeGroup — multi-file tabbed code block */
 .code-group {
-  border: 1px solid oklch(0.923 0.003 48.717);
+  border: 1px solid var(--border);
   border-radius: 0.875rem;
   margin: 1rem 0;
   overflow: hidden;
 }
 
-.dark .code-group {
-  border-color: oklch(1 0 0 / 10%);
-}
-
 .code-group-tabs {
   display: flex;
   align-items: center;
-  background-color: oklch(0.97 0.001 106.424);
-  border-bottom: 1px solid oklch(0.923 0.003 48.717);
+  background-color: var(--secondary);
+  border-bottom: 1px solid var(--border);
   padding: 0 0.5rem;
   overflow-x: auto;
-}
-
-.dark .code-group-tabs {
-  background-color: oklch(0.268 0.007 34.298);
-  border-bottom-color: oklch(1 0 0 / 10%);
 }
 
 .code-group-tab {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   font-size: 0.75rem;
   font-weight: 500;
-  color: oklch(0.553 0.013 58.07);
+  color: var(--muted-foreground);
   padding: 0.5rem 0.75rem;
   border: none;
   border-bottom: 2px solid transparent;
@@ -270,16 +255,8 @@
 }
 
 .code-group-tab[data-active='true'] {
-  color: oklch(0.147 0.004 49.25);
+  color: var(--foreground);
   border-bottom-color: var(--primary);
-}
-
-.dark .code-group-tab {
-  color: oklch(0.709 0.01 56.259);
-}
-
-.dark .code-group-tab[data-active='true'] {
-  color: oklch(0.985 0.001 106.423);
 }
 
 .code-group-copy {
@@ -291,9 +268,9 @@
   margin-left: auto;
   flex-shrink: 0;
   border-radius: 0.375rem;
-  border: 1px solid oklch(0.923 0.003 48.717);
-  background-color: white;
-  color: oklch(0.553 0.013 58.07);
+  border: 1px solid var(--border);
+  background-color: var(--card);
+  color: var(--muted-foreground);
   cursor: pointer;
   opacity: 0;
   transition:
@@ -306,29 +283,28 @@
 }
 
 .code-group-copy:hover {
-  color: oklch(0.216 0.006 56.043);
+  color: var(--secondary-foreground);
 }
 
 .dark .code-group-copy {
-  border-color: oklch(1 0 0 / 10%);
-  background-color: oklch(0.268 0.007 34.298);
-  color: oklch(0.709 0.01 56.259);
+  background-color: var(--secondary);
+  color: var(--muted-foreground);
 }
 
 .dark .code-group-copy:hover {
-  color: oklch(0.985 0.001 106.423);
+  color: var(--foreground);
 }
 
 /* Strip code block's own border/radius/margin when inside a code group */
-.code-group > pre.astro-code {
-  border: none !important;
-  border-radius: 0 !important;
-  margin: 0 !important;
+.prose .code-group > pre.astro-code {
+  border: none;
+  border-radius: 0;
+  margin: 0;
 }
 
 /* Suppress the filename header pseudo-element inside code groups (tab bar handles it) */
-.code-group > pre.astro-code[data-title]::before {
-  display: none !important;
+.prose .code-group > pre.astro-code[data-title]::before {
+  display: none;
 }
 
 /* Copy button */
@@ -355,9 +331,9 @@
   font-size: 0.7rem;
   font-weight: 500;
   font-family: var(--font-sans);
-  color: oklch(0.553 0.013 58.07);
-  background-color: oklch(0.97 0.001 106.424);
-  border: 1px solid oklch(0.923 0.003 48.717);
+  color: var(--muted-foreground);
+  background-color: var(--secondary);
+  border: 1px solid var(--border);
   border-top: none;
   border-radius: 0 0 0.875rem 0.875rem;
   cursor: pointer;
@@ -367,18 +343,12 @@
 }
 
 .code-expand-btn:hover {
-  color: oklch(0.216 0.006 56.043);
+  color: var(--secondary-foreground);
   background-color: oklch(0.94 0.001 106.424);
 }
 
-.dark .code-expand-btn {
-  color: oklch(0.709 0.01 56.259);
-  background-color: oklch(0.268 0.007 34.298);
-  border-color: oklch(1 0 0 / 10%);
-}
-
 .dark .code-expand-btn:hover {
-  color: oklch(0.985 0.001 106.423);
+  color: var(--foreground);
   background-color: oklch(0.29 0.007 34.298);
 }
 
@@ -402,9 +372,9 @@
   width: 1.75rem;
   height: 1.75rem;
   border-radius: 0.375rem;
-  border: 1px solid oklch(0.923 0.003 48.717);
-  background-color: white;
-  color: oklch(0.553 0.013 58.07);
+  border: 1px solid var(--border);
+  background-color: var(--card);
+  color: var(--muted-foreground);
   cursor: pointer;
   opacity: 0;
   transition:
@@ -419,7 +389,7 @@
   bottom: calc(100% + 0.375rem);
   transform: translateX(-50%);
   background-color: var(--primary);
-  color: white;
+  color: var(--primary-foreground);
   font-size: 0.6875rem;
   font-weight: 600;
   line-height: 1;
@@ -432,7 +402,7 @@
 }
 
 .code-copy-btn:hover {
-  color: oklch(0.216 0.006 56.043);
+  color: var(--secondary-foreground);
 }
 
 .code-copy-btn:hover::after {
@@ -444,13 +414,12 @@
 }
 
 .dark .code-copy-btn {
-  border-color: oklch(1 0 0 / 10%);
-  background-color: oklch(0.268 0.007 34.298);
-  color: oklch(0.709 0.01 56.259);
+  background-color: var(--secondary);
+  color: var(--muted-foreground);
 }
 
 .dark .code-copy-btn:hover {
-  color: oklch(0.985 0.001 106.423);
+  color: var(--foreground);
 }
 
 .dark .astro-code,
