@@ -191,7 +191,7 @@ import Expandable from '@/components/Expandable.astro'
 
 ### Icons
 
-Mintlify accepts kebab-case icon names (e.g. `icon="message-square"`). The Bach framework uses `Icon.astro`, which requires **PascalCase Lucide icon names** (e.g. `icon="MessageSquare"`). Passing a kebab-case name throws a runtime error.
+Mintlify accepts kebab-case icon names (e.g. `icon="message-square"`). The Bach framework uses `Icon.astro`, which accepts both kebab-case and PascalCase — it normalizes kebab-case internally via `toLucideKebab`. **PascalCase is the enforced convention** (e.g. `icon="MessageSquare"`).
 
 **Conversion rule:** kebab-case → PascalCase. Examples:
 
