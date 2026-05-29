@@ -34,7 +34,7 @@ export default function Header({ tabs, activeTab, siteName, siteLogo, siteLogoDa
           className="text-sm font-semibold text-stone-900 dark:text-stone-100"
           style={hasLogo ? { display: 'none' } : undefined}
         >
-          {siteName || 'Docs'}w
+          {siteName || 'Docs'}
         </span>
       </a>
 
