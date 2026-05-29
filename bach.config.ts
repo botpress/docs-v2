@@ -38,12 +38,12 @@ export default defineConfig(collections, {
                   'studio/concepts/home',
                   {
                     group: 'Nodes',
-                    icon: 'square-mouse-pointer',
+                    icon: 'SquareMousePointer',
                     pages: ['studio/concepts/nodes/introduction', 'studio/concepts/nodes/autonomous-node'],
                   },
                   {
                     group: 'Cards',
-                    icon: 'rows-3',
+                    icon: 'Rows3',
                     pages: [
                       'studio/concepts/cards/introduction',
                       'studio/concepts/cards/send-messages',
@@ -70,7 +70,7 @@ export default defineConfig(collections, {
                   'studio/concepts/workflows',
                   {
                     group: 'Knowledge Bases',
-                    icon: 'book-open',
+                    icon: 'BookOpen',
                     pages: [
                       'studio/concepts/knowledge-base/introduction',
                       'studio/concepts/knowledge-base/add-sources',
@@ -81,7 +81,7 @@ export default defineConfig(collections, {
                   'studio/concepts/actions',
                   {
                     group: 'Agents',
-                    icon: 'bot',
+                    icon: 'Bot',
                     pages: [
                       'studio/concepts/agents/introduction',
                       'studio/concepts/agents/summary-agent',
@@ -103,7 +103,7 @@ export default defineConfig(collections, {
                   'studio/concepts/find',
                   {
                     group: 'Variables',
-                    icon: 'variable',
+                    icon: 'Variable',
                     pages: [
                       'studio/concepts/variables/overview',
                       {
@@ -128,7 +128,7 @@ export default defineConfig(collections, {
                   'studio/concepts/copy-to-bot',
                   {
                     group: 'Controls and Settings',
-                    icon: 'wrench',
+                    icon: 'Wrench',
                     pages: [
                       'studio/concepts/controls-and-settings/keyboard-shortcuts',
                       'studio/concepts/controls-and-settings/studio-commands',
