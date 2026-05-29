@@ -1,5 +1,6 @@
 ---
 import Icon from "./Icon.astro";
+import { Link } from "lucide-react";
 import { slugify } from "@/lib/icon-utils";
 
 interface Props {
@@ -41,7 +42,7 @@ const stepId = title ? slugify(title) : undefined;
         <span
           class="absolute inset-0 flex items-center justify-center opacity-0 group-hover/stepnum:opacity-100 transition-opacity duration-100 text-stone-500 dark:text-stone-400"
         >
-          <Icon icon="lucide:link" class="size-3" />
+          <Link className="size-3" />
         </span>
       )}
     </div>
