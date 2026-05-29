@@ -1,7 +1,7 @@
 import type { SidebarNode } from '@/bach/types'
 import SidebarTreeView from './sidebar-tree-view'
 import ThemeToggle from './theme-toggle'
-import { LUCIDE_NAV_ICONS } from '../lib/nav-icons'
+import { ReactIcon } from './ReactIcon'
 
 interface NavItem {
   label: string
@@ -17,8 +17,7 @@ interface SidebarProps {
 
 function NavIcon({ icon }: { icon: string }) {
   if (icon.startsWith('lucide:')) {
-    const Icon = LUCIDE_NAV_ICONS[icon.slice(7)]
-    return Icon ? <Icon className="h-4 w-4 shrink-0" /> : null
+    return <ReactIcon icon={icon} className="h-4 w-4 shrink-0" />
   }
   return (
     <span

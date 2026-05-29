@@ -1,15 +1,12 @@
 import { useState } from 'react'
-import { icons } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
-import { toPascalCase } from '@/lib/icon-utils'
 import { hasActiveChild, isPathActive } from '@/bach/nav'
 import type { SidebarCategoryNode, SidebarNode } from '@/bach/types'
+import { ReactIcon } from './ReactIcon'
 
 function TreeIcon({ name }: { name: string }) {
-  const Icon = icons[toPascalCase(name) as keyof typeof icons]
-  if (!Icon) return null
-  return <Icon className="h-4 w-4 shrink-0 text-primary" />
+  return <ReactIcon icon={name} className="h-4 w-4 shrink-0 text-primary" />
 }
 
 function SidebarMethodBadge({ method }: { method: string }) {

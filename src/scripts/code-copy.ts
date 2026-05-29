@@ -5,6 +5,10 @@ const CHEVRON_UP = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="1
 
 const EXPAND_LINE_THRESHOLD = 15
 
+function expandLabel(count: number) {
+  return `See all ${count} lines ${CHEVRON_DOWN}`
+}
+
 function initCopyButtons() {
   document.querySelectorAll('pre.astro-code').forEach((pre) => {
     if (pre.closest('.code-block-wrapper') || pre.closest('.code-group')) return
@@ -39,11 +43,11 @@ function initCopyButtons() {
 
       const expandBtn = document.createElement('button')
       expandBtn.className = 'code-expand-btn'
-      expandBtn.innerHTML = `See all ${lineCount} lines ${CHEVRON_DOWN}`
+      expandBtn.innerHTML = expandLabel(lineCount)
 
       expandBtn.addEventListener('click', () => {
         const expanded = wrapper.classList.toggle('is-expanded')
-        expandBtn.innerHTML = expanded ? `Show fewer lines ${CHEVRON_UP}` : `See all ${lineCount} lines ${CHEVRON_DOWN}`
+        expandBtn.innerHTML = expanded ? `Show fewer lines ${CHEVRON_UP}` : expandLabel(lineCount)
       })
 
       wrapper.appendChild(expandBtn)

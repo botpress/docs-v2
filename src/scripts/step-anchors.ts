@@ -9,8 +9,8 @@ function initStepAnchors() {
       target?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       try {
         await navigator.clipboard.writeText(window.location.href)
-      } catch {
-        // clipboard access denied
+      } catch (err) {
+        console.warn('Clipboard write failed:', err)
       }
     })
   })

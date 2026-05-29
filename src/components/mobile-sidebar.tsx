@@ -3,7 +3,7 @@ import type { SidebarNode, TabInfo } from '@/bach/types'
 import SidebarTreeView from './sidebar-tree-view'
 import ThemeToggle from './theme-toggle'
 import { ChevronDownIcon } from 'lucide-react'
-import { LUCIDE_NAV_ICONS } from '../lib/nav-icons'
+import { ReactIcon } from './ReactIcon'
 import { navigate } from 'astro:transitions/client'
 import {
   DropdownMenu,
@@ -39,8 +39,7 @@ interface Props {
 
 function NavIcon({ icon }: { icon: string }) {
   if (icon.startsWith('lucide:')) {
-    const Icon = LUCIDE_NAV_ICONS[icon.slice(7)]
-    return Icon ? <Icon className="h-4 w-4 shrink-0" /> : null
+    return <ReactIcon icon={icon} className="h-4 w-4 shrink-0" />
   }
   return (
     <span
@@ -191,12 +190,16 @@ export default function MobileSidebar({
                 <React.Fragment key={i}>
                   {i > 0 && <span className="shrink-0 mx-0.5">&rsaquo;</span>}
                   {i < breadcrumbs.length - 1 ? (
-                    <button
-                      onClick={handleOpen}
-                      className="shrink-0 transition-colors hover:text-stone-600 dark:hover:text-stone-300"
-                    >
-                      {crumb.label}
-                    </button>
+                    crumb.href ? (
+                      <a
+                        href={crumb.href}
+                        className="shrink-0 transition-colors hover:text-stone-600 dark:hover:text-stone-300"
+                      >
+                        {crumb.label}
+                      </a>
+                    ) : (
+                      <span className="shrink-0">{crumb.label}</span>
+                    )
                   ) : (
                     <span className="truncate font-semibold text-stone-900 dark:text-stone-100">{crumb.label}</span>
                   )}

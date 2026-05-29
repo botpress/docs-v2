@@ -344,12 +344,12 @@
 
 .code-expand-btn:hover {
   color: var(--secondary-foreground);
-  background-color: oklch(0.94 0.001 106.424);
+  background-color: color-mix(in oklch, var(--secondary) 80%, var(--foreground));
 }
 
 .dark .code-expand-btn:hover {
   color: var(--foreground);
-  background-color: oklch(0.29 0.007 34.298);
+  background-color: color-mix(in oklch, var(--secondary) 80%, var(--foreground));
 }
 
 .code-block-wrapper.is-collapsible.is-expanded > pre.astro-code {
@@ -562,6 +562,11 @@ a.step-anchor {
     text-decoration: underline;
     text-underline-offset: 4px;
     text-decoration-color: var(--color-primary);
+    text-decoration-thickness: 1px !important;
+    transition: text-decoration-thickness 0.15s ease;
+  }
+  .prose a:hover:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+    text-decoration-thickness: 2px !important;
   }
   .dark .prose a:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
     text-decoration-color: var(--color-primary);
@@ -676,15 +681,6 @@ a.step-anchor {
    The React island only renders *inside* this pre-allocated space. */
 .ai-panel-container {
   display: none;
-}
-
-/* Unlayered — beats all Tailwind utilities so the hover thickness override wins */
-.prose a:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-  text-decoration-thickness: 1px;
-  transition: text-decoration-thickness 0.15s ease;
-}
-.prose a:hover:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-  text-decoration-thickness: 2px;
 }
 
 /* Links inside callout blocks use the block's text colour for the underline */
