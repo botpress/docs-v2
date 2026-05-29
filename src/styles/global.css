@@ -14,7 +14,7 @@
   --card-foreground: oklch(0.147 0.004 49.25);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.147 0.004 49.25);
-  --primary: #0090ff;
+  --primary: oklch(0.649 0.193 251.8);
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.97 0.001 106.424);
   --secondary-foreground: oklch(0.216 0.006 56.043);
@@ -48,7 +48,7 @@
   --card-foreground: oklch(0.985 0.001 106.423);
   --popover: oklch(0.216 0.006 56.043);
   --popover-foreground: oklch(0.985 0.001 106.423);
-  --primary: #0090ff;
+  --primary: oklch(0.649 0.193 251.8);
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.268 0.007 34.298);
   --secondary-foreground: oklch(0.985 0.001 106.423);
@@ -669,10 +669,10 @@ a.step-anchor {
   flex-shrink: 0;
   width: 9px;
   height: 9px;
-  background-color: #d97757;
+  background-color: oklch(0.672 0.131 38.8);
   box-shadow:
-    0 0 0 1px rgba(217, 119, 87, 0.18),
-    0 0 14px -4px rgba(217, 119, 87, 0.55);
+    0 0 0 1px oklch(0.672 0.131 38.8 / 0.18),
+    0 0 14px -4px oklch(0.672 0.131 38.8 / 0.55);
   animation: morph-spin 3.2s ease-in-out infinite;
 }
 

@@ -1,12 +1,9 @@
-import { COPY_ICON, CHECK_ICON } from '@/scripts/code-icons'
-
-const CHEVRON_DOWN = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`
-const CHEVRON_UP = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>`
+import { COPY_ICON, CHECK_ICON, CHEVRON_DOWN_ICON_ICON, CHEVRON_UP_ICON_ICON } from '@/scripts/code-icons'
 
 const EXPAND_LINE_THRESHOLD = 15
 
 function expandLabel(count: number) {
-  return `See all ${count} lines ${CHEVRON_DOWN}`
+  return `See all ${count} lines ${CHEVRON_DOWN_ICON}`
 }
 
 function initCopyButtons() {
@@ -47,7 +44,7 @@ function initCopyButtons() {
 
       expandBtn.addEventListener('click', () => {
         const expanded = wrapper.classList.toggle('is-expanded')
-        expandBtn.innerHTML = expanded ? `Show fewer lines ${CHEVRON_UP}` : expandLabel(lineCount)
+        expandBtn.innerHTML = expanded ? `Show fewer lines ${CHEVRON_UP_ICON}` : expandLabel(lineCount)
       })
 
       wrapper.appendChild(expandBtn)
