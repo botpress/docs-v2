@@ -1,4 +1,4 @@
-import { COPY_ICON, CHECK_ICON, CHEVRON_DOWN_ICON_ICON, CHEVRON_UP_ICON_ICON } from '@/scripts/code-icons'
+import { COPY_ICON, CHECK_ICON, CHEVRON_DOWN_ICON, CHEVRON_UP_ICON } from '@/scripts/code-icons'
 
 const EXPAND_LINE_THRESHOLD = 15
 
