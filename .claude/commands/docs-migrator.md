@@ -425,4 +425,13 @@ Mintlify uses `openapi:` frontmatter to auto-generate pages from OpenAPI specs. 
 5. **Replace snippet imports** — map to `@/components/` equivalents (see §6); replace `<ResponseField>`/`<ParamField>` with `Field` from `@/components/field`; replace `<CodeGroup>` with `CodeGroup.astro` and update tab title syntax (see §7)
 6. **Copy assets** — copy `./assets/*` from source section to equivalent path in `src/content/docs/`
 7. **Register the page in `bach.config.ts`** — add the slug to the correct tab/group (see §1)
-8. **Run `npm run check`** in `docs-v2/` to catch broken imports, type errors, and lint issues
+8. **Verify in `docs-v2/`** — run the checks below. The pre-commit hook runs all of these automatically, but run them manually to catch issues before committing.
+
+   | Command                  | What it checks                                                     | Auto-fix                               |
+   | ------------------------ | ------------------------------------------------------------------ | -------------------------------------- |
+   | `bun run check`          | Runs all checks below in parallel                                  | —                                      |
+   | `bunx oxfmt --check .`   | Formatting (`.ts`, `.tsx`, `.md`, `.mdx`, `.css`, `.json`, `.yml`) | `bunx oxfmt .`                         |
+   | `bun check:format:biome` | Formatting (`.astro` files)                                        | `bunx @biomejs/biome format --write .` |
+   | `bun check:lint`         | oxlint + Biome lint (`.ts`, `.tsx`)                                | —                                      |
+   | `bun check:type`         | TypeScript / Astro type errors                                     | —                                      |
+   | `bun check:link`         | Broken internal links (informational — does not block commits)     | —                                      |
