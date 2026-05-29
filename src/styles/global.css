@@ -220,8 +220,8 @@
 .prose pre.astro-code .line.highlighted {
   display: inline-block;
   width: calc(100% + 2rem);
-  background-color: rgb(0 144 255 / 0.1);
-  border-left: 2px solid #0090ff;
+  background-color: color-mix(in oklch, var(--primary) 10%, transparent);
+  border-left: 2px solid var(--primary);
   margin-left: -1rem;
   padding-left: calc(1rem - 2px);
   margin-right: -1rem;
@@ -271,7 +271,7 @@
 
 .code-group-tab[data-active='true'] {
   color: oklch(0.147 0.004 49.25);
-  border-bottom-color: #0090ff;
+  border-bottom-color: var(--primary);
 }
 
 .dark .code-group-tab {
@@ -520,7 +520,7 @@
 }
 
 /* Parameter names (bold code at the start of a param line) — primary blue, no background */
-.expandable-content p > strong:first-child > code {
+.field-description p > strong:first-child > code {
   color: var(--primary);
   background-color: transparent;
   padding-inline: 0;

@@ -27,7 +27,7 @@ interface ChatHeaderProps {
 export function ChatHeader({
   conversationIds,
   currentConversationId,
-  selectedConversationId,
+  selectedConversationId: _selectedConversationId,
   onSwitchConversation,
   onNewConversation,
   onClearAll,

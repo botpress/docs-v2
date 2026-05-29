@@ -28,7 +28,7 @@ const { name = "", type, required = false, deprecated = false } = Astro.props;
     )}
   </div>
   {Astro.slots.has('default') && (
-    <div class="expandable-content mt-4 text-sm text-stone-600 dark:text-stone-400 [&>p:first-child]:mt-0 [&>p:last-child]:mb-0">
+    <div class="expandable-content field-description mt-4 text-sm text-stone-600 dark:text-stone-400 [&>p:first-child]:mt-0 [&>p:last-child]:mb-0">
       <slot />
     </div>
   )}

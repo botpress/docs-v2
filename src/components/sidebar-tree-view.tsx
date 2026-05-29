@@ -2,15 +2,9 @@ import { useState } from 'react'
 import { icons } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
+import { toPascalCase } from '@/lib/icon-utils'
 import { hasActiveChild, isPathActive } from '@/bach/nav'
 import type { SidebarCategoryNode, SidebarNode } from '@/bach/types'
-
-function toPascalCase(name: string) {
-  return name
-    .split('-')
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join('')
-}
 
 function TreeIcon({ name }: { name: string }) {
   const Icon = icons[toPascalCase(name) as keyof typeof icons]

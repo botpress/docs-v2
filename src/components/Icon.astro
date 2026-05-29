@@ -1,6 +1,7 @@
 ---
 import { Icon as AstroIcon } from "astro-icon/components";
 import clsx from "clsx";
+import { toLucideKebab } from "@/lib/icon-utils";
 
 interface Props {
   icon: string;
@@ -11,8 +12,6 @@ const { icon, class: className } = Astro.props;
 
 // Plain names (no prefix) are Lucide icons — prefix them for iconify.
 // Normalize PascalCase to kebab-case so legacy icon names keep working.
-const toLucideKebab = (name: string) =>
-  name.replace(/([a-z])([A-Z0-9])/g, "$1-$2").toLowerCase();
 const resolved = icon.includes(":") ? icon : `lucide:${toLucideKebab(icon)}`;
 ---
 

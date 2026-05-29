@@ -49,6 +49,6 @@ const { src, title, height = "500px", class: className } = Astro.props;
     });
   };
 
-  initLazyIframes();
-  document.addEventListener('astro:page-load', initLazyIframes);
+  document.addEventListener('DOMContentLoaded', initLazyIframes)
+  document.addEventListener('astro:page-load', initLazyIframes)
 </script>

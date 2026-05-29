@@ -11,6 +11,7 @@ import sitemap from '@astrojs/sitemap'
 import icon from 'astro-icon'
 import { transformerMetaHighlight } from '@shikijs/transformers'
 
+/** @returns {import('shiki').ShikiTransformer} */
 function transformerFilename() {
   return {
     name: 'transformer:filename',
@@ -24,6 +25,7 @@ function transformerFilename() {
   }
 }
 
+/** @returns {import('shiki').ShikiTransformer} */
 function transformerExpandable() {
   return {
     name: 'transformer:expandable',
