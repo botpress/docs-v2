@@ -19,7 +19,12 @@ export default defineConfig({
     prefetchAll: true,
     defaultStrategy: 'hover',
   },
-  integrations: [react(), mdx(), sitemap(), icon()],
+  integrations: [
+    react(),
+    mdx(),
+    sitemap(),
+    icon({ include: { 'simple-icons': ['react', 'wordpress', 'wix', 'webflow'] } }),
+  ],
   vite: {
     plugins: [tailwindcss()],
     resolve: {
