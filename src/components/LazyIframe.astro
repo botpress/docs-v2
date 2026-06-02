@@ -1,5 +1,5 @@
 ---
-import { LazyIframe } from "./LazyIframe";
+import { LazyIframe as LazyIframeReact } from "./LazyIframe";
 
 interface Props {
   src: string;
@@ -11,4 +11,4 @@ interface Props {
 const { src, title, height, class: className } = Astro.props;
 ---
 
-<LazyIframe src={src} title={title} height={height} className={className} client:load />
+<LazyIframeReact src={src} title={title} height={height} className={className} client:load />
