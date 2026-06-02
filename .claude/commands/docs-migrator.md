@@ -36,7 +36,7 @@ export default defineConfig(collections, {
         pages: [
           {
             group: 'Get started',
-            icon: 'Rocket', // optional Lucide icon name
+            icon: 'rocket', // optional Lucide icon name (kebab-case)
             pages: ['index', 'get-started/quick-start'],
           },
         ],
@@ -133,11 +133,11 @@ import LinkCard from '@/components/LinkCard.astro'
   href="/some/path"
   title="Card Title"
   description="Short description shown below the title."
-  icon="MessageSquare"
+  icon="message-square"
 />
 ```
 
-Props: `href` (string), `title` (string), `description` (string), `icon` (Lucide PascalCase icon name — required).
+Props: `href` (string), `title` (string), `description` (string), `icon` (Lucide kebab-case icon name — required).
 
 **Expandable** (`@/components/Expandable.astro`) — collapsible section, typically used to wrap nested `<Field>` items inside a parent `<Field>`. Default label is "Show/Hide child attributes":
 
@@ -191,31 +191,44 @@ import Expandable from '@/components/Expandable.astro'
 
 ### Icons
 
-Mintlify accepts kebab-case icon names (e.g. `icon="message-square"`). The Bach framework uses `Icon.astro`, which accepts both kebab-case and PascalCase — it normalizes kebab-case internally via `toLucideKebab`. **PascalCase is the enforced convention** (e.g. `icon="MessageSquare"`).
+Icon names use **kebab-case** (e.g. `message-square`), which is what `astro-icon` with the Lucide icon set expects. The `IconName` type in `@/types/icons` is derived directly from the iconify JSON keys and enforces this format — use it to typecheck icon props in Astro components.
 
-**Conversion rule:** kebab-case → PascalCase. Examples:
+In Astro components, render icons via the `Icon.astro` wrapper:
 
-- `message-square` → `MessageSquare`
-- `arrow-right` → `ArrowRight`
-- `chevron-down` → `ChevronDown`
+```astro
+---
+import Icon from '@/components/Icon.astro'
+import type { IconName } from '@/types/icons'
 
-**Brand icons** (e.g. `react`, `wordpress`, `wix`, `webflow`, `github`) are **not in lucide-react**. Substitute with a semantically close Lucide icon:
+interface Props {
+  icon: IconName
+}
+---
 
-| Mintlify icon                                              | Lucide substitute     |
-| ---------------------------------------------------------- | --------------------- |
-| `react`                                                    | `Atom`                |
-| `wordpress`, `wix`, `webflow`, or any CMS/website platform | `Globe`               |
-| `github`, `gitlab`                                         | `GitBranch` or `Code` |
-| `slack`, `discord`                                         | `MessageSquare`       |
-| `database`, `supabase`, `mongo`                            | `Database`            |
+<Icon icon={icon} class="size-4" />
+```
+
+In MDX files, pass kebab-case strings to any `icon` prop (e.g. `icon="message-square"`).
+
+**Mintlify icons are already kebab-case** — keep them as-is when migrating. No conversion needed.
+
+**Brand icons** (e.g. `react`, `wordpress`, `wix`, `webflow`, `github`) are **not in the Lucide set**. Substitute with a semantically close Lucide icon:
+
+| Mintlify icon                                              | Lucide substitute      |
+| ---------------------------------------------------------- | ---------------------- |
+| `react`                                                    | `atom`                 |
+| `wordpress`, `wix`, `webflow`, or any CMS/website platform | `globe`                |
+| `github`, `gitlab`                                         | `git-branch` or `code` |
+| `slack`, `discord`                                         | `message-square`       |
+| `database`, `supabase`, `mongo`                            | `database`             |
 
 When in doubt, verify an icon exists before using it:
 
 ```bash
-node -e "const { icons } = require('lucide-react'); console.log(!!icons['IconName'])"
+node -e "const icons = require('@iconify-json/lucide/icons.json').icons; console.log('icon-name' in icons)"
 ```
 
-This applies to `icon=` props on `<Card>`, `<LinkCard>`, `<Tab>`, and group-level `icon:` in `bach.config.ts`. **PascalCase is the single correct format everywhere** — `Icon.astro` normalizes both at runtime, but PascalCase is the enforced convention.
+This applies to `icon=` props on `<Card>`, `<LinkCard>`, `<Tab>`, and group-level `icon:` in `bach.config.ts`.
 
 ### Tabs
 
@@ -232,7 +245,7 @@ import Tab from '@/components/tabs/Tab.astro'
 
 <Tabs>
   <Tab title="TypeScript">...</Tab>
-  <Tab title="Python" icon="Code">
+  <Tab title="Python" icon="code">
     ...
   </Tab>
 </Tabs>
