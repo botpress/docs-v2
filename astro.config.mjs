@@ -10,33 +10,7 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import sitemap from '@astrojs/sitemap'
 import icon from 'astro-icon'
 import { transformerMetaHighlight } from '@shikijs/transformers'
-
-/** @returns {import('shiki').ShikiTransformer} */
-function transformerFilename() {
-  return {
-    name: 'transformer:filename',
-    pre(node) {
-      const meta = this.options?.meta?.__raw ?? ''
-      const match = meta.trim().match(/^([^\s{[\]]+)/)
-      if (match?.[1]) {
-        node.properties['data-title'] = match[1]
-      }
-    },
-  }
-}
-
-/** @returns {import('shiki').ShikiTransformer} */
-function transformerExpandable() {
-  return {
-    name: 'transformer:expandable',
-    pre(node) {
-      const meta = this.options?.meta?.__raw ?? ''
-      if (/\bexpandable\b/.test(meta)) {
-        node.properties['data-expandable'] = 'true'
-      }
-    },
-  }
-}
+import { transformerFilename, transformerExpandable } from './src/shiki/transformers/index.js'
 
 export default defineConfig({
   site: 'https://botpress.com/docs',
