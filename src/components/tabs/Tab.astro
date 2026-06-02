@@ -1,10 +1,10 @@
 ---
-import type { icons } from "lucide-react";
 import Icon from "../Icon.astro";
+import type { IconName } from "@/types/icons";
 
 interface Props {
   title: string;
-  icon?: keyof typeof icons;
+  icon?: IconName;
   class?: string;
 }
 
