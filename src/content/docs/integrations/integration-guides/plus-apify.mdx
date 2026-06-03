@@ -9,6 +9,7 @@ import Step from '@/components/Step.astro'
 import Steps from '@/components/Steps.astro'
 import { Check } from '@/components/callouts'
 import { Info } from '@/components/callouts'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
 
 The official Apify integration connects your bot to Apify, an advanced website crawling platform. It allows your bot to manage your Apify crawler runs.
 
@@ -21,7 +22,7 @@ This integration is useful if you need more powerful crawling than Studio's [def
 
 - A [published bot](/get-started/quick-start)
 - An [Apify account](https://console.apify.com/sign-up)
-  </Info>
+</Info>
 
 <Steps>
   <Step title="Install the integration in Botpress">
@@ -83,5 +84,6 @@ This integration is useful if you need more powerful crawling than Studio's [def
 </Check>
 
 ## Cards
+<IntegrationCards integration="plus-apify"/>
 
 ## Triggers
