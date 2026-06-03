@@ -11,4 +11,10 @@ interface Props {
 const { src, title, height, class: className } = Astro.props;
 ---
 
-<LazyIframeReact src={src} title={title} height={height} className={className} client:load />
+<LazyIframeReact
+  src={src}
+  title={title}
+  height={height}
+  className={className}
+  client:load
+/>

@@ -78,7 +78,9 @@ function ParameterSection({ parameters, location }: { parameters: Parameter[]; l
             key={param.name}
             schema={{
               type: 'object',
-              properties: { [param.name]: { ...schema, description: param.description } },
+              properties: {
+                [param.name]: { ...schema, description: param.description },
+              },
               required: param.required ? [param.name] : [],
             }}
           />

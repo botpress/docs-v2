@@ -197,11 +197,11 @@ In Astro components, render icons via the `Icon.astro` wrapper:
 
 ```astro
 ---
-import Icon from '@/components/Icon.astro'
-import type { IconName } from '@/types/icons'
+import Icon from "@/components/Icon.astro";
+import type { IconName } from "@/types/icons";
 
 interface Props {
-  icon: IconName
+  icon: IconName;
 }
 ---
 

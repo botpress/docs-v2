@@ -793,7 +793,9 @@ export default new bp.Integration({
           let zendeskAuthorId = user.tags.id
 
           if (payload.userId) {
-            const { user: botpressUser } = await client.getUser({ id: payload.userId })
+            const { user: botpressUser } = await client.getUser({
+              id: payload.userId,
+            })
             zendeskAuthorId = botpressUser.tags.id
           }
 

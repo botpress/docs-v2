@@ -52,11 +52,15 @@ This stores the exact moment the user was handed off to HITL, in milliseconds si
 After your [Start HITL](/integrations/integration-guides/hitl/introduction#step-3-add-the-start-hitl-card-to-your-workflow) Card, insert another [Execute Code](/studio/concepts/cards/execute-code) Card that computes the time until an agent was assigned and formats the result. Use the following code:
 
 ```js
-const { conversation: upstream } = await client.getConversation({ id: event.conversationId })
+const { conversation: upstream } = await client.getConversation({
+  id: event.conversationId,
+})
 const downstreamConvId = upstream.tags?.['hitl#downstream']
 
 if (downstreamConvId) {
-  const { conversation: downstream } = await client.getConversation({ id: downstreamConvId })
+  const { conversation: downstream } = await client.getConversation({
+    id: downstreamConvId,
+  })
   const assignedAtMs = parseInt(downstream.tags?.['hitl:assignedAt'] || '0')
 
   if (assignedAtMs) {

@@ -445,7 +445,9 @@ export default new bp.Integration({
       const { file: fileToTransfer, fileKey } = input
 
       // Use Dropbox's SDK to download the file:
-      const fileBuffer = await dropboxClient.getFileContents({ path: fileToTransfer.id })
+      const fileBuffer = await dropboxClient.getFileContents({
+        path: fileToTransfer.id,
+      })
 
       // Upload the file to Botpress:
       const { file: uploadedFile } = await client.uploadFile({

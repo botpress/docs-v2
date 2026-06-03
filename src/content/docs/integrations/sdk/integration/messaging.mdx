@@ -74,7 +74,10 @@ export default new IntegrationDefinition({
     webhook: {
       conversation: {
         tags: {
-          id: { title: 'Conversation ID', description: 'The ID of the conversation in the external service' },
+          id: {
+            title: 'Conversation ID',
+            description: 'The ID of the conversation in the external service',
+          },
         },
       },
       messages: {
@@ -89,7 +92,10 @@ export default new IntegrationDefinition({
   },
   user: {
     tags: {
-      id: { title: 'User ID', description: 'The ID of the user in the external service' },
+      id: {
+        title: 'User ID',
+        description: 'The ID of the user in the external service',
+      },
     },
   },
 })

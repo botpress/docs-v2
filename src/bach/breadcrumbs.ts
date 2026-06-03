@@ -21,7 +21,13 @@ export async function searchPagesForBreadcrumbs<TCollection extends string>(
     if (typeof item === 'string') {
       if (normalizePagePath(item) === normalizedTarget) {
         const href = normalizedTarget === 'index' ? '/' : `/${normalizedTarget}`
-        return [...prefix, { label: titleMap.get(normalizedTarget) ?? titleFromSlug(lastSegment(item)), href }]
+        return [
+          ...prefix,
+          {
+            label: titleMap.get(normalizedTarget) ?? titleFromSlug(lastSegment(item)),
+            href,
+          },
+        ]
       }
     } else {
       // Check if this is a collection group and the target matches a collection entry
