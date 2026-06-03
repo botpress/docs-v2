@@ -26,7 +26,22 @@ export default defineConfig({
       dedupe: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
     },
     optimizeDeps: {
-      include: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime', '@botpress/webchat'],
+      include: [
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        'react/jsx-dev-runtime',
+        '@botpress/webchat',
+        '@base-ui/react',
+        '@nanostores/react',
+        'nanostores',
+        'lucide-react',
+        'react-resizable-panels',
+        'vaul',
+        'class-variance-authority',
+        'clsx',
+        'tailwind-merge',
+      ],
     },
   },
   markdown: {

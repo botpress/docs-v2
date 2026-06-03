@@ -4,6 +4,7 @@ import { COPY_ICON, CHECK_ICON } from '@/scripts/code-icons'
 function CodeGroup({ children }: { children: ReactNode }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const presRef = useRef<HTMLElement[]>([])
+  const copyTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const [tabs, setTabs] = useState<string[]>([])
   const [activeIndex, setActiveIndex] = useState(0)
   const [copied, setCopied] = useState(false)
@@ -18,6 +19,7 @@ function CodeGroup({ children }: { children: ReactNode }) {
     pres.forEach((pre, i) => {
       pre.hidden = i !== 0
     })
+    return () => clearTimeout(copyTimerRef.current)
   }, [])
 
   const handleSetActive = (newIndex: number) => {
@@ -31,7 +33,8 @@ function CodeGroup({ children }: { children: ReactNode }) {
     const code = presRef.current[activeIndex]?.querySelector('code')?.textContent ?? ''
     await navigator.clipboard.writeText(code)
     setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    clearTimeout(copyTimerRef.current)
+    copyTimerRef.current = setTimeout(() => setCopied(false), 2000)
   }
 
   return (

@@ -10,6 +10,10 @@ interface Props {
 
 const { icon, class: className } = Astro.props;
 
+// Unknown icon names are caught at compile time: IconName is derived from
+// @iconify-json/lucide/icons.json, so TypeScript will reject any invalid name.
+// astro-icon renders nothing silently at runtime, but that path is unreachable
+// with a valid build.
 const resolved = icon.includes(":") ? icon : `lucide:${icon}`;
 ---
 

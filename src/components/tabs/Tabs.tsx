@@ -21,6 +21,8 @@ function Tabs({ defaultIndex = 0, className, children }: TabsProps) {
   const panelsRef = useRef<HTMLDivElement>(null)
   const panelEls = useRef<HTMLElement[]>([])
   const tabEls = useRef<HTMLLIElement[]>([])
+  // Capture defaultIndex once at mount — it's intentionally not reactive.
+  const initialDefaultIndex = useRef(defaultIndex)
   const [tabs, setTabs] = useState<TabInfo[]>([])
   const [activeIndex, setActiveIndex] = useState(defaultIndex)
   const [ready, setReady] = useState(false)
@@ -47,7 +49,7 @@ function Tabs({ defaultIndex = 0, className, children }: TabsProps) {
       return { title, iconHtml }
     })
 
-    const safeDefault = Math.max(0, Math.min(defaultIndex, panels.length - 1))
+    const safeDefault = Math.max(0, Math.min(initialDefaultIndex.current, panels.length - 1))
     panels.forEach((panel, i) => {
       panel.dataset.active = String(i === safeDefault)
       panel.setAttribute('aria-hidden', String(i !== safeDefault))
