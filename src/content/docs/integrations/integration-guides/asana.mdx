@@ -1,0 +1,45 @@
+---
+title: Asana
+icon: 'layout-dashboard'
+---
+
+import { Note } from '@/components/callouts'
+
+Asana Integration allows you to seamlessly connect your Botpress and Asana, a well-established project management platform. This integration equips your bot with the ability to manage projects and tasks right from its interface. After the setup, you will be able to perform actions such as task creation, task updates, task comment addition, and more.
+
+## Prerequisites
+
+- An [Asana account](https://asana.com/)
+- Access to an existing Asana workspace.
+
+## Setting up the Asana integration in Botpress
+
+1. Go to the [Integration Hub](https://app.botpress.cloud/hub) in Botpress Cloud (if you don't have the integration installed yet).
+2. Find and open the Asana integration then click on the "Install to Bot" button, now go back to your bot settings.
+
+The Asana integration has the following settings:
+
+- **Enabled**: Whether Botpress will communicate with Asana
+- **Webhook URL**: The URL for receiving data in Botpress. (You shall not be using it)
+- **API Token**: The API token generated from Asana
+- **Workspace Gid**: The workspace ID obtained from Asana
+
+## Setting up Asana
+
+1. Generate a Personal Access Token on Asana. Follow [these instructions](https://developers.asana.com/docs/personal-access-token) to get your token. Once you have it, paste it in the API Token input in Botpress.
+2. Get the workspace ID. You can obtain your workspace ID by visiting [this link](https://app.asana.com/api/1.0/workspaces) while logged in to your Asana account. The workspace ID corresponds to the `gid` parameter of the workspace you want to use. Paste it in the Workspace Gid input in Botpress.
+
+That's it! Now the Asana integration is operational and ready for use within your bot.
+
+<Note>
+Note
+
+The Asana API rate limits are applicable. Also, note that certain advanced Asana features tied to paid plans may not be accessible.
+
+</Note>
+
+With the Asana Integration, you can interact with Asana directly from your Botpress bot. The integration introduces various actions, including task creation, task updates, task comment addition, and more, making the task and user management processes more efficient.
+
+---
+
+## Cards

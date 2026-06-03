@@ -1,0 +1,278 @@
+---
+title: WhatsApp Setup
+description: Add a bot to WhatsApp using the official integration.
+sidebarTitle: Setup
+---
+
+import AccordionGroup from '@/components/AccordionGroup.astro'
+import Step from '@/components/Step.astro'
+import Steps from '@/components/Steps.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import Tabs from '@/components/tabs/Tabs.astro'
+import { Check } from '@/components/callouts'
+import { Info } from '@/components/callouts'
+import { Note } from '@/components/callouts'
+import { Tip } from '@/components/callouts'
+import { Warning } from '@/components/callouts'
+import Accordion from '@/components/Accordion.astro'
+
+The official WhatsApp integration allows your users to chat with your bot by messaging a WhatsApp number.
+
+## Setup
+
+<Tabs>
+  <Tab title="Basic configuration">
+    <Info>
+    You will need:
+
+    - A [published bot](https://botpress.com/docs/botpress-quickstart)
+    - A [Facebook account](https://www.facebook.com/signup)
+      </Info>
+
+    <Tip>
+    Visual learner?
+
+    Check out our [WhatsApp Setup guide](https://www.youtube.com/watch?v=Fs6dIxgEKoY) on YouTube for a step-by-step video guide.
+    </Tip>
+
+    <Steps>
+      <Step>
+        In Botpress Studio, select **Explore Hub** in the upper-right corner.
+      </Step>
+      <Step>
+        Search for the **WhatsApp** integration, then select **Install Integration**.
+      </Step>
+      <Step>
+        In the **Configuration** menu, select **Authorize WhatsApp**.
+      </Step>
+      <Step>
+        Follow the instructions to connect Botpress to your WhatsApp account.
+      </Step>
+    </Steps>
+
+    <Note>
+    Additional requirements:
+
+    - While setting up your WhatsApp integration, we will ask you to create or select:
+
+      - A [Facebook business page](https://www.facebook.com/business/help/1968057156746246?id=939256796236247)
+      - A [WhatsApp business account](https://business.whatsapp.com)
+
+    - After setup is complete, your business will undergo a [verification process by Meta](https://www.facebook.com/business/help/1095661473946872?id=180505742745347), the parent company of WhatsApp. This verification confirms the identity and eligibility of your business to use Meta's platforms.
+    </Note>
+
+  </Tab>
+
+  <Tab title="Manual configuration">
+
+    For advanced use cases, you can use your own Meta app with our integration.
+
+    <Info>
+    You will need:
+
+    - A [Meta developer app](https://developers.facebook.com/apps/creation/) with the . Check out the [Meta developer documentation](https://developers.facebook.com/docs/whatsapp/cloud-api/get-started#set-up-developer-assets) to learn more about the setup process.
+      </Info>
+
+    ### Step 1: Install the integration in Botpress
+
+    <Steps>
+      <Step>In Botpress Studio, select **Explore Hub** in the upper-right corner.</Step>
+      <Step>Search for the **WhatsApp** integration, then select **Install Integration**.</Step>
+      <Step>In the **Configuration** menu, open the drop-down menu and select **Manual Configuration**.</Step>
+    </Steps>
+
+    ### Step 2: Configure the integration
+
+    Next, fill in the integration's configuration fields using information from your Meta app:
+
+    <AccordionGroup>
+      <Accordion
+        title="Verify Token"
+      >
+        Used by Meta to verify that you're the real owner of the provided webhook. Can be any alphanumeric string.
+      </Accordion>
+      <Accordion
+        title="Access Token"
+      >
+        <Steps>
+          <Step>
+            In your Meta app's left sidebar, go to **Use cases > Connect with customers through WhatsApp > Customize**.
+
+            <Note>
+              If you haven't added WhatsApp as a use case yet, select **Add use cases**, then **Connect with customers through WhatsApp**.
+            </Note>
+          </Step>
+          <Step>
+            Select a WhatsApp business portfolio (if you haven't already).
+          </Step>
+          <Step>
+            Go to **API testing**.
+          </Step>
+          <Step>
+            Select **Generate access token**, then copy the token.
+          </Step>
+          <Step>
+            In Botpress, paste the token into the integration's **Access Token** configuration field.
+          </Step>
+        </Steps>
+      </Accordion>
+      <Accordion
+        title="Client Secret"
+      >
+      <Steps>
+        <Step>In your Meta App's left sidebar, expand the **App Settings** menu and select **Basic**.</Step>
+        <Step>In the **App Secret** field,  select **Show**, then copy your secret.</Step>
+        <Step>In Botpress, paste the secret into the integration's **Client Secret** configuration field.</Step>
+      </Steps>
+      </Accordion>
+      <Accordion
+        title="Default Bot Phone Number ID"
+      >
+        <Steps>
+          <Step>
+            In your Meta app's left sidebar, go to **Use cases > Connect with customers through WhatsApp > Customize**.
+
+            <Note>
+              If you haven't added WhatsApp as a use case yet, select **Add use cases**, then **Connect with customers through WhatsApp**.
+            </Note>
+          </Step>
+          <Step>
+            Select a WhatsApp business portfolio (if you haven't already).
+          </Step>
+          <Step>
+            Go to **API testing**.
+          </Step>
+          <Step>
+            Under **Select a 'From' phone number**, copy the **Phone number ID**.
+          </Step>
+          <Step>
+            In Botpress, paste the ID into the integration's **Default Bot Phone Number ID** configuration field.
+          </Step>
+        </Steps>
+      </Accordion>
+      <Accordion
+        title="WABA ID (WhatsApp Business Account ID)"
+      >
+        <Steps>
+          <Step>
+            In your Meta app's left sidebar, go to **Use cases > Connect with customers through WhatsApp > Customize**.
+            <Note>
+              If you haven't added WhatsApp as a use case yet, select **Add use cases**, then **Connect with customers through WhatsApp**.
+            </Note>
+          </Step>
+          <Step>
+            Select a WhatsApp business portfolio (if you haven't already).
+          </Step>
+          <Step>
+            Go to **API testing**.
+          </Step>
+          <Step>
+            Under **Select a 'From' phone number**, copy the **WhatsApp Business Account ID**.
+          </Step>
+          <Step>
+            In Botpress, paste the ID into the integration's **WhatsApp Business Account ID** configuration field.
+          </Step>
+        </Steps>
+      </Accordion>
+    </AccordionGroup>
+
+    When you've filled in all the fields, select **Save Configuration**. This will automatically enable your integration.
+
+    ### Step 3: Add your webhook
+
+    Now that you've enabled your integration, you can add your webhook to your Meta app's configuration:
+
+    <Steps>
+      <Step>In Botpress, copy the webhook URL and **Verify Token** from the integration's **Configuration** section.</Step>
+      <Step>
+        In your Meta app's left sidebar, go to **Use cases > Connect with customers through WhatsApp > Customize**.
+        <Note>
+          If you haven't added WhatsApp as a use case yet, select **Add use cases**, then **Connect with customers through WhatsApp**.
+        </Note>
+      </Step>
+      <Step>
+        Select a WhatsApp business portfolio (if you haven't already).
+      </Step>
+      <Step>Go to **Configuration**.</Step>
+      <Step>Paste the webhook URL into the **Callback URL** field.</Step>
+      <Step>Paste your **Verify Token** in the **Verify Token** field.</Step>
+      <Step>
+        Select **Verify and save**. Then, subscribe to the following webhook fields:
+
+        - `message_template_components_update`
+        - `message_template_quality_update`
+        - `message_template_status_update`
+        - `messages`
+        - `template_category_update`
+      </Step>
+    </Steps>
+
+    <Check>
+      You've manually configured your WhatsApp integration!
+
+      For more information, check out WhatsApp's guide on [getting started with Cloud API](https://developers.facebook.com/docs/whatsapp/cloud-api/get-started#send-test-message).
+    </Check>
+
+  </Tab>
+  <Tab title="Playground">
+    If you want to test your bot's behaviour in WhatsApp before going through the actual setup process, you can use the WhatsApp integration playground.
+
+    <Info>
+      You will need:
+
+      - A [published bot](https://botpress.com/docs/botpress-quickstart)
+      - A [WhatsApp account](https://web.whatsapp.com)
+      </Info>
+
+    <Steps>
+      <Step>In Botpress Studio, select **Explore Hub** in the upper-right corner.</Step>
+      <Step>Search for the **WhatsApp** integration, then select **Install Integration**.</Step>
+      <Step>Select **Test your agent on WhatsApp**.</Step>
+      <Step>Follow the instructions to set up the playground.</Step>
+    </Steps>
+
+  </Tab>
+</Tabs>
+
+---
+
+## Cards
+
+<Warning>
+  Some of the integration's Cards use [WhatsApp message templates](https://developers.facebook.com/docs/whatsapp/business-management-api/message-templates/) to send messages to users.
+
+In WhatsApp, these templates support both [named and positional parameters](https://developers.facebook.com/docs/whatsapp/business-management-api/message-templates/#parameter-formats). However, the integration currently only supports positional parameters. This means you'll get an error if you try to provide named parameters in a Card's `conversation.templateVariablesJson` field.
+
+</Warning>
+
+---
+
+## Triggers
+
+---
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion
+    title="Not receiving messages from bot on WhatsApp"
+  >
+    Until Meta has verified your business, your bot won't be able to send messages to WhatsApp users, even if you've configured it correctly.
+
+    If you need to test out your bot right away, you can use the [WhatsApp Playground](#playground) while waiting for business verification.
+
+  </Accordion>
+  <Accordion
+    title="Meta business verification taking too long"
+  >
+    Unfortunately, we can't help speed up Meta's business verification process.
+
+    If you need to test out your bot right away, you can use the [WhatsApp Playground](#playground) while waiting for business verification.
+
+  </Accordion>
+  <Accordion
+    title="Bot receiving WhatsApp messages, but not sending messages back"
+  >
+    There may be a problem with the payment method in your WhatsApp business account. Check the billing hub and make sure your [payment method](https://business.facebook.com/billing_hub/) is configured correctly.
+  </Accordion>
+</AccordionGroup>

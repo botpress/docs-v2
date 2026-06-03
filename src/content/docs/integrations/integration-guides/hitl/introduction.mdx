@@ -1,0 +1,117 @@
+---
+title: Human-in-the-Loop (HITL)
+description: Allow a live agent to participate directly in the bot's conversation.
+sidebarTitle: Setup
+---
+
+import { Picture } from 'astro:assets'
+import startHitlCardDarkImg from '../assets/start-hitl-card-dark.png'
+import startHitlCardImg from '../assets/start-hitl-card.png'
+import Frame from '@/components/Frame.astro'
+import Icon from '@/components/Icon.astro'
+import Step from '@/components/Step.astro'
+import Steps from '@/components/Steps.astro'
+import { Check } from '@/components/callouts'
+import { Info } from '@/components/callouts'
+import { Note } from '@/components/callouts'
+import { Tip } from '@/components/callouts'
+import { Warning } from '@/components/callouts'
+
+<Warning>
+  For new workspaces, HITL has moved to [Botpress Desk](https://botpress.com/desk), our new AI helpdesk for modern support teams. From your dashboard, go to <Icon icon="message-square-reply"/> **Human Handoff > Open Botpress Desk** to get started setting up your workspace.
+
+Users on existing workspaces can follow the steps below and continue using the legacy HITL integration.
+
+</Warning>
+
+The Human-in-the-Loop (HITL) integration allows members of your Workspace to:
+
+- Chat directly with users
+- Approve AI-generated outputs before they're sent
+- Handle complex or sensitive scenarios
+
+<Note>
+  The HITL integration needs to be configured before you can use [Human
+  Handoff](/get-started/manage-your-agent/human-handoff).
+</Note>
+
+## Setup
+
+<Info>
+  You will need:
+
+- A [Botpress Plus plan](https://botpress.com/pricing) or higher
+  </Info>
+
+### Step 1: Install the HITL integration
+
+First, install the official HITL integration:
+
+<Steps>
+  <Step>In Botpress Studio, select **Explore Hub** in the upper-right corner.</Step>
+  <Step>Search for the HITL integration, then select **Install Integration**.</Step>
+</Steps>
+
+### Step 2: Install the HITL plugin
+
+    Next, install the official HITL plugin. This will allow you to start HITL from any point in your Workflow.
+
+<Steps>
+  <Step>
+    Navigate back to Botpress Hub and search for the HITL plugin.
+  </Step>
+  <Step>
+    Select it, then select **Install Plugin**.
+  </Step>
+  <Step>
+    In the **Configuration** menu, open the dropdown under **HITL integration**.
+
+    <Note>
+      This dropdown will display all HITL-compatible integrations you've installed. Since this is a guide to the official Botpress HITL integration, we'll select that one for now.
+    </Note>
+
+  </Step>
+    Select **HITL**.
+  <Step>
+    Scroll down and select **Save**.
+  </Step>
+</Steps>
+
+<Tip>
+  The plugin's **Configuration** section contains many optional fields. You can use these to customize your HITL
+  experience.
+</Tip>
+
+### Step 3: Add the Start HITL card to your Workflow
+
+<Steps>
+  <Step>
+    Open a Workflow in Studio and create (or select) any Node.
+  </Step>
+  <Step>
+    Add the **Start HITL** Card at the point where you want to hand off conversations to a live agent:
+
+    <Frame>
+      <Picture alt="Start HITL Card" class="block dark:hidden" src={startHitlCardImg}/>
+      <Picture alt="Start HITL Card" class="hidden dark:block" src={startHitlCardDarkImg}/>
+    </Frame>
+
+  </Step>
+  <Step>
+    In the Card's [inspector](/studio/concepts/cards/introduction#configure-a-card), fill in the required fields:
+
+    | Fields              | Description
+    | :----------------- | :---------- |
+    | **Ticket Title**    | The name of the ticket created for the live agent.                                                                 |
+    | **User ID**         | The user ID associated with the ticket. Enter the `{{event.userId}}` variable to use the current user's ID.       |
+    | **Conversation ID** | The conversation ID associated with the ticket. Enter the `{{event.conversationId}}` variable to use the current conversation's ID. |
+
+  </Step>
+</Steps>
+
+<Check>
+  Done! HITL will begin whenever the **Start HITL** card executes.
+
+For more information about assigning live agents and managing conversations, check out the [Human Handoff](/get-started/manage-your-agent/human-handoff) guide.
+
+</Check>

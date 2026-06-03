@@ -1,0 +1,307 @@
+---
+title: Google Calendar
+description: Add a bot to Google Calendar using the official integration.
+icon: 'calendar'
+---
+
+import Accordion from '@/components/Accordion.astro'
+import AccordionGroup from '@/components/AccordionGroup.astro'
+import Step from '@/components/Step.astro'
+import Steps from '@/components/Steps.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import Tabs from '@/components/tabs/Tabs.astro'
+import { Check } from '@/components/callouts'
+import { Info } from '@/components/callouts'
+import { Note } from '@/components/callouts'
+import { Warning } from '@/components/callouts'
+
+The official Google Calendar integration allows your bot to access your Google Calendar data and manage events.
+
+## Setup
+
+<Tabs>
+  <Tab title="Basic configuration">
+    <Info>
+      You will need:
+
+      - A [published bot](/get-started/quick-start)
+      - A [Google account](https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://accounts.google.ca/&ved=2ahUKEwjT06jO35CSAxWy5MkDHcRzEJIQFnoECAwQAQ&usg=AOvVaw2kpHPlQsXrFmVVEu4DOt-N)
+      </Info>
+
+    <Steps>
+      <Step>
+        In Botpress Studio, select **Explore Hub** in the upper-right corner.
+      </Step>
+      <Step>
+        Search for the **Google Calendar** integration, then select **Install Integration**.
+      </Step>
+      <Step>
+        In the **Configuration** menu, select **Authorize Google Calendar**.
+      </Step>
+      <Step>
+        Follow the instructions to connect Botpress to your Google account.
+      </Step>
+    </Steps>
+
+  </Tab>
+  <Tab title="Manual configuration">
+    For more advanced use cases, you can manually configure the integration.
+
+    <Info>
+      You will need:
+
+      - A [published bot](/get-started/quick-start)
+      - A [Google account](https://accounts.google.com/signup)
+      - Access to [Google Cloud Console](https://console.developers.google.com/)
+      </Info>
+
+    ### Step 1: Create a Google Cloud project
+
+    <Steps>
+      <Step>
+        Go to the [Google Cloud Console](https://console.developers.google.com/) and sign in with your Google account.
+      </Step>
+      <Step>
+        Go to **Select a project**, then select **New Project**.
+      </Step>
+      <Step>
+        Enter your project details:
+        - **Project name**: Choose a descriptive name for your project.
+        - **Organization**: Select your organization (if applicable).
+        - **Location**: Choose the appropriate location.
+      </Step>
+      <Step>
+        Select **Create** and wait for the project to be created.
+      </Step>
+      <Step>
+        Verify you're in the correct project by checking the project name next to the Google logo.
+      </Step>
+    </Steps>
+
+    ### Step 2: Enable the Google Calendar API
+
+    <Steps>
+      <Step>
+        In the Google Cloud Console, open the left sidebar and go to **API & Services > Credentials**.
+      </Step>
+      <Step>
+        Select **+ Create Credentials > API Key** to create an API key. Copy and store it somewhere.
+      </Step>
+      <Step>
+        Go to **Library**, search for "Google Calendar API", and select **Enable**.
+      </Step>
+    </Steps>
+
+    ### Step 3: Create a service account
+
+    <Steps>
+      <Step>
+        Open the left sidebar again and go to **API & Services > Credentials**.
+      </Step>
+      <Step>
+        Select **+ Create Credentials > Service Account**.
+      </Step>
+      <Step>
+        Enter a **Service account name**. The Service Account ID will be automatically generated.
+      </Step>
+      <Step>
+        The remaining fields are optional. Select **Done** to create the service account.
+      </Step>
+      <Step>
+        Select your newly created service account, then go to the **Keys** tab.
+      </Step>
+      <Step>
+        Select **Add Key > Create new key**, choose **JSON** as the key type, then select **Create**.
+
+        A JSON file will be downloaded to your machine. Keep this file secure—you'll need it to configure the integration.
+      </Step>
+    </Steps>
+
+    <Note>
+      The downloaded JSON file contains sensitive credentials. Store it securely and never share it publicly. The file structure looks like this:
+
+      ```json
+      {
+        "type": "service_account",
+        "project_id": "your-project-id",
+        "private_key_id": "...",
+        "private_key": "...",
+        "client_email": "your-service-account@your-project.iam.gserviceaccount.com",
+        "client_id": "...",
+        "auth_uri": "...",
+        "token_uri": "...",
+        "auth_provider_x509_cert_url": "...",
+        "client_x509_cert_url": "...",
+        "universe_domain": "googleapis.com"
+      }
+      ```
+    </Note>
+
+    ### Step 4: Enable domain-wide delegation (Google Workspace only)
+
+    <Warning>
+      Domain-wide delegation is **required** if you want your bot to:
+      - Create Google Meet links for events
+      - Send invitations to attendees
+      - Act on behalf of users in your organization
+
+      Without domain-wide delegation, the service account can only manage its own calendar and cannot invite attendees or create Meet links.
+
+      **This feature is only available for Google Workspace accounts.** Personal `@gmail.com` accounts do not support domain-wide delegation.
+    </Warning>
+
+    Follow Google's official guide to [delegate domain-wide authority to your service account](https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority).
+
+    When configuring the OAuth scopes in the Google Admin Console, paste in the following scopes (comma-separated):
+
+    ```
+    https://www.googleapis.com/auth/calendar,https://www.googleapis.com/auth/calendar.events
+    ```
+
+    ### Step 5: Configure OAuth consent screen (if not already configured)
+
+    <Steps>
+      <Step>
+        Open the left sidebar again and go to **API & Services > OAuth consent screen**.
+      </Step>
+      <Step>
+        Select **Get started**.
+      </Step>
+      <Step>
+        Configure the OAuth consent screen. Under **App Information**:
+
+        - **App name**: Enter a name for your application.
+        - **User support email**: Select your email address.
+
+        Then, select **Next**.
+      </Step>
+      <Step>
+        Under **Audience**, select **Internal**. Then, select **Next**.
+      </Step>
+      <Step>
+        Under **Contact Information**, enter a contact email address. Then, select **Next**.
+      </Step>
+      <Step>
+        Agree to the Google API policy, then select **Create**.
+      </Step>
+    </Steps>
+
+    ### Step 6: Create OAuth client
+
+    <Steps>
+      <Step>
+        Select **Create OAuth client**.
+      </Step>
+      <Step>
+        Select an **Application type** and enter a name. Then select **Create**.
+      </Step>
+    </Steps>
+
+    ### Step 7: Configure scopes
+
+    <Steps>
+      <Step>
+        Go to **Data Access** in the left sidebar, then select **Add or remove scopes**.
+      </Step>
+      <Step>
+        Add the following scopes:
+
+        - `https://www.googleapis.com/auth/calendar`
+        - `https://www.googleapis.com/auth/calendar.events`
+      </Step>
+      <Step>
+        Select **Update**.
+      </Step>
+    </Steps>
+
+    ### Step 8: Grant calendar access to the service account
+
+    <Steps>
+      <Step>
+        Open [Google Calendar](https://calendar.google.com) and select the settings icon in the upper-right corner. Then, select **Settings**.
+      </Step>
+      <Step>
+        In the left sidebar, select the calendar you want to share with your bot.
+      </Step>
+      <Step>
+        Go to **Shared with** > **+ Add people and groups**.
+      </Step>
+      <Step>
+        Enter the `client_email` from your downloaded JSON file (for example, `your-service-account@your-project.iam.gserviceaccount.com`).
+      </Step>
+      <Step>
+        Set the permission to **Make changes to events** so the bot can manage calendar events.
+      </Step>
+    </Steps>
+
+    ### Step 9: Configure the integration in Botpress
+
+    <Steps>
+      <Step>
+        In Botpress Studio, select **Explore Hub** in the upper-right corner.
+      </Step>
+      <Step>
+        Search for the **Google Calendar** integration, then select **Install Integration**.
+      </Step>
+      <Step>
+        In the **Configuration** menu, select the drop-down and choose **Configure manually**.
+      </Step>
+    </Steps>
+
+    Fill in the integration's configuration fields:
+
+    <AccordionGroup>
+      <Accordion title="Calendar ID">
+        1. In Google Calendar, go to **Settings** and select your calendar.
+        2. Scroll to **Integrate calendar** to find your Calendar ID.
+        3. Copy the Calendar ID and paste it into the **Calendar ID** field in Botpress.
+      </Accordion>
+      <Accordion title="Client Email">
+        Open the JSON file you downloaded in [Step 3](#step-3-create-a-service-account) and copy the `client_email` value.
+      </Accordion>
+      <Accordion title="Private Key">
+        Open the JSON file you downloaded in [Step 3](#step-3-create-a-service-account) and copy the entire `private_key` value, including the `-----BEGIN PRIVATE KEY-----` and `-----END PRIVATE KEY-----` markers.
+      </Accordion>
+      <Accordion title="Impersonate Email (Google Workspace only)">
+        Enter the email address of a user in your Google Workspace that the service account will impersonate.
+
+        This field is **required** for:
+        - Creating Google Meet links
+        - Sending attendee invitations
+
+        The email must belong to an actual user in your Google Workspace domain. Without this field configured, Meet creation and attendee invitations will not work.
+
+        <Note>
+          This field only applies if you have configured [domain-wide delegation](#step-4-enable-domain-wide-delegation-google-workspace-only). Personal @gmail.com accounts do not support impersonation.
+        </Note>
+      </Accordion>
+    </AccordionGroup>
+
+    When you've filled in all the fields, select **Save Configuration**.
+
+    <Check>
+      You've successfully configured the Google Calendar integration!
+    </Check>
+
+  </Tab>
+</Tabs>
+
+---
+
+## Limitations
+
+Different Google account types have different capabilities when using this integration.
+
+| Feature                             |                                            Google Workspace                                             | Personal (`@gmail.com`) |
+| ----------------------------------- | :-----------------------------------------------------------------------------------------------------: | :---------------------: |
+| Create, read, update, delete events |                                                   Yes                                                   |           Yes           |
+| Create Google Meet links            |                                                   Yes                                                   |           No            |
+| Invite attendees                    | Yes ([requires domain-wide delegation](#step-4%3A-enable-domain-wide-delegation-google-workspace-only)) |           No            |
+
+---
+
+## Cards
+
+---
+
+## Triggers
