@@ -1,0 +1,21 @@
+---
+import { getEntry } from "astro:content";
+import { IntegrationEvents as IntegrationEventsReact } from "./IntegrationEvents";
+
+interface Props {
+  integration: string;
+}
+
+const { integration } = Astro.props;
+const entry = await getEntry("integrations", integration);
+const events = (entry?.data.events ?? {}) as Record<
+  string,
+  Record<string, unknown>
+>;
+---
+
+{
+  Object.keys(events).length > 0 && (
+    <IntegrationEventsReact events={events} client:load />
+  )
+}
