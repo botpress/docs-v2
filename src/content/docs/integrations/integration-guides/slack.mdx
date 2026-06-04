@@ -15,6 +15,8 @@ import { Info } from '@/components/callouts'
 import { Note } from '@/components/callouts'
 import { Warning } from '@/components/callouts'
 import Accordion from '@/components/Accordion.astro'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
+import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
 
 The official Slack integration allows members of your Slack workspace to chat with your bot via a Slack app.
 
@@ -325,9 +327,13 @@ However, any outgoing AI-generated messages your bot sends to the Slack integrat
 
 ## Cards
 
+<IntegrationCards integration="slack"/>
+
 ---
 
 ## Triggers
+
+<IntegrationEvents integration="slack"/>
 
 ---
 

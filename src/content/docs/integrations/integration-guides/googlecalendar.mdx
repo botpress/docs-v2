@@ -14,6 +14,8 @@ import { Check } from '@/components/callouts'
 import { Info } from '@/components/callouts'
 import { Note } from '@/components/callouts'
 import { Warning } from '@/components/callouts'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
+import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
 
 The official Google Calendar integration allows your bot to access your Google Calendar data and manage events.
 
@@ -302,6 +304,10 @@ Different Google account types have different capabilities when using this integ
 
 ## Cards
 
+<IntegrationCards integration="googlecalendar"/>
+
 ---
 
 ## Triggers
+
+<IntegrationEvents integration="googlecalendar"/>

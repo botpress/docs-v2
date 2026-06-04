@@ -4,6 +4,8 @@ icon: 'zap'
 ---
 
 import { Info } from '@/components/callouts'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
+import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
 
 <Info>
 
@@ -81,6 +83,10 @@ The first action receives an event from the bot, and the second one sends the sa
 
 ## Cards
 
+<IntegrationCards integration="zapier"/>
+
 ---
 
 ## Triggers
+
+<IntegrationEvents integration="zapier"/>

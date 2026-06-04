@@ -10,6 +10,8 @@ import Steps from '@/components/Steps.astro'
 import { Check } from '@/components/callouts'
 import { Info } from '@/components/callouts'
 import Accordion from '@/components/Accordion.astro'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
+import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
 
 The official MailerLite integration allows your bot to create, update, fetch, or delete your MailerLite subscribers.
 
@@ -60,9 +62,13 @@ The official MailerLite integration allows your bot to create, update, fetch, or
 
 ## Cards
 
+<IntegrationCards integration="mailerlite"/>
+
 ---
 
 ## Triggers
+
+<IntegrationEvents integration="mailerlite"/>
 
 ---
 

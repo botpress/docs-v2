@@ -10,6 +10,8 @@ import Steps from '@/components/Steps.astro'
 import { Check } from '@/components/callouts'
 import { Info } from '@/components/callouts'
 import { Note } from '@/components/callouts'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
+import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
 
 The official BambooHR integration allows your bot to interact with your company's BambooHR employees.
 
@@ -65,4 +67,8 @@ The official BambooHR integration allows your bot to interact with your company'
 
 ## Cards
 
+<IntegrationCards integration="bamboohr"/>
+
 ## Triggers
+
+<IntegrationEvents integration="bamboohr"/>

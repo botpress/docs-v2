@@ -10,6 +10,8 @@ import Tab from '@/components/tabs/Tab.astro'
 import Tabs from '@/components/tabs/Tabs.astro'
 import { Check } from '@/components/callouts'
 import { Info } from '@/components/callouts'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
+import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
 
 The official HubSpot integration allows your bot to interact with your HubSpot account.
 
@@ -131,6 +133,10 @@ The official HubSpot integration allows your bot to interact with your HubSpot a
 
 ## Cards
 
+<IntegrationCards integration="hubspot"/>
+
 ---
 
 ## Triggers
+
+<IntegrationEvents integration="hubspot"/>

@@ -3,6 +3,9 @@ title: Trello
 icon: 'layout-dashboard'
 ---
 
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
+import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
+
 <img src="./assets/trello.png" />
 
 This integration allows you to connect your Botpress bot with Trello, a leading project management platform. With this integration, you can easily manage your boards, lists and cards directly from your bot.
@@ -46,6 +49,10 @@ That's it! Now the Trello integration is operational and ready for use within yo
 
 ## Cards
 
+<IntegrationCards integration="trello"/>
+
 ---
 
 ## Triggers
+
+<IntegrationEvents integration="trello"/>

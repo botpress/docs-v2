@@ -11,6 +11,8 @@ import Tabs from '@/components/tabs/Tabs.astro'
 import { Check } from '@/components/callouts'
 import { Info } from '@/components/callouts'
 import { Note } from '@/components/callouts'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
+import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
 
 The official Linear integration lets your bot automate issue workflows and react to repository file events.
 
@@ -142,6 +144,10 @@ The official Linear integration lets your bot automate issue workflows and react
 
 ## Cards
 
+<IntegrationCards integration="linear"/>
+
 ---
 
 ## Triggers
+
+<IntegrationEvents integration="linear"/>

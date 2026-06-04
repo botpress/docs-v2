@@ -10,6 +10,8 @@ import { Check } from '@/components/callouts'
 import { Info } from '@/components/callouts'
 import { Note } from '@/components/callouts'
 import { Warning } from '@/components/callouts'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
+import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
 
 The official Zendesk integration allows you to create and manage support tickets directly from your bot. You can also assign a Zendesk agent to communicate directly with the user, all within the same conversation initially handled by the bot.
 
@@ -46,6 +48,10 @@ The official Zendesk integration allows you to create and manage support tickets
 
 ## Cards
 
+<IntegrationCards integration="zendesk"/>
+
 ---
 
 ## Triggers
+
+<IntegrationEvents integration="zendesk"/>

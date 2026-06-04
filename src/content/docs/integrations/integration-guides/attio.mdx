@@ -9,6 +9,8 @@ import Steps from '@/components/Steps.astro'
 import { Check } from '@/components/callouts'
 import { Info } from '@/components/callouts'
 import { Note } from '@/components/callouts'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
+import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
 
 The official Attio integration allows your bot to interact with objects/records in your Attio workspace.
 
@@ -59,6 +61,8 @@ The official Attio integration allows your bot to interact with objects/records 
 
 ## Cards
 
+<IntegrationCards integration="attio"/>
+
 <Note>
 
 When adding [filters](#param-filter) to the [List Records](#list-records) Card, follow [Attio's filtering guide](https://docs.attio.com/rest-api/how-to/filtering-and-sorting) to structure your data.
@@ -66,3 +70,5 @@ When adding [filters](#param-filter) to the [List Records](#list-records) Card, 
 </Note>
 
 ## Triggers
+
+<IntegrationEvents integration="attio"/>

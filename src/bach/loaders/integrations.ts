@@ -1,8 +1,9 @@
 import type { Loader } from 'astro/loaders'
 
-// map for MDX filename without extension to Botpress Hub API name
-const INTEGRATIONS: Record<string, string> = {
-  // path segment '/' gets mapped to '%2F' in api request
+type MdxFileName = string
+type ApiName = string
+
+const INTEGRATIONS: Record<MdxFileName, ApiName> = {
   'plus-apify': 'plus/apify',
   'plus-email-notifier': 'plus/email-notifier',
   'plus-google-analytics': 'plus/google-analytics',
@@ -49,7 +50,7 @@ const INTEGRATIONS: Record<string, string> = {
   workable: 'workable',
   zapier: 'zapier',
   zendesk: 'zendesk',
-}
+} as const
 
 const API_BASE = 'https://api.botpress.cloud/v1/admin/hub/integrations'
 
@@ -65,12 +66,14 @@ export const integrationsLoader = (): Loader => ({
     await Promise.all(
       Object.entries(INTEGRATIONS).map(async ([slug, apiName]) => {
         try {
-          const encodedName = apiName.replace('/', '%2F')
-          const res = await fetch(`${API_BASE}/${encodedName}/latest`, {
+          // TODO: make a client
+          const res = await fetch(`${API_BASE}/${encodeURIComponent(apiName)}/latest`, {
             headers: { Authorization: `Bearer ${token}` },
           })
           if (!res.ok) {
-            logger.warn(`Failed to fetch integration "${apiName}" (slug: "${slug}"): ${res.status}`)
+            logger.warn(
+              `Failed to fetch integration "${apiName}" (slug: "${slug}"): ${res.status}. Cards would not be populated`
+            )
             return
           }
           const { integration } = await res.json()

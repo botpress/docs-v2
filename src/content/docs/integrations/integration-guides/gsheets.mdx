@@ -13,6 +13,7 @@ import Tabs from '@/components/tabs/Tabs.astro'
 import { Check } from '@/components/callouts'
 import { Info } from '@/components/callouts'
 import { Note } from '@/components/callouts'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
 
 The Google Sheets integration allows your bot to access and update Google Sheets data in real-time, automating tasks like CRM updates, inventory management, and survey tracking directly within chat.
 
@@ -212,6 +213,8 @@ The Google Sheets integration allows your bot to access and update Google Sheets
 ---
 
 ## Cards
+
+<IntegrationCards integration="gsheets"/>
 
 <Note>
   For Cards that take [named ranges](https://support.google.com/docs/answer/63175?hl=en&co=GENIE.Platform%3DDesktop) as input, Google's standard restrictions for range names apply. Range names:

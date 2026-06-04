@@ -11,6 +11,8 @@ import Tabs from '@/components/tabs/Tabs.astro'
 import { Check } from '@/components/callouts'
 import { Info } from '@/components/callouts'
 import { Note } from '@/components/callouts'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
+import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
 
 The Notion Integration with Botpress enables seamless integration to boost productivity, allowing interactions such as commenting on discussions or pages and database manipulations right from your Botpress bot.
 
@@ -168,6 +170,8 @@ The Notion Integration with Botpress enables seamless integration to boost produ
 
 ## Cards
 
+<IntegrationCards integration="notion"/>
+
  <Note>
 To use certain Cards, you might need to identify elements by their IDs. You can get page and database IDs:
 
@@ -178,3 +182,5 @@ To use certain Cards, you might need to identify elements by their IDs. You can 
 ---
 
 ## Triggers
+
+<IntegrationEvents integration="notion"/>

@@ -8,6 +8,8 @@ import Step from '@/components/Step.astro'
 import Steps from '@/components/Steps.astro'
 import { Check } from '@/components/callouts'
 import { Info } from '@/components/callouts'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
+import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
 
 The official Loops integration allows your bot to send emails to your customers via Loops.
 
@@ -81,4 +83,8 @@ Then, create your Loops API key:
 
 ## Cards
 
+<IntegrationCards integration="loops"/>
+
 ## Triggers
+
+<IntegrationEvents integration="loops"/>

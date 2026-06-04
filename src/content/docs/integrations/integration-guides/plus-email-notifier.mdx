@@ -8,6 +8,8 @@ import Step from '@/components/Step.astro'
 import Steps from '@/components/Steps.astro'
 import { Info } from '@/components/callouts'
 import { Tip } from '@/components/callouts'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
+import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
 
 The official Email Notifier integration allows your bot to send emails from a generic email address.
 
@@ -43,6 +45,10 @@ The official Email Notifier integration allows your bot to send emails from a ge
 
 ## Cards
 
+<IntegrationCards integration="plus-email-notifier"/>
+
 ---
 
 ## Triggers
+
+<IntegrationEvents integration="plus-email-notifier"/>
