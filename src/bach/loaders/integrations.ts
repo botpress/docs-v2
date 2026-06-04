@@ -1,4 +1,5 @@
 import type { Loader } from 'astro/loaders'
+import { Client } from '@botpress/client'
 
 type MdxFileName = string
 type ApiName = string
@@ -52,8 +53,6 @@ const INTEGRATIONS: Record<MdxFileName, ApiName> = {
   zendesk: 'zendesk',
 } as const
 
-const API_BASE = 'https://api.botpress.cloud/v1/admin/hub/integrations'
-
 export const integrationsLoader = (): Loader => ({
   name: 'integration-loader',
   load: async ({ store, logger }) => {
@@ -63,20 +62,12 @@ export const integrationsLoader = (): Loader => ({
       return
     }
 
+    const client = new Client({ token })
+
     await Promise.all(
       Object.entries(INTEGRATIONS).map(async ([slug, apiName]) => {
         try {
-          // TODO: make a client
-          const res = await fetch(`${API_BASE}/${encodeURIComponent(apiName)}/latest`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          if (!res.ok) {
-            logger.warn(
-              `Failed to fetch integration "${apiName}" (slug: "${slug}"): ${res.status}. Cards would not be populated`
-            )
-            return
-          }
-          const { integration } = await res.json()
+          const { integration } = await client.getPublicIntegration({ name: apiName, version: 'latest' })
           store.set({
             id: slug,
             data: {
@@ -88,7 +79,7 @@ export const integrationsLoader = (): Loader => ({
             },
           })
         } catch (err) {
-          logger.warn(`Error fetching integration "${apiName}": ${err}`)
+          logger.warn(`Failed to fetch integration "${apiName}" (slug: "${slug}"): ${err}`)
         }
       })
     )
