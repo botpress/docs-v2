@@ -14,4 +14,4 @@ export type { Schema, Parameter, SecurityScheme, ServerVariable, Endpoint, ApiCo
 export type { DocsSchema } from './docs'
 
 export { integrationSchema } from './integrations'
-export type { IntegrationSchema } from './integrations'
+export type { JsonSchema, ActionSchema, EventSchema, IntegrationSchema } from './integrations'

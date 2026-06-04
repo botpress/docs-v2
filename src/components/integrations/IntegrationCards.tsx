@@ -1,34 +1,16 @@
 import { Field } from '@/components/field'
 import { Expandable } from '@/components/Expandable'
+import type { ActionSchema, JsonSchema } from '@/bach/schemas/integrations'
 
-type JsonSchemaProp = Record<string, unknown>
-
-type Action = {
-  title?: string
-  description?: string
-  input?: {
-    schema: {
-      properties?: Record<string, JsonSchemaProp>
-      required?: string[]
-    }
-  }
-  output?: {
-    schema: {
-      properties?: Record<string, JsonSchemaProp>
-      required?: string[]
-    }
-  }
-}
-
-function resolveType(prop: JsonSchemaProp): string {
+function resolveType(prop: JsonSchema): string {
   const t = prop.type
   if (Array.isArray(t)) return t.find((x) => x !== 'null') ?? 'unknown'
   return (t as string) ?? 'object'
 }
 
-function resolveProperty(prop: JsonSchemaProp) {
+function resolveProperty(prop: JsonSchema) {
   if (Array.isArray(prop.anyOf)) {
-    const nonNull = (prop.anyOf as JsonSchemaProp[]).find((p) => p.type !== 'null')
+    const nonNull = (prop.anyOf as JsonSchema[]).find((p) => p.type !== 'null')
     if (nonNull) {
       const xzui = nonNull['x-zui'] as Record<string, unknown> | undefined
       const parentXzui = prop['x-zui'] as Record<string, unknown> | undefined
@@ -38,9 +20,9 @@ function resolveProperty(prop: JsonSchemaProp) {
         title: (xzui?.title ?? parentXzui?.title) as string | undefined,
         default: nonNull.default ?? prop.default,
         enum: nonNull.enum as string[] | undefined,
-        properties: nonNull.properties as Record<string, JsonSchemaProp> | undefined,
+        properties: nonNull.properties as Record<string, JsonSchema> | undefined,
         required: nonNull.required as string[] | undefined,
-        items: nonNull.items as JsonSchemaProp | undefined,
+        items: nonNull.items as JsonSchema | undefined,
       }
     }
   }
@@ -52,19 +34,13 @@ function resolveProperty(prop: JsonSchemaProp) {
     title: xzui?.title as string | undefined,
     default: prop.default,
     enum: prop.enum as string[] | undefined,
-    properties: prop.properties as Record<string, JsonSchemaProp> | undefined,
+    properties: prop.properties as Record<string, JsonSchema> | undefined,
     required: prop.required as string[] | undefined,
-    items: prop.items as JsonSchemaProp | undefined,
+    items: prop.items as JsonSchema | undefined,
   }
 }
 
-function SchemaFields({
-  properties,
-  required = [],
-}: {
-  properties: Record<string, JsonSchemaProp>
-  required?: string[]
-}) {
+function SchemaFields({ properties, required = [] }: { properties: Record<string, JsonSchema>; required?: string[] }) {
   return (
     <>
       {Object.entries(properties).map(([key, rawProp]) => {
@@ -90,10 +66,10 @@ function SchemaFields({
                 <SchemaFields properties={prop.properties} required={prop.required} />
               </Expandable>
             )}
-            {prop.type === 'array' && prop.items && (prop.items.properties as Record<string, JsonSchemaProp>) && (
+            {prop.type === 'array' && prop.items && (prop.items.properties as Record<string, JsonSchema>) && (
               <Expandable title="item properties">
                 <SchemaFields
-                  properties={prop.items.properties as Record<string, JsonSchemaProp>}
+                  properties={prop.items.properties as Record<string, JsonSchema>}
                   required={(prop.items.required as string[]) ?? []}
                 />
               </Expandable>
@@ -105,7 +81,7 @@ function SchemaFields({
   )
 }
 
-function ActionSection({ actionKey, action }: { actionKey: string; action: Action }) {
+function ActionSection({ actionKey, action }: { actionKey: string; action: ActionSchema }) {
   const inputProps = action.input?.schema?.properties
   const outputProps = action.output?.schema?.properties
 
@@ -131,7 +107,7 @@ function ActionSection({ actionKey, action }: { actionKey: string; action: Actio
   )
 }
 
-export function IntegrationCards({ actions }: { actions: Record<string, Action> }) {
+export function IntegrationCards({ actions }: { actions: Record<string, ActionSchema> }) {
   const entries = Object.entries(actions)
   if (entries.length === 0) return null
 
