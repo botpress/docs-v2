@@ -4,6 +4,8 @@ icon: 'phone'
 ---
 
 import { Warning } from '@/components/callouts'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
+import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
 
 <img src="./assets/twilio.png" />
 
@@ -60,3 +62,11 @@ To receive messages from Twilio, you will need to set up a webhook
 8. Copy paste the webhook URL provided in the channel configuration UI to the **A Message Comes In** field
 
 That's it! Now the Twilio integration is operational and ready for use within your bot.
+
+## Cards
+
+<IntegrationCards/>
+
+## Triggers
+
+<IntegrationEvents/>

@@ -16,6 +16,8 @@ import { Info } from '@/components/callouts'
 import { Note } from '@/components/callouts'
 import { Tip } from '@/components/callouts'
 import { Warning } from '@/components/callouts'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
+import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
 
 <Warning>
   For new workspaces, HITL has moved to [Botpress Desk](https://botpress.com/desk), our new AI helpdesk for modern support teams. From your dashboard, go to <Icon icon="message-square-reply"/> **Human Handoff > Open Botpress Desk** to get started setting up your workspace.
@@ -115,3 +117,11 @@ First, install the official HITL integration:
 For more information about assigning live agents and managing conversations, check out the [Human Handoff](/get-started/manage-your-agent/human-handoff) guide.
 
 </Check>
+
+## Cards
+
+<IntegrationCards/>
+
+## Triggers
+
+<IntegrationEvents/>

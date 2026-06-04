@@ -4,6 +4,8 @@ icon: 'message-square'
 ---
 
 import { Info } from '@/components/callouts'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
+import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
 
 <img src="./assets/intercom.png" />
 
@@ -136,3 +138,11 @@ await axios.post(
   { headers }
 )
 ```
+
+## Cards
+
+<IntegrationCards/>
+
+## Triggers
+
+<IntegrationEvents/>

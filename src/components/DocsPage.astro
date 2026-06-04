@@ -11,6 +11,7 @@ import {
   BreadcrumbSeparator,
 } from "./ui/breadcrumb";
 import { cleanupHeadings } from "@/lib/cleanup-headings";
+import { getIntegrationHeadingsState } from "@/lib/integration-headings";
 import { render } from "astro:content";
 import type { DynamicCollectionEntry } from "@/bach/content";
 import type { AdjacentPages } from "@/bach/types";
@@ -27,7 +28,13 @@ const { entry, breadcrumbs, markdownUrl, prev, next } = Astro.props;
 
 const renderResult = await render(entry);
 const { Content } = renderResult;
-const headings = cleanupHeadings(entry.body ?? "", renderResult.headings);
+
+const { hideCards, hideTriggers, hiddenSlugs } =
+  await getIntegrationHeadingsState(entry);
+const headings = cleanupHeadings(entry.body ?? "", renderResult.headings, {
+  hideSlugs: hiddenSlugs,
+});
+
 const useProse = "prose" in entry.data && entry.data.prose !== false;
 const title = entry.data.title;
 const description =
@@ -86,6 +93,12 @@ const description =
           </div>
 
           <div class="prose prose-stone mt-6 max-w-none prose-headings:text-stone-950 prose-p:text-stone-600 prose-li:text-stone-600 prose-a:text-stone-900 prose-a:underline prose-a:underline-offset-4 prose-a:decoration-primary prose-strong:text-stone-800 prose-code:rounded-md prose-code:bg-stone-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-stone-700 prose-code:before:content-none prose-code:after:content-none prose-th:text-left prose-th:text-stone-700 prose-td:text-stone-600 dark:prose-headings:text-stone-100 dark:prose-p:text-stone-300 dark:prose-a:text-stone-100 dark:prose-a:decoration-primary dark:hover:prose-a:decoration-primary dark:prose-strong:text-stone-200 dark:prose-code:bg-stone-800 dark:prose-code:text-stone-300 dark:prose-th:text-stone-300 dark:prose-td:text-stone-400 dark:prose-li:text-stone-300 dark:prose-hr:border-stone-800">
+            {hideCards && (
+              <style is:global is:inline set:html="h2#cards{display:none}" />
+            )}
+            {hideTriggers && (
+              <style is:global is:inline set:html="h2#triggers{display:none}" />
+            )}
             <Content />
           </div>
 

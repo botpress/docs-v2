@@ -15,6 +15,8 @@ import Icon from '@/components/Icon.astro'
 import Step from '@/components/Step.astro'
 import Steps from '@/components/Steps.astro'
 import { Info } from '@/components/callouts'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
+import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
 
 The official Improvement integration lets you provide feedback on your bot's responses in the [emulator](/studio/concepts/emulator). Your bot can then use that feedback when generating future responses.
 
@@ -77,3 +79,11 @@ Any time you save feedback, it gets added to the **Feedback** [Table](/studio/co
 Your bot reads directly from this table when applying your feedback. This means you can modify the table's rows and columns to modify how feedback is applied.
 
 You can also delete a specific piece of feedback by deleting its associated table row.
+
+## Cards
+
+<IntegrationCards/>
+
+## Triggers
+
+<IntegrationEvents/>

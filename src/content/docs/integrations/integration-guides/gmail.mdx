@@ -8,12 +8,10 @@ import Step from '@/components/Step.astro'
 import Steps from '@/components/Steps.astro'
 import Tab from '@/components/tabs/Tab.astro'
 import Tabs from '@/components/tabs/Tabs.astro'
-import { Info } from '@/components/callouts'
-import { Note } from '@/components/callouts'
-import { Tip } from '@/components/callouts'
-import { Warning } from '@/components/callouts'
+import { Info, Note, Tip, Warning, Danger } from '@/components/callouts'
 import Accordion from '@/components/Accordion.astro'
 import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
+import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
 
 The Gmail integration allows your bot to chat with users via your Gmail address.
 
@@ -443,4 +441,8 @@ You can also use the integration's [Cards](#cards) to interact with your Gmail i
 
 ## Cards
 
-<IntegrationCards integration="gmail"/>
+<IntegrationCards/>
+
+## Triggers
+
+<IntegrationEvents/>

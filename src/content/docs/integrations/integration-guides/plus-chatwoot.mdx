@@ -10,6 +10,8 @@ import Step from '@/components/Step.astro'
 import Steps from '@/components/Steps.astro'
 import { Check } from '@/components/callouts'
 import { Info } from '@/components/callouts'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
+import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
 
 The official Chatwoot integration allows users to chat with your bot through Telegram, WhatsApp, Email, or any Chatwoot-supported channel. It also allows your bot to hand off conversations to human agents when needed.
 
@@ -146,3 +148,11 @@ Finally, configure your Botpress webhook in Chatwoot:
   Your Chatwoot integration is ready. When users send a message to the provided Chatwoot inbox, it'll respond as your
   Botpress bot.
 </Check>
+
+## Cards
+
+<IntegrationCards/>
+
+## Triggers
+
+<IntegrationEvents/>

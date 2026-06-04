@@ -10,6 +10,7 @@ import { Info } from '@/components/callouts'
 import { Note } from '@/components/callouts'
 import { Tip } from '@/components/callouts'
 import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
 
 Install this integration to generate a personalized [webhook](https://docs.webhook.site/index.html) that allows your bot to receive external updates.
 
@@ -262,6 +263,10 @@ The maximum size for a Webhook payload is 100 MB.
 
 ---
 
+## Cards
+
+<IntegrationCards/>
+
 ## Triggers
 
-<IntegrationEvents integration="webhook"/>
+<IntegrationEvents/>

@@ -4,9 +4,19 @@ icon: 'message-square'
 ---
 
 import Card from '@/components/Card.astro'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
+import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
 
 The official Chat integration offers an **HTTP API to chat with your bot**.
 
 <Card title="Chat API" icon="chevrons-left-right" href="/api-reference/chat-api/">
   Check out the Chat API documentation for more information
 </Card>
+
+## Cards
+
+<IntegrationCards/>
+
+## Triggers
+
+<IntegrationEvents/>
