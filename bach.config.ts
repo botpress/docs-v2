@@ -201,7 +201,7 @@ export default defineConfig(collections, {
                   'integrations/integration-guides/bamboohr',
                   'integrations/integration-guides/canny',
                   'integrations/integration-guides/chat',
-                  'integrations/integration-guides/chatwoot',
+                  'integrations/integration-guides/plus-chatwoot',
                   'integrations/integration-guides/discord',
                   'integrations/integration-guides/plus-email-notifier',
                   'integrations/integration-guides/github',
