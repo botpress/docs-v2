@@ -1,7 +1,8 @@
 import type { SidebarNode } from '@/bach/types'
 import SidebarTreeView from './sidebar-tree-view'
 import ThemeToggle from './theme-toggle'
-import { LUCIDE_NAV_ICONS } from '../lib/nav-icons'
+import { ReactIcon } from './ReactIcon'
+import { isPathActive } from '@/bach/nav'
 
 interface NavItem {
   label: string
@@ -15,17 +16,9 @@ interface SidebarProps {
   tree: SidebarNode[]
 }
 
-function isActive(currentPath: string, href: string): boolean {
-  const norm = currentPath.endsWith('/') ? currentPath.slice(0, -1) : currentPath
-  const normHref = href.endsWith('/') ? href.slice(0, -1) : href
-  if (normHref === '' || normHref === '/') return norm === '' || norm === '/'
-  return norm === normHref
-}
-
 function NavIcon({ icon }: { icon: string }) {
   if (icon.startsWith('lucide:')) {
-    const Icon = LUCIDE_NAV_ICONS[icon.slice(7)]
-    return Icon ? <Icon className="h-4 w-4 shrink-0" /> : null
+    return <ReactIcon icon={icon} className="h-4 w-4 shrink-0" />
   }
   return (
     <span
@@ -70,14 +63,24 @@ export default function Sidebar({ currentPath, navItems, tree }: SidebarProps) {
               <a
                 target="_blank"
                 href={item.href}
-                className={`flex items-center gap-2 rounded-md px-2 mb-4 text-sm transition-colors ${
-                  isActive(currentPath, item.href)
-                    ? 'text-stone-900 dark:text-stone-100 font-medium'
-                    : 'text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100'
+                className={`group flex items-center gap-3 rounded-md px-2 mb-4 text-sm transition-colors ${
+                  isPathActive(item.href, currentPath)
+                    ? 'text-primary dark:text-primary'
+                    : 'text-stone-600 hover:text-primary dark:text-stone-400 dark:hover:text-primary'
                 }`}
               >
-                {item.icon && <NavIcon icon={item.icon} />}
-                {item.label}
+                {item.icon && (
+                  <span
+                    className={`inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border transition-colors ${
+                      isPathActive(item.href, currentPath)
+                        ? 'border-primary/30 bg-primary/5 dark:border-primary/40 dark:bg-primary/10'
+                        : 'border-stone-200 bg-white group-hover:border-primary/30 group-hover:bg-primary/5 dark:border-stone-700 dark:bg-stone-900 dark:group-hover:border-primary/40 dark:group-hover:bg-primary/10'
+                    }`}
+                  >
+                    <NavIcon icon={item.icon} />
+                  </span>
+                )}
+                <span className="font-semibold">{item.label}</span>
               </a>
             </li>
           ))}

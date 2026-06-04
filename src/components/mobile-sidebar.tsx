@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
-import { isPathActive } from '@/bach/nav'
 import type { SidebarNode, TabInfo } from '@/bach/types'
 import SidebarTreeView from './sidebar-tree-view'
 import ThemeToggle from './theme-toggle'
 import { ChevronDownIcon } from 'lucide-react'
-import { LUCIDE_NAV_ICONS } from '../lib/nav-icons'
+import { ReactIcon } from './ReactIcon'
 import { navigate } from 'astro:transitions/client'
+import { isPathActive } from '@/bach/nav'
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -40,8 +40,7 @@ interface Props {
 
 function NavIcon({ icon }: { icon: string }) {
   if (icon.startsWith('lucide:')) {
-    const Icon = LUCIDE_NAV_ICONS[icon.slice(7)]
-    return Icon ? <Icon className="h-4 w-4 shrink-0" /> : null
+    return <ReactIcon icon={icon} className="h-4 w-4 shrink-0" />
   }
   return (
     <span
@@ -215,6 +214,7 @@ export default function MobileSidebar({
       {mounted && (
         <div
           className="fixed inset-0 z-50 lg:hidden"
+          style={{ pointerEvents: open ? 'auto' : 'none' }}
           onTransitionEnd={() => {
             if (!open) setMounted(false)
           }}
@@ -223,6 +223,7 @@ export default function MobileSidebar({
             className="absolute inset-0 bg-black/10 backdrop-blur-[2px] transition-all ease-in-out dark:bg-black/20"
             style={{
               opacity: open ? 1 : 0,
+              pointerEvents: open ? 'auto' : 'none',
               transitionDuration: open ? '200ms' : '150ms',
             }}
             onClick={handleClose}
@@ -313,14 +314,14 @@ export default function MobileSidebar({
                     <li key={item.href}>
                       <a
                         href={item.href}
-                        className={`flex items-center gap-2 rounded-md px-2 mb-4 text-base transition-colors ${
-                          isPathActive(item.href, currentPath)
-                            ? 'text-primary bg-primary/10 dark:bg-primary/15 font-medium'
-                            : 'text-stone-600 hover:bg-black/5 dark:text-stone-400 dark:hover:bg-white/5'
-                        }`}
+                        className={`group flex items-center gap-3 rounded-md px-2 mb-4 text-base transition-colors hover:text-primary ${isPathActive(item.href, currentPath) ? 'text-primary font-semibold' : 'text-stone-600 dark:text-stone-400 dark:hover:text-primary'}`}
                       >
-                        {item.icon && <NavIcon icon={item.icon} />}
-                        {item.label}
+                        {item.icon && (
+                          <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-stone-200 bg-white transition-colors group-hover:border-primary/30 group-hover:bg-primary/5 dark:border-stone-700 dark:bg-stone-900 dark:group-hover:border-primary/40 dark:group-hover:bg-primary/10">
+                            <NavIcon icon={item.icon} />
+                          </span>
+                        )}
+                        <span className="font-semibold">{item.label}</span>
                       </a>
                     </li>
                   ))}

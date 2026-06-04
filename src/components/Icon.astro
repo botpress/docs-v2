@@ -1,24 +1,27 @@
 ---
-import { icons } from "lucide-react";
+import { Icon as AstroIcon } from "astro-icon/components";
 import clsx from "clsx";
+import type { IconName } from "@/types/icons";
 
 interface Props {
-  icon: keyof typeof icons;
+  icon: IconName;
   class?: string;
 }
 
 const { icon, class: className } = Astro.props;
-const IconComponent = icons[icon];
 
-if (!IconComponent) {
-  throw new Error(`Icon "${icon}" not found in lucide-react`);
-}
+// Unknown icon names are caught at compile time: IconName is derived from
+// @iconify-json/lucide/icons.json, so TypeScript will reject any invalid name.
+// astro-icon renders nothing silently at runtime, but that path is unreachable
+// with a valid build.
+const resolved = icon.includes(":") ? icon : `lucide:${icon}`;
 ---
 
-<IconComponent className={clsx(className, "size-4", "icon")} />
+<AstroIcon name={resolved} class={clsx(className, "size-4", "icon")} />
 
 <style>
-  :global(p) .icon {
+  :global(:is(p, li, strong, em, a)) .icon {
     display: inline;
+    vertical-align: middle;
   }
 </style>

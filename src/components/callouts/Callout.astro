@@ -1,12 +1,6 @@
 ---
-import {
-  Info as InfoIcon,
-  Lightbulb,
-  TriangleAlert,
-  OctagonAlert,
-  CircleCheck,
-  NotebookPen,
-} from "lucide-react";
+import Icon from "@/components/Icon.astro";
+import type { IconName } from "@/types/icons";
 
 type CalloutVariant =
   | "note"
@@ -27,60 +21,53 @@ const { variant = "note", title, class: className } = Astro.props;
 
 const config: Record<
   CalloutVariant,
-  {
-    border: string;
-    bg: string;
-    text: string;
-    iconComponent: typeof InfoIcon;
-  }
+  { border: string; bg: string; text: string; icon: IconName }
 > = {
   note: {
     border: "border-blue-200 dark:border-blue-900",
     bg: "bg-blue-50 dark:bg-blue-600/20",
     text: "text-blue-800 dark:text-blue-300",
-    iconComponent: InfoIcon,
+    icon: "info",
   },
   info: {
     border: "border-fuchsia-200/50 dark:border-purple-500/30",
     bg: "bg-fuchsia-50/50 dark:bg-fuchsia-500/10",
     text: "text-fuchsia-900 dark:text-fuchsia-200",
-    iconComponent: InfoIcon,
+    icon: "info",
   },
   tip: {
     border: "border-green-200 dark:border-green-900",
     bg: "bg-green-50 dark:bg-green-600/20",
     text: "text-green-800 dark:text-green-300",
-    iconComponent: Lightbulb,
+    icon: "lightbulb",
   },
   check: {
     border: "border-green-200 dark:border-green-900",
     bg: "bg-green-50 dark:bg-green-600/20",
     text: "text-green-800 dark:text-green-300",
-    iconComponent: CircleCheck,
+    icon: "circle-check",
   },
   warning: {
     border: "border-yellow-200 dark:border-yellow-900",
     bg: "bg-yellow-50 dark:bg-yellow-600/20",
     text: "text-yellow-800 dark:text-yellow-300",
-    iconComponent: TriangleAlert,
+    icon: "triangle-alert",
   },
   danger: {
     border: "border-red-200 dark:border-red-900",
     bg: "bg-red-50 dark:bg-red-600/20",
     text: "text-red-800 dark:text-red-300",
-    iconComponent: OctagonAlert,
+    icon: "octagon-alert",
   },
   goodtoknow: {
     border: "border-green-200 dark:border-green-900",
     bg: "bg-green-50 dark:bg-green-600/20",
     text: "text-green-800 dark:text-green-300",
-    iconComponent: NotebookPen,
+    icon: "notebook-pen",
   },
 };
 
 const c = config[variant];
-const IconComponent = c.iconComponent;
-const iconClass = `mt-0.5 h-4 w-4 shrink-0 ${c.text}`;
 ---
 
 <div
@@ -92,7 +79,7 @@ const iconClass = `mt-0.5 h-4 w-4 shrink-0 ${c.text}`;
     className,
   ]}
 >
-  <IconComponent className={iconClass} />
+  <Icon icon={c.icon} class={`mt-0.5 h-4 w-4 shrink-0 ${c.text}`} />
 
   <div
     class:list={[

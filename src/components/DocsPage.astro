@@ -1,7 +1,7 @@
 ---
 import PageOptions from "./page-options";
 import PageNavigation from "./page-navigation";
-import Footer from "./footer.astro";
+import Footer from "./Footer.astro";
 import { ClerkTOC } from "./clerk-toc";
 import {
   Breadcrumb,
@@ -30,6 +30,8 @@ const { Content } = renderResult;
 const headings = cleanupHeadings(entry.body ?? "", renderResult.headings);
 const useProse = "prose" in entry.data && entry.data.prose !== false;
 const title = entry.data.title;
+const description =
+  "description" in entry.data ? entry.data.description : undefined;
 ---
 
 {
@@ -45,9 +47,9 @@ const title = entry.data.title;
     <div class="flex w-full justify-center gap-10 px-8 pt-10 pb-8 sm:px-8 sm:pt-12 sm:pb-10 lg:px-16">
       <div class="min-w-0 max-w-[40rem] flex-1" data-pagefind-body>
         <article>
-          <div class="hidden items-start justify-between gap-4 lg:flex">
-            {breadcrumbs.length > 0 ? (
-              <Breadcrumb className="min-w-0 flex-1">
+          {breadcrumbs.length > 0 && (
+            <div class="mb-2">
+              <Breadcrumb>
                 <BreadcrumbList>
                   {breadcrumbs.map((crumb, i) => (
                     <>
@@ -61,22 +63,29 @@ const title = entry.data.title;
                   ))}
                 </BreadcrumbList>
               </Breadcrumb>
-            ) : (
-              <div />
-            )}
+            </div>
+          )}
 
-            <PageOptions client:load markdownUrl={markdownUrl} />
+          <div class="flex items-start justify-between gap-4">
+            <h1 class="font-heading text-3xl font-semibold text-stone-900 lg:text-4xl dark:text-stone-100">
+              {title}
+            </h1>
+            <div class="mt-1 hidden shrink-0 lg:block">
+              <PageOptions client:load markdownUrl={markdownUrl} />
+            </div>
           </div>
 
-          <h1 class="font-heading text-2xl font-semibold text-stone-900 lg:text-3xl dark:text-stone-100">
-            {title}
-          </h1>
+          {description && (
+            <p class="mt-2 text-lg text-stone-500 dark:text-stone-400">
+              {description}
+            </p>
+          )}
 
           <div class="mt-3 lg:hidden">
             <PageOptions client:load markdownUrl={markdownUrl} />
           </div>
 
-          <div class="prose prose-stone mt-6 max-w-none prose-headings:text-stone-900 prose-headings:font-semibold prose-p:text-stone-600 prose-a:text-stone-900 prose-a:underline prose-a:underline-offset-2 prose-a:decoration-stone-300 hover:prose-a:decoration-stone-500 prose-strong:text-stone-800 prose-code:rounded-md prose-code:bg-stone-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-stone-700 prose-code:before:content-none prose-code:after:content-none prose-th:text-left prose-th:text-stone-700 prose-td:text-stone-600 dark:prose-headings:text-stone-100 dark:prose-p:text-stone-300 dark:prose-a:text-stone-100 dark:prose-a:decoration-stone-600 dark:hover:prose-a:decoration-stone-400 dark:prose-strong:text-stone-200 dark:prose-code:bg-stone-800 dark:prose-code:text-stone-300 dark:prose-th:text-stone-300 dark:prose-td:text-stone-400 dark:prose-li:text-stone-300 dark:prose-hr:border-stone-800">
+          <div class="prose prose-stone mt-6 max-w-none prose-headings:text-stone-950 prose-p:text-stone-600 prose-li:text-stone-600 prose-a:text-stone-900 prose-a:underline prose-a:underline-offset-4 prose-a:decoration-primary prose-strong:text-stone-800 prose-code:rounded-md prose-code:bg-stone-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-stone-700 prose-code:before:content-none prose-code:after:content-none prose-th:text-left prose-th:text-stone-700 prose-td:text-stone-600 dark:prose-headings:text-stone-100 dark:prose-p:text-stone-300 dark:prose-a:text-stone-100 dark:prose-a:decoration-primary dark:hover:prose-a:decoration-primary dark:prose-strong:text-stone-200 dark:prose-code:bg-stone-800 dark:prose-code:text-stone-300 dark:prose-th:text-stone-300 dark:prose-td:text-stone-400 dark:prose-li:text-stone-300 dark:prose-hr:border-stone-800">
             <Content />
           </div>
 

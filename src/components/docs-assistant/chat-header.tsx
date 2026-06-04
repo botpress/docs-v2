@@ -17,7 +17,6 @@ import { cn } from '@/lib/utils'
 interface ChatHeaderProps {
   conversationIds: string[]
   currentConversationId?: string
-  selectedConversationId?: string
   onSwitchConversation: (id: string) => void
   onNewConversation: () => void
   onClearAll: () => void
@@ -27,7 +26,6 @@ interface ChatHeaderProps {
 export function ChatHeader({
   conversationIds,
   currentConversationId,
-  selectedConversationId,
   onSwitchConversation,
   onNewConversation,
   onClearAll,

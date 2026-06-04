@@ -1,14 +1,12 @@
 import { useState } from 'react'
-import { icons } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { hasActiveChild, isPathActive } from '@/bach/nav'
 import type { SidebarCategoryNode, SidebarNode } from '@/bach/types'
+import { ReactIcon } from './ReactIcon'
 
 function TreeIcon({ name }: { name: string }) {
-  const Icon = icons[name as keyof typeof icons]
-  if (!Icon) return null
-  return <Icon className="h-4 w-4 shrink-0" />
+  return <ReactIcon icon={name} className="h-4 w-4 shrink-0 text-primary" />
 }
 
 function SidebarMethodBadge({ method }: { method: string }) {
@@ -109,9 +107,7 @@ function NestedCategory({
         }}
       >
         <div className="overflow-hidden">
-          <ul
-            className={`relative space-y-0.5 ${depth === 0 ? 'before:absolute before:left-2.5 before:top-0.5 before:bottom-1 before:w-px before:bg-stone-300 dark:before:bg-stone-700' : ''}`}
-          >
+          <ul className="space-y-0.5">
             {node.children.map((child) => (
               <ChildNode
                 key={child.type === 'article' ? child.href : child.path}

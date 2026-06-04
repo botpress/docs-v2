@@ -1,0 +1,14 @@
+---
+import { LazyIframe as LazyIframeReact } from "./LazyIframe";
+
+interface Props {
+  src: string;
+  title: string;
+  height?: string;
+  class?: string;
+}
+
+const { src, title, height, class: className } = Astro.props;
+---
+
+<LazyIframeReact src={src} title={title} height={height} className={className} client:load />
