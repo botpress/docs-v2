@@ -1,0 +1,31 @@
+---
+title: Variables
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import Icon from '@/components/Icon.astro'
+import variableSectionImg from './assets/variable-section.png'
+import variableSectionDarkImg from './assets/variable-section-dark.png'
+import newVariableImg from './assets/new-variable.png'
+import newVariableDarkImg from './assets/new-variable-dark.png'
+
+Sometimes, it's useful for your bot to remember some information—for example, about a specific user or conversation.
+
+You can do this using _variables_. A variable is a container that lets you store information from somewhere in Botpress Studio and reuse it somewhere else.
+
+Create a new variable in the bottom-left section of the Studio:
+
+<Frame>
+  <Picture alt="Variable section" class="block dark:hidden" src={variableSectionImg} />
+  <Picture alt="Variable section" class="hidden dark:block" src={variableSectionDarkImg} />
+</Frame>
+
+1. Select <Icon icon="plus"/> in the upper-right corner.
+2. In the name field, enter `firstName`.
+3. Select **Add** to save your variable:
+
+<Frame>
+  <Picture alt="Variable" class="block dark:hidden" src={newVariableImg} />
+  <Picture alt="Variable" class="hidden dark:block" src={newVariableDarkImg} />
+</Frame>

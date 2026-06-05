@@ -1,0 +1,39 @@
+---
+title: Adding knowledge
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import Icon from '@/components/Icon.astro'
+import questionImg from './assets/question.png'
+import questionDarkImg from './assets/question-dark.png'
+import questionWithKbImg from './assets/question-with-kb.png'
+import questionWithKbDarkImg from './assets/question-with-kb-dark.png'
+
+Now that our bot has a custom prompt, let's try asking it a question:
+
+<Frame>
+  <Picture alt="Question" class="block dark:hidden" src={questionImg} />
+  <Picture alt="Question" class="hidden dark:block" src={questionDarkImg} />
+</Frame>
+
+That's not very helpful. The bot couldn't answer the question because we haven't given it the store's opening hours. Let's add them:
+
+1. Under <Icon icon="book-open"/> **Knowledge Bases**, select **Rich Text**.
+2. Select the newly created rich text file.
+
+This opens a blank text field. Copy and paste in the following text:
+
+```txt
+Monday-Friday: 10:00 AM to 6:00 PM
+Saturday-Sunday: 11:00 AM to 3:00 PM
+```
+
+Now, let's try that same question again in the emulator:
+
+<Frame>
+  <Picture alt="Question with Knowledge Base" class="block dark:hidden" src={questionWithKbImg} />
+  <Picture alt="Question with Knowledge Base" class="hidden dark:block" src={questionWithKbDarkImg} />
+</Frame>
+
+Much better! The bot was able to answer the question correctly.

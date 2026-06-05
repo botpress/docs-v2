@@ -1,0 +1,52 @@
+---
+title: Workflows
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import Icon from '@/components/Icon.astro'
+import { GoodToKnow } from '@/components/callouts'
+import mainWorkflowImg from './assets/main-workflow.png'
+import mainWorkflowDarkImg from './assets/main-workflow-dark.png'
+import transitionImg from './assets/transition.png'
+import transitionDarkImg from './assets/transition-dark.png'
+
+So far, we've only had our bot generate responses using AI. In practice, though, you might run into situations where you want your bot to perform some hard-coded logic.
+
+In Studio, you can do this using _Workflows_. A Workflow is a drag-and-drop canvas that represents the steps your bot follows during a conversation with a user.
+
+## Nodes
+
+Each step in a Workflow is represented by a _Node_. Let's open the Main Workflow and take a look at its Nodes:
+
+1. Go to the <Icon icon="workflow"/> **Workflows** section in the left sidebar.
+2. Select your **Main** Workflow. It should look something like this:
+
+<Frame>
+  <Picture alt="Main Workflow" class="block dark:hidden" src={mainWorkflowImg} />
+  <Picture alt="Main Workflow" class="hidden dark:block" src={mainWorkflowDarkImg} />
+</Frame>
+
+The Main Workflow contains the main logic for your bot—it executes as soon as a user starts a new conversation. By default, it contains:
+
+- A _Start Node_, which starts the conversation
+- An _Autonomous Node_, which generates AI responses
+- An _End Node_, which ends the conversation
+
+<GoodToKnow>
+  You may have noticed the Autonomous Node has an **Instructions** field with the same instructions we provided earlier.
+  This is no coincidence! The settings on Studio's home screen are shortcuts to configure the Autonomous Node.
+</GoodToKnow>
+
+## Transitions
+
+Notice the path connecting the Start Node and the Autonomous Node:
+
+<Frame>
+  <Picture alt="Transition" class="block dark:hidden" src={transitionImg} />
+  <Picture alt="Transition" class="hidden dark:block" src={transitionDarkImg} />
+</Frame>
+
+This is a _transition_. It tells your bot:
+
+> When the conversation starts, go directly to the Autonomous Node.
