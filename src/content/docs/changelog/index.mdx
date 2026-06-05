@@ -1,4 +1,1902 @@
 ---
-title: Introduction
-description: A history of changes and updates to Botpress.
+title: Changelog
+description: The latest updates and improvements to Botpress.
+icon: newspaper
 ---
+
+import { Picture } from 'astro:assets'
+import img20260501IntegrationsHubDashboard from './assets/2026-05-01/integrations-hub-dashboard.png'
+import img20260501IntegrationsHubDashboardDark from './assets/2026-05-01/integrations-hub-dashboard-dark.png'
+import img20260501RangeSlider from './assets/2026-05-01/range-slider.png'
+import img20260501RangeSliderDark from './assets/2026-05-01/range-slider-dark.png'
+import img20260417PromptEditor from './assets/2026-04-17/prompt-editor.png'
+import img20260417PromptEditorDark from './assets/2026-04-17/prompt-editor-dark.png'
+import img20260410IntegrationsHub from './assets/2026-04-10/integrations-hub.png'
+import img20260410IntegrationsHubDark from './assets/2026-04-10/integrations-hub-dark.png'
+import img20260410NewKnowledgeSources from './assets/2026-04-10/new-knowledge-sources.png'
+import img20260410NewKnowledgeSourcesDark from './assets/2026-04-10/new-knowledge-sources-dark.png'
+import img20260320AdkCopilot from './assets/2026-03-20/adk-copilot.png'
+import img20260320AdkCopilotDark from './assets/2026-03-20/adk-copilot-dark.png'
+import img20260313AdkChat from './assets/2026-03-13/adk_chat.png'
+import img20260313AdkChatDark from './assets/2026-03-13/adk_chat_dark.png'
+import img20260306AdkControlPanel from './assets/2026-03-06/adk-control-panel.png'
+import img20260306AdkControlPanelDark from './assets/2026-03-06/adk-control-panel-dark.png'
+import img20260306AdkAction from './assets/2026-03-06/adk-action.png'
+import img20260306AdkActionDark from './assets/2026-03-06/adk-action-dark.png'
+import img20260306AdkTrigger from './assets/2026-03-06/adk-trigger.png'
+import img20260306AdkTriggerDark from './assets/2026-03-06/adk-trigger-dark.png'
+import img20260306AdkEvals from './assets/2026-03-06/adk-evals.png'
+import img20260306AdkEvalsDark from './assets/2026-03-06/adk-evals-dark.png'
+import img20260306AdkConfigVar from './assets/2026-03-06/adk-config-var.png'
+import img20260306AdkConfigVarDark from './assets/2026-03-06/adk-config-var-dark.png'
+import img20260227OnboardingFlow from './assets/2026-02-27/onboarding-flow.png'
+import img20260227OnboardingFlowDark from './assets/2026-02-27/onboarding-flow-dark.png'
+import img20260206ShowEmptyConversations from './assets/2026-02-06/show-empty-conversations.png'
+import img20260206ShowEmptyConversationsDark from './assets/2026-02-06/show-empty-conversations-dark.png'
+import img20260123AdditionalContext from './assets/2026-01-23/additional-context.png'
+import img20260123AdditionalContextDark from './assets/2026-01-23/additional-context-dark.png'
+import img20260123LoggingMode from './assets/2026-01-23/logging-mode.png'
+import img20260123LoggingModeDark from './assets/2026-01-23/logging-mode-dark.png'
+import img20260109CreatedBy from './assets/2026-01-09/created-by.png'
+import img20260109CreatedByDark from './assets/2026-01-09/created-by-dark.png'
+import img20251219AdkFlow from './assets/2025-12-19/adk-flow.png'
+import img20251205Filters from './assets/2025-12-05/filters.png'
+import img20251205FiltersDark from './assets/2025-12-05/filters-dark.png'
+import img20251128NewModelPicker from './assets/2025-11-28/new-model-picker.png'
+import img20251128NewModelPickerDark from './assets/2025-11-28/new-model-picker-dark.png'
+import img20251114BotIdentity from './assets/2025-11-14/bot-identity.png'
+import img20251114BotIdentityDark from './assets/2025-11-14/bot-identity-dark.png'
+import img20251114BotAppearance from './assets/2025-11-14/bot-appearance.png'
+import img20251114BotAppearanceDark from './assets/2025-11-14/bot-appearance-dark.png'
+import img20251114DeploySettings from './assets/2025-11-14/deploy-settings.png'
+import img20251114DeploySettingsDark from './assets/2025-11-14/deploy-settings-dark.png'
+import img20251114Features from './assets/2025-11-14/features.png'
+import img20251114FeaturesDark from './assets/2025-11-14/features-dark.png'
+import img20251114CardTray from './assets/2025-11-14/card-tray.png'
+import img20251114CardTrayDark from './assets/2025-11-14/card-tray-dark.png'
+import img20251106NewBilling from './assets/2025-11-06/new-billing.png'
+import img20251106NewBillingDark from './assets/2025-11-06/new-billing-dark.png'
+import img20251031DashboardKb from './assets/2025-10-31/dashboard-kb.png'
+import img20251031DashboardKbDark from './assets/2025-10-31/dashboard-kb-dark.png'
+import img20251031NewOverview from './assets/2025-10-31/new-overview.png'
+import img20251031NewOverviewDark from './assets/2025-10-31/new-overview-dark.png'
+import img20251031NewConversations from './assets/2025-10-31/new-conversations.png'
+import img20251031NewConversationsDark from './assets/2025-10-31/new-conversations-dark.png'
+import img20251017Publish from './assets/2025-10-17/publish.png'
+import img20251017PublishDark from './assets/2025-10-17/publish-dark.png'
+import img20251003NewLogin from './assets/2025-10-03/new-login.gif'
+import img20251003OtherUseCase from './assets/2025-10-03/other-use-case.png'
+import img20251003OtherUseCaseDark from './assets/2025-10-03/other-use-case-dark.png'
+import img20251003Goal from './assets/2025-10-03/goal.png'
+import img20251003GoalDark from './assets/2025-10-03/goal-dark.png'
+import img20250926CustomToggle from './assets/2025-09-26/custom-toggle.gif'
+import img20250926CustomToggleDark from './assets/2025-09-26/custom-toggle-dark.gif'
+import img20250926BotSelect from './assets/2025-09-26/bot-select.png'
+import img20250926BotSelectDark from './assets/2025-09-26/bot-select-dark.png'
+import img20250919ConfirmDelete from './assets/2025-09-19/confirm-delete.png'
+import img20250919ConfirmDeleteDark from './assets/2025-09-19/confirm-delete-dark.png'
+import img20250912AnVariables from './assets/2025-09-12/an-variables.png'
+import img20250912AnVariablesDark from './assets/2025-09-12/an-variables-dark.png'
+import img20250905GeneralWebchat from './assets/2025-09-05/general-webchat.png'
+import img20250905GeneralWebchatDark from './assets/2025-09-05/general-webchat-dark.png'
+import img20250905ThemeWebchat from './assets/2025-09-05/theme-webchat.png'
+import img20250905ThemeWebchatDark from './assets/2025-09-05/theme-webchat-dark.png'
+import img20250829DashLayout from './assets/2025-08-29/dash-layout.png'
+import img20250829DashLayoutDark from './assets/2025-08-29/dash-layout-dark.png'
+import img20250815SearchFonts from './assets/2025-08-15/search-fonts.gif'
+import img20250815SearchFontsDark from './assets/2025-08-15/search-fonts-dark.gif'
+import img20250815AnalyticsTabs from './assets/2025-08-15/analytics-tabs.png'
+import img20250815AnalyticsTabsDark from './assets/2025-08-15/analytics-tabs-dark.png'
+import img20250808Gpt5Botpress from './assets/2025-08-08/gpt5-botpress.png'
+import img20250718Addons from './assets/2025-07-18/addons.png'
+import img20250718AddonsDark from './assets/2025-07-18/addons-dark.png'
+import img20250711WebchatNotification from './assets/2025-07-11/webchat-notification.png'
+import img20250711WebchatNotificationDark from './assets/2025-07-11/webchat-notification-dark.png'
+import img20250704Category from './assets/2025-07-04/category.png'
+import img20250704CategoryDark from './assets/2025-07-04/category-dark.png'
+import img20250704Knowledge from './assets/2025-07-04/knowledge.png'
+import img20250704KnowledgeDark from './assets/2025-07-04/knowledge-dark.png'
+import img20250704NewAgent from './assets/2025-07-04/new-agent.png'
+import img20250613AiSpendTotal from './assets/2025-06-13/ai-spend-total.png'
+import img20250613AiSpendTotalDark from './assets/2025-06-13/ai-spend-total-dark.png'
+import img20250613AiSpendDaily from './assets/2025-06-13/ai-spend-daily.png'
+import img20250613AiSpendDailyDark from './assets/2025-06-13/ai-spend-daily-dark.png'
+import img20250606NewWebchat from './assets/2025-06-06/new-webchat.png'
+import img20250606NewWebchatDark from './assets/2025-06-06/new-webchat-dark.png'
+import img20250606WebchatFeedback from './assets/2025-06-06/webchat-feedback.png'
+import img20250606WebchatFeedbackDark from './assets/2025-06-06/webchat-feedback-dark.png'
+import img20250530InactivityTimeout from './assets/2025-05-30/inactivity-timeout.png'
+import img20250530InactivityTimeoutDark from './assets/2025-05-30/inactivity-timeout-dark.png'
+import img20250523CronTimezone from './assets/2025-05-23/cron-timezone.png'
+import img20250516DashboardNotifications from './assets/2025-05-16/dashboard-notifications.png'
+import img20250502ProactiveSlackThreads from './assets/2025-05-02/proactive-slack-threads.png'
+import img20250502DisplayLastMessageDate from './assets/2025-05-02/display-last-message-date.png'
+
+import imgStudioConceptsNodesAn from '../studio/concepts/nodes/assets/an.png'
+import imgStudioConceptsNodesAnDark from '../studio/concepts/nodes/assets/an-dark.png'
+import imgStudioConceptsActionPrompt from '../studio/concepts/assets/action-prompt.png'
+import imgStudioConceptsActionPromptDark from '../studio/concepts/assets/action-prompt-dark.png'
+import imgStudioConceptsGeneratedAction from '../studio/concepts/assets/generated-action.png'
+import imgStudioConceptsGeneratedActionDark from '../studio/concepts/assets/generated-action-dark.png'
+import imgStudioConceptsCardsCardInspector from '../studio/concepts/cards/assets/card-inspector.png'
+import imgStudioConceptsCardsCardInspectorDark from '../studio/concepts/cards/assets/card-inspector-dark.png'
+
+import Update from '@/components/Update.astro'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+
+<Update label="May 8, 2026">
+
+### Features & enhancements
+
+- Improve UI for filtering conversations by message count
+
+### Bug fixes
+
+- Fixed an issue where bots could fail to load on flaky networks (VPNs, proxies) due to dropped WebSocket connections
+- Reduced typing lag in the Autonomous Node transition condition input field
+- Fixed an issue where expired session tokens could prevent bots from reconnecting
+- Fixed an issue where closed conversations in the Human Handoff dashboard were not loading
+
+### Integrations
+
+- **Odoo:** Added Odoo integration
+- **WhatsApp:** Added native support for Carousels and Cards
+
+</Update>
+
+<Update label="May 1, 2026">
+
+### Features & enhancements
+
+- Added support for [Claude Opus 4.7](https://www.anthropic.com/news/claude-opus-4-7)
+- Added an integration hub to the dashboard:
+
+<Frame>
+  <Picture
+    alt="Integrations hub on the dashboard"
+    class="block dark:hidden"
+    src={img20260501IntegrationsHubDashboard}
+  />
+  <Picture
+    alt="Integrations hub on the dashboard"
+    class="hidden dark:block"
+    src={img20260501IntegrationsHubDashboardDark}
+  />
+</Frame>
+
+- Added a range slider for filtering conversations by number of messages in the [conversations menu](/get-started/manage-your-agent/monitor#conversations):
+
+<Frame>
+  <Picture alt="Conversation range slider" class="block dark:hidden" src={img20260501RangeSlider} />
+  <Picture alt="Conversation range slider" class="hidden dark:block" src={img20260501RangeSliderDark} />
+</Frame>
+
+### Bug fixes
+
+- Fixed an issue where Nodes could become corrupted or inconsistent when using multiplayer in Studio
+- Fixed an issue where multiplayer was causing some users to get stuck on the “Loading bot” screen or would receive a “Failed to load bot” error
+- Fixed an issue where formatting problems were adding unnecessary latency to the Translator Agent’s JSON response
+- Fixed an issue where the AI Generate Text Card was displaying an incorrect token limit under the **Prompt** field for certain models
+- Fixed an issue where refreshing the page after saving the Human-in-the-Loop (HITL) integration’s configuration would erase the values of the configuration fields
+- Fixed an issue where the Webchat delivery status indicator wasn’t translated to languages other than English
+
+### Integrations
+
+- **Slack**: Video and audio messages now appear as native media in Slack instead of plain text links
+- **Linear**: Webhooks for issues and comments now register automatically when you connect your account
+- **Airtable**: Added option to connect via OAuth
+
+</Update>
+
+<Update label="April 24, 2026">
+
+### Features & enhancements
+
+- Added auto-translation for Webchat UI components based on browser locale
+
+### Bug fixes
+
+- Fixed an issue where the initial bot setup would get stuck on a loading screen without completing or timing out
+- Fixed a visual issue in the pricing plan selection dialog
+- Fixed various issues with the integration hub
+- Fixed an issue where Webchat conversation history would persist indefinitely even when configured to clear data when the browser tab closes
+- Fixed an issue where the Human-in-the-Loop dashboard was reloading the entire conversation list every few seconds, causing unnecessary slowdowns
+
+### Integrations
+
+- **Postmark**: Added Postmark integration
+- **Messenger and Facebook**: Fixed an error during OAuth setup where fetching Facebook Pages could fail due to incorrect API response parsing
+- **Slack**: Improved manual configuration process using OAuth
+- **Zendesk Messaging HITL**: Added support for linking sessions to existing Zendesk Support users by passing a user's `externalId` into the Email field
+  on the Start HITL card.
+- **HubSpot**: Added support for Human-in-the-Loop (HITL)
+
+</Update>
+
+<Update label="April 17, 2026">
+  ### Revamped Autonomous Node
+
+Improved the UX of the Autonomous Node, including a brand new prompt editor which:
+
+- Provides a macro menu for quickly referencing Knowledge Base, variables and more
+- Introduces a raw Markdown mode for precise editing
+
+<Tabs>
+  <Tab title="Autonomous Node">
+    <Frame>
+      <Picture alt="Autonomous Node" class="block dark:hidden" src={imgStudioConceptsNodesAn} />
+      <Picture alt="Autonomous Node" class="hidden dark:block" src={imgStudioConceptsNodesAnDark} />
+    </Frame>
+  </Tab>
+  <Tab title="Prompt editor">
+    <Frame>
+      <Picture alt="Prompt editor" class="block dark:hidden" src={img20260417PromptEditor} />
+      <Picture alt="Prompt editor" class="hidden dark:block" src={img20260417PromptEditorDark} />
+    </Frame>
+  </Tab>
+</Tabs>
+
+### Improved Studio multiplayer
+
+Revamped the Studio multiplayer and added multiple features/enhancements, including:
+
+- Greatly improved performance and latency
+- Real-time cursor position display for teammates
+- Ability to "focus" on a specific teammate and follow their cursor
+- Visual indicators displaying which Node each teammate is focused on
+
+### Bug fixes
+
+- Fixed a race condition which was preventing bots from responding when opening the Webchat preview URL under certain circumstances
+
+### Integrations
+
+- **Telegram**: Fixed an issue where the typing indicator was raising errors when the typing indicator emoji was disabled
+- **WhatsApp**: Fixed an issue where events sent by WhatsApp were mistakenly raising an error
+
+</Update>
+
+<Update label="April 10, 2026">
+
+### Redesigned integrations Hub
+
+Revamped the design of the integration Hub:
+
+<Frame>
+  <Picture alt="Integrations Hub" class="block dark:hidden" src={img20260410IntegrationsHub} />
+  <Picture alt="Integrations Hub" class="hidden dark:block" src={img20260410IntegrationsHubDark} />
+</Frame>
+
+### New knowledge source providers
+
+Added new knowledge source providers to Knowledge Bases:
+
+- Linear
+- GitHub
+- Confluence
+- Google Drive
+- Notion
+
+<Frame>
+  <Picture alt="New knowledge sources" class="block dark:hidden" src={img20260410NewKnowledgeSources} />
+  <Picture alt="New knowledge sources" class="hidden dark:block" src={img20260410NewKnowledgeSourcesDark} />
+</Frame>
+
+### Integrations
+
+- **Discord**: Added [Discord](/integrations/integration-guides/discord) integration
+- **Zoom**: Added a new Transcript Received Trigger that returns the raw content of a meeting's transcript
+
+### Bug fixes
+
+- Fixed an issue with editing two bots simultaneously in different browser tabs where saving one bot would corrupt the draft of the other
+- Fixed an issue in the [Human Handoff](/get-started/manage-your-agent/human-handoff) dashboard where long messages would overflow horizontally
+
+</Update>
+
+<Update label="April 3, 2026">
+
+### Studio
+
+### Features & enhancements
+
+- Added option to select the model used by the Vision Agent inside [Extract Content from Image](/studio/concepts/agents/vision-agent#extract-from-incoming-images) Card
+- Added `--url` flag to CLI `deploy` command allowing you to pass a custom URL when deploying an integration
+
+### Integrations
+
+- **Airtable**: Improved UX of adding Fields in Cards.
+- **Slack**:
+  - Improved use of mentions in broadcast messages
+  - Added [Get Channels Info](/integrations/integration-guides/slack#get-channels-info) action
+- **WhatsApp**:
+  - Added configuration option for customizing typing indicator
+  - Added support for using named parameters in template variables
+- **Google Sheets**: Improved OAuth configuration flow
+- **Salesforce**: Improved OAuth configuration flow
+- **Kommo**: Added Kommo Integration
+
+### Bug fixes
+
+- Fixed issues in Tables with columns duplicating or disappearing when being renamed
+
+</Update>
+
+<Update label="March 27, 2026">
+
+### Studio
+
+### Features & enhancements
+
+- New AI Models: Claude Opus 4.5, Qwen3 8B, Gemini 2.5 Pro/Flash-Lite, Gemini 3.1 Pro/Flash-Lite, Grok 4.1 Fast, Grok 4.20
+- Added support for bot secrets in SDK
+
+### Integrations
+
+- **Dropbox**: You can now sync files to Knowledge Bases
+- **WhatsApp**: Added [List Message Templates](/integrations/integration-guides/whatsapp/introduction#list-message-templates) Card
+- **Linear**: Added new Triggers:
+  - [Aggregate File Changes](/integrations/integration-guides/linear#aggregate-file-changes)
+  - [File Created](/integrations/integration-guides/linear#file-created)
+  - [File Deleted](/integrations/integration-guides/linear#file-deleted)
+  - [File Updated](/integrations/integration-guides/linear#file-updated)
+  - [Folder Deleted Recursive](/integrations/integration-guides/linear#folder-deleted-recursive)
+- **GitHub**: Added new Triggers:
+  - [Aggregate File Changes](/integrations/integration-guides/github#aggregate-file-changes)
+  - [File Created](/integrations/integration-guides/github#file-created)
+  - [File Deleted](/integrations/integration-guides/github#file-deleted)
+  - [File Updated](/integrations/integration-guides/github#file-updated)
+  - [Folder Deleted Recursive](/integrations/integration-guides/github#folder-deleted-recursive)
+- **Telegram**: Added typing indicator toggle in integration settings
+
+### Bug fixes
+
+- Fixed an issue with conversations appearing empty when [AI insights](/get-started/manage-your-agent/monitor#ai-insights) were disabled
+
+---
+
+### ADK
+
+### Control Panel
+
+- Added a global command palette (`Cmd+K` / `Ctrl+K`) for quick navigation in the Control Panel
+- New **Models** page listing all available models
+- Updated UI for **Settings** and **Trigger** pages
+- Added Agent Steps to **Chat** page to see what your agent is doing while it runs
+- **Actions page** accepts JSON5/JS object syntax for testing actions
+
+### CLI
+
+- Added `adk models` command to see all available models
+
+</Update>
+
+<Update label="March 20, 2026">
+
+### Studio
+
+### Features & enhancements
+
+- New AI Models: GPT 5.4, Sonnet 4.6, Opus 4.6, Gemini 3.1 Pro Preview
+- Added support for MDX (Markdown JSX) in the Files API
+
+### Integrations
+
+- All integrations now automatically save configuration settings upon completion of OAuth
+- **Linear**, **HubSpot**, **LinkedIn**, **GitHub**, and **Notion** now supports OAuth for multiple bots
+- **WeChat**: Added WeChat integration
+- **WhatsApp**: Added events to track outbound message delivery lifecycle
+
+### Bug fixes
+
+- Fixed issue where integration settings were reset on update
+- Fixed issue with duplicate header names in Tables
+- Fixed issue with duplicate variables being created after variable deletion
+- Fixed errors when connecting additional stylesheets in Webchat
+
+---
+
+### ADK
+
+### Control Panel
+
+- Added Copilot (OpenCode) Panel
+
+<Frame>
+  <Picture alt="ADK Control Panel with Copilot (OpenCode)" class="block dark:hidden" src={img20260320AdkCopilot} />
+  <Picture alt="ADK Control Panel with Copilot (OpenCode)" class="hidden dark:block" src={img20260320AdkCopilotDark} />
+</Frame>
+
+- Added Chat history in Conversations page
+- Updated Traces page UI
+
+### CLI
+
+- Self upgrade support for Windows using `adk self-upgrade`
+- Add Copilot (OpenCode) support using `adk dev --copilot`
+
+</Update>
+
+<Update label="March 13, 2026">
+
+### Studio
+
+### Features & enhancements
+
+- Webchat can now recover messages if user's connection is interrupted
+
+### Integrations
+
+- **Zendesk**: Improved HITL support
+- **HITL**: Added support to pass additional information through tags
+- **Google Calendar** and **Google Sheets**: OAuth is now available
+
+### Bug fixes
+
+- Fixed an issue where Bot Identity and Styling changes were not saving
+- Fixed an issue where default boolean columns in the **Insert Record** card did not default to false
+- Fixed an issue in Webchat where text messages appeared as code blocks
+
+---
+
+### ADK
+
+### Control Panel
+
+- Added a visual Chat view to test conversations and traces (requires Webchat installation):
+
+<Frame>
+  <Picture alt="Chat view with Timeline and Bot conversation" class="block dark:hidden" src={img20260313AdkChat} />
+  <Picture alt="Chat view with Timeline and Bot conversation" class="hidden dark:block" src={img20260313AdkChatDark} />
+</Frame>
+
+- Updated the UI for the **Tables** and **Traces** pages
+- Added variable validation for **Configuration Variables**
+- Improved the type system for workflow events in conversation handlers
+
+### CLI
+
+- Improved support for Windows
+- MCP port can now be assigned using `adk mcp --port <port>`
+- The Control Panel no longer opens automatically on `adk dev`
+
+</Update>
+
+<Update label="March 6, 2026">
+
+### Studio
+
+### Features & enhancements
+
+- Improved breakdown UI for **AI Spend by Source** dashboard
+- Improved logging for Integrations in **Audits** page
+
+### Integrations
+
+- **Dropbox**: Added OAuth configuration
+- **HubSpot**: Added new cards
+  - [Get Company](/integrations/integration-guides/hubspot#get-company)
+  - [Update Company](/integrations/integration-guides/hubspot#update-company)
+
+---
+
+### ADK
+
+### Control Panel
+
+- The dev console has been replaced by the **Control Panel**
+- Dark (default) and light themes with toggle in the top bar
+- New **Overview** page with panels for Agent summary, Component inventory, and Runtime and Integrations:
+
+<Frame>
+  <Picture
+    alt="ADK Control Panel with sidebar and main view"
+    class="block dark:hidden"
+    src={img20260306AdkControlPanel}
+  />
+  <Picture
+    alt="ADK Control Panel with sidebar and main view"
+    class="hidden dark:block"
+    src={img20260306AdkControlPanelDark}
+  />
+</Frame>
+
+- Restructured sidebar into **Connect**, **Build**, **Data**, and **Observe** sections
+- Improved UI across **Workflow**, **Logs** and **Traces** pages
+- Added ability to test Integration and Bot Actions in one place on the **Actions** page:
+
+<Frame>
+  <Picture alt="Actions page with Integration and Bot Actions" class="block dark:hidden" src={img20260306AdkAction} />
+  <Picture
+    alt="Actions page with Integration and Bot Actions"
+    class="hidden dark:block"
+    src={img20260306AdkActionDark}
+  />
+</Frame>
+
+- Added a **Triggers** page for managing triggers in your ADK agents:
+
+<Frame>
+  <Picture alt="Triggers page in Control Panel" class="block dark:hidden" src={img20260306AdkTrigger} />
+  <Picture alt="Triggers page in Control Panel" class="hidden dark:block" src={img20260306AdkTriggerDark} />
+</Frame>
+
+- Added an **Evals** page for running declarative conversation tests on your ADK agents:
+
+<Frame>
+  <Picture alt="Evals page for declarative conversation tests" class="block dark:hidden" src={img20260306AdkEvals} />
+  <Picture
+    alt="Evals page for declarative conversation tests"
+    class="hidden dark:block"
+    src={img20260306AdkEvalsDark}
+  />
+</Frame>
+
+- Added Configuration Variable management in the **Settings** page:
+
+<Frame>
+  <Picture
+    alt="Configuration Variable management in Settings"
+    class="block dark:hidden"
+    src={img20260306AdkConfigVar}
+  />
+  <Picture
+    alt="Configuration Variable management in Settings"
+    class="hidden dark:block"
+    src={img20260306AdkConfigVarDark}
+  />
+</Frame>
+
+- Testing page removed
+
+### CLI
+
+- Added support to create a new agent without prompts by use `adk init --yes` or `adk init --defaults`
+- Use `adk init --skip-link` to skip the interactive bot-linking step
+- You can set the Control Panel theme (dark or light) using `adk theme`
+
+</Update>
+
+<Update label="February 27th, 2026">
+
+### Features & enhancements
+
+- Added a new onboarding experience when creating a bot in Studio:
+
+<Frame>
+  <Picture
+    alt="Choose an option - Guided Setup or Start from Scratch"
+    class="block dark:hidden"
+    src={img20260227OnboardingFlow}
+  />
+  <Picture
+    alt="Choose an option - Guided Setup or Start from Scratch"
+    class="hidden dark:block"
+    src={img20260227OnboardingFlowDark}
+  />
+</Frame>
+
+- Improved formatting for lists and headings in [Comment Cards](/studio/concepts/cards/utilities#comment)
+
+### Bug fixes
+
+- Fixed an issue where the **Unsaved changes** button appeared even after saving
+- Fixed an issue where inserting Cards into a Node caused them to appear in previously selected Nodes
+- Fixed an issue where variables were unintentionally removed from an Autonomous Node while editing instructions
+- Fixed an issue where non-nullable table fields were incorrectly defaulting to null
+  </Update>
+
+<Update label="February 20th, 2026">
+
+### Features & enhancements
+
+- Improved response for retry on [Capture Information Cards](studio/concepts/cards/capture-information)
+- Improved autoscroll behaviour of new messages in Webchat
+
+### Bug fixes
+
+- “Select All” in Knowledge Base now accurately selects visible (filtered) documents and data sources
+  </Update>
+
+<Update label="February 13th, 2026">
+
+### Features & enhancements
+
+- Improved error handling for AI Code Suggestions in [Execute Code Cards](/studio/concepts/cards/execute-code)
+- Improved website crawling for Knowledge Bases
+- Added support for variables in Confirm Cancel Messages in [Single Choice Cards](studio/concepts/cards/capture-information#single-choice)
+- Improved UI for dark mode in Webchat
+
+### Integrations
+
+- **Sunshine Conversations**: Added OAuth configuration
+
+### Bug fixes
+
+- Fixed an issue of generating multiple ports
+- Prevent crashing on certain search terms
+  </Update>
+
+<Update label="February 6th, 2026">
+
+### Features & enhancements
+
+- Added the option to show/hide empty conversations in the dashboard:
+
+<Frame>
+  <Picture alt="Show empty conversations" class="block dark:hidden" src={img20260206ShowEmptyConversations} />
+  <Picture alt="Show empty conversations" class="hidden dark:block" src={img20260206ShowEmptyConversationsDark} />
+</Frame>
+
+- Improved UX for inserting a link in a comment Node
+- Improved the Translation Agent's performance when translating dropdown and multiple choice messages
+
+### Integrations
+
+- **LinkedIn**: Added LinkedIn integration
+- **WhatsApp**: Fixed an issue where the message delivery status wasn’t updating properly in playground
+- **Trello**: Improved security and reliability
+
+### Bug fixes
+
+- Fixed an issue where Actions would fail to capture input on first attempt
+- Fixed Knowledge Bases being deleted right after creation in new bots under certain circumstances
+  </Update>
+
+<Update label="January 30, 2026">
+  ### Features & enhancements
+
+- [Gemini 3 previews](https://aistudio.google.com/models/gemini-3) are now available in Studio
+- Improved UI for viewing video guides in Studio
+- You can now copy the raw LLMz output when inspecting a message in the emulator
+- Studio now displays exactly which configuration field is causing an error when attempting to save an integration's configuration
+- Added support for BCP 47 to the Translator Agent, which helps distinguish between traditional and simplified Chinese
+
+### Integrations
+
+- **BambooHR**: Fixed an issue that was causing the [Get Custom Info](/integrations/integration-guides/bamboohr#get-custom-info) Card to not return any fields
+- **WhatsApp**:
+  - Improved logging when messages fail to send
+  - Added referral metadata to tags, which provides details about the origin of the conversation
+
+### Bug fixes
+
+- Fixed an issue where changes to a Workflow were being lost due to a failure to save the Workflow
+- Fixed an issue where certain integrations showed an error message before attempting to save the configuration
+- Fixed an issue where certain Knowledge Base IDs were being duplicated when copying a bot
+- Fixed an issue where the [Find Records](/studio/concepts/cards/tables#find-records) Card wasn't working properly with queries containing variables
+- Fixed a visual issue with the error message displayed when attempting to drag Autonomous Node Cards into a Standard Node
+- Fixed a visual issue where default connectors were missing from Nodes with multiple exit connectors
+- Fixed an issue where hooks related to an integration were deleted after copying a bot if that integration wasn't enabled or configured
+- Fixed an issue where large favicons were preventing websites from being crawled properly
+
+</Update>
+
+<Update label="January 23, 2026">
+  ### Additional context for Agents
+
+When using the Translator Agent or Summary Agent, you can now provide additional context via an **Additional Context** field:
+
+<Frame>
+  <Picture alt="Additional context" class="block dark:hidden" src={img20260123AdditionalContext} />
+  <Picture alt="Additional context" class="hidden dark:block" src={img20260123AdditionalContextDark} />
+</Frame>
+
+### Logging options
+
+You can now configure a **Logging Mode** in your bot's settings:
+
+<Frame>
+  <Picture alt="Logging mode" class="block dark:hidden" src={img20260123LoggingMode} />
+  <Picture alt="Logging mode" class="hidden dark:block" src={img20260123LoggingModeDark} />
+</Frame>
+
+This lets you choose between 4 options for logging:
+
+- **Enabled**: Displays all logs
+- **Verbose**: Displays all logs with as much detail as possible
+- **Disabled**: Doesn't display any logs
+- **Console logs only**: Only displays logs you've written yourself
+
+### Integrations
+
+- **Tally**: Added Tally integration
+- **Slack**:
+  - Added **Reply Behaviour** field to configure where the bot should send replies (in the channel, thread, or both)
+  - Added parsing from Markdown to [`mrkdwn`](https://docs.slack.dev/messaging/formatting-message-text/#basic-formatting)
+- **Twilio**:
+  - Added typing and "read" indicator support
+  - Improved rendering for multiple content types in the same message
+- **Zendesk**: Improved logging and error tracking
+- **Trello**: Various bug fixes and improvements
+
+### Bug fixes
+
+- Fixed an issue that was preventing horizontal scrolling in Tables and Knowledge Bases
+- Fixed an issue where adding the same website page to 2 different Knowledge Bases would cause the first Knowledge Base to delete that page
+- Fixed an issue where website Knowledge Base sources were reappearing after being deleted
+- Fixed an issue where conversation variables and user variables didn't persist their assigned value after the conversation transitioned to another Workflow
+- Fixed an issue where using Anthropic models with the Personality Agent was causing unexpected errors
+- Fixed an issue where copying a bot to a new bot didn't enable integrations automatically
+- Fixed an issue where Start Nodes could be copied, even if the copies never executed
+- Fixed an issue where additional End Nodes couldn't be deleted when created as copies of the default End Node
+- Fixed an issue with the Summary Agent where setting the **Transcript Max Messages** setting to 0 would cause an error
+- Fixed an issue with integration pages in the Hub where the Card schemas displayed matched the latest version of the integration instead of the currently installed version
+- Fixed an issue where the Capture Information Card's **Skip if variable is already filled** option wasn't skipping properly when the assigned value was an empty object
+
+</Update>
+
+<Update label="January 16, 2026">
+  ### Features & enhancements
+
+- You can now use models from [Mistral AI](https://mistral.ai/) by installing the official integration
+- Users can now upload `.gif` and `.webp` images to their conversations in Webchat
+- When users upload a file to a Webchat conversation, the Botpress file ID is now included in the event's payload as `fileId`. This allows the bot to manipulate the uploaded file directly (for example, changing its permissions or deleting it)
+
+---
+
+### Integrations
+
+### BambooHR
+
+Improved parsing for input in the integration's configuration fields
+
+### Gmail
+
+- Improved error handling for when users delete messages
+- Fixed bug that was causing messages to be processed multiple times
+
+### Google Sheets
+
+Added new Cards:
+
+- [Find Rows](integrations/integration-guides/gsheets#find-rows)
+- [Find Row (First Match)](integrations/integration-guides/gsheets#find-row-first-match)
+- [Get Row](integrations/integration-guides/gsheets#get-row)
+- [Update Row](integrations/integration-guides/gsheets#update-row)
+- [Insert Row at Index](integrations/integration-guides/gsheets#insert-row-at-index)
+- [Delete Rows](integrations/integration-guides/gsheets#delete-rows)
+- [Upsert Row](integrations/integration-guides/gsheets#upsert-row)
+
+### Intercom HITL
+
+- The conversation title in Botpress is now sent to Intercom when escalating a conversation
+
+### Linear
+
+- **Get User** Card can now get the currently authenticated user
+- The **List Teams** Card's output now includes each team’s unique key
+
+### Notion
+
+- Added new Cards:
+  - [Get Page](integrations/integration-guides/notion#get-page)
+  - [Search by Title](integrations/integration-guides/notion#search-by-title)
+  - [Get Page Content](integrations/integration-guides/notion#get-page-content)
+  - [Append Blocks to Page](integrations/integration-guides/notion#append-blocks-to-page)
+  - [Update Page Properties](integrations/integration-guides/notion#update-page-properties)
+
+- Added a new Trigger:
+  - [Comment Created](integrations/integration-guides/notion#comment-created)
+
+### Zoom
+
+- When a Zoom transcript is completed, the **Transcript Received** Trigger now includes the audio URL in the transcript
+
+---
+
+### Bug fixes
+
+- Fixed an issue where the Summary Agent's transcript message was not returning the entire transcript history
+- Fixed a visual bug where Workflow context menu was being duplicated when opened over the Card tray
+- Fixed an issue with the emulator where tools didn’t work properly when added to the same Autonomous Node multiple times
+- Fixed an issue where the Studio would get stuck on the loading screen if the browser window was out of focus
+- Fixed the **Watch Video** button for individual Cards in the Card tray
+- Fixed the Translator Agent's prompt to better support dropdowns
+- Fixed issues with multiplayer in the Studio where recent changes were lost if the connection was unstable
+- Fixed an issue where **Reset bot to default** wasn't deleting Knowledge Bases
+- Fixed a visual issue where an error screen was flashing when creating a new bot
+- Fixed an issue where the user's configuration for Webchat's embedded chat ID / toggle chat ID was mistakenly being overwritten
+
+</Update>
+
+<Update label="January 9, 2026">
+  ### Dashboard displays bot creator
+
+The dashboard now displays which member of your workspace created a bot:
+
+<Frame>
+  <Picture alt="Bot creator" class="block dark:hidden" src={img20260109CreatedBy} />
+  <Picture alt="Bot creator" class="hidden dark:block" src={img20260109CreatedByDark} />
+</Frame>
+
+### Integrations
+
+- **Hub**: Botpress Hub now has callouts clearly showing when an integration version is deprecated
+- **Chatwoot**: [Added Chatwoot integration](/integrations/integration-guides/chatwoot)
+- **Slack**: Fixed an issue where messages containing percentage symbols were causing errors
+- **Sunshine Conversations**: Added `origin` conversation tag for tracking what channel a conversation originated from
+- **Zendesk**: Added information about the requester when creating a ticket in Zendesk from the Start HITL Card
+
+### Bug fixes
+
+- Fixed an issue where Autonomous Node responses were incorrectly exceeding the maximum payload size
+- Fixed visual issues with CLI authentication
+- Fixed a visual bug with scrolling to the **Copy to bot** option in the Dashboard
+- Fixed an issue where user data wasn't properly persisted when injecting Webchat
+
+</Update>
+
+<Update label="December 19, 2025">
+  ### Create ADK agents from the dashboard
+
+- Added support for creating an ADK agent from the dashboard:
+
+<Frame>
+  <Picture alt="ADK flow" src={img20251219AdkFlow} />
+</Frame>
+
+### GPT-5.2
+
+- Added support for GPT-5.2 from OpenAI
+
+### Integrations
+
+- **Gmail**: Added [Cards](/integrations/integration-guides/gmail#cards) to the Gmail integration
+- **Zendesk**: Added OAuth configuration
+- **Messenger & Facebook**: Added [Start DM Conversation from Comment](integrations/integration-guides/messenger#start-dm-conversation-from-comment) Card
+
+</Update>
+
+<Update label="December 12, 2025">
+  ### Webchat input improvements
+
+- Starting with Webchat 3.5, Webchat input is disabled while your bot processes a message
+
+### Integrations
+
+- **Sunshine Conversations**: Added support for incoming files
+
+### Bug fixes
+
+- Fixed an issue where deleting a comment Node would sometimes delete nearby transitions
+  </Update>
+
+<Update label="December 5, 2025">
+  ### Dashboard improvements
+
+- Added menu to manage website Knowledge Base crawling
+- Improved UX for filtering conversations:
+
+<Frame>
+  <Picture alt="Conversation filters" class="block dark:hidden" src={img20251205Filters} />
+  <Picture alt="Conversation filters" class="hidden dark:block" src={img20251205FiltersDark} />
+</Frame>
+
+### Integrations
+
+- **Linear**: Fixed an issue where bots would reply to their own comments in an endless loop
+- **Notion**: Improved error handling
+
+### Bug fixes
+
+- Fixed an issue where code editors in the Studio became unresponsive after switching to new tab
+- Fixed and issue where leaving the optional subtitle field empty in Carousel Cards would result in an error
+
+</Update>
+
+<Update label="November 28, 2025">
+  ### Features & enhancements
+
+- Improved UI for the model picker in the Studio:
+
+<Frame>
+  <Picture alt="New model picker" class="block dark:hidden" src={img20251128NewModelPicker} />
+  <Picture alt="New model picker" class="hidden dark:block" src={img20251128NewModelPickerDark} />
+</Frame>
+
+- Added option to automatically recharge your bot's add-ons using **Auto-Recharge**
+
+### Integrations
+
+- **WhatsApp**:
+  - Added support for captions in images
+  - Improved handling for long messages (4096+ characters)
+- **Messenger**: Improved error handling
+- **Intercom**: Fixed images and text being sent out of order
+- **Email notifier**: Added support for line breaks
+
+### Bug fixes
+
+- Fixed a visual issue with file upload in the Emulator
+- Fixed an issue where Knowledge Base entries were disappearing after indexing under certain circumstances
+- Fixed an issue where variables were being overwritten when opening Bot Settings.
+- Fixed an issue where toggling the bottom pane was not working
+
+</Update>
+
+<Update label="November 21, 2025">
+  ### Features & enhancements
+
+- Improved performance across the Studio
+- Improved rendering of bullets and lists in the Emulator
+- Improved error handling for **Copy to bot** feature
+- Improved error messaging when limit usage is reached in Dashboard
+
+### Integrations
+
+- **Messenger**: Added support for interaction with Facebook pages, including comment replies and private conversations started from Facebook comments
+- **Email Notifier**: Added option to specify a reply-to email address in the [Send Mail](/integrations/integration-guides/plus-email-notifier#send-email) Card
+
+### Bug fixes
+
+- Fixed an issue where the Translator Agent was ignoring model preference set in global bot configuration
+- Fixed an issue where Knowledge Bases in the Studio homepage weren’t displaying updated data
+- Fixed an issue with variable capture in the Conversation End Workflow where Capture Information Cards appeared to succeed but weren't actually storing variables
+- Fixed an issue with copy-paste operations in text editors where keyboard shortcuts (<kbd>Cmd+A</kbd>, <kbd>Cmd+C</kbd>, <kbd>Cmd+V</kbd>) were copying JSON instead of the selected text
+- Fixed sidebar visual bug in Webchat configuration
+- Fixed visual issue with dark mode on Firefox and Safari
+- Fixed visual issues with Webchat components and styles
+
+</Update>
+
+<Update label="November 14, 2025">
+  ### Features & enhancements
+
+### GPT-5.1 support
+
+- Added support for GPT-5.1 from OpenAI
+
+### Webchat 3.4
+
+- Released Webchat 3.4. Improvements include:
+  - Added the ability to paste images from clipboard
+  - Improved scrolling smoothness
+  - Improved typing indicators
+  - Improved media rendering
+  - Improved performance and reliability
+
+### Dashboard
+
+- Redesigned Webchat configuration split into four sections:
+
+<Tabs>
+  <Tab title="Bot Identity">
+    <Frame>
+      <Picture alt="Bot Identity" class="block dark:hidden" src={img20251114BotIdentity} />
+      <Picture alt="Bot Identity" class="hidden dark:block" src={img20251114BotIdentityDark} />
+    </Frame>
+  </Tab>
+  <Tab title="Bot Appearance">
+    <Frame>
+      <Picture alt="Bot Appearance" class="block dark:hidden" src={img20251114BotAppearance} />
+      <Picture alt="Bot Appearance" class="hidden dark:block" src={img20251114BotAppearanceDark} />
+    </Frame>
+  </Tab>
+  <Tab title="Deploy Settings">
+    <Frame>
+      <Picture alt="Deploy Settings" class="block dark:hidden" src={img20251114DeploySettings} />
+      <Picture alt="Deploy Settings" class="hidden dark:block" src={img20251114DeploySettingsDark} />
+    </Frame>
+  </Tab>
+  <Tab title="Features">
+    <Frame>
+      <Picture alt="Features" class="block dark:hidden" src={img20251114Features} />
+      <Picture alt="Features" class="hidden dark:block" src={img20251114FeaturesDark} />
+    </Frame>
+  </Tab>
+</Tabs>
+
+- Added keyboard shortcuts to Workspace selector
+
+### Card tray
+
+- Redesigned the Card tray as a modal:
+
+  <Frame>
+    <Picture alt="Card tray" class="block dark:hidden" src={img20251114CardTray} />
+    <Picture alt="Card tray" class="hidden dark:block" src={img20251114CardTrayDark} />
+  </Frame>
+
+### Integrations
+
+- **Hunter**: Added [Hunter](/integrations/integration-guides/hunter) integration
+- **Slack**: Added ability for bot to retrieve a private channel
+- **WhatsApp**: Fixed an issue where messages were being duplicated under certain circumstances
+- **HubSpot**: Improved error logging when pipeline status can't be found
+
+### Bug fixes
+
+- Fixed an issue where searching in Studio was not working under certain circumstances
+- Fixed an issue where hotkeys weren’t working properly when tables were open
+- Fixed an issue with Human Handoff where typing indicator showed even when the support agent wasn't typing
+- Fixed a visual issue with Knowledge Bases in the Dashboard in dark mode
+- Fixed an issue where log filters weren’t updating the displayed logs correctly
+
+</Update>
+
+<Update label="November 7, 2025">
+  ### Features & enhancements
+
+- Redesigned billing section in the Dashboard:
+
+<Frame>
+  <Picture alt="New billing section" class="block dark:hidden" src={img20251106NewBilling} />
+  <Picture alt="New billing section" class="hidden dark:block" src={img20251106NewBillingDark} />
+</Frame>
+
+- Added option to rename [Execute Code Cards](/studio/concepts/cards/execute-code)
+- Added handling to allow adding duplicate files to Webchat message
+- Added option to configure custom analytics for an entire workspace
+
+### Integrations
+
+- **HubSpot**: Added [Search Company](/integrations/integration-guides/hubspot#search-company) Card
+- **Workable**: Added [Get Job Questions](/integrations/integration-guides/workable#get-job-questions) Card
+- **Intercom HITL**: Improved handling for email address formatting
+- **Sharepoint**: Fixed an issue with syncing document libraries on registration
+
+### Bug fixes
+
+- Fixed an issue with the [AI Transition](/studio/concepts/cards/ai/ai-transition) Card where newly-added fields would be impossible to delete
+- Fixed an issue where the [Capture Information](/studio/concepts/cards/capture-information) Card's **Skip if variable is already filled** option wasn't working properly
+- Fixed issue where the Dashboard's hotkeys were interfering with the Help Desk bot
+- Fixed visual issues with viewing Knowledge Bases on mobile Dashboard
+- Fixed a visual issue where Webchat bot contact info was being displayed even when configuration fields were empty
+
+### Miscellaneous
+
+- Added two new methods returned by the Webchat React library's [`useWebchat`](/webchat/react-library/hooks/use-webchat-client) hook: `bindConversation` and `bindUser`
+
+</Update>
+
+<Update label="October 31, 2025">
+  ### Features & enhancements
+
+### New Actions experience
+
+Overhauled the Actions experience and added ability generate Actions and Schemas using AI:
+
+<Tabs>
+  <Tab title="Just write your prompt...">
+    <Frame>
+      <Picture alt="Action prompt" class="block dark:hidden" src={imgStudioConceptsActionPrompt} />
+      <Picture alt="Action prompt" class="hidden dark:block" src={imgStudioConceptsActionPromptDark} />
+    </Frame>
+  </Tab>
+  <Tab title="then use the generated Action.">
+    <Frame>
+      <Picture alt="Generated action" class="block dark:hidden" src={imgStudioConceptsGeneratedAction} />
+      <Picture alt="Actions" class="hidden dark:block" src={imgStudioConceptsGeneratedActionDark} />
+    </Frame>
+  </Tab>
+</Tabs>
+
+### Dashboard improvements
+
+- Added the ability to manage Knowledge Bases from the Dashboard:
+
+<Frame>
+  <Picture alt="Dashboard Knowledge Bases" class="block dark:hidden" src={img20251031DashboardKb} />
+  <Picture alt="Dashboard Knowledge Bases" class="hidden dark:block" src={img20251031DashboardKbDark} />
+</Frame>
+
+- Redesigned agent overview page with better metrics, feature visibility, and a link to the bot's shareable preview:
+
+<Frame>
+  <Picture alt="New agent overview" class="block dark:hidden" src={img20251031NewOverview} />
+  <Picture alt="New agent overview" class="hidden dark:block" src={img20251031NewOverviewDark} />
+</Frame>
+
+- Redesigned Conversations tab that shows you Conversation Insights, sentiment analysis and an AI summary:
+
+<Frame>
+  <Picture alt="New Conversations tab" class="block dark:hidden" src={img20251031NewConversations} />
+  <Picture alt="New Conversations tab" class="hidden dark:block" src={img20251031NewConversationsDark} />
+</Frame>
+
+### Integrations
+
+- **Workable**: Added [Workable](/integrations/integration-guides/workable) integration
+- **Mintlify**: Added [Mintlify](/integrations/integration-guides/mintlify) integration
+- **WhatsApp**: Fixed an issue with parsing Mexican phone numbers
+- **Freshchat**: Fixed an issue with handling empty events
+- **HubSpot**: Fixed an issue where Cards that return search results would cause errors when no results were found
+- **Instagram**: Added option for bot to reply to comments on posts
+- **Twilio**:
+  - Added new Cards: **Start Conversation** and **Get or Create User**
+  - Added better Markdown support
+
+### Bug fixes
+
+- Fixed visual bug when loading variable picker in a Card's inspector
+- Fixed a bug where user variables would reset with each new conversation in the Emulator
+- Fixed an issue where sending multiple API requests to upsert rows using the Tables API was causing duplicate rows
+
+### Miscellaneous
+
+- Added file metadata to the [`searchFiles`](/api-reference/files-api/openapi/searchFiles) endpoint's response
+  </Update>
+
+<Update label="October 24, 2025">
+  ### Integrations
+
+- **BambooHR**: Added BambooHR integration
+- **Instagram**: Added option for bot to reply to comments on posts
+- **Airtable**: Improved error logging when Cards fail
+
+### Bug fixes
+
+- Fixed an issue where loading multiple documents into a Knowledge Base would stall if the Knowledge Base also contained many website pages
+- Fixed visual bug with pagination in Knowledge Base documents
+
+### Miscellaneous
+
+- Retired integrations are now listed as deprecated in Studio, preventing installation
+  </Update>
+
+<Update label="October 17, 2025">
+  ### Features & enhancements
+
+- Improved the UI for the Studio's **Publish** button:
+
+<Frame>
+  <Picture alt="Publish button" class="block dark:hidden" src={img20251017Publish} />
+  <Picture alt="Publish button" class="hidden dark:block" src={img20251017PublishDark} />
+</Frame>
+
+- Added support for [Claude Haiku 4.5](https://www.anthropic.com/news/claude-haiku-4-5) via the Anthropic integration
+
+### Bug fixes
+
+- Fixed an issue where clicking Tools in your bot's home screen would cause a crash if your bot only contained standard Nodes
+- Fixed an issue where duplicating a Workflow would incorrectly display "Integration not installed or disabled" even though the integration was installed
+- Fixed an issue where imported bots would display ghost Knowledge Bases
+- Fixed an issue where previously-created variables were unavailable to select in certain Cards' output
+- Fixed an issue where the `event` object's state was inaccessible in Actions
+- Fixed an issue where URLs with backslashes weren’t crawling properly
+  </Update>
+
+<Update label="October 10, 2025">
+  ### Bug fixes
+
+- Fixed an issue where the **Copy to bot** option wasn't displaying all available bots after a certain number
+- Fixed a bug with storing a Card's output in a variable, where:
+  - Existing Workflow variables weren't visible in the output picker
+  - Creating a variable within the picker resulted in a duplicate variable if it had the same name as an existing variable
+- Fixed an issue where the Set Activity Timeout Card wasn't working under certain circumstances
+- Fixed an issue that was making the Webchat typing indicator appear and disappear irregularly while a bot prepared its reply
+- Fixed an issue where file storage wasn't always being reduced even when file was deleted from bot
+
+### Features & enhancements
+
+- Conversations with the Botpress Help Desk now persist between the Dashboard and the Studio
+
+### Integrations
+
+- **WhatsApp**: Added better support for international phone numbers
+
+</Update>
+
+<Update label="October 3, 2025">
+  ### Features & enhancements
+
+### Login
+
+- Refreshed [login page](https://sso.botpress.cloud/login):
+
+<Frame>
+  <Picture alt="New login page" src={img20251003NewLogin} />
+</Frame>
+
+### Onboarding
+
+- Improved onboarding experience:
+  - Refreshed, more focused UI
+  - Added option to describe your bot's goal when selecting **Other**:
+
+<Tabs>
+  <Tab title="Select goal">
+    <Frame>
+      <Picture alt="Other use case" class="block dark:hidden" src={img20251003OtherUseCase} />
+      <Picture alt="Other use case" class="hidden dark:block" src={img20251003OtherUseCaseDark} />
+    </Frame>
+  </Tab>
+  <Tab title="Describe goal">
+    <Frame>
+      <Picture alt="Goal" class="block dark:hidden" src={img20251003Goal} />
+      <Picture alt="Goal" class="hidden dark:block" src={img20251003GoalDark} />
+    </Frame>
+  </Tab>
+</Tabs>
+
+    - Tasks now run in the background while you're setting up your agent, making the onboarding experience much faster
+
+### Studio
+
+- Added [Claude Sonnet 4.5](https://www.anthropic.com/news/claude-sonnet-4-5) to Studio
+
+### Integrations
+
+- **Apify**: Added [Apify integration](/integrations/integration-guides/plus-apify) for advanced website crawling
+- **WhatsApp**:
+  - Added [new Triggers](integrations/integration-guides/whatsapp/introduction#triggers) to for monitoring [message templates](https://developers.facebook.com/docs/whatsapp/message-templates/guidelines/)
+  - Fixed an issue where Freshchat agents' messages weren't being displayed on WhatsApp
+- **HubSpot**: Updated [Get Contact](/integrations/integration-guides/hubspot#get-contact) Card to retrieve all contact properties by default
+
+### Miscellaneous
+
+  <Warning>
+    ### Webchat v1 deprecation
+
+    We're deprecating Webchat v1 (and any old implementations tied to it). This means
+    any Webchat deployments on your website that use v1 will stop functioning. To avoid
+    service disruption, all users currently using v1 must migrate to Webchat v2 or higher
+    before **December 31, 2025**.
+
+    If you're currently a Webchat v1 user, you should have already received an email with instructions for upgrading. For any questions, don't hesitate to contact our support team.
+
+  </Warning>
+
+</Update>
+
+<Update label="September 26, 2025">
+  ### Features & enhancements
+
+### Webchat
+
+- Added the option to configure a [custom Webchat toggle](/webchat/interact/use-custom-toggle):
+
+<Frame>
+  <Picture alt="Custom Webchat toggle" class="block dark:hidden" src={img20250926CustomToggle} />
+  <Picture alt="Custom Webchat toggle" class="hidden dark:block" src={img20250926CustomToggleDark} />
+</Frame>
+
+- Added the option to [inject Webchat into a specific HTML element](/webchat/get-started/embed-in-element)
+- Added the option to enable sound effects for Webchat
+- Improved the Webchat customization UI
+
+### Autonomous Nodes
+
+- Added the option to [set a specific LLM for Retrieval-Augmented Generation (RAG) tasks](/studio/concepts/bot-settings#rag-language-model), like searching a Knowledge Base
+- Added the option to [override your bot's default LLM settings](/studio/concepts/nodes/autonomous-node#override-default-models) at the Node level
+
+### Studio
+
+- Added the option to select another bot when Studio is already open in another tab:
+
+<Frame>
+  <Picture alt="Bot selector" class="block dark:hidden" src={img20250926BotSelect} />
+  <Picture alt="Bot selector" class="hidden dark:block" src={img20250926BotSelectDark} />
+</Frame>
+
+### Integrations
+
+- [Email Notifier](/integrations/integration-guides/plus-email-notifier): Added an integration for sending emails from a generic email address
+- **Apollo**: Added [Apollo](/integrations/integration-guides/apollo) integration
+- **Attio**: Added [Attio](https://attio.com/) integration
+- **Slack**: Added support for tagged Slack users in incoming message payloads
+
+### Bug fixes
+
+- Fixed an issue where dynamically including Knowledge Bases in Autonomous Nodes (using a variable) wasn't working properly
+- Fixed an issue with the Slack integration where quick replies would result in a 400 error
+  </Update>
+
+<Update label="September 19, 2025">
+  ### Features & enhancements
+
+- Added option to rename rich text Knowledge Bases
+- Improved UI for array input fields in Cards
+- Added a safer check when deleting bots:
+
+  <Frame>
+    <Picture alt="Confirm delete" class="block dark:hidden" src={img20250919ConfirmDelete} />
+    <Picture alt="Confirm delete" class="hidden dark:block" src={img20250919ConfirmDeleteDark} />
+  </Frame>
+
+- Added a search tab to workspace/bot selection dropdown
+
+### Integrations
+
+- **Klaviyo**: Added [Klaviyo integration](/integrations/integration-guides/klaviyo)
+- **Pipedrive**: Added [Pipedrive integration](/integrations/integration-guides/pipedrive)
+- **MailerLite**: Added [MailerLite integration](/integrations/integration-guides/mailerlite)
+- **Slack**: Added support for incoming Slack messages containing images, audio, files, and multiple files
+- **Loops**: Added attachment support to the **Send Transactional Email** Card
+- **SendGrid**: Fixed an issue with CC and BCC emails not being received
+- **Linear**: Fixed an issue with the integration's event handling
+- **WhatsApp**: Improved handling when the integration is rate limited by WhatsApp
+
+### Bug fixes
+
+- **UI fixes**:
+  - Fixed issue with Dashboard sidebar on mobile
+  - Fixed issue where the **Copy Share Link** wasn't clickable when viewing a Workflow in the Hub
+
+- Fixed issue where the Capture Information Card wasn't working properly for files
+- Fixed issue where shareable Webchat link would show error screen when error hadn’t occurred
+- Fixed issue where negative feedback from Webchat wasn’t being displayed in Conversations tab
+
+</Update>
+
+<Update label="September 12, 2025">
+  ### Features & enhancements
+
+- Improved the variable management experience for Autonomous Nodes:
+
+  <Frame caption="You can now assign read/write access to individual variables as needed.">
+    <Picture alt="Autonomous Node variable management" class="block dark:hidden" src={img20250912AnVariables} />
+    <Picture alt="Autonomous Node variable management" class="hidden dark:block" src={img20250912AnVariablesDark} />
+  </Frame>
+
+- Improved speed for crawling website Knowledge Bases during onboarding
+- **Integrations**:
+  - **Canny:** Added Canny integration
+  - **Loops:** Added Loops integration
+  - **Feature Base**: Added Feature Base integration
+  - **Webflow**: Added several new events
+
+### Bug fixes
+
+- Fixed an issue where bot exports were failing
+- Fixed various UX issues in Dashboard, Studio and Webchat
+- Fixed various bugs in HubSpot integration
+  </Update>
+
+<Update label="September 5, 2025">
+  ### Features & enhancements
+
+- Improved UI for Webchat settings:
+
+  <Tabs>
+    <Tab title="General">
+      <Frame>
+        <Picture alt="General Webchat settings" class="block dark:hidden" src={img20250905GeneralWebchat} />
+        <Picture alt="General Webchat settings" class="hidden dark:block" src={img20250905GeneralWebchatDark} />
+      </Frame>
+    </Tab>
+    <Tab title="Theme">
+      <Frame>
+        <Picture alt="Theme Webchat settings" class="block dark:hidden" src={img20250905ThemeWebchat} />
+        <Picture alt="Theme Webchat settings" class="hidden dark:block" src={img20250905ThemeWebchatDark} />
+      </Frame>
+    </Tab>
+  </Tabs>
+
+- Fixed an issue with using additional stylesheet URLs with the Webchat React library
+- Improved speed for crawling website Knowledge Bases during onboarding
+- **Integrations:**
+  - **HubSpot**: Added HubSpot integration
+  - **SendGrid**: Fixed issue with API keys
+
+### Bug fixes
+
+- Fixed an issue where bot exports were failing
+- Fixed a visual bug with the close button on Webchat error screens
+
+</Update>
+
+<Update label="August 29, 2025">
+
+### Features & enhancements
+
+- Fresh layout for Dashboard bot menu:
+
+  <Frame>
+    <Picture alt="Dashboard layout update" class="block dark:hidden" src={img20250829DashLayout} />
+    <Picture alt="Dashboard layout update" class="hidden dark:block" src={img20250829DashLayoutDark} />
+  </Frame>
+
+- Added ability to edit fields in Tables directly from the Dashboard
+- Added search option in dropdown menu to select a bot
+- Improved speed when creating new bots
+- Improvements to Studio UI:
+  - Moved the Schema editor to a modal
+  - Improved experience when testing a Trigger and viewing the event’s payload
+- Added [Cal.com](http://Cal.com) integration
+
+### Bug fixes
+
+- Fixed various visual bugs in Dashboard, including on mobile
+- Fixed visual bugs in Studio:
+  - UI issues with editing frozen tables
+  - Workflow variable values not displaying updates in Studio
+- Fixed an issue where the Conversation Started event was emitted multiple times
+- Fixed an issue with BigCommerce integration where syncing large datasets caused a timeout
+
+</Update>
+
+<Update label="August 22 2025">
+
+### Features & enhancements
+
+- Improved the Card inspector UI, which now appears in the Studio's right panel instead of obstructing your Workflow:
+
+<Frame>
+  <Picture alt="Card inspector" class="block dark:hidden" src={imgStudioConceptsCardsCardInspector} />
+  <Picture alt="Card inspector" class="hidden dark:block" src={imgStudioConceptsCardsCardInspectorDark} />
+</Frame>
+
+- Improved UX for cancelling your subscription:
+  - Subscription end date now displayed
+  - Added a modal to give feedback when cancelling subscription
+- Improved general performance and speed for bots across the board
+- Integrations:
+  - **Calendly**: Added Calendly integration
+  - **Twilio**: Added support for receiving media (audio, images, videos, files)
+
+  ### Bug fixes
+  - Fixed an issue where users without the proper permissions had access to the Billing section in the Dashboard
+  - Fixed minor issues with Webchat events
+
+</Update>
+
+<Update label="August 15, 2025">
+
+### Features & enhancements
+
+- You can now choose any Google Font when styling Webchat:
+
+  <Frame>
+    <Picture alt="Search fonts" class="block dark:hidden" src={img20250815SearchFonts} />
+    <Picture alt="Search fonts" class="hidden dark:block" src={img20250815SearchFontsDark} />
+  </Frame>
+
+- You can now view analytics for either the current bot or the entire Workspace:
+
+  <Frame>
+    <Picture alt="Analytics tabs" class="block dark:hidden" src={img20250815AnalyticsTabs} />
+    <Picture alt="Analytics tabs" class="hidden dark:block" src={img20250815AnalyticsTabsDark} />
+  </Frame>
+
+- Improved syntax highlighting for logs in emulator
+
+### Bug fixes
+
+- Fixed an issue where focusing the Webchat composer on mobile zoomed in unintentionally
+- Fixed a visual bug where multi-line inputs for integration Cards were cut off
+- Fixed a visual bug with Usage tab popovers
+
+</Update>
+
+<Update label="August 8, 2025">
+
+### Features & enhancements
+
+<Frame>
+
+<Picture alt="GPT-5 in Botpress" src={img20250808Gpt5Botpress} />
+
+</Frame>
+
+- GPT-5 is now available in Botpress Studio
+  - OpenAI's new GPT-OSS models are also available with Fireworks AI, Cerebras and Groq integrations
+- Various UI improvements in Studio:
+  - Improved UI for integration playgrounds
+  - Card tray now displays the Card type (based on the currently selected Node) and displays a message when a Card can’t be added to a Node
+- Webchat:
+  - Added a `conversationId` argument to the Webchat initialization script—this allows users to programmatically load Webchat with a specific conversation
+  - Improved handling of images that fail to load
+- Integrations:
+  - **Messenger**: Added a playground and made general improvements
+  - **Telegram:** Improved Markdown support, added support for captions on images, improved error handling
+  - **Freshchat:** General fixes and improvements
+  - **Zendesk:** Added the option to customize the Botpress system username in Zendesk
+  - **Email:** Minor fix
+
+### Bug fixes
+
+- Fixed an issue where conversation variables weren't usable in Capture Information Cards and Autonomous Nodes
+- Fixed an issue with searching for files based on tags in the Dashboard
+- Fixed a visual issue with filtering logs in Dashboard
+
+</Update>
+
+<Update label="August 1, 2025">
+
+    ### Features & enhancements
+
+    - Improvements to user experience in Analytics tab
+
+    ### Bug fixes
+
+    - Fixed an issue where Tables Cards were missing labels when added to a Node
+    - Fixed an issue with missing newlines when exporting large tables as CSV
+    - Fixed various visual bugs in the Dashboard
+
+</Update>
+
+<Update label="July 25, 2025">
+
+    ### Features & enhancements
+
+    - Users can now decide which members of a Workspace can access bots within that Workspace
+    - Improvements to search results in the Card Tray
+    - Improved UX for deleting bots in the Dashboard
+    - Improvements to log filtering in the Dashboard
+    - Integration updates:
+        - **Email**: added a new provider-agnostic email integration
+        - **HITL**: Start HITL Card now provides more specific configuration fields based on which HITL integration is being used
+        - **Slack**: added support for threading in all channel types
+        - **Teams**: improvements to Start DM Card
+
+    ### Bug fixes
+
+    - Fixed issue with testing the timeout Workflow in the emulator
+    - Fixed average values for analytics
+
+</Update>
+
+<Update label="July 18, 2025">
+
+    ### Features & enhancements
+
+    - New menu for updating add-ons in Dashboard:
+
+        <Frame>
+          <Picture alt="Add-ons" class="block dark:hidden" src={img20250718Addons} />
+          <Picture alt="Add-ons" class="hidden dark:block" src={img20250718AddonsDark} />
+        </Frame>
+
+    - Updates to Dashboard Settings:
+        - New section for configuration variables
+        - Option to delete bot
+
+    - Studio now displays the version of plugins
+    - Improved labelling of LLMZ-appropriate models in Studio
+
+</Update>
+
+<Update label="July 11, 2025">
+
+    ### Features & enhancements
+
+    - Added a notification indicator to Webchat:
+
+    <Frame>
+      <Picture alt="Webchat notification" class="block dark:hidden" src={img20250711WebchatNotification} />
+      <Picture alt="Webchat notification" class="hidden dark:block" src={img20250711WebchatNotificationDark} />
+    </Frame>
+
+    - Improved timeout handling for integration API calls longer than 60 seconds
+    - Added helpful messages to Webchat window when error occurs
+    - Integration updates:
+        - **SendGrid**: added support for Markdown
+        - **Resend**: added CC and BCC fields to sendMail action
+        - **Messenger**: added support for sending media and files
+        - **Slack/WhatsApp**: improved Markdown handling
+
+    - Added Gemini 2.5
+
+    ### Bug fixes
+
+        - Fixed aggregation issues for Tables API
+        - Fixed an issue with renaming bots
+        - Fixed an issue with Slack reply threading
+
+</Update>
+
+<Update label="July 4, 2025">
+
+    ### Features & enhancements
+
+        - **New onboarding flow**:
+
+            When you create a new bot, Studio now has an onboarding flow that automatically builds a production-ready AI agent, styled and tailored to your brand.
+
+            <Tabs>
+                <Tab title="1. Choose a use case">
+                    <Frame>
+                      <Picture alt="Category" class="block dark:hidden" src={img20250704Category} />
+                      <Picture alt="Category" class="hidden dark:block" src={img20250704CategoryDark} />
+                    </Frame>
+                </Tab>
+                <Tab title="2. Provide knowledge sources">
+                    <Frame>
+                      <Picture alt="Knowledge" class="block dark:hidden" src={img20250704Knowledge} />
+                      <Picture alt="Knowledge" class="hidden dark:block" src={img20250704KnowledgeDark} />
+                    </Frame>
+                </Tab>
+                <Tab title="3. Try out your AI agent">
+                    <Frame>
+                        <Picture alt="New agent" class="block dark:hidden" src={img20250704NewAgent} />
+                        <Picture alt="new agent" class="hidden dark:block" src={img20250704NewAgent} />
+                    </Frame>
+                </Tab>
+            </Tabs>
+
+        - Screenshot Card now takes fully-styled webpage screenshots
+        - Teams integration: added a Start DM Card
+
+
+    ### Bug fixes
+
+        - Fixed issue where changes to rich text Knowledge Bases weren't properly reflected
+
+</Update>
+
+<Update label="June 27, 2025">
+
+    ### Features & enhancements
+
+        - Increased timeout for crawling websites containing many pages, preventing missing pages in the Knowledge Base
+        - Slack integration: Added the ability to pass a Slack `userId` to an external service
+
+    ### Bug fixes
+
+        - Fixed an issue where the Conversation Started Trigger wasn't firing
+        - Fixed an issue with Zendesk integration where Zendesk wasn’t receiving user email addresses from the Start HITL Card
+
+</Update>
+
+<Update label="June 20, 2025">
+
+    ### Features & enhancements
+
+        - Improved uninstall flow for integrations
+
+    ### Bug fixes
+
+        - Fixed various issues in Studio's multiplayer
+        - Fixed issue that caused user variables to be erased
+        - Fixed issue with Stripe integration where payment links weren't being properly created
+        - Fixed issue with Telegram integration where uploading a sticker caused an infinite loop in bot
+
+</Update>
+
+---
+
+<Update label="June 13, 2025">
+
+    ### Features & enhancements
+
+        - Improved **AI Spend** section with a representation of each bot's usage:
+            <Tabs>
+                <Tab title="Total">
+                    <Frame>
+                        <Picture alt="AI spend total" class="block dark:hidden" src={img20250613AiSpendTotal} />
+                        <Picture alt="AI spend total" class="hidden dark:block" src={img20250613AiSpendTotalDark} />
+                    </Frame>
+                </Tab>
+                <Tab title="Daily Average">
+                    <Frame>
+                      <Picture alt="AI spend daily" class="block dark:hidden" src={img20250613AiSpendDaily} />
+                      <Picture alt="AI spend daily" class="hidden dark:block" src={img20250613AiSpendDailyDark} />
+                    </Frame>
+                </Tab>
+            </Tabs>
+
+        - Added a playground for the Instagram integration
+        - WhatsApp integration improvements:
+            - Improved formatting for text messages
+            - New dropdown label option for choice messages
+        - When an HITL agent joins the chat, their messages are now sent from a distinct user
+        - Added support for new models:
+            - Qwen3 32B
+            - Llama 4 Scout
+        - Visual improvements to **Files** section in the Dashboard
+        - LLMz responses now use citations
+        - General improvements to RAG efficiency
+
+    ### Bug fixes
+
+        - Fixed issue with improper formatting when pasting into a rich text Knowledge Base
+
+</Update>
+
+---
+
+<Update label="June 6, 2025">
+
+    ### Features & enhancements
+
+        - Webchat style refresh:
+
+            <Frame>
+            <Picture alt="alt" class="block dark:hidden" src={img20250606NewWebchat} />
+            <Picture alt="alt" class="hidden dark:block" src={img20250606NewWebchatDark} />
+            </Frame>
+
+            - The new look also includes:
+                - Improved animations
+                - New typing indicator
+
+        - You can now leave message feedback in Webchat:
+
+            <Frame>
+            <Picture alt="Webchat message feedback" class="block dark:hidden" src={img20250606WebchatFeedback} />
+            <Picture alt="Webchat message feedback" class="hidden dark:block" src={img20250606WebchatFeedbackDark} />
+            </Frame>
+
+        - Added support for new models:
+            - Claude 4 Sonnet
+            - DeepSeek R1 and V3
+            - Llama 4
+
+    ### Bug fixes
+
+        - Fixed issue where users couldn’t leave the WhatsApp sandbox environment
+        - Fixed issue with accessing shared drives with the Google Drive integration
+
+    ### Miscellaneous
+
+        - Improved error for failed payments
+
+</Update>
+
+---
+
+<Update label="May 30, 2025">
+
+    ### Features & enhancements
+
+        - Added new Card to set a custom inactivity timeout:
+
+            <Frame>
+                <Picture alt="Inactivity timeout" class="block dark:hidden" src={img20250530InactivityTimeout} />
+                <Picture alt="Inactivity timeout" class="hidden dark:block" src={img20250530InactivityTimeoutDark} />
+            </Frame>
+
+        - Bumped LLM timeout from 30 seconds to 90 seconds
+        - Bots using the BigCommerce integration can now recommend best-selling products without hallucinating
+
+    ### Bug fixes
+
+        - Fixed issue where variables assigned in the last Card in a Workflow weren’t stored
+        - Various WhatsApp integration fixes:
+            - Fixed error with OAuth flow when the user had more than 50 WhatsApp business accounts
+            - Fixed an error when receiving [Contact](https://developers.facebook.com/docs/whatsapp/cloud-api/messages/contacts-messages) messages from WhatsApp
+        - Fixed issue with Intercom integration
+
+</Update>
+
+---
+
+<Update label="May 23, 2025">
+
+    ### Features & enhancements
+
+        - The [Fixed Schedule](/studio/concepts/triggers#fixed-schedule) Trigger now displays both the timezone and next run:
+
+            <Frame>
+            <Picture alt="Fixed Schedule timezone" src={img20250523CronTimezone} />
+            </Frame>
+
+        - Added [Monday.com](http://Monday.com) integration
+
+    ### Bug fixes
+
+        - Fixed issue where Workflows incorrectly timed out under certain conditions
+        - Fixed issue where proactive messages didn’t work properly for new conversations in Webchat 2.5
+        - Fixed issue where tables weren’t horizontally scrollable in Webchat
+        - Fixed issue where tables in Dashboard overflowed
+        - Fixed issue with missing parameter in `appendValues` call to Google Sheets API
+
+</Update>
+
+---
+
+<Update label="May 16, 2025">
+
+    ### Features & enhancements
+
+        - Fixed links to documentation in Botpress Studio
+        - Added option to filter logs by message content
+        - Added notifications menu in Dashboard:
+
+            <Frame>
+            <Picture alt="Dashboard notifications" src={img20250516DashboardNotifications} />
+            </Frame>
+
+    ### Bug fixes
+
+        - Fixed issue where Studio wouldn’t load under certain conditions
+        - Fixed issue where you couldn’t reset FAB/avatar images to default
+        - Fixed an issue where the [Conversation Started](/studio/concepts/triggers#conversation-started) Trigger didn’t work within the shareable Webchat window
+        - Improved rendering of Markdown in Webchat
+
+</Update>
+
+---
+
+<Update label="May 9, 2025">
+
+    ### Features & enhancements
+        - **Improvements to Webchat**:
+            - Now supports richer Markdown rendering
+            - Webchat preview now has a sidebar with a list of recent conversations
+            - You can now add an image to your Webchat’s Floating Action Button (FAB)
+        - You can now filter your bot’s logs by `userId` or `conversationId`
+
+    ### Bug fixes
+
+        - Updated React library version and documentation
+
+    ### Miscellaneous
+
+        - Added a callout to Botpress Hub when the HITL plugin is required and hasn't been installed yet
+
+</Update>
+
+---
+
+<Update label="May 2, 2025">
+
+    ### Features & enhancements
+        - The Slack integration now has a configuration option to **reply as a thread**:
+
+            <Frame>
+            <Picture alt="Slack reply threading option" src={img20250502ProactiveSlackThreads} />
+            </Frame>
+
+        - **HITL improvements**:
+            - The Webchat composer for the HITL integration now supports **uploading files**
+            - The HITL inbox now displays when the **last message** in each conversation was sent:
+
+                <Frame>
+                <Picture alt="HITL display last message date" src={img20250502DisplayLastMessageDate} />
+                </Frame>
+    ### Bug fixes
+        - Fixed an issue where variables with circular dependencies would cause bots to crash
+        - Fixed an issue where moving a Workflow or a folder inside another folder caused the tables to disappear
+        - Increased duration before timeout when indexing knowledge bases with a large number of vectors
+
+    ### Miscellaneous
+
+    - Changed the default language setting for the WhatsApp **Start Conversation** Card to address a potential error
+
+</Update>
+
+---
+
+<Update label="April 25, 2025">
+
+    ### Features & enhancements
+
+        - Added new models from OpenAI:
+            - o4-mini
+            - o3
+            - 4.1
+        - Users with viewer permissions for a Workspace can now view logs for that Workspace’s bots
+        - Users can now upload multiple files to a single message in Webchat
+        - The payload for button/dropdown components now includes the `value` of the button
+
+    ### Bug fixes
+
+        - Fixed an issue in Knowledge Bases  where the similarity score was in the wrong order
+        - Fixed the new keyboard shortcut (`ctrl`+ `P`) for search in Studio
+        - Fixed an issue where there was a mismatch with imported data
+        - Fixed an issue with the default Webchat theme
+        - Various fixes and improvements for the Slack integration
+        - Various fixes for the BigCommerce integration
+
+</Update>
+
+---
+
+<Update label="April 11, 2025">
+
+    ### Features & enhancements
+
+        - Revamped and improved **Usage** tab:
+            - New section to track AI spend
+            - Revised UI makes it clearer to understand usage between bots
+        - You can now specify the storage location of Webchat user/conversation data in the Dashboard settings:
+            - **Session storage**: Creates a new user/conversation every time the page is re-opened
+            - **Local storage**: Keeps user/conversation data across page visits
+        - Request headers for the Webhook integration are now passed into the event payload
+
+    ### Bug fixes
+
+        - Solved an issue where a React apps running Botpress would not run under certain circumstances
+        - Fixed a bug where Human-In-The-Loop (HITL) messages were displayed in the wrong order
+
+    ### Miscellaneous
+
+        - Improvements to server processing so deleting bots is now faster
+
+</Update>

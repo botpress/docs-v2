@@ -1,0 +1,25 @@
+---
+import { slugify } from "@/lib/icon-utils";
+
+interface Props {
+  label: string;
+  class?: string;
+}
+
+const { label, class: className } = Astro.props;
+const id = slugify(label);
+---
+
+<section
+  id={id}
+  class:list={['relative not-prose scroll-mt-20 border-t border-stone-200 pt-8 pb-10 first:border-t-0 first:pt-0 dark:border-white/10', className]}
+>
+  <a href={`#${id}`} class="no-underline">
+    <h2 class="font-heading text-2xl font-semibold text-stone-900 dark:text-stone-200">
+      {label}
+    </h2>
+  </a>
+  <div class="prose mt-6 dark:prose-invert">
+    <slot />
+  </div>
+</section>
