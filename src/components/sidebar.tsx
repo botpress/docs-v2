@@ -16,6 +16,7 @@ interface SidebarProps {
   tree: SidebarNode[]
 }
 
+//TODO: suggestion (non-blocking): In react components, we should use clsx to manage many classes on an element (feel free to tackle in a follow-up PR).
 function NavIcon({ icon }: { icon: string }) {
   if (icon.startsWith('lucide:')) {
     return <ReactIcon icon={icon} className="h-4 w-4 shrink-0" />
