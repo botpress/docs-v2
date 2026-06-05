@@ -81,6 +81,7 @@ export async function buildBreadcrumbs<TCollection extends string>(
   const pagePath = normalizeEntryId(entryId)
 
   for (const tab of config.navigation.tabs) {
+    if (!tab.pages) continue
     const crumbs = await searchPagesForBreadcrumbs(pagePath, tab.pages, [], titleMap, sidebarTitleMap, iconMap)
     if (crumbs) {
       // Remove the active page itself — breadcrumbs show only the parent path

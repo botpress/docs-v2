@@ -196,6 +196,7 @@ export default defineConfig(collections, {
           },
         ],
       },
+      { tab: 'Botpress Desk', href: 'https://desk.support.channel', external: true },
       { tab: 'Tutorial', pages: ['tutorial/index'] },
       {
         tab: 'API Reference',
