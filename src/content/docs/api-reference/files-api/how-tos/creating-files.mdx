@@ -236,15 +236,13 @@ const fileUrl = file.url
 If you only want to allow all the integrations installed in the bot to access the file rather than making it fully public, you can just assign the `integrations` access policy instead:
 
 ```ts
-const response = await client.uploadFile({
+const file = await client.uploadFile({
   key: 'test.txt',
-  content: 'This is a public file',
-  accessPolicies: ['public_content'],
+  content: 'This is a file accessible by all integrations of the bot',
+  accessPolicies: ['integrations'],
 })
 
-// This will be a permanent URL (can be stored long-term) to allow anyone to download the file.
-const fileUrl = response.file.url
-```
+const fileUrl = file.url
 
 ## Adding tags to a file
 
