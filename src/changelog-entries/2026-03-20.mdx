@@ -1,0 +1,54 @@
+---
+date: 2026-03-20
+label: March 20, 2026
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20260320AdkCopilot from './assets/2026-03-20/adk-copilot.png'
+import img20260320AdkCopilotDark from './assets/2026-03-20/adk-copilot-dark.png'
+
+### Studio
+
+### Features & enhancements
+
+- New AI Models: GPT 5.4, Sonnet 4.6, Opus 4.6, Gemini 3.1 Pro Preview
+- Added support for MDX (Markdown JSX) in the Files API
+
+### Integrations
+
+- All integrations now automatically save configuration settings upon completion of OAuth
+- **Linear**, **HubSpot**, **LinkedIn**, **GitHub**, and **Notion** now supports OAuth for multiple bots
+- **WeChat**: Added WeChat integration
+- **WhatsApp**: Added events to track outbound message delivery lifecycle
+
+### Bug fixes
+
+- Fixed issue where integration settings were reset on update
+- Fixed issue with duplicate header names in Tables
+- Fixed issue with duplicate variables being created after variable deletion
+- Fixed errors when connecting additional stylesheets in Webchat
+
+---
+
+### ADK
+
+### Control Panel
+
+- Added Copilot (OpenCode) Panel
+
+<Frame>
+  <Picture alt="ADK Control Panel with Copilot (OpenCode)" class="block dark:hidden" src={img20260320AdkCopilot} />
+  <Picture alt="ADK Control Panel with Copilot (OpenCode)" class="hidden dark:block" src={img20260320AdkCopilotDark} />
+</Frame>
+
+- Added Chat history in Conversations page
+- Updated Traces page UI
+
+### CLI
+
+- Self upgrade support for Windows using `adk self-upgrade`
+- Add Copilot (OpenCode) support using `adk dev --copilot`

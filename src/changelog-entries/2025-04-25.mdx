@@ -1,0 +1,29 @@
+---
+date: 2025-04-25
+label: April 25, 2025
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+
+### Features & enhancements
+
+    - Added new models from OpenAI:
+        - o4-mini
+        - o3
+        - 4.1
+    - Users with viewer permissions for a Workspace can now view logs for that Workspace’s bots
+    - Users can now upload multiple files to a single message in Webchat
+    - The payload for button/dropdown components now includes the `value` of the button
+
+### Bug fixes
+
+    - Fixed an issue in Knowledge Bases  where the similarity score was in the wrong order
+    - Fixed the new keyboard shortcut (`ctrl`+ `P`) for search in Studio
+    - Fixed an issue where there was a mismatch with imported data
+    - Fixed an issue with the default Webchat theme
+    - Various fixes and improvements for the Slack integration
+    - Various fixes for the BigCommerce integration

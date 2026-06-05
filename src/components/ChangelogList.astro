@@ -1,0 +1,30 @@
+---
+import type { MDXInstance } from "astro";
+import Update from "./Update.astro";
+
+interface EntryFrontmatter {
+  date: string;
+  label: string;
+}
+
+const modules = import.meta.glob<MDXInstance<EntryFrontmatter>>(
+  "/src/changelog-entries/*.mdx",
+  { eager: true },
+);
+
+const entries = Object.values(modules)
+  .map((m) => ({
+    date: m.frontmatter.date,
+    label: m.frontmatter.label,
+    Content: m.default,
+  }))
+  .sort((a, b) => b.date.localeCompare(a.date));
+---
+
+{
+  entries.map(({ label, Content }) => (
+    <Update label={label}>
+      <Content />
+    </Update>
+  ))
+}

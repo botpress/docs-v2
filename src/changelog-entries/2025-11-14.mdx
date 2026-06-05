@@ -1,0 +1,92 @@
+---
+date: 2025-11-14
+label: November 14, 2025
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20251114BotAppearance from './assets/2025-11-14/bot-appearance.png'
+import img20251114BotAppearanceDark from './assets/2025-11-14/bot-appearance-dark.png'
+import img20251114BotIdentity from './assets/2025-11-14/bot-identity.png'
+import img20251114BotIdentityDark from './assets/2025-11-14/bot-identity-dark.png'
+import img20251114CardTray from './assets/2025-11-14/card-tray.png'
+import img20251114CardTrayDark from './assets/2025-11-14/card-tray-dark.png'
+import img20251114DeploySettings from './assets/2025-11-14/deploy-settings.png'
+import img20251114DeploySettingsDark from './assets/2025-11-14/deploy-settings-dark.png'
+import img20251114Features from './assets/2025-11-14/features.png'
+import img20251114FeaturesDark from './assets/2025-11-14/features-dark.png'
+
+### Features & enhancements
+
+### GPT-5.1 support
+
+- Added support for GPT-5.1 from OpenAI
+
+### Webchat 3.4
+
+- Released Webchat 3.4. Improvements include:
+  - Added the ability to paste images from clipboard
+  - Improved scrolling smoothness
+  - Improved typing indicators
+  - Improved media rendering
+  - Improved performance and reliability
+
+### Dashboard
+
+- Redesigned Webchat configuration split into four sections:
+
+<Tabs>
+  <Tab title="Bot Identity">
+    <Frame>
+      <Picture alt="Bot Identity" class="block dark:hidden" src={img20251114BotIdentity} />
+      <Picture alt="Bot Identity" class="hidden dark:block" src={img20251114BotIdentityDark} />
+    </Frame>
+  </Tab>
+  <Tab title="Bot Appearance">
+    <Frame>
+      <Picture alt="Bot Appearance" class="block dark:hidden" src={img20251114BotAppearance} />
+      <Picture alt="Bot Appearance" class="hidden dark:block" src={img20251114BotAppearanceDark} />
+    </Frame>
+  </Tab>
+  <Tab title="Deploy Settings">
+    <Frame>
+      <Picture alt="Deploy Settings" class="block dark:hidden" src={img20251114DeploySettings} />
+      <Picture alt="Deploy Settings" class="hidden dark:block" src={img20251114DeploySettingsDark} />
+    </Frame>
+  </Tab>
+  <Tab title="Features">
+    <Frame>
+      <Picture alt="Features" class="block dark:hidden" src={img20251114Features} />
+      <Picture alt="Features" class="hidden dark:block" src={img20251114FeaturesDark} />
+    </Frame>
+  </Tab>
+</Tabs>
+
+- Added keyboard shortcuts to Workspace selector
+
+### Card tray
+
+- Redesigned the Card tray as a modal:
+
+  <Frame>
+    <Picture alt="Card tray" class="block dark:hidden" src={img20251114CardTray} />
+    <Picture alt="Card tray" class="hidden dark:block" src={img20251114CardTrayDark} />
+  </Frame>
+
+### Integrations
+
+- **Hunter**: Added [Hunter](/integrations/integration-guides/hunter) integration
+- **Slack**: Added ability for bot to retrieve a private channel
+- **WhatsApp**: Fixed an issue where messages were being duplicated under certain circumstances
+- **HubSpot**: Improved error logging when pipeline status can't be found
+
+### Bug fixes
+
+- Fixed an issue where searching in Studio was not working under certain circumstances
+- Fixed an issue where hotkeys weren’t working properly when tables were open
+- Fixed an issue with Human Handoff where typing indicator showed even when the support agent wasn't typing
+- Fixed a visual issue with Knowledge Bases in the Dashboard in dark mode
+- Fixed an issue where log filters weren’t updating the displayed logs correctly
