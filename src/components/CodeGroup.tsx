@@ -57,9 +57,7 @@ function CodeGroup({ children }: { children: ReactNode }) {
             className="code-group-copy"
             aria-label="Copy code"
             onClick={handleCopy}
-            dangerouslySetInnerHTML={{
-              __html: copied ? CHECK_ICON : COPY_ICON,
-            }}
+            dangerouslySetInnerHTML={{ __html: copied ? CHECK_ICON : COPY_ICON }}
           />
         </div>
       )}
