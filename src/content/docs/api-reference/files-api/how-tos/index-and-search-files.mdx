@@ -111,7 +111,7 @@ const res = await client.searchFiles({
   contextDepth: 1, // This number can be increased to pass more context to the model for each matching passage
 })
 
-const relevantInformation = res.data.passages.map((passage) => passage.content).join('\n\n----------\n\n')
+const relevantInformation = res.passages.map((passage) => passage.content).join('\n\n----------\n\n')
 
 const answer = await openai.chat.completions.create({
   model: 'gpt-4o-mini', //  This can be changed for any other OpenAI model available here: https://platform.openai.com/docs/models
