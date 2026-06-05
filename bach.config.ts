@@ -188,6 +188,63 @@ export default defineConfig(collections, {
           },
         ],
       },
+      {
+        tab: 'ADK',
+        pages: [
+          {
+            group: 'Get started',
+            pages: ['adk/index', 'adk/introduction', 'adk/quickstart'],
+          },
+          {
+            group: 'Setting up your agent',
+            pages: ['adk/setup/configuration', 'adk/setup/environment', 'adk/setup/integrations'],
+          },
+          {
+            group: 'Handling conversations',
+            pages: [
+              'adk/conversations/setup',
+              'adk/conversations/ai-execution',
+              'adk/conversations/tools',
+              'adk/conversations/messages',
+              'adk/conversations/custom-components',
+              'adk/conversations/lifecycle',
+              'adk/conversations/state',
+            ],
+          },
+          {
+            group: 'Handling longform logic',
+            pages: ['adk/workflows/create', 'adk/workflows/steps', 'adk/workflows/request-notify'],
+          },
+          {
+            group: 'Actions and triggers',
+            pages: ['adk/external/actions', 'adk/external/triggers'],
+          },
+          {
+            group: 'Working with data',
+            pages: ['adk/data/tables', 'adk/data/knowledge'],
+          },
+          {
+            group: 'Testing and debugging',
+            pages: ['adk/testing/evals', 'adk/testing/agent-steps', 'adk/testing/debugging', 'adk/testing/scripts'],
+          },
+          {
+            group: 'LLM Utilities',
+            pages: ['adk/zai/overview', 'adk/zai/extract', 'adk/zai/generate', 'adk/zai/classify'],
+          },
+          {
+            group: 'AI-native development',
+            pages: ['adk/ai-native/skills'],
+          },
+          {
+            group: 'Advanced',
+            pages: ['adk/advanced/hitl', 'adk/advanced/desk-hitl'],
+          },
+          {
+            group: 'CLI',
+            pages: ['adk/cli-reference'],
+          },
+        ],
+      },
       { tab: 'Tutorial', pages: ['tutorial/index'] },
       {
         tab: 'API Reference',
