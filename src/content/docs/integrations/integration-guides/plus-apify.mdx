@@ -7,7 +7,7 @@ icon: 'cpu'
 import Icon from '@/components/Icon.astro'
 import Step from '@/components/Step.astro'
 import Steps from '@/components/Steps.astro'
-import { Check, Info } from '@/components/callouts'
+import { Check, Info, Tip } from '@/components/callouts'
 import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
 import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
 
@@ -84,7 +84,16 @@ This integration is useful if you need more powerful crawling than Studio's [def
 </Check>
 
 ## Cards
+
+Here’s a reference for all **[Cards](https://botpress.com/docs/studio/concepts/cards)** available with the integration:
 <IntegrationCards/>
 
 ## Triggers
+
+Here’s a reference for all **[Triggers](https://botpress.com/docs/studio/concepts/triggers)** available with the integration:
+
+<Tip>
+You can access data returned from any of these Triggers by reading event.payload after the Trigger fires.
+
+</Tip>
 <IntegrationEvents/>
