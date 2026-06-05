@@ -21,7 +21,7 @@ export function getReferencedCollections<TCollection extends string>(
   const refs = new Set<TCollection>()
   refs.add(config.defaultCollection)
   for (const tab of config.navigation.tabs) {
-    _collectFromPages(tab.pages, refs)
+    if (tab.pages) _collectFromPages(tab.pages, refs)
   }
   return refs
 }
@@ -234,8 +234,19 @@ export async function buildSidebarTree<TCollection extends string>(
 
   for (const tabItem of config.navigation.tabs) {
     const tabSlug = slugify(tabItem.tab)
+
+    if (tabItem.href !== undefined && !tabItem.pages) {
+      tabs.push({
+        slug: tabSlug,
+        label: tabItem.tab,
+        href: tabItem.href,
+        external: tabItem.external ?? tabItem.href.startsWith('http'),
+      })
+      continue
+    }
+
     const tabTree = buildPages(
-      tabItem.pages,
+      tabItem.pages ?? [],
       0,
       '',
       titleMap,
