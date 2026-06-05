@@ -2,6 +2,7 @@ export interface TabInfo {
   slug: string
   label: string
   href: string
+  external?: boolean
 }
 
 export interface SidebarTreeResult {
@@ -54,7 +55,9 @@ export type PageItem<TCollection extends string = string> =
 
 export interface TabItem<TCollection extends string = string> {
   tab: string
-  pages: PageItem<TCollection>[]
+  pages?: PageItem<TCollection>[]
+  href?: string
+  external?: boolean
 }
 
 export interface DocsConfig<TCollection extends string = string> {

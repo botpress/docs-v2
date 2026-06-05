@@ -287,9 +287,14 @@ export default function MobileSidebar({
                     <DropdownMenuRadioGroup
                       value={selectedTab ?? ''}
                       onValueChange={(val) => {
-                        setSelectedTab(val)
                         const tab = tabs.find((t) => t.slug === val)
-                        if (tab) navigate(tab.href)
+                        if (!tab) return
+                        if (tab.external) {
+                          window.open(tab.href, '_blank', 'noreferrer')
+                          return
+                        }
+                        setSelectedTab(val)
+                        navigate(tab.href)
                       }}
                     >
                       {tabs.map((tab) => (

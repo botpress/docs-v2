@@ -186,8 +186,17 @@ export default defineConfig(collections, {
               },
             ],
           },
+          {
+            group: 'ADK',
+            pages: ['adk/quickstart'],
+          },
+          {
+            group: 'Botpress Desk',
+            pages: ['desk/introduction'],
+          },
         ],
       },
+      { tab: 'Botpress Desk', href: 'https://desk.support.channel', external: true },
       { tab: 'Tutorial', pages: ['tutorial/index'] },
       {
         tab: 'API Reference',
