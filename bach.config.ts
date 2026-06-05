@@ -191,7 +191,7 @@ export default defineConfig(collections, {
             pages: ['adk/quickstart'],
           },
           {
-            group: 'Desk',
+            group: 'Botpress Desk',
             pages: ['desk/introduction'],
           },
         ],
