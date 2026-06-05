@@ -65,7 +65,10 @@ The Botpress app for Zapier is currently in BETA. In order to use Botpress in yo
 workflow.zapierData = JSON.parse(event.payload.body)
 ```
 
-{/* vale Botpress.workflows = NO */} 5. Now the rest of your trigger workflow can use the `{{ workflow.zapierData }}` variable to access the data you sent from Zapier.
+{/* vale Botpress.workflows = NO */}
+
+5. Now the rest of your trigger workflow can use the `{{ workflow.zapierData }}` variable to access the data you sent from Zapier.
+
 {/* vale Botpress.workflows = YES */}
 
 ### Testing your Zapier integration
