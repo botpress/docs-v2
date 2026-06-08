@@ -235,7 +235,7 @@ const fileUrl = file.url
 
 If you only want to allow all the integrations installed in the bot to access the file rather than making it fully public, you can just assign the `integrations` access policy instead:
 
-```ts
+````ts
 const file = await client.uploadFile({
   key: 'test.txt',
   content: 'This is a file accessible by all integrations of the bot',
@@ -261,4 +261,4 @@ const response = await client.uploadFile({
 })
 
 console.log(response.file)
-```
+````
