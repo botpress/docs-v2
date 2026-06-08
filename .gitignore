@@ -26,3 +26,6 @@ pnpm-debug.log*
 
 # ADK developer-specific config
 agent/agent.local.json
+
+# dab
+.dab/
