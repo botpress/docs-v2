@@ -8,7 +8,7 @@ interface EntryFrontmatter {
 }
 
 const modules = import.meta.glob<MDXInstance<EntryFrontmatter>>(
-  "/src/changelog-entries/*.mdx",
+  "/src/content/docs/changelog/changelog-entries/*.mdx",
   { eager: true },
 );
 
