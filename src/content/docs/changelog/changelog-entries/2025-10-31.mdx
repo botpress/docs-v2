@@ -1,0 +1,86 @@
+---
+date: 2025-10-31
+label: October 31, 2025
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20251031DashboardKb from './assets/2025-10-31/dashboard-kb.png'
+import img20251031DashboardKbDark from './assets/2025-10-31/dashboard-kb-dark.png'
+import img20251031NewConversations from './assets/2025-10-31/new-conversations.png'
+import img20251031NewConversationsDark from './assets/2025-10-31/new-conversations-dark.png'
+import img20251031NewOverview from './assets/2025-10-31/new-overview.png'
+import img20251031NewOverviewDark from './assets/2025-10-31/new-overview-dark.png'
+import imgStudioConceptsActionPrompt from '../../studio/concepts/assets/action-prompt.png'
+import imgStudioConceptsActionPromptDark from '../../studio/concepts/assets/action-prompt-dark.png'
+import imgStudioConceptsGeneratedAction from '../../studio/concepts/assets/generated-action.png'
+import imgStudioConceptsGeneratedActionDark from '../../studio/concepts/assets/generated-action-dark.png'
+
+### Features & enhancements
+
+### New Actions experience
+
+Overhauled the Actions experience and added ability generate Actions and Schemas using AI:
+
+<Tabs>
+  <Tab title="Just write your prompt...">
+    <Frame>
+      <Picture alt="Action prompt" class="block dark:hidden" src={imgStudioConceptsActionPrompt} />
+      <Picture alt="Action prompt" class="hidden dark:block" src={imgStudioConceptsActionPromptDark} />
+    </Frame>
+  </Tab>
+  <Tab title="then use the generated Action.">
+    <Frame>
+      <Picture alt="Generated action" class="block dark:hidden" src={imgStudioConceptsGeneratedAction} />
+      <Picture alt="Actions" class="hidden dark:block" src={imgStudioConceptsGeneratedActionDark} />
+    </Frame>
+  </Tab>
+</Tabs>
+
+### Dashboard improvements
+
+- Added the ability to manage Knowledge Bases from the Dashboard:
+
+<Frame>
+  <Picture alt="Dashboard Knowledge Bases" class="block dark:hidden" src={img20251031DashboardKb} />
+  <Picture alt="Dashboard Knowledge Bases" class="hidden dark:block" src={img20251031DashboardKbDark} />
+</Frame>
+
+- Redesigned agent overview page with better metrics, feature visibility, and a link to the bot's shareable preview:
+
+<Frame>
+  <Picture alt="New agent overview" class="block dark:hidden" src={img20251031NewOverview} />
+  <Picture alt="New agent overview" class="hidden dark:block" src={img20251031NewOverviewDark} />
+</Frame>
+
+- Redesigned Conversations tab that shows you Conversation Insights, sentiment analysis and an AI summary:
+
+<Frame>
+  <Picture alt="New Conversations tab" class="block dark:hidden" src={img20251031NewConversations} />
+  <Picture alt="New Conversations tab" class="hidden dark:block" src={img20251031NewConversationsDark} />
+</Frame>
+
+### Integrations
+
+- **Workable**: Added [Workable](/integrations/integration-guides/workable) integration
+- **Mintlify**: Added [Mintlify](/integrations/integration-guides/mintlify) integration
+- **WhatsApp**: Fixed an issue with parsing Mexican phone numbers
+- **Freshchat**: Fixed an issue with handling empty events
+- **HubSpot**: Fixed an issue where Cards that return search results would cause errors when no results were found
+- **Instagram**: Added option for bot to reply to comments on posts
+- **Twilio**:
+  - Added new Cards: **Start Conversation** and **Get or Create User**
+  - Added better Markdown support
+
+### Bug fixes
+
+- Fixed visual bug when loading variable picker in a Card's inspector
+- Fixed a bug where user variables would reset with each new conversation in the Emulator
+- Fixed an issue where sending multiple API requests to upsert rows using the Tables API was causing duplicate rows
+
+### Miscellaneous
+
+- Added file metadata to the [`searchFiles`](/api-reference/files-api/openapi/searchFiles) endpoint's response

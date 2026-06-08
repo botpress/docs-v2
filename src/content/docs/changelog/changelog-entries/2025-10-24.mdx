@@ -1,0 +1,25 @@
+---
+date: 2025-10-24
+label: October 24, 2025
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+
+### Integrations
+
+- **BambooHR**: Added BambooHR integration
+- **Instagram**: Added option for bot to reply to comments on posts
+- **Airtable**: Improved error logging when Cards fail
+
+### Bug fixes
+
+- Fixed an issue where loading multiple documents into a Knowledge Base would stall if the Knowledge Base also contained many website pages
+- Fixed visual bug with pagination in Knowledge Base documents
+
+### Miscellaneous
+
+- Retired integrations are now listed as deprecated in Studio, preventing installation

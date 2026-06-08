@@ -1,0 +1,34 @@
+---
+date: 2025-09-12
+label: September 12, 2025
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20250912AnVariables from './assets/2025-09-12/an-variables.png'
+import img20250912AnVariablesDark from './assets/2025-09-12/an-variables-dark.png'
+
+### Features & enhancements
+
+- Improved the variable management experience for Autonomous Nodes:
+
+  <Frame caption="You can now assign read/write access to individual variables as needed.">
+    <Picture alt="Autonomous Node variable management" class="block dark:hidden" src={img20250912AnVariables} />
+    <Picture alt="Autonomous Node variable management" class="hidden dark:block" src={img20250912AnVariablesDark} />
+  </Frame>
+
+- Improved speed for crawling website Knowledge Bases during onboarding
+- **Integrations**:
+  - **Canny:** Added Canny integration
+  - **Loops:** Added Loops integration
+  - **Feature Base**: Added Feature Base integration
+  - **Webflow**: Added several new events
+
+### Bug fixes
+
+- Fixed an issue where bot exports were failing
+- Fixed various UX issues in Dashboard, Studio and Webchat
+- Fixed various bugs in HubSpot integration

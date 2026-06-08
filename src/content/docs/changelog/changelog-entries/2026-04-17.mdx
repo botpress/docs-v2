@@ -1,0 +1,54 @@
+---
+date: 2026-04-17
+label: April 17, 2026
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20260417PromptEditor from './assets/2026-04-17/prompt-editor.png'
+import img20260417PromptEditorDark from './assets/2026-04-17/prompt-editor-dark.png'
+import imgStudioConceptsNodesAn from '../../studio/concepts/nodes/assets/an.png'
+import imgStudioConceptsNodesAnDark from '../../studio/concepts/nodes/assets/an-dark.png'
+
+### Revamped Autonomous Node
+
+Improved the UX of the Autonomous Node, including a brand new prompt editor which:
+
+- Provides a macro menu for quickly referencing Knowledge Base, variables and more
+- Introduces a raw Markdown mode for precise editing
+
+<Tabs>
+  <Tab title="Autonomous Node">
+    <Frame>
+      <Picture alt="Autonomous Node" class="block dark:hidden" src={imgStudioConceptsNodesAn} />
+      <Picture alt="Autonomous Node" class="hidden dark:block" src={imgStudioConceptsNodesAnDark} />
+    </Frame>
+  </Tab>
+  <Tab title="Prompt editor">
+    <Frame>
+      <Picture alt="Prompt editor" class="block dark:hidden" src={img20260417PromptEditor} />
+      <Picture alt="Prompt editor" class="hidden dark:block" src={img20260417PromptEditorDark} />
+    </Frame>
+  </Tab>
+</Tabs>
+
+### Improved Studio multiplayer
+
+Revamped the Studio multiplayer and added multiple features/enhancements, including:
+
+- Greatly improved performance and latency
+- Real-time cursor position display for teammates
+- Ability to "focus" on a specific teammate and follow their cursor
+- Visual indicators displaying which Node each teammate is focused on
+
+### Bug fixes
+
+- Fixed a race condition which was preventing bots from responding when opening the Webchat preview URL under certain circumstances
+
+### Integrations
+
+- **Telegram**: Fixed an issue where the typing indicator was raising errors when the typing indicator emoji was disabled
+- **WhatsApp**: Fixed an issue where events sent by WhatsApp were mistakenly raising an error

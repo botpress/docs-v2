@@ -47,7 +47,7 @@ jobs:
           fail_on_error: true
           filter_mode: nofilter
           reporter: github-check
-          vale_flags: --glob=*.{md,mdx}
+          vale_flags: --glob=*.{md,mdx},!**/changelog-entries/**
           token: ${{ secrets.GITHUB_TOKEN }}
 
   check-link:

@@ -1,0 +1,35 @@
+---
+date: 2026-02-06
+label: February 6th, 2026
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20260206ShowEmptyConversations from './assets/2026-02-06/show-empty-conversations.png'
+import img20260206ShowEmptyConversationsDark from './assets/2026-02-06/show-empty-conversations-dark.png'
+
+### Features & enhancements
+
+- Added the option to show/hide empty conversations in the dashboard:
+
+<Frame>
+  <Picture alt="Show empty conversations" class="block dark:hidden" src={img20260206ShowEmptyConversations} />
+  <Picture alt="Show empty conversations" class="hidden dark:block" src={img20260206ShowEmptyConversationsDark} />
+</Frame>
+
+- Improved UX for inserting a link in a comment Node
+- Improved the Translation Agent's performance when translating dropdown and multiple choice messages
+
+### Integrations
+
+- **LinkedIn**: Added LinkedIn integration
+- **WhatsApp**: Fixed an issue where the message delivery status wasn’t updating properly in playground
+- **Trello**: Improved security and reliability
+
+### Bug fixes
+
+- Fixed an issue where Actions would fail to capture input on first attempt
+- Fixed Knowledge Bases being deleted right after creation in new bots under certain circumstances
