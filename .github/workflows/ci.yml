@@ -16,8 +16,8 @@ jobs:
           node-version: 22
           registry-url: https://npm.pkg.github.com
           scope: '@botpress-private'
+      - run: cp "${{ env.NPM_CONFIG_USERCONFIG }}" .npmrc
       - uses: oven-sh/setup-bun@v2
-      - run: cat .npmrc
       - run: bun install --frozen-lockfile
         env:
           NODE_AUTH_TOKEN: ${{ secrets.PRIVATE_NPM_TOKEN }}
@@ -33,6 +33,7 @@ jobs:
           node-version: 22
           registry-url: https://npm.pkg.github.com
           scope: '@botpress-private'
+      - run: cp "${{ env.NPM_CONFIG_USERCONFIG }}" .npmrc
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
         env:
@@ -49,6 +50,7 @@ jobs:
           node-version: 22
           registry-url: https://npm.pkg.github.com
           scope: '@botpress-private'
+      - run: cp "${{ env.NPM_CONFIG_USERCONFIG }}" .npmrc
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
         env:
@@ -65,6 +67,7 @@ jobs:
           node-version: 22
           registry-url: https://npm.pkg.github.com
           scope: '@botpress-private'
+      - run: cp "${{ env.NPM_CONFIG_USERCONFIG }}" .npmrc
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
         env:
@@ -89,6 +92,7 @@ jobs:
           node-version: 22
           registry-url: https://npm.pkg.github.com
           scope: '@botpress-private'
+      - run: cp "${{ env.NPM_CONFIG_USERCONFIG }}" .npmrc
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
         env:
@@ -106,6 +110,7 @@ jobs:
           node-version: 22
           registry-url: https://npm.pkg.github.com
           scope: '@botpress-private'
+      - run: cp "${{ env.NPM_CONFIG_USERCONFIG }}" .npmrc
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
         env:
