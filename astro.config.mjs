@@ -6,15 +6,17 @@ import tailwindcss from '@tailwindcss/vite'
 import remarkGfm from 'remark-gfm'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import remarkRewriteLinks from './src/remark/plugins/rewrite-links.js'
 
 import sitemap from '@astrojs/sitemap'
 import icon from 'astro-icon'
 import { transformerMetaHighlight } from '@shikijs/transformers'
+import { baseUrl } from './src/const.js'
 import { transformerFilename, transformerExpandable } from './src/shiki/transformers/index.js'
 
 export default defineConfig({
   site: 'https://botpress.com',
-  base: '/docs',
+  base: baseUrl,
   output: 'static',
   prefetch: {
     prefetchAll: true,
@@ -46,7 +48,7 @@ export default defineConfig({
     },
   },
   markdown: {
-    remarkPlugins: [remarkGfm],
+    remarkPlugins: [remarkGfm, remarkRewriteLinks],
     rehypePlugins: [
       rehypeSlug,
       [
