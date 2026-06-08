@@ -1,7 +1,0 @@
-allowBuilds:
-  es5-ext: true
-  esbuild: true
-  lefthook: true
-  msw: true
-  protobufjs: true
-  sharp: true
