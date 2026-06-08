@@ -1,4 +1,5 @@
 import type { SidebarNode, AdjacentPage, AdjacentPages, SidebarTreeResult } from './types'
+import { stripBase } from './utils'
 
 export function isPathActive(href: string, currentPath: string): boolean {
   if (href === currentPath) return true
@@ -52,7 +53,7 @@ export function getAdjacentPages(nodes: SidebarNode[], currentPath: string): Adj
  * Falls back to prefix matching when there is no exact slug match.
  */
 export function getActiveTab(pathname: string, slugToTab: Record<string, string>): string | null {
-  const normalized = pathname.replace(/^\/|\/$/g, '') || 'index'
+  const normalized = stripBase(pathname).replace(/^\/|\/$/g, '') || 'index'
   if (slugToTab[normalized]) return slugToTab[normalized]
 
   for (const [slug, tab] of Object.entries(slugToTab)) {

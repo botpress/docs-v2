@@ -104,7 +104,7 @@ export default function MobileSidebar({
     <>
       <div className="sticky top-0 z-40 lg:hidden">
         <div className="flex h-13 items-center justify-between px-[calc(var(--spacing)*4)]">
-          <a href="/" className="flex items-center">
+          <a href="/docs/" className="flex items-center">
             <img
               src={siteLogo ?? siteLogoDark ?? undefined}
               alt={siteName || 'Docs'}

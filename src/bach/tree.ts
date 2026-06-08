@@ -7,7 +7,7 @@ import type {
   PageItem,
   DocsConfig,
 } from './types'
-import { slugify, normalizePagePath, lastSegment, titleFromSlug } from './utils'
+import { slugify, normalizePagePath, lastSegment, titleFromSlug, withBase, stripBase } from './utils'
 
 // --- Collection reference collector ---
 
@@ -79,7 +79,7 @@ export function buildPages<TCollection extends string>(
     if (typeof item === 'string') {
       const pagePath = item
       const normalizedPath = normalizePagePath(pagePath)
-      const href = normalizedPath === 'index' ? '/' : `/${normalizedPath}`
+      const href = normalizedPath === 'index' ? withBase('/') : withBase(`/${normalizedPath}`)
       const title = titleMap.get(normalizedPath) ?? titleFromSlug(lastSegment(pagePath))
 
       const articleNode: SidebarArticleNode = {
@@ -121,7 +121,7 @@ export function buildPages<TCollection extends string>(
             type: 'article',
             title: entry.title,
             sidebarTitle: entry.sidebarTitle,
-            href: `/${entry.id}`,
+            href: withBase(`/${entry.id}`),
             path: entry.id,
             method: entry.method,
             icon: entry.icon,
@@ -133,7 +133,7 @@ export function buildPages<TCollection extends string>(
 
       if (item.root && depth > 0) {
         const rootNormalized = normalizePagePath(item.root)
-        href = rootNormalized === 'index' ? '/' : `/${rootNormalized}`
+        href = rootNormalized === 'index' ? withBase('/') : withBase(`/${rootNormalized}`)
 
         childrenPages = item.pages.filter((p) => {
           if (typeof p === 'string') {
@@ -195,7 +195,7 @@ export function collectAllSlugs(nodes: SidebarNode[]): string[] {
       slugs.push(node.path)
     } else {
       if (node.href) {
-        const hrefPath = node.href.replace(/^\//, '') || 'index'
+        const hrefPath = stripBase(node.href).replace(/^\//, '') || 'index'
         slugs.push(hrefPath)
       }
       slugs.push(...collectAllSlugs(node.children))

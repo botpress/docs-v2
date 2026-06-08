@@ -7,8 +7,8 @@ export interface NavbarLink {
 
 export const siteConfig = {
   name: 'Docs',
-  logo: '/logo/light.svg',
-  logoDark: '/logo/dark.svg',
+  logo: '/docs/logo/light.svg',
+  logoDark: '/docs/logo/dark.svg',
   navbar: {
     links: [{ label: 'Dashboard', href: 'https://app.botpress.cloud', type: 'button', external: true }] as NavbarLink[],
   },

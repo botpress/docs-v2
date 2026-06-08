@@ -13,7 +13,8 @@ import { transformerMetaHighlight } from '@shikijs/transformers'
 import { transformerFilename, transformerExpandable } from './src/shiki/transformers/index.js'
 
 export default defineConfig({
-  site: 'https://botpress.com/docs',
+  site: 'https://botpress.com',
+  base: '/docs',
   output: 'static',
   prefetch: {
     prefetchAll: true,
