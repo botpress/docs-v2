@@ -55,8 +55,8 @@ export function lastSegment(pagePath: string): string {
   return parts[parts.length - 1]!
 }
 
-/** URL prefix matching Astro's `base` config — must stay in sync with astro.config.mjs. */
-export const BASE_PREFIX = '/docs'
+/** URL prefix derived from Astro's `base` config (e.g. `/docs`). Empty when base is `/`. */
+export const BASE_PREFIX = import.meta.env.BASE_URL.replace(/\/$/, '')
 
 /** Prefix a root-relative path with the docs base. */
 export function withBase(path: string): string {

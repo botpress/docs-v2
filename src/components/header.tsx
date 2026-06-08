@@ -1,4 +1,5 @@
 import type { TabInfo } from '@/bach/types'
+import { withBase } from '@/bach/utils'
 import type { NavbarLink } from '../lib/site-config'
 
 interface HeaderProps {
@@ -16,7 +17,7 @@ export default function Header({ tabs, activeTab, siteName, siteLogo, siteLogoDa
 
   return (
     <header className="hidden lg:flex h-14 shrink-0 items-center bg-stone-100 px-6 dark:bg-stone-950">
-      <a href="/docs/" className="flex shrink-0 items-center">
+      <a href={withBase('/')} className="flex shrink-0 items-center">
         <img
           src={siteLogo ?? siteLogoDark ?? undefined}
           alt={siteName || 'Docs'}
