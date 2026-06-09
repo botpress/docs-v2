@@ -1,0 +1,39 @@
+---
+title: Generic Entities
+---
+
+## Overview
+
+Entities define **standardized data structures** for an interface.
+
+Once an interface defines entities, its actions and events can consume or produce instances of those entities. Plugins can also define a dependency on specific interfaces, then consume entities produced by integrations that implement those interfaces.
+
+Integrations that implement an interface can:
+
+- Rename entities to align with the terminology of external services
+- Extend entities with extra fields to meet the specific needs of the external service.
+
+## Example: `listable` interface
+
+Consider a `listable` interface designed to provide standardized listing functionality across different services:
+
+### Interface Definition
+
+- Defines an `item` entity as a base structure for `listable` resources
+- Specifies a `listItems` action that returns `item` results
+
+### GitHub integration implementation
+
+An integration connecting to GitHub might implement this interface as follows:
+
+- Extends the `item` entity to create a `pullRequest` entity with GitHub-specific fields
+- Renames the `listItems` action to `listPullRequests` to reflect GitHub terminology
+- Implements the required functionality while using terminology that makes sense for GitHub
+
+### Slack integration implementation
+
+A Slack integration might implement the same interface differently:
+
+- Extends the `item` entity to create a `channel` entity with Slack-specific properties
+- Renames the `listItems` action to `listChannels` to reflect Slack terminology
+- Provides the same core capability but adapted to Slack's specific requirements

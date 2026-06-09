@@ -1,0 +1,19 @@
+---
+import { getEntry } from "astro:content";
+
+interface Props {
+  integration?: string;
+  class?: string;
+}
+
+const { integration, class: className } = Astro.props;
+const slug = Astro.params.slug as string | undefined;
+const integrationSlug =
+  integration ?? slug?.split("integration-guides/")[1]?.split("/")[0];
+const entry = integrationSlug
+  ? await getEntry("integrations", integrationSlug)
+  : undefined;
+const iconUrl = entry?.data.iconUrl;
+---
+
+{iconUrl && <img src={iconUrl} alt={`${integration} icon`} class={className} />}

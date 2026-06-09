@@ -1,0 +1,88 @@
+import { Field } from '@/components/field'
+import { Expandable } from '@/components/Expandable'
+import type { JsonSchema } from '@/bach/schemas/integrations'
+
+function resolveType(prop: JsonSchema): string {
+  const t = prop.type
+  if (Array.isArray(t)) return t.find((x) => x !== 'null') ?? 'unknown'
+  return (t as string) ?? 'object'
+}
+
+export function resolveProperty(prop: JsonSchema) {
+  if (Array.isArray(prop.anyOf)) {
+    const nonNull = (prop.anyOf as JsonSchema[]).find((p) => p.type !== 'null')
+    if (nonNull) {
+      const xzui = nonNull['x-zui'] as Record<string, unknown> | undefined
+      const parentXzui = prop['x-zui'] as Record<string, unknown> | undefined
+      return {
+        type: resolveType(nonNull),
+        description: (nonNull.description ?? prop.description) as string | undefined,
+        title: (xzui?.title ?? parentXzui?.title) as string | undefined,
+        default: nonNull.default ?? prop.default,
+        enum: nonNull.enum as string[] | undefined,
+        properties: nonNull.properties as Record<string, JsonSchema> | undefined,
+        required: nonNull.required as string[] | undefined,
+        items: nonNull.items as JsonSchema | undefined,
+      }
+    }
+  }
+
+  const xzui = prop['x-zui'] as Record<string, unknown> | undefined
+  return {
+    type: resolveType(prop),
+    description: prop.description as string | undefined,
+    title: xzui?.title as string | undefined,
+    default: prop.default,
+    enum: prop.enum as string[] | undefined,
+    properties: prop.properties as Record<string, JsonSchema> | undefined,
+    required: prop.required as string[] | undefined,
+    items: prop.items as JsonSchema | undefined,
+  }
+}
+
+export function SchemaFields({
+  properties,
+  required = [],
+}: {
+  properties: Record<string, JsonSchema>
+  required?: string[]
+}) {
+  return (
+    <>
+      {Object.entries(properties).map(([key, rawProp]) => {
+        const prop = resolveProperty(rawProp)
+        const isRequired = required.includes(key)
+
+        return (
+          <Field key={key} name={prop.title ?? key} type={prop.type} required={isRequired} default={prop.default}>
+            {prop.description && <p>{prop.description}</p>}
+            {prop.enum && (
+              <p>
+                {'Options: '}
+                {prop.enum.map((v, i) => (
+                  <span key={v}>
+                    <code>{v}</code>
+                    {i < prop.enum!.length - 1 ? ', ' : ''}
+                  </span>
+                ))}
+              </p>
+            )}
+            {prop.type === 'object' && prop.properties && (
+              <Expandable title="properties">
+                <SchemaFields properties={prop.properties} required={prop.required} />
+              </Expandable>
+            )}
+            {prop.type === 'array' && prop.items && (prop.items.properties as Record<string, JsonSchema>) && (
+              <Expandable title="item properties">
+                <SchemaFields
+                  properties={prop.items.properties as Record<string, JsonSchema>}
+                  required={(prop.items.required as string[]) ?? []}
+                />
+              </Expandable>
+            )}
+          </Field>
+        )
+      })}
+    </>
+  )
+}

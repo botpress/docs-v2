@@ -3,10 +3,19 @@
   "servers": [
     {
       "url": "https://chat.botpress.cloud/{webhookUrl}",
-      "variables": { "webhookUrl": { "default": "your_default_webhook_url", "description": "The webhook URL" } }
+      "variables": {
+        "webhookUrl": {
+          "default": "your_default_webhook_url",
+          "description": "The webhook URL"
+        }
+      }
     }
   ],
-  "info": { "title": "Chat API", "description": "API for the Chat Integration", "version": "0.0.0" },
+  "info": {
+    "title": "Chat API",
+    "description": "API for the Chat Integration",
+    "version": "0.0.0"
+  },
   "paths": {
     "/conversations/{id}": {
       "get": {
@@ -131,7 +140,11 @@
             "description": "Returns the [Conversation](#schema_conversation) object that was deleted",
             "content": {
               "application/json": {
-                "schema": { "type": "object", "title": "deleteConversationResponse", "additionalProperties": false }
+                "schema": {
+                  "type": "object",
+                  "title": "deleteConversationResponse",
+                  "additionalProperties": false
+                }
               }
             }
           },
@@ -139,7 +152,11 @@
             "description": "Returns the [Conversation](#schema_conversation) object that was deleted",
             "content": {
               "application/json": {
-                "schema": { "type": "object", "title": "deleteConversationResponse", "additionalProperties": false }
+                "schema": {
+                  "type": "object",
+                  "title": "deleteConversationResponse",
+                  "additionalProperties": false
+                }
               }
             }
           }
@@ -244,7 +261,10 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "id": { "type": "string", "description": "Identifier of the [Conversation](#schema_conversation)" }
+                  "id": {
+                    "type": "string",
+                    "description": "Identifier of the [Conversation](#schema_conversation)"
+                  }
                 },
                 "title": "createConversationBody",
                 "additionalProperties": false
@@ -472,7 +492,10 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "id": { "type": "string", "description": "Identifier of the [Conversation](#schema_conversation)" }
+                  "id": {
+                    "type": "string",
+                    "description": "Identifier of the [Conversation](#schema_conversation)"
+                  }
                 },
                 "required": ["id"],
                 "title": "getOrCreateConversationBody",
@@ -510,7 +533,11 @@
             "description": "Returns nothing but a stream",
             "content": {
               "application/json": {
-                "schema": { "type": "object", "title": "listenConversationResponse", "additionalProperties": false }
+                "schema": {
+                  "type": "object",
+                  "title": "listenConversationResponse",
+                  "additionalProperties": false
+                }
               }
             }
           },
@@ -518,7 +545,11 @@
             "description": "Returns nothing but a stream",
             "content": {
               "application/json": {
-                "schema": { "type": "object", "title": "listenConversationResponse", "additionalProperties": false }
+                "schema": {
+                  "type": "object",
+                  "title": "listenConversationResponse",
+                  "additionalProperties": false
+                }
               }
             }
           }
@@ -567,7 +598,10 @@
                       "items": {
                         "type": "object",
                         "properties": {
-                          "id": { "type": "string", "description": "Identifier of the [Message](#schema_message)" },
+                          "id": {
+                            "type": "string",
+                            "description": "Identifier of the [Message](#schema_message)"
+                          },
                           "createdAt": {
                             "type": "string",
                             "format": "date-time",
@@ -578,8 +612,14 @@
                               {
                                 "type": "object",
                                 "properties": {
-                                  "audioUrl": { "type": "string", "minLength": 1 },
-                                  "type": { "type": "string", "enum": ["audio"] }
+                                  "audioUrl": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": ["audio"]
+                                  }
                                 },
                                 "required": ["audioUrl", "type"]
                               },
@@ -587,16 +627,31 @@
                                 "type": "object",
                                 "properties": {
                                   "title": { "type": "string", "minLength": 1 },
-                                  "subtitle": { "type": "string", "minLength": 1 },
-                                  "imageUrl": { "type": "string", "minLength": 1 },
+                                  "subtitle": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "imageUrl": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
                                   "actions": {
                                     "type": "array",
                                     "items": {
                                       "type": "object",
                                       "properties": {
-                                        "action": { "type": "string", "enum": ["postback", "url", "say"] },
-                                        "label": { "type": "string", "minLength": 1 },
-                                        "value": { "type": "string", "minLength": 1 }
+                                        "action": {
+                                          "type": "string",
+                                          "enum": ["postback", "url", "say"]
+                                        },
+                                        "label": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        },
+                                        "value": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        }
                                       },
                                       "required": ["action", "label", "value"]
                                     }
@@ -613,17 +668,35 @@
                                     "items": {
                                       "type": "object",
                                       "properties": {
-                                        "title": { "type": "string", "minLength": 1 },
-                                        "subtitle": { "type": "string", "minLength": 1 },
-                                        "imageUrl": { "type": "string", "minLength": 1 },
+                                        "title": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        },
+                                        "subtitle": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        },
+                                        "imageUrl": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        },
                                         "actions": {
                                           "type": "array",
                                           "items": {
                                             "type": "object",
                                             "properties": {
-                                              "action": { "type": "string", "enum": ["postback", "url", "say"] },
-                                              "label": { "type": "string", "minLength": 1 },
-                                              "value": { "type": "string", "minLength": 1 }
+                                              "action": {
+                                                "type": "string",
+                                                "enum": ["postback", "url", "say"]
+                                              },
+                                              "label": {
+                                                "type": "string",
+                                                "minLength": 1
+                                              },
+                                              "value": {
+                                                "type": "string",
+                                                "minLength": 1
+                                              }
                                             },
                                             "required": ["action", "label", "value"]
                                           }
@@ -632,7 +705,10 @@
                                       "required": ["title", "actions"]
                                     }
                                   },
-                                  "type": { "type": "string", "enum": ["carousel"] }
+                                  "type": {
+                                    "type": "string",
+                                    "enum": ["carousel"]
+                                  }
                                 },
                                 "required": ["items", "type"]
                               },
@@ -645,13 +721,22 @@
                                     "items": {
                                       "type": "object",
                                       "properties": {
-                                        "label": { "type": "string", "minLength": 1 },
-                                        "value": { "type": "string", "minLength": 1 }
+                                        "label": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        },
+                                        "value": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        }
                                       },
                                       "required": ["label", "value"]
                                     }
                                   },
-                                  "type": { "type": "string", "enum": ["choice"] }
+                                  "type": {
+                                    "type": "string",
+                                    "enum": ["choice"]
+                                  }
                                 },
                                 "required": ["text", "options", "type"]
                               },
@@ -664,20 +749,32 @@
                                     "items": {
                                       "type": "object",
                                       "properties": {
-                                        "label": { "type": "string", "minLength": 1 },
-                                        "value": { "type": "string", "minLength": 1 }
+                                        "label": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        },
+                                        "value": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        }
                                       },
                                       "required": ["label", "value"]
                                     }
                                   },
-                                  "type": { "type": "string", "enum": ["dropdown"] }
+                                  "type": {
+                                    "type": "string",
+                                    "enum": ["dropdown"]
+                                  }
                                 },
                                 "required": ["text", "options", "type"]
                               },
                               {
                                 "type": "object",
                                 "properties": {
-                                  "fileUrl": { "type": "string", "minLength": 1 },
+                                  "fileUrl": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
                                   "title": { "type": "string", "minLength": 1 },
                                   "type": { "type": "string", "enum": ["file"] }
                                 },
@@ -686,8 +783,14 @@
                               {
                                 "type": "object",
                                 "properties": {
-                                  "imageUrl": { "type": "string", "minLength": 1 },
-                                  "type": { "type": "string", "enum": ["image"] }
+                                  "imageUrl": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": ["image"]
+                                  }
                                 },
                                 "required": ["imageUrl", "type"]
                               },
@@ -698,15 +801,24 @@
                                   "longitude": { "type": "number" },
                                   "address": { "type": "string" },
                                   "title": { "type": "string" },
-                                  "type": { "type": "string", "enum": ["location"] }
+                                  "type": {
+                                    "type": "string",
+                                    "enum": ["location"]
+                                  }
                                 },
                                 "required": ["latitude", "longitude", "type"]
                               },
                               {
                                 "type": "object",
                                 "properties": {
-                                  "markdown": { "type": "string", "minLength": 1 },
-                                  "type": { "type": "string", "enum": ["markdown"] }
+                                  "markdown": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": ["markdown"]
+                                  }
                                 },
                                 "required": ["markdown", "type"]
                               },
@@ -721,15 +833,24 @@
                               {
                                 "type": "object",
                                 "properties": {
-                                  "videoUrl": { "type": "string", "minLength": 1 },
-                                  "type": { "type": "string", "enum": ["video"] }
+                                  "videoUrl": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": ["video"]
+                                  }
                                 },
                                 "required": ["videoUrl", "type"]
                               }
                             ],
                             "description": "Payload is the content type of the message."
                           },
-                          "userId": { "type": "string", "description": "ID of the [User](#schema_user)" },
+                          "userId": {
+                            "type": "string",
+                            "description": "ID of the [User](#schema_user)"
+                          },
                           "conversationId": {
                             "type": "string",
                             "description": "ID of the [Conversation](#schema_conversation)"
@@ -771,7 +892,10 @@
                       "items": {
                         "type": "object",
                         "properties": {
-                          "id": { "type": "string", "description": "Identifier of the [Message](#schema_message)" },
+                          "id": {
+                            "type": "string",
+                            "description": "Identifier of the [Message](#schema_message)"
+                          },
                           "createdAt": {
                             "type": "string",
                             "format": "date-time",
@@ -782,8 +906,14 @@
                               {
                                 "type": "object",
                                 "properties": {
-                                  "audioUrl": { "type": "string", "minLength": 1 },
-                                  "type": { "type": "string", "enum": ["audio"] }
+                                  "audioUrl": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": ["audio"]
+                                  }
                                 },
                                 "required": ["audioUrl", "type"]
                               },
@@ -791,16 +921,31 @@
                                 "type": "object",
                                 "properties": {
                                   "title": { "type": "string", "minLength": 1 },
-                                  "subtitle": { "type": "string", "minLength": 1 },
-                                  "imageUrl": { "type": "string", "minLength": 1 },
+                                  "subtitle": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "imageUrl": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
                                   "actions": {
                                     "type": "array",
                                     "items": {
                                       "type": "object",
                                       "properties": {
-                                        "action": { "type": "string", "enum": ["postback", "url", "say"] },
-                                        "label": { "type": "string", "minLength": 1 },
-                                        "value": { "type": "string", "minLength": 1 }
+                                        "action": {
+                                          "type": "string",
+                                          "enum": ["postback", "url", "say"]
+                                        },
+                                        "label": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        },
+                                        "value": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        }
                                       },
                                       "required": ["action", "label", "value"]
                                     }
@@ -817,17 +962,35 @@
                                     "items": {
                                       "type": "object",
                                       "properties": {
-                                        "title": { "type": "string", "minLength": 1 },
-                                        "subtitle": { "type": "string", "minLength": 1 },
-                                        "imageUrl": { "type": "string", "minLength": 1 },
+                                        "title": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        },
+                                        "subtitle": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        },
+                                        "imageUrl": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        },
                                         "actions": {
                                           "type": "array",
                                           "items": {
                                             "type": "object",
                                             "properties": {
-                                              "action": { "type": "string", "enum": ["postback", "url", "say"] },
-                                              "label": { "type": "string", "minLength": 1 },
-                                              "value": { "type": "string", "minLength": 1 }
+                                              "action": {
+                                                "type": "string",
+                                                "enum": ["postback", "url", "say"]
+                                              },
+                                              "label": {
+                                                "type": "string",
+                                                "minLength": 1
+                                              },
+                                              "value": {
+                                                "type": "string",
+                                                "minLength": 1
+                                              }
                                             },
                                             "required": ["action", "label", "value"]
                                           }
@@ -836,7 +999,10 @@
                                       "required": ["title", "actions"]
                                     }
                                   },
-                                  "type": { "type": "string", "enum": ["carousel"] }
+                                  "type": {
+                                    "type": "string",
+                                    "enum": ["carousel"]
+                                  }
                                 },
                                 "required": ["items", "type"]
                               },
@@ -849,13 +1015,22 @@
                                     "items": {
                                       "type": "object",
                                       "properties": {
-                                        "label": { "type": "string", "minLength": 1 },
-                                        "value": { "type": "string", "minLength": 1 }
+                                        "label": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        },
+                                        "value": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        }
                                       },
                                       "required": ["label", "value"]
                                     }
                                   },
-                                  "type": { "type": "string", "enum": ["choice"] }
+                                  "type": {
+                                    "type": "string",
+                                    "enum": ["choice"]
+                                  }
                                 },
                                 "required": ["text", "options", "type"]
                               },
@@ -868,20 +1043,32 @@
                                     "items": {
                                       "type": "object",
                                       "properties": {
-                                        "label": { "type": "string", "minLength": 1 },
-                                        "value": { "type": "string", "minLength": 1 }
+                                        "label": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        },
+                                        "value": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        }
                                       },
                                       "required": ["label", "value"]
                                     }
                                   },
-                                  "type": { "type": "string", "enum": ["dropdown"] }
+                                  "type": {
+                                    "type": "string",
+                                    "enum": ["dropdown"]
+                                  }
                                 },
                                 "required": ["text", "options", "type"]
                               },
                               {
                                 "type": "object",
                                 "properties": {
-                                  "fileUrl": { "type": "string", "minLength": 1 },
+                                  "fileUrl": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
                                   "title": { "type": "string", "minLength": 1 },
                                   "type": { "type": "string", "enum": ["file"] }
                                 },
@@ -890,8 +1077,14 @@
                               {
                                 "type": "object",
                                 "properties": {
-                                  "imageUrl": { "type": "string", "minLength": 1 },
-                                  "type": { "type": "string", "enum": ["image"] }
+                                  "imageUrl": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": ["image"]
+                                  }
                                 },
                                 "required": ["imageUrl", "type"]
                               },
@@ -902,15 +1095,24 @@
                                   "longitude": { "type": "number" },
                                   "address": { "type": "string" },
                                   "title": { "type": "string" },
-                                  "type": { "type": "string", "enum": ["location"] }
+                                  "type": {
+                                    "type": "string",
+                                    "enum": ["location"]
+                                  }
                                 },
                                 "required": ["latitude", "longitude", "type"]
                               },
                               {
                                 "type": "object",
                                 "properties": {
-                                  "markdown": { "type": "string", "minLength": 1 },
-                                  "type": { "type": "string", "enum": ["markdown"] }
+                                  "markdown": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": ["markdown"]
+                                  }
                                 },
                                 "required": ["markdown", "type"]
                               },
@@ -925,15 +1127,24 @@
                               {
                                 "type": "object",
                                 "properties": {
-                                  "videoUrl": { "type": "string", "minLength": 1 },
-                                  "type": { "type": "string", "enum": ["video"] }
+                                  "videoUrl": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": ["video"]
+                                  }
                                 },
                                 "required": ["videoUrl", "type"]
                               }
                             ],
                             "description": "Payload is the content type of the message."
                           },
-                          "userId": { "type": "string", "description": "ID of the [User](#schema_user)" },
+                          "userId": {
+                            "type": "string",
+                            "description": "ID of the [User](#schema_user)"
+                          },
                           "conversationId": {
                             "type": "string",
                             "description": "ID of the [Conversation](#schema_conversation)"
@@ -999,9 +1210,18 @@
                     "participant": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" },
-                        "name": { "type": "string", "description": "Name of the [User](#schema_user)" },
-                        "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                        "id": {
+                          "type": "string",
+                          "description": "Identifier of the [User](#schema_user)"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Name of the [User](#schema_user)"
+                        },
+                        "pictureUrl": {
+                          "type": "string",
+                          "description": "Picture url of the [User](#schema_user)"
+                        },
                         "profile": {
                           "type": "string",
                           "description": "Custom profile data of the [User](#schema_user) encoded as a string"
@@ -1040,9 +1260,18 @@
                     "participant": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" },
-                        "name": { "type": "string", "description": "Name of the [User](#schema_user)" },
-                        "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                        "id": {
+                          "type": "string",
+                          "description": "Identifier of the [User](#schema_user)"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Name of the [User](#schema_user)"
+                        },
+                        "pictureUrl": {
+                          "type": "string",
+                          "description": "Picture url of the [User](#schema_user)"
+                        },
                         "profile": {
                           "type": "string",
                           "description": "Custom profile data of the [User](#schema_user) encoded as a string"
@@ -1078,7 +1307,9 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "properties": { "userId": { "type": "string", "description": "User id" } },
+                "properties": {
+                  "userId": { "type": "string", "description": "User id" }
+                },
                 "required": ["userId"],
                 "title": "addParticipantBody",
                 "additionalProperties": false
@@ -1128,9 +1359,18 @@
                       "items": {
                         "type": "object",
                         "properties": {
-                          "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" },
-                          "name": { "type": "string", "description": "Name of the [User](#schema_user)" },
-                          "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                          "id": {
+                            "type": "string",
+                            "description": "Identifier of the [User](#schema_user)"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Name of the [User](#schema_user)"
+                          },
+                          "pictureUrl": {
+                            "type": "string",
+                            "description": "Picture url of the [User](#schema_user)"
+                          },
                           "profile": {
                             "type": "string",
                             "description": "Custom profile data of the [User](#schema_user) encoded as a string"
@@ -1182,9 +1422,18 @@
                       "items": {
                         "type": "object",
                         "properties": {
-                          "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" },
-                          "name": { "type": "string", "description": "Name of the [User](#schema_user)" },
-                          "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                          "id": {
+                            "type": "string",
+                            "description": "Identifier of the [User](#schema_user)"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Name of the [User](#schema_user)"
+                          },
+                          "pictureUrl": {
+                            "type": "string",
+                            "description": "Picture url of the [User](#schema_user)"
+                          },
                           "profile": {
                             "type": "string",
                             "description": "Custom profile data of the [User](#schema_user) encoded as a string"
@@ -1248,14 +1497,24 @@
             "required": true,
             "schema": { "type": "string" }
           },
-          { "name": "userId", "in": "path", "description": "User id", "required": true, "schema": { "type": "string" } }
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "User id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
         ],
         "responses": {
           "200": {
             "description": "Returns an empty object",
             "content": {
               "application/json": {
-                "schema": { "type": "object", "title": "removeParticipantResponse", "additionalProperties": false }
+                "schema": {
+                  "type": "object",
+                  "title": "removeParticipantResponse",
+                  "additionalProperties": false
+                }
               }
             }
           },
@@ -1263,7 +1522,11 @@
             "description": "Returns an empty object",
             "content": {
               "application/json": {
-                "schema": { "type": "object", "title": "removeParticipantResponse", "additionalProperties": false }
+                "schema": {
+                  "type": "object",
+                  "title": "removeParticipantResponse",
+                  "additionalProperties": false
+                }
               }
             }
           }
@@ -1289,7 +1552,13 @@
             "required": true,
             "schema": { "type": "string" }
           },
-          { "name": "userId", "in": "path", "description": "User id", "required": true, "schema": { "type": "string" } }
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "User id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
         ],
         "responses": {
           "200": {
@@ -1302,9 +1571,18 @@
                     "participant": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" },
-                        "name": { "type": "string", "description": "Name of the [User](#schema_user)" },
-                        "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                        "id": {
+                          "type": "string",
+                          "description": "Identifier of the [User](#schema_user)"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Name of the [User](#schema_user)"
+                        },
+                        "pictureUrl": {
+                          "type": "string",
+                          "description": "Picture url of the [User](#schema_user)"
+                        },
                         "profile": {
                           "type": "string",
                           "description": "Custom profile data of the [User](#schema_user) encoded as a string"
@@ -1343,9 +1621,18 @@
                     "participant": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" },
-                        "name": { "type": "string", "description": "Name of the [User](#schema_user)" },
-                        "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                        "id": {
+                          "type": "string",
+                          "description": "Identifier of the [User](#schema_user)"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Name of the [User](#schema_user)"
+                        },
+                        "pictureUrl": {
+                          "type": "string",
+                          "description": "Picture url of the [User](#schema_user)"
+                        },
                         "profile": {
                           "type": "string",
                           "description": "Custom profile data of the [User](#schema_user) encoded as a string"
@@ -1410,7 +1697,10 @@
                     "message": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "string", "description": "Identifier of the [Message](#schema_message)" },
+                        "id": {
+                          "type": "string",
+                          "description": "Identifier of the [Message](#schema_message)"
+                        },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time",
@@ -1421,7 +1711,10 @@
                             {
                               "type": "object",
                               "properties": {
-                                "audioUrl": { "type": "string", "minLength": 1 },
+                                "audioUrl": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
                                 "type": { "type": "string", "enum": ["audio"] }
                               },
                               "required": ["audioUrl", "type"]
@@ -1430,16 +1723,31 @@
                               "type": "object",
                               "properties": {
                                 "title": { "type": "string", "minLength": 1 },
-                                "subtitle": { "type": "string", "minLength": 1 },
-                                "imageUrl": { "type": "string", "minLength": 1 },
+                                "subtitle": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "imageUrl": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
                                 "actions": {
                                   "type": "array",
                                   "items": {
                                     "type": "object",
                                     "properties": {
-                                      "action": { "type": "string", "enum": ["postback", "url", "say"] },
-                                      "label": { "type": "string", "minLength": 1 },
-                                      "value": { "type": "string", "minLength": 1 }
+                                      "action": {
+                                        "type": "string",
+                                        "enum": ["postback", "url", "say"]
+                                      },
+                                      "label": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
+                                      "value": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
                                     },
                                     "required": ["action", "label", "value"]
                                   }
@@ -1456,17 +1764,35 @@
                                   "items": {
                                     "type": "object",
                                     "properties": {
-                                      "title": { "type": "string", "minLength": 1 },
-                                      "subtitle": { "type": "string", "minLength": 1 },
-                                      "imageUrl": { "type": "string", "minLength": 1 },
+                                      "title": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
+                                      "subtitle": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
+                                      "imageUrl": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
                                       "actions": {
                                         "type": "array",
                                         "items": {
                                           "type": "object",
                                           "properties": {
-                                            "action": { "type": "string", "enum": ["postback", "url", "say"] },
-                                            "label": { "type": "string", "minLength": 1 },
-                                            "value": { "type": "string", "minLength": 1 }
+                                            "action": {
+                                              "type": "string",
+                                              "enum": ["postback", "url", "say"]
+                                            },
+                                            "label": {
+                                              "type": "string",
+                                              "minLength": 1
+                                            },
+                                            "value": {
+                                              "type": "string",
+                                              "minLength": 1
+                                            }
                                           },
                                           "required": ["action", "label", "value"]
                                         }
@@ -1475,7 +1801,10 @@
                                     "required": ["title", "actions"]
                                   }
                                 },
-                                "type": { "type": "string", "enum": ["carousel"] }
+                                "type": {
+                                  "type": "string",
+                                  "enum": ["carousel"]
+                                }
                               },
                               "required": ["items", "type"]
                             },
@@ -1488,8 +1817,14 @@
                                   "items": {
                                     "type": "object",
                                     "properties": {
-                                      "label": { "type": "string", "minLength": 1 },
-                                      "value": { "type": "string", "minLength": 1 }
+                                      "label": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
+                                      "value": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
                                     },
                                     "required": ["label", "value"]
                                   }
@@ -1507,13 +1842,22 @@
                                   "items": {
                                     "type": "object",
                                     "properties": {
-                                      "label": { "type": "string", "minLength": 1 },
-                                      "value": { "type": "string", "minLength": 1 }
+                                      "label": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
+                                      "value": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
                                     },
                                     "required": ["label", "value"]
                                   }
                                 },
-                                "type": { "type": "string", "enum": ["dropdown"] }
+                                "type": {
+                                  "type": "string",
+                                  "enum": ["dropdown"]
+                                }
                               },
                               "required": ["text", "options", "type"]
                             },
@@ -1529,7 +1873,10 @@
                             {
                               "type": "object",
                               "properties": {
-                                "imageUrl": { "type": "string", "minLength": 1 },
+                                "imageUrl": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
                                 "type": { "type": "string", "enum": ["image"] }
                               },
                               "required": ["imageUrl", "type"]
@@ -1541,15 +1888,24 @@
                                 "longitude": { "type": "number" },
                                 "address": { "type": "string" },
                                 "title": { "type": "string" },
-                                "type": { "type": "string", "enum": ["location"] }
+                                "type": {
+                                  "type": "string",
+                                  "enum": ["location"]
+                                }
                               },
                               "required": ["latitude", "longitude", "type"]
                             },
                             {
                               "type": "object",
                               "properties": {
-                                "markdown": { "type": "string", "minLength": 1 },
-                                "type": { "type": "string", "enum": ["markdown"] }
+                                "markdown": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "type": {
+                                  "type": "string",
+                                  "enum": ["markdown"]
+                                }
                               },
                               "required": ["markdown", "type"]
                             },
@@ -1564,7 +1920,10 @@
                             {
                               "type": "object",
                               "properties": {
-                                "videoUrl": { "type": "string", "minLength": 1 },
+                                "videoUrl": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
                                 "type": { "type": "string", "enum": ["video"] }
                               },
                               "required": ["videoUrl", "type"]
@@ -1572,7 +1931,10 @@
                           ],
                           "description": "Payload is the content type of the message."
                         },
-                        "userId": { "type": "string", "description": "ID of the [User](#schema_user)" },
+                        "userId": {
+                          "type": "string",
+                          "description": "ID of the [User](#schema_user)"
+                        },
                         "conversationId": {
                           "type": "string",
                           "description": "ID of the [Conversation](#schema_conversation)"
@@ -1601,7 +1963,10 @@
                     "message": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "string", "description": "Identifier of the [Message](#schema_message)" },
+                        "id": {
+                          "type": "string",
+                          "description": "Identifier of the [Message](#schema_message)"
+                        },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time",
@@ -1612,7 +1977,10 @@
                             {
                               "type": "object",
                               "properties": {
-                                "audioUrl": { "type": "string", "minLength": 1 },
+                                "audioUrl": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
                                 "type": { "type": "string", "enum": ["audio"] }
                               },
                               "required": ["audioUrl", "type"]
@@ -1621,16 +1989,31 @@
                               "type": "object",
                               "properties": {
                                 "title": { "type": "string", "minLength": 1 },
-                                "subtitle": { "type": "string", "minLength": 1 },
-                                "imageUrl": { "type": "string", "minLength": 1 },
+                                "subtitle": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "imageUrl": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
                                 "actions": {
                                   "type": "array",
                                   "items": {
                                     "type": "object",
                                     "properties": {
-                                      "action": { "type": "string", "enum": ["postback", "url", "say"] },
-                                      "label": { "type": "string", "minLength": 1 },
-                                      "value": { "type": "string", "minLength": 1 }
+                                      "action": {
+                                        "type": "string",
+                                        "enum": ["postback", "url", "say"]
+                                      },
+                                      "label": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
+                                      "value": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
                                     },
                                     "required": ["action", "label", "value"]
                                   }
@@ -1647,17 +2030,35 @@
                                   "items": {
                                     "type": "object",
                                     "properties": {
-                                      "title": { "type": "string", "minLength": 1 },
-                                      "subtitle": { "type": "string", "minLength": 1 },
-                                      "imageUrl": { "type": "string", "minLength": 1 },
+                                      "title": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
+                                      "subtitle": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
+                                      "imageUrl": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
                                       "actions": {
                                         "type": "array",
                                         "items": {
                                           "type": "object",
                                           "properties": {
-                                            "action": { "type": "string", "enum": ["postback", "url", "say"] },
-                                            "label": { "type": "string", "minLength": 1 },
-                                            "value": { "type": "string", "minLength": 1 }
+                                            "action": {
+                                              "type": "string",
+                                              "enum": ["postback", "url", "say"]
+                                            },
+                                            "label": {
+                                              "type": "string",
+                                              "minLength": 1
+                                            },
+                                            "value": {
+                                              "type": "string",
+                                              "minLength": 1
+                                            }
                                           },
                                           "required": ["action", "label", "value"]
                                         }
@@ -1666,7 +2067,10 @@
                                     "required": ["title", "actions"]
                                   }
                                 },
-                                "type": { "type": "string", "enum": ["carousel"] }
+                                "type": {
+                                  "type": "string",
+                                  "enum": ["carousel"]
+                                }
                               },
                               "required": ["items", "type"]
                             },
@@ -1679,8 +2083,14 @@
                                   "items": {
                                     "type": "object",
                                     "properties": {
-                                      "label": { "type": "string", "minLength": 1 },
-                                      "value": { "type": "string", "minLength": 1 }
+                                      "label": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
+                                      "value": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
                                     },
                                     "required": ["label", "value"]
                                   }
@@ -1698,13 +2108,22 @@
                                   "items": {
                                     "type": "object",
                                     "properties": {
-                                      "label": { "type": "string", "minLength": 1 },
-                                      "value": { "type": "string", "minLength": 1 }
+                                      "label": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
+                                      "value": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
                                     },
                                     "required": ["label", "value"]
                                   }
                                 },
-                                "type": { "type": "string", "enum": ["dropdown"] }
+                                "type": {
+                                  "type": "string",
+                                  "enum": ["dropdown"]
+                                }
                               },
                               "required": ["text", "options", "type"]
                             },
@@ -1720,7 +2139,10 @@
                             {
                               "type": "object",
                               "properties": {
-                                "imageUrl": { "type": "string", "minLength": 1 },
+                                "imageUrl": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
                                 "type": { "type": "string", "enum": ["image"] }
                               },
                               "required": ["imageUrl", "type"]
@@ -1732,15 +2154,24 @@
                                 "longitude": { "type": "number" },
                                 "address": { "type": "string" },
                                 "title": { "type": "string" },
-                                "type": { "type": "string", "enum": ["location"] }
+                                "type": {
+                                  "type": "string",
+                                  "enum": ["location"]
+                                }
                               },
                               "required": ["latitude", "longitude", "type"]
                             },
                             {
                               "type": "object",
                               "properties": {
-                                "markdown": { "type": "string", "minLength": 1 },
-                                "type": { "type": "string", "enum": ["markdown"] }
+                                "markdown": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "type": {
+                                  "type": "string",
+                                  "enum": ["markdown"]
+                                }
                               },
                               "required": ["markdown", "type"]
                             },
@@ -1755,7 +2186,10 @@
                             {
                               "type": "object",
                               "properties": {
-                                "videoUrl": { "type": "string", "minLength": 1 },
+                                "videoUrl": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
                                 "type": { "type": "string", "enum": ["video"] }
                               },
                               "required": ["videoUrl", "type"]
@@ -1763,7 +2197,10 @@
                           ],
                           "description": "Payload is the content type of the message."
                         },
-                        "userId": { "type": "string", "description": "ID of the [User](#schema_user)" },
+                        "userId": {
+                          "type": "string",
+                          "description": "ID of the [User](#schema_user)"
+                        },
                         "conversationId": {
                           "type": "string",
                           "description": "ID of the [Conversation](#schema_conversation)"
@@ -1797,14 +2234,24 @@
             "required": true,
             "schema": { "type": "string" }
           },
-          { "name": "id", "in": "path", "description": "Message id", "required": true, "schema": { "type": "string" } }
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Message id",
+            "required": true,
+            "schema": { "type": "string" }
+          }
         ],
         "responses": {
           "200": {
             "description": "Returns the [Message](#schema_message) object that was deleted",
             "content": {
               "application/json": {
-                "schema": { "type": "object", "title": "deleteMessageResponse", "additionalProperties": false }
+                "schema": {
+                  "type": "object",
+                  "title": "deleteMessageResponse",
+                  "additionalProperties": false
+                }
               }
             }
           },
@@ -1812,7 +2259,11 @@
             "description": "Returns the [Message](#schema_message) object that was deleted",
             "content": {
               "application/json": {
-                "schema": { "type": "object", "title": "deleteMessageResponse", "additionalProperties": false }
+                "schema": {
+                  "type": "object",
+                  "title": "deleteMessageResponse",
+                  "additionalProperties": false
+                }
               }
             }
           }
@@ -1845,7 +2296,10 @@
                     "message": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "string", "description": "Identifier of the [Message](#schema_message)" },
+                        "id": {
+                          "type": "string",
+                          "description": "Identifier of the [Message](#schema_message)"
+                        },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time",
@@ -1856,7 +2310,10 @@
                             {
                               "type": "object",
                               "properties": {
-                                "audioUrl": { "type": "string", "minLength": 1 },
+                                "audioUrl": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
                                 "type": { "type": "string", "enum": ["audio"] }
                               },
                               "required": ["audioUrl", "type"]
@@ -1865,16 +2322,31 @@
                               "type": "object",
                               "properties": {
                                 "title": { "type": "string", "minLength": 1 },
-                                "subtitle": { "type": "string", "minLength": 1 },
-                                "imageUrl": { "type": "string", "minLength": 1 },
+                                "subtitle": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "imageUrl": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
                                 "actions": {
                                   "type": "array",
                                   "items": {
                                     "type": "object",
                                     "properties": {
-                                      "action": { "type": "string", "enum": ["postback", "url", "say"] },
-                                      "label": { "type": "string", "minLength": 1 },
-                                      "value": { "type": "string", "minLength": 1 }
+                                      "action": {
+                                        "type": "string",
+                                        "enum": ["postback", "url", "say"]
+                                      },
+                                      "label": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
+                                      "value": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
                                     },
                                     "required": ["action", "label", "value"]
                                   }
@@ -1891,17 +2363,35 @@
                                   "items": {
                                     "type": "object",
                                     "properties": {
-                                      "title": { "type": "string", "minLength": 1 },
-                                      "subtitle": { "type": "string", "minLength": 1 },
-                                      "imageUrl": { "type": "string", "minLength": 1 },
+                                      "title": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
+                                      "subtitle": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
+                                      "imageUrl": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
                                       "actions": {
                                         "type": "array",
                                         "items": {
                                           "type": "object",
                                           "properties": {
-                                            "action": { "type": "string", "enum": ["postback", "url", "say"] },
-                                            "label": { "type": "string", "minLength": 1 },
-                                            "value": { "type": "string", "minLength": 1 }
+                                            "action": {
+                                              "type": "string",
+                                              "enum": ["postback", "url", "say"]
+                                            },
+                                            "label": {
+                                              "type": "string",
+                                              "minLength": 1
+                                            },
+                                            "value": {
+                                              "type": "string",
+                                              "minLength": 1
+                                            }
                                           },
                                           "required": ["action", "label", "value"]
                                         }
@@ -1910,7 +2400,10 @@
                                     "required": ["title", "actions"]
                                   }
                                 },
-                                "type": { "type": "string", "enum": ["carousel"] }
+                                "type": {
+                                  "type": "string",
+                                  "enum": ["carousel"]
+                                }
                               },
                               "required": ["items", "type"]
                             },
@@ -1923,8 +2416,14 @@
                                   "items": {
                                     "type": "object",
                                     "properties": {
-                                      "label": { "type": "string", "minLength": 1 },
-                                      "value": { "type": "string", "minLength": 1 }
+                                      "label": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
+                                      "value": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
                                     },
                                     "required": ["label", "value"]
                                   }
@@ -1942,13 +2441,22 @@
                                   "items": {
                                     "type": "object",
                                     "properties": {
-                                      "label": { "type": "string", "minLength": 1 },
-                                      "value": { "type": "string", "minLength": 1 }
+                                      "label": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
+                                      "value": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
                                     },
                                     "required": ["label", "value"]
                                   }
                                 },
-                                "type": { "type": "string", "enum": ["dropdown"] }
+                                "type": {
+                                  "type": "string",
+                                  "enum": ["dropdown"]
+                                }
                               },
                               "required": ["text", "options", "type"]
                             },
@@ -1964,7 +2472,10 @@
                             {
                               "type": "object",
                               "properties": {
-                                "imageUrl": { "type": "string", "minLength": 1 },
+                                "imageUrl": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
                                 "type": { "type": "string", "enum": ["image"] }
                               },
                               "required": ["imageUrl", "type"]
@@ -1976,15 +2487,24 @@
                                 "longitude": { "type": "number" },
                                 "address": { "type": "string" },
                                 "title": { "type": "string" },
-                                "type": { "type": "string", "enum": ["location"] }
+                                "type": {
+                                  "type": "string",
+                                  "enum": ["location"]
+                                }
                               },
                               "required": ["latitude", "longitude", "type"]
                             },
                             {
                               "type": "object",
                               "properties": {
-                                "markdown": { "type": "string", "minLength": 1 },
-                                "type": { "type": "string", "enum": ["markdown"] }
+                                "markdown": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "type": {
+                                  "type": "string",
+                                  "enum": ["markdown"]
+                                }
                               },
                               "required": ["markdown", "type"]
                             },
@@ -1999,7 +2519,10 @@
                             {
                               "type": "object",
                               "properties": {
-                                "videoUrl": { "type": "string", "minLength": 1 },
+                                "videoUrl": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
                                 "type": { "type": "string", "enum": ["video"] }
                               },
                               "required": ["videoUrl", "type"]
@@ -2007,7 +2530,10 @@
                           ],
                           "description": "Payload is the content type of the message."
                         },
-                        "userId": { "type": "string", "description": "ID of the [User](#schema_user)" },
+                        "userId": {
+                          "type": "string",
+                          "description": "ID of the [User](#schema_user)"
+                        },
                         "conversationId": {
                           "type": "string",
                           "description": "ID of the [Conversation](#schema_conversation)"
@@ -2036,7 +2562,10 @@
                     "message": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "string", "description": "Identifier of the [Message](#schema_message)" },
+                        "id": {
+                          "type": "string",
+                          "description": "Identifier of the [Message](#schema_message)"
+                        },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time",
@@ -2047,7 +2576,10 @@
                             {
                               "type": "object",
                               "properties": {
-                                "audioUrl": { "type": "string", "minLength": 1 },
+                                "audioUrl": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
                                 "type": { "type": "string", "enum": ["audio"] }
                               },
                               "required": ["audioUrl", "type"]
@@ -2056,16 +2588,31 @@
                               "type": "object",
                               "properties": {
                                 "title": { "type": "string", "minLength": 1 },
-                                "subtitle": { "type": "string", "minLength": 1 },
-                                "imageUrl": { "type": "string", "minLength": 1 },
+                                "subtitle": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "imageUrl": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
                                 "actions": {
                                   "type": "array",
                                   "items": {
                                     "type": "object",
                                     "properties": {
-                                      "action": { "type": "string", "enum": ["postback", "url", "say"] },
-                                      "label": { "type": "string", "minLength": 1 },
-                                      "value": { "type": "string", "minLength": 1 }
+                                      "action": {
+                                        "type": "string",
+                                        "enum": ["postback", "url", "say"]
+                                      },
+                                      "label": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
+                                      "value": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
                                     },
                                     "required": ["action", "label", "value"]
                                   }
@@ -2082,17 +2629,35 @@
                                   "items": {
                                     "type": "object",
                                     "properties": {
-                                      "title": { "type": "string", "minLength": 1 },
-                                      "subtitle": { "type": "string", "minLength": 1 },
-                                      "imageUrl": { "type": "string", "minLength": 1 },
+                                      "title": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
+                                      "subtitle": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
+                                      "imageUrl": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
                                       "actions": {
                                         "type": "array",
                                         "items": {
                                           "type": "object",
                                           "properties": {
-                                            "action": { "type": "string", "enum": ["postback", "url", "say"] },
-                                            "label": { "type": "string", "minLength": 1 },
-                                            "value": { "type": "string", "minLength": 1 }
+                                            "action": {
+                                              "type": "string",
+                                              "enum": ["postback", "url", "say"]
+                                            },
+                                            "label": {
+                                              "type": "string",
+                                              "minLength": 1
+                                            },
+                                            "value": {
+                                              "type": "string",
+                                              "minLength": 1
+                                            }
                                           },
                                           "required": ["action", "label", "value"]
                                         }
@@ -2101,7 +2666,10 @@
                                     "required": ["title", "actions"]
                                   }
                                 },
-                                "type": { "type": "string", "enum": ["carousel"] }
+                                "type": {
+                                  "type": "string",
+                                  "enum": ["carousel"]
+                                }
                               },
                               "required": ["items", "type"]
                             },
@@ -2114,8 +2682,14 @@
                                   "items": {
                                     "type": "object",
                                     "properties": {
-                                      "label": { "type": "string", "minLength": 1 },
-                                      "value": { "type": "string", "minLength": 1 }
+                                      "label": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
+                                      "value": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
                                     },
                                     "required": ["label", "value"]
                                   }
@@ -2133,13 +2707,22 @@
                                   "items": {
                                     "type": "object",
                                     "properties": {
-                                      "label": { "type": "string", "minLength": 1 },
-                                      "value": { "type": "string", "minLength": 1 }
+                                      "label": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
+                                      "value": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
                                     },
                                     "required": ["label", "value"]
                                   }
                                 },
-                                "type": { "type": "string", "enum": ["dropdown"] }
+                                "type": {
+                                  "type": "string",
+                                  "enum": ["dropdown"]
+                                }
                               },
                               "required": ["text", "options", "type"]
                             },
@@ -2155,7 +2738,10 @@
                             {
                               "type": "object",
                               "properties": {
-                                "imageUrl": { "type": "string", "minLength": 1 },
+                                "imageUrl": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
                                 "type": { "type": "string", "enum": ["image"] }
                               },
                               "required": ["imageUrl", "type"]
@@ -2167,15 +2753,24 @@
                                 "longitude": { "type": "number" },
                                 "address": { "type": "string" },
                                 "title": { "type": "string" },
-                                "type": { "type": "string", "enum": ["location"] }
+                                "type": {
+                                  "type": "string",
+                                  "enum": ["location"]
+                                }
                               },
                               "required": ["latitude", "longitude", "type"]
                             },
                             {
                               "type": "object",
                               "properties": {
-                                "markdown": { "type": "string", "minLength": 1 },
-                                "type": { "type": "string", "enum": ["markdown"] }
+                                "markdown": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "type": {
+                                  "type": "string",
+                                  "enum": ["markdown"]
+                                }
                               },
                               "required": ["markdown", "type"]
                             },
@@ -2190,7 +2785,10 @@
                             {
                               "type": "object",
                               "properties": {
-                                "videoUrl": { "type": "string", "minLength": 1 },
+                                "videoUrl": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
                                 "type": { "type": "string", "enum": ["video"] }
                               },
                               "required": ["videoUrl", "type"]
@@ -2198,7 +2796,10 @@
                           ],
                           "description": "Payload is the content type of the message."
                         },
-                        "userId": { "type": "string", "description": "ID of the [User](#schema_user)" },
+                        "userId": {
+                          "type": "string",
+                          "description": "ID of the [User](#schema_user)"
+                        },
                         "conversationId": {
                           "type": "string",
                           "description": "ID of the [Conversation](#schema_conversation)"
@@ -2246,7 +2847,10 @@
                             "items": {
                               "type": "object",
                               "properties": {
-                                "action": { "type": "string", "enum": ["postback", "url", "say"] },
+                                "action": {
+                                  "type": "string",
+                                  "enum": ["postback", "url", "say"]
+                                },
                                 "label": { "type": "string", "minLength": 1 },
                                 "value": { "type": "string", "minLength": 1 }
                               },
@@ -2266,16 +2870,31 @@
                               "type": "object",
                               "properties": {
                                 "title": { "type": "string", "minLength": 1 },
-                                "subtitle": { "type": "string", "minLength": 1 },
-                                "imageUrl": { "type": "string", "minLength": 1 },
+                                "subtitle": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "imageUrl": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
                                 "actions": {
                                   "type": "array",
                                   "items": {
                                     "type": "object",
                                     "properties": {
-                                      "action": { "type": "string", "enum": ["postback", "url", "say"] },
-                                      "label": { "type": "string", "minLength": 1 },
-                                      "value": { "type": "string", "minLength": 1 }
+                                      "action": {
+                                        "type": "string",
+                                        "enum": ["postback", "url", "say"]
+                                      },
+                                      "label": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      },
+                                      "value": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
                                     },
                                     "required": ["action", "label", "value"]
                                   }
@@ -2421,9 +3040,18 @@
                     "user": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" },
-                        "name": { "type": "string", "description": "Name of the [User](#schema_user)" },
-                        "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                        "id": {
+                          "type": "string",
+                          "description": "Identifier of the [User](#schema_user)"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Name of the [User](#schema_user)"
+                        },
+                        "pictureUrl": {
+                          "type": "string",
+                          "description": "Picture url of the [User](#schema_user)"
+                        },
                         "profile": {
                           "type": "string",
                           "description": "Custom profile data of the [User](#schema_user) encoded as a string"
@@ -2462,9 +3090,18 @@
                     "user": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" },
-                        "name": { "type": "string", "description": "Name of the [User](#schema_user)" },
-                        "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                        "id": {
+                          "type": "string",
+                          "description": "Identifier of the [User](#schema_user)"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Name of the [User](#schema_user)"
+                        },
+                        "pictureUrl": {
+                          "type": "string",
+                          "description": "Picture url of the [User](#schema_user)"
+                        },
                         "profile": {
                           "type": "string",
                           "description": "Custom profile data of the [User](#schema_user) encoded as a string"
@@ -2520,9 +3157,18 @@
                     "user": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" },
-                        "name": { "type": "string", "description": "Name of the [User](#schema_user)" },
-                        "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                        "id": {
+                          "type": "string",
+                          "description": "Identifier of the [User](#schema_user)"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Name of the [User](#schema_user)"
+                        },
+                        "pictureUrl": {
+                          "type": "string",
+                          "description": "Picture url of the [User](#schema_user)"
+                        },
                         "profile": {
                           "type": "string",
                           "description": "Custom profile data of the [User](#schema_user) encoded as a string"
@@ -2561,9 +3207,18 @@
                     "user": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" },
-                        "name": { "type": "string", "description": "Name of the [User](#schema_user)" },
-                        "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                        "id": {
+                          "type": "string",
+                          "description": "Identifier of the [User](#schema_user)"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Name of the [User](#schema_user)"
+                        },
+                        "pictureUrl": {
+                          "type": "string",
+                          "description": "Picture url of the [User](#schema_user)"
+                        },
                         "profile": {
                           "type": "string",
                           "description": "Custom profile data of the [User](#schema_user) encoded as a string"
@@ -2604,7 +3259,10 @@
                     "type": "string",
                     "description": "Name of the [User](#schema_user) (not a unique identifier)"
                   },
-                  "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                  "pictureUrl": {
+                    "type": "string",
+                    "description": "Picture url of the [User](#schema_user)"
+                  },
                   "profile": {
                     "type": "string",
                     "maxLength": 1000,
@@ -2637,7 +3295,11 @@
             "description": "Returns the [User](#schema_user) object that was deleted",
             "content": {
               "application/json": {
-                "schema": { "type": "object", "title": "deleteUserResponse", "additionalProperties": false }
+                "schema": {
+                  "type": "object",
+                  "title": "deleteUserResponse",
+                  "additionalProperties": false
+                }
               }
             }
           },
@@ -2645,7 +3307,11 @@
             "description": "Returns the [User](#schema_user) object that was deleted",
             "content": {
               "application/json": {
-                "schema": { "type": "object", "title": "deleteUserResponse", "additionalProperties": false }
+                "schema": {
+                  "type": "object",
+                  "title": "deleteUserResponse",
+                  "additionalProperties": false
+                }
               }
             }
           }
@@ -2670,9 +3336,18 @@
                     "user": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" },
-                        "name": { "type": "string", "description": "Name of the [User](#schema_user)" },
-                        "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                        "id": {
+                          "type": "string",
+                          "description": "Identifier of the [User](#schema_user)"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Name of the [User](#schema_user)"
+                        },
+                        "pictureUrl": {
+                          "type": "string",
+                          "description": "Picture url of the [User](#schema_user)"
+                        },
                         "profile": {
                           "type": "string",
                           "description": "Custom profile data of the [User](#schema_user) encoded as a string"
@@ -2712,9 +3387,18 @@
                     "user": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" },
-                        "name": { "type": "string", "description": "Name of the [User](#schema_user)" },
-                        "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                        "id": {
+                          "type": "string",
+                          "description": "Identifier of the [User](#schema_user)"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Name of the [User](#schema_user)"
+                        },
+                        "pictureUrl": {
+                          "type": "string",
+                          "description": "Picture url of the [User](#schema_user)"
+                        },
                         "profile": {
                           "type": "string",
                           "description": "Custom profile data of the [User](#schema_user) encoded as a string"
@@ -2756,13 +3440,19 @@
                     "type": "string",
                     "description": "Name of the [User](#schema_user) (not a unique identifier)"
                   },
-                  "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                  "pictureUrl": {
+                    "type": "string",
+                    "description": "Picture url of the [User](#schema_user)"
+                  },
                   "profile": {
                     "type": "string",
                     "maxLength": 1000,
                     "description": "Custom profile data of the [User](#schema_user) encoded as a string"
                   },
-                  "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" }
+                  "id": {
+                    "type": "string",
+                    "description": "Identifier of the [User](#schema_user)"
+                  }
                 },
                 "title": "createUserBody",
                 "additionalProperties": false
@@ -2798,9 +3488,18 @@
                     "user": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" },
-                        "name": { "type": "string", "description": "Name of the [User](#schema_user)" },
-                        "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                        "id": {
+                          "type": "string",
+                          "description": "Identifier of the [User](#schema_user)"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Name of the [User](#schema_user)"
+                        },
+                        "pictureUrl": {
+                          "type": "string",
+                          "description": "Picture url of the [User](#schema_user)"
+                        },
                         "profile": {
                           "type": "string",
                           "description": "Custom profile data of the [User](#schema_user) encoded as a string"
@@ -2839,9 +3538,18 @@
                     "user": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" },
-                        "name": { "type": "string", "description": "Name of the [User](#schema_user)" },
-                        "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                        "id": {
+                          "type": "string",
+                          "description": "Identifier of the [User](#schema_user)"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Name of the [User](#schema_user)"
+                        },
+                        "pictureUrl": {
+                          "type": "string",
+                          "description": "Picture url of the [User](#schema_user)"
+                        },
                         "profile": {
                           "type": "string",
                           "description": "Custom profile data of the [User](#schema_user) encoded as a string"
@@ -2882,7 +3590,10 @@
                     "type": "string",
                     "description": "Name of the [User](#schema_user) (not a unique identifier)"
                   },
-                  "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                  "pictureUrl": {
+                    "type": "string",
+                    "description": "Picture url of the [User](#schema_user)"
+                  },
                   "profile": {
                     "type": "string",
                     "maxLength": 1000,
@@ -2930,7 +3641,10 @@
                     "event": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "string", "description": "ID of the custom [Event](#schema_event)." },
+                        "id": {
+                          "type": "string",
+                          "description": "ID of the custom [Event](#schema_event)."
+                        },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time",
@@ -2945,7 +3659,10 @@
                           "type": "string",
                           "description": "ID of the [Conversation](#schema_conversation)."
                         },
-                        "userId": { "type": "string", "description": "ID of the [User](#schema_user)." }
+                        "userId": {
+                          "type": "string",
+                          "description": "ID of the [User](#schema_user)."
+                        }
                       },
                       "required": ["id", "createdAt", "payload", "conversationId", "userId"],
                       "additionalProperties": false,
@@ -2969,7 +3686,10 @@
                     "event": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "string", "description": "ID of the custom [Event](#schema_event)." },
+                        "id": {
+                          "type": "string",
+                          "description": "ID of the custom [Event](#schema_event)."
+                        },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time",
@@ -2984,7 +3704,10 @@
                           "type": "string",
                           "description": "ID of the [Conversation](#schema_conversation)."
                         },
-                        "userId": { "type": "string", "description": "ID of the [User](#schema_user)." }
+                        "userId": {
+                          "type": "string",
+                          "description": "ID of the [User](#schema_user)."
+                        }
                       },
                       "required": ["id", "createdAt", "payload", "conversationId", "userId"],
                       "additionalProperties": false,
@@ -3027,7 +3750,10 @@
                     "event": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "string", "description": "ID of the custom [Event](#schema_event)." },
+                        "id": {
+                          "type": "string",
+                          "description": "ID of the custom [Event](#schema_event)."
+                        },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time",
@@ -3042,7 +3768,10 @@
                           "type": "string",
                           "description": "ID of the [Conversation](#schema_conversation)."
                         },
-                        "userId": { "type": "string", "description": "ID of the [User](#schema_user)." }
+                        "userId": {
+                          "type": "string",
+                          "description": "ID of the [User](#schema_user)."
+                        }
                       },
                       "required": ["id", "createdAt", "payload", "conversationId", "userId"],
                       "additionalProperties": false,
@@ -3066,7 +3795,10 @@
                     "event": {
                       "type": "object",
                       "properties": {
-                        "id": { "type": "string", "description": "ID of the custom [Event](#schema_event)." },
+                        "id": {
+                          "type": "string",
+                          "description": "ID of the custom [Event](#schema_event)."
+                        },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time",
@@ -3081,7 +3813,10 @@
                           "type": "string",
                           "description": "ID of the [Conversation](#schema_conversation)."
                         },
-                        "userId": { "type": "string", "description": "ID of the [User](#schema_user)." }
+                        "userId": {
+                          "type": "string",
+                          "description": "ID of the [User](#schema_user)."
+                        }
                       },
                       "required": ["id", "createdAt", "payload", "conversationId", "userId"],
                       "additionalProperties": false,
@@ -3130,9 +3865,18 @@
       "User": {
         "type": "object",
         "properties": {
-          "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" },
-          "name": { "type": "string", "description": "Name of the [User](#schema_user)" },
-          "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+          "id": {
+            "type": "string",
+            "description": "Identifier of the [User](#schema_user)"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the [User](#schema_user)"
+          },
+          "pictureUrl": {
+            "type": "string",
+            "description": "Picture url of the [User](#schema_user)"
+          },
           "profile": {
             "type": "string",
             "description": "Custom profile data of the [User](#schema_user) encoded as a string"
@@ -3156,7 +3900,10 @@
       "Conversation": {
         "type": "object",
         "properties": {
-          "id": { "type": "string", "description": "Identifier of the [Conversation](#schema_conversation)" },
+          "id": {
+            "type": "string",
+            "description": "Identifier of the [Conversation](#schema_conversation)"
+          },
           "createdAt": {
             "type": "string",
             "format": "date-time",
@@ -3175,7 +3922,10 @@
       "Message": {
         "type": "object",
         "properties": {
-          "id": { "type": "string", "description": "Identifier of the [Message](#schema_message)" },
+          "id": {
+            "type": "string",
+            "description": "Identifier of the [Message](#schema_message)"
+          },
           "createdAt": {
             "type": "string",
             "format": "date-time",
@@ -3202,7 +3952,10 @@
                     "items": {
                       "type": "object",
                       "properties": {
-                        "action": { "type": "string", "enum": ["postback", "url", "say"] },
+                        "action": {
+                          "type": "string",
+                          "enum": ["postback", "url", "say"]
+                        },
                         "label": { "type": "string", "minLength": 1 },
                         "value": { "type": "string", "minLength": 1 }
                       },
@@ -3229,7 +3982,10 @@
                           "items": {
                             "type": "object",
                             "properties": {
-                              "action": { "type": "string", "enum": ["postback", "url", "say"] },
+                              "action": {
+                                "type": "string",
+                                "enum": ["postback", "url", "say"]
+                              },
                               "label": { "type": "string", "minLength": 1 },
                               "value": { "type": "string", "minLength": 1 }
                             },
@@ -3337,8 +4093,14 @@
             ],
             "description": "Payload is the content type of the message."
           },
-          "userId": { "type": "string", "description": "ID of the [User](#schema_user)" },
-          "conversationId": { "type": "string", "description": "ID of the [Conversation](#schema_conversation)" }
+          "userId": {
+            "type": "string",
+            "description": "ID of the [User](#schema_user)"
+          },
+          "conversationId": {
+            "type": "string",
+            "description": "ID of the [Conversation](#schema_conversation)"
+          }
         },
         "required": ["id", "createdAt", "payload", "userId", "conversationId"],
         "description": "The Message object represents a message in a [Conversation](#schema_conversation) for a specific [User](#schema_user).",
@@ -3348,7 +4110,10 @@
       "Event": {
         "type": "object",
         "properties": {
-          "id": { "type": "string", "description": "ID of the custom [Event](#schema_event)." },
+          "id": {
+            "type": "string",
+            "description": "ID of the custom [Event](#schema_event)."
+          },
           "createdAt": {
             "type": "string",
             "format": "date-time",
@@ -3359,8 +4124,14 @@
             "additionalProperties": {},
             "description": "Payload is the content of the custom event."
           },
-          "conversationId": { "type": "string", "description": "ID of the [Conversation](#schema_conversation)." },
-          "userId": { "type": "string", "description": "ID of the [User](#schema_user)." }
+          "conversationId": {
+            "type": "string",
+            "description": "ID of the [Conversation](#schema_conversation)."
+          },
+          "userId": {
+            "type": "string",
+            "description": "ID of the [User](#schema_user)."
+          }
         },
         "required": ["id", "createdAt", "payload", "conversationId", "userId"],
         "additionalProperties": false,
@@ -3378,7 +4149,10 @@
                 "conversation": {
                   "type": "object",
                   "properties": {
-                    "id": { "type": "string", "description": "Identifier of the [Conversation](#schema_conversation)" },
+                    "id": {
+                      "type": "string",
+                      "description": "Identifier of the [Conversation](#schema_conversation)"
+                    },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time",
@@ -3412,7 +4186,10 @@
                 "conversation": {
                   "type": "object",
                   "properties": {
-                    "id": { "type": "string", "description": "Identifier of the [Conversation](#schema_conversation)" },
+                    "id": {
+                      "type": "string",
+                      "description": "Identifier of the [Conversation](#schema_conversation)"
+                    },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time",
@@ -3446,7 +4223,10 @@
                 "conversation": {
                   "type": "object",
                   "properties": {
-                    "id": { "type": "string", "description": "Identifier of the [Conversation](#schema_conversation)" },
+                    "id": {
+                      "type": "string",
+                      "description": "Identifier of the [Conversation](#schema_conversation)"
+                    },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time",
@@ -3474,7 +4254,11 @@
         "description": "Returns the [Conversation](#schema_conversation) object that was deleted",
         "content": {
           "application/json": {
-            "schema": { "type": "object", "title": "deleteConversationResponse", "additionalProperties": false }
+            "schema": {
+              "type": "object",
+              "title": "deleteConversationResponse",
+              "additionalProperties": false
+            }
           }
         }
       },
@@ -3530,7 +4314,11 @@
         "description": "Returns nothing but a stream",
         "content": {
           "application/json": {
-            "schema": { "type": "object", "title": "listenConversationResponse", "additionalProperties": false }
+            "schema": {
+              "type": "object",
+              "title": "listenConversationResponse",
+              "additionalProperties": false
+            }
           }
         }
       },
@@ -3546,7 +4334,10 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "id": { "type": "string", "description": "Identifier of the [Message](#schema_message)" },
+                      "id": {
+                        "type": "string",
+                        "description": "Identifier of the [Message](#schema_message)"
+                      },
                       "createdAt": {
                         "type": "string",
                         "format": "date-time",
@@ -3573,9 +4364,18 @@
                                 "items": {
                                   "type": "object",
                                   "properties": {
-                                    "action": { "type": "string", "enum": ["postback", "url", "say"] },
-                                    "label": { "type": "string", "minLength": 1 },
-                                    "value": { "type": "string", "minLength": 1 }
+                                    "action": {
+                                      "type": "string",
+                                      "enum": ["postback", "url", "say"]
+                                    },
+                                    "label": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    },
+                                    "value": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    }
                                   },
                                   "required": ["action", "label", "value"]
                                 }
@@ -3592,17 +4392,35 @@
                                 "items": {
                                   "type": "object",
                                   "properties": {
-                                    "title": { "type": "string", "minLength": 1 },
-                                    "subtitle": { "type": "string", "minLength": 1 },
-                                    "imageUrl": { "type": "string", "minLength": 1 },
+                                    "title": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    },
+                                    "subtitle": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    },
+                                    "imageUrl": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    },
                                     "actions": {
                                       "type": "array",
                                       "items": {
                                         "type": "object",
                                         "properties": {
-                                          "action": { "type": "string", "enum": ["postback", "url", "say"] },
-                                          "label": { "type": "string", "minLength": 1 },
-                                          "value": { "type": "string", "minLength": 1 }
+                                          "action": {
+                                            "type": "string",
+                                            "enum": ["postback", "url", "say"]
+                                          },
+                                          "label": {
+                                            "type": "string",
+                                            "minLength": 1
+                                          },
+                                          "value": {
+                                            "type": "string",
+                                            "minLength": 1
+                                          }
                                         },
                                         "required": ["action", "label", "value"]
                                       }
@@ -3624,8 +4442,14 @@
                                 "items": {
                                   "type": "object",
                                   "properties": {
-                                    "label": { "type": "string", "minLength": 1 },
-                                    "value": { "type": "string", "minLength": 1 }
+                                    "label": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    },
+                                    "value": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    }
                                   },
                                   "required": ["label", "value"]
                                 }
@@ -3643,8 +4467,14 @@
                                 "items": {
                                   "type": "object",
                                   "properties": {
-                                    "label": { "type": "string", "minLength": 1 },
-                                    "value": { "type": "string", "minLength": 1 }
+                                    "label": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    },
+                                    "value": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    }
                                   },
                                   "required": ["label", "value"]
                                 }
@@ -3708,7 +4538,10 @@
                         ],
                         "description": "Payload is the content type of the message."
                       },
-                      "userId": { "type": "string", "description": "ID of the [User](#schema_user)" },
+                      "userId": {
+                        "type": "string",
+                        "description": "ID of the [User](#schema_user)"
+                      },
                       "conversationId": {
                         "type": "string",
                         "description": "ID of the [Conversation](#schema_conversation)"
@@ -3748,9 +4581,18 @@
                 "participant": {
                   "type": "object",
                   "properties": {
-                    "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" },
-                    "name": { "type": "string", "description": "Name of the [User](#schema_user)" },
-                    "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                    "id": {
+                      "type": "string",
+                      "description": "Identifier of the [User](#schema_user)"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the [User](#schema_user)"
+                    },
+                    "pictureUrl": {
+                      "type": "string",
+                      "description": "Picture url of the [User](#schema_user)"
+                    },
                     "profile": {
                       "type": "string",
                       "description": "Custom profile data of the [User](#schema_user) encoded as a string"
@@ -3783,7 +4625,11 @@
         "description": "Returns an empty object",
         "content": {
           "application/json": {
-            "schema": { "type": "object", "title": "removeParticipantResponse", "additionalProperties": false }
+            "schema": {
+              "type": "object",
+              "title": "removeParticipantResponse",
+              "additionalProperties": false
+            }
           }
         }
       },
@@ -3797,9 +4643,18 @@
                 "participant": {
                   "type": "object",
                   "properties": {
-                    "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" },
-                    "name": { "type": "string", "description": "Name of the [User](#schema_user)" },
-                    "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                    "id": {
+                      "type": "string",
+                      "description": "Identifier of the [User](#schema_user)"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the [User](#schema_user)"
+                    },
+                    "pictureUrl": {
+                      "type": "string",
+                      "description": "Picture url of the [User](#schema_user)"
+                    },
                     "profile": {
                       "type": "string",
                       "description": "Custom profile data of the [User](#schema_user) encoded as a string"
@@ -3840,9 +4695,18 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" },
-                      "name": { "type": "string", "description": "Name of the [User](#schema_user)" },
-                      "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                      "id": {
+                        "type": "string",
+                        "description": "Identifier of the [User](#schema_user)"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Name of the [User](#schema_user)"
+                      },
+                      "pictureUrl": {
+                        "type": "string",
+                        "description": "Picture url of the [User](#schema_user)"
+                      },
                       "profile": {
                         "type": "string",
                         "description": "Custom profile data of the [User](#schema_user) encoded as a string"
@@ -3892,7 +4756,10 @@
                 "message": {
                   "type": "object",
                   "properties": {
-                    "id": { "type": "string", "description": "Identifier of the [Message](#schema_message)" },
+                    "id": {
+                      "type": "string",
+                      "description": "Identifier of the [Message](#schema_message)"
+                    },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time",
@@ -3919,7 +4786,10 @@
                               "items": {
                                 "type": "object",
                                 "properties": {
-                                  "action": { "type": "string", "enum": ["postback", "url", "say"] },
+                                  "action": {
+                                    "type": "string",
+                                    "enum": ["postback", "url", "say"]
+                                  },
                                   "label": { "type": "string", "minLength": 1 },
                                   "value": { "type": "string", "minLength": 1 }
                                 },
@@ -3939,16 +4809,31 @@
                                 "type": "object",
                                 "properties": {
                                   "title": { "type": "string", "minLength": 1 },
-                                  "subtitle": { "type": "string", "minLength": 1 },
-                                  "imageUrl": { "type": "string", "minLength": 1 },
+                                  "subtitle": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "imageUrl": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
                                   "actions": {
                                     "type": "array",
                                     "items": {
                                       "type": "object",
                                       "properties": {
-                                        "action": { "type": "string", "enum": ["postback", "url", "say"] },
-                                        "label": { "type": "string", "minLength": 1 },
-                                        "value": { "type": "string", "minLength": 1 }
+                                        "action": {
+                                          "type": "string",
+                                          "enum": ["postback", "url", "say"]
+                                        },
+                                        "label": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        },
+                                        "value": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        }
                                       },
                                       "required": ["action", "label", "value"]
                                     }
@@ -4054,7 +4939,10 @@
                       ],
                       "description": "Payload is the content type of the message."
                     },
-                    "userId": { "type": "string", "description": "ID of the [User](#schema_user)" },
+                    "userId": {
+                      "type": "string",
+                      "description": "ID of the [User](#schema_user)"
+                    },
                     "conversationId": {
                       "type": "string",
                       "description": "ID of the [Conversation](#schema_conversation)"
@@ -4083,7 +4971,10 @@
                 "message": {
                   "type": "object",
                   "properties": {
-                    "id": { "type": "string", "description": "Identifier of the [Message](#schema_message)" },
+                    "id": {
+                      "type": "string",
+                      "description": "Identifier of the [Message](#schema_message)"
+                    },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time",
@@ -4110,7 +5001,10 @@
                               "items": {
                                 "type": "object",
                                 "properties": {
-                                  "action": { "type": "string", "enum": ["postback", "url", "say"] },
+                                  "action": {
+                                    "type": "string",
+                                    "enum": ["postback", "url", "say"]
+                                  },
                                   "label": { "type": "string", "minLength": 1 },
                                   "value": { "type": "string", "minLength": 1 }
                                 },
@@ -4130,16 +5024,31 @@
                                 "type": "object",
                                 "properties": {
                                   "title": { "type": "string", "minLength": 1 },
-                                  "subtitle": { "type": "string", "minLength": 1 },
-                                  "imageUrl": { "type": "string", "minLength": 1 },
+                                  "subtitle": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "imageUrl": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
                                   "actions": {
                                     "type": "array",
                                     "items": {
                                       "type": "object",
                                       "properties": {
-                                        "action": { "type": "string", "enum": ["postback", "url", "say"] },
-                                        "label": { "type": "string", "minLength": 1 },
-                                        "value": { "type": "string", "minLength": 1 }
+                                        "action": {
+                                          "type": "string",
+                                          "enum": ["postback", "url", "say"]
+                                        },
+                                        "label": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        },
+                                        "value": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        }
                                       },
                                       "required": ["action", "label", "value"]
                                     }
@@ -4245,7 +5154,10 @@
                       ],
                       "description": "Payload is the content type of the message."
                     },
-                    "userId": { "type": "string", "description": "ID of the [User](#schema_user)" },
+                    "userId": {
+                      "type": "string",
+                      "description": "ID of the [User](#schema_user)"
+                    },
                     "conversationId": {
                       "type": "string",
                       "description": "ID of the [Conversation](#schema_conversation)"
@@ -4268,7 +5180,11 @@
         "description": "Returns the [Message](#schema_message) object that was deleted",
         "content": {
           "application/json": {
-            "schema": { "type": "object", "title": "deleteMessageResponse", "additionalProperties": false }
+            "schema": {
+              "type": "object",
+              "title": "deleteMessageResponse",
+              "additionalProperties": false
+            }
           }
         }
       },
@@ -4282,9 +5198,18 @@
                 "user": {
                   "type": "object",
                   "properties": {
-                    "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" },
-                    "name": { "type": "string", "description": "Name of the [User](#schema_user)" },
-                    "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                    "id": {
+                      "type": "string",
+                      "description": "Identifier of the [User](#schema_user)"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the [User](#schema_user)"
+                    },
+                    "pictureUrl": {
+                      "type": "string",
+                      "description": "Picture url of the [User](#schema_user)"
+                    },
                     "profile": {
                       "type": "string",
                       "description": "Custom profile data of the [User](#schema_user) encoded as a string"
@@ -4323,9 +5248,18 @@
                 "user": {
                   "type": "object",
                   "properties": {
-                    "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" },
-                    "name": { "type": "string", "description": "Name of the [User](#schema_user)" },
-                    "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                    "id": {
+                      "type": "string",
+                      "description": "Identifier of the [User](#schema_user)"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the [User](#schema_user)"
+                    },
+                    "pictureUrl": {
+                      "type": "string",
+                      "description": "Picture url of the [User](#schema_user)"
+                    },
                     "profile": {
                       "type": "string",
                       "description": "Custom profile data of the [User](#schema_user) encoded as a string"
@@ -4365,9 +5299,18 @@
                 "user": {
                   "type": "object",
                   "properties": {
-                    "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" },
-                    "name": { "type": "string", "description": "Name of the [User](#schema_user)" },
-                    "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                    "id": {
+                      "type": "string",
+                      "description": "Identifier of the [User](#schema_user)"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the [User](#schema_user)"
+                    },
+                    "pictureUrl": {
+                      "type": "string",
+                      "description": "Picture url of the [User](#schema_user)"
+                    },
                     "profile": {
                       "type": "string",
                       "description": "Custom profile data of the [User](#schema_user) encoded as a string"
@@ -4406,9 +5349,18 @@
                 "user": {
                   "type": "object",
                   "properties": {
-                    "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" },
-                    "name": { "type": "string", "description": "Name of the [User](#schema_user)" },
-                    "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                    "id": {
+                      "type": "string",
+                      "description": "Identifier of the [User](#schema_user)"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the [User](#schema_user)"
+                    },
+                    "pictureUrl": {
+                      "type": "string",
+                      "description": "Picture url of the [User](#schema_user)"
+                    },
                     "profile": {
                       "type": "string",
                       "description": "Custom profile data of the [User](#schema_user) encoded as a string"
@@ -4441,7 +5393,11 @@
         "description": "Returns the [User](#schema_user) object that was deleted",
         "content": {
           "application/json": {
-            "schema": { "type": "object", "title": "deleteUserResponse", "additionalProperties": false }
+            "schema": {
+              "type": "object",
+              "title": "deleteUserResponse",
+              "additionalProperties": false
+            }
           }
         }
       },
@@ -4455,7 +5411,10 @@
                 "event": {
                   "type": "object",
                   "properties": {
-                    "id": { "type": "string", "description": "ID of the custom [Event](#schema_event)." },
+                    "id": {
+                      "type": "string",
+                      "description": "ID of the custom [Event](#schema_event)."
+                    },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time",
@@ -4470,7 +5429,10 @@
                       "type": "string",
                       "description": "ID of the [Conversation](#schema_conversation)."
                     },
-                    "userId": { "type": "string", "description": "ID of the [User](#schema_user)." }
+                    "userId": {
+                      "type": "string",
+                      "description": "ID of the [User](#schema_user)."
+                    }
                   },
                   "required": ["id", "createdAt", "payload", "conversationId", "userId"],
                   "additionalProperties": false,
@@ -4494,7 +5456,10 @@
                 "event": {
                   "type": "object",
                   "properties": {
-                    "id": { "type": "string", "description": "ID of the custom [Event](#schema_event)." },
+                    "id": {
+                      "type": "string",
+                      "description": "ID of the custom [Event](#schema_event)."
+                    },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time",
@@ -4509,7 +5474,10 @@
                       "type": "string",
                       "description": "ID of the [Conversation](#schema_conversation)."
                     },
-                    "userId": { "type": "string", "description": "ID of the [User](#schema_user)." }
+                    "userId": {
+                      "type": "string",
+                      "description": "ID of the [User](#schema_user)."
+                    }
                   },
                   "required": ["id", "createdAt", "payload", "conversationId", "userId"],
                   "additionalProperties": false,
@@ -4532,7 +5500,10 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": { "type": "string", "description": "Identifier of the [Conversation](#schema_conversation)" }
+                "id": {
+                  "type": "string",
+                  "description": "Identifier of the [Conversation](#schema_conversation)"
+                }
               },
               "title": "createConversationBody",
               "additionalProperties": false
@@ -4547,7 +5518,10 @@
             "schema": {
               "type": "object",
               "properties": {
-                "id": { "type": "string", "description": "Identifier of the [Conversation](#schema_conversation)" }
+                "id": {
+                  "type": "string",
+                  "description": "Identifier of the [Conversation](#schema_conversation)"
+                }
               },
               "required": ["id"],
               "title": "getOrCreateConversationBody",
@@ -4562,7 +5536,9 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "properties": { "userId": { "type": "string", "description": "User id" } },
+              "properties": {
+                "userId": { "type": "string", "description": "User id" }
+              },
               "required": ["userId"],
               "title": "addParticipantBody",
               "additionalProperties": false
@@ -4598,7 +5574,10 @@
                           "items": {
                             "type": "object",
                             "properties": {
-                              "action": { "type": "string", "enum": ["postback", "url", "say"] },
+                              "action": {
+                                "type": "string",
+                                "enum": ["postback", "url", "say"]
+                              },
                               "label": { "type": "string", "minLength": 1 },
                               "value": { "type": "string", "minLength": 1 }
                             },
@@ -4625,9 +5604,18 @@
                                 "items": {
                                   "type": "object",
                                   "properties": {
-                                    "action": { "type": "string", "enum": ["postback", "url", "say"] },
-                                    "label": { "type": "string", "minLength": 1 },
-                                    "value": { "type": "string", "minLength": 1 }
+                                    "action": {
+                                      "type": "string",
+                                      "enum": ["postback", "url", "say"]
+                                    },
+                                    "label": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    },
+                                    "value": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    }
                                   },
                                   "required": ["action", "label", "value"]
                                 }
@@ -4733,7 +5721,10 @@
                   ],
                   "description": "Payload is the content type of the message."
                 },
-                "conversationId": { "type": "string", "description": "ID of the [Conversation](#schema_conversation)" }
+                "conversationId": {
+                  "type": "string",
+                  "description": "ID of the [Conversation](#schema_conversation)"
+                }
               },
               "required": ["payload", "conversationId"],
               "title": "createMessageBody",
@@ -4753,13 +5744,19 @@
                   "type": "string",
                   "description": "Name of the [User](#schema_user) (not a unique identifier)"
                 },
-                "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                "pictureUrl": {
+                  "type": "string",
+                  "description": "Picture url of the [User](#schema_user)"
+                },
                 "profile": {
                   "type": "string",
                   "maxLength": 1000,
                   "description": "Custom profile data of the [User](#schema_user) encoded as a string"
                 },
-                "id": { "type": "string", "description": "Identifier of the [User](#schema_user)" }
+                "id": {
+                  "type": "string",
+                  "description": "Identifier of the [User](#schema_user)"
+                }
               },
               "title": "createUserBody",
               "additionalProperties": false
@@ -4778,7 +5775,10 @@
                   "type": "string",
                   "description": "Name of the [User](#schema_user) (not a unique identifier)"
                 },
-                "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                "pictureUrl": {
+                  "type": "string",
+                  "description": "Picture url of the [User](#schema_user)"
+                },
                 "profile": {
                   "type": "string",
                   "maxLength": 1000,
@@ -4802,7 +5802,10 @@
                   "type": "string",
                   "description": "Name of the [User](#schema_user) (not a unique identifier)"
                 },
-                "pictureUrl": { "type": "string", "description": "Picture url of the [User](#schema_user)" },
+                "pictureUrl": {
+                  "type": "string",
+                  "description": "Picture url of the [User](#schema_user)"
+                },
                 "profile": {
                   "type": "string",
                   "maxLength": 1000,
@@ -4827,7 +5830,10 @@
                   "additionalProperties": {},
                   "description": "Payload is the content of the custom event."
                 },
-                "conversationId": { "type": "string", "description": "ID of the [Conversation](#schema_conversation)" }
+                "conversationId": {
+                  "type": "string",
+                  "description": "ID of the [Conversation](#schema_conversation)"
+                }
               },
               "required": ["payload", "conversationId"],
               "title": "createEventBody",

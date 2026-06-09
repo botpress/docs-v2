@@ -30,6 +30,7 @@ export interface SidebarArticleNode {
   path: string
   method?: string
   icon?: string
+  iconUrl?: string
 }
 
 export type SidebarNode = SidebarCategoryNode | SidebarArticleNode

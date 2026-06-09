@@ -66,7 +66,9 @@ export default new Conversation({
     if (!messageText) {
       await conversation.send({
         type: 'text',
-        payload: { text: 'Send me a text question about Botpress and I can help.' },
+        payload: {
+          text: 'Send me a text question about Botpress and I can help.',
+        },
       })
       return
     }
@@ -136,7 +138,9 @@ If there are any pages in ${JSON.stringify(state.context)}, prioritize them when
     if (!result.is(AnswerExit)) {
       await conversation.send({
         type: 'text',
-        payload: { text: 'I ran into an issue processing that. Could you try rephrasing your question?' },
+        payload: {
+          text: 'I ran into an issue processing that. Could you try rephrasing your question?',
+        },
       })
       return
     }
