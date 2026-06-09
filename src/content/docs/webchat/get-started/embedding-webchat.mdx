@@ -1,0 +1,109 @@
+---
+title: Embed Webchat
+description: Manually add Webchat to your website.
+---
+
+import { Note, Info, Tip } from '@/components/callouts'
+import Steps from '@/components/Steps.astro'
+import Step from '@/components/Step.astro'
+import Frame from '@/components/Frame.astro'
+import { Picture } from 'astro:assets'
+import embedCodeDashboardImg from './assets/embed-code-dashboard.png'
+import embedCodeDashboardDarkImg from './assets/embed-code-dashboard-dark.png'
+
+You can manually embed the Webchat window in an HTML `<div>`. This is useful if you want to include the Webchat window in a specific section of your website.
+
+<Note>
+  If you just want to quickly add a bot to your website, use the [Quickstart guide](/webchat/get-started/quick-start).
+</Note>
+
+<Info>
+You will need:
+
+- A [published bot](/get-started/quick-start)
+- Basic familiarity with HTML
+
+</Info>
+
+<Steps titleSize="h2">
+
+  <Step title="Get your embed code">
+
+    To embed a bot on your website, you need the bot's Webchat embed code. You can get the embed code from the Dashboard:
+
+    1. Open your bot's Workspace and select the bot you want to embed.
+    2. In the left sidebar, go to **Webchat** > **Deploy Settings**.
+    3. Copy the **Embed code**:
+
+    <Frame>
+      <Picture alt="Embed code from Dashboard" class="block dark:hidden" src={embedCodeDashboardImg} />
+      <Picture alt="Embed code from Dashboard" class="hidden dark:block" src={embedCodeDashboardDarkImg} />
+    </Frame>
+
+  </Step>
+
+  <Step title="Copy the script URL">
+      Open the URL in your browser and **copy the content of the page**. It should look something like this:
+
+      ``` uri https://files.bpcontent.cloud/20XX/0X/0X/XX/XXXXXXXXXXXXXXXX-XXXXXXXX.js [expandable]
+      window.botpress.init({
+          "botId": "xxxxxxxxxxxxxxxxxxxxxx",
+          "configuration": {
+              "website": {},
+              "email": {},
+              "phone": {},
+              "termsOfService": {},
+              "privacyPolicy": {},
+              "variant": "soft",
+              "themeMode": "light",
+              "fontFamily": "inter"
+          },
+          "clientId": "xxxxxxxxxxxxxxxxxxxxxx"
+      });
+      ```
+
+  </Step>
+
+  <Step title="Add Webchat to an HTML div">
+    Now you can embed Webchat directly in an HTML `<div>` on your website:
+
+    ```html {8} [expandable]
+    <div id="webchat-container" style="position: relative; width: 100%; height: 100%;">
+      <script src="https://cdn.botpress.cloud/webchat/v3.3/inject.js"></script>
+      <script>
+        window.botpress.on('webchat:initialized', () => {
+          window.botpress.open()
+        })
+
+        // Paste your Webchat config snippet here
+      </script>
+      <style>
+        #webchat-container {
+          position: relative;
+          width: 100%;
+          height: 100%;
+        }
+        .bpFab {
+          display: none;
+        }
+        .bpWebchat {
+          position: absolute !important;
+          top: 0 !important;
+          left: 0 !important;
+          right: 0 !important;
+          bottom: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+          max-height: 100% !important;
+        }
+      </style>
+    </div>
+    ```
+
+    <Tip>
+        By default, the code above will make Webchat take up your entire screen. To change the size and position of the Webchat window, update the `bpWebchat` class.
+      </Tip>
+
+  </Step>
+  
+</Steps>

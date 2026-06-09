@@ -1,0 +1,68 @@
+---
+title: Container
+---
+
+import { Tabs, Tab } from '@/components/tabs'
+import LazyIframe from '@/components/LazyIframe.astro'
+import ResponseField from '@/components/ResponseField.astro'
+
+The `Container` wraps the core Webchat interface.
+It manages:
+
+- Layout
+- Drag-and-drop file uploading
+- Connection status feedback
+
+It also provides a shared context for nested components like `MessageList` and `Composer`.
+
+<Tabs>
+    <Tab title="Example">
+        <LazyIframe
+            src="https://botpress.github.io/docs-examples/iframe.html?args=&globals=&id=container--primary"
+            title="Container component"
+            height="500px"
+            />
+    </Tab>
+    <Tab title="Code">
+        ```jsx App.jsx
+        import { Container, useWebchat } from '@botpress/webchat'
+
+        function App() {
+          const [isWebchatOpen, setIsWebchatOpen] = useState(false)
+
+          const { clientState } = useWebchat({
+            clientId: '$CLIENT_ID$', // Insert your Client ID here
+          })
+
+          return (
+            <Container
+              connected={clientState !== 'disconnected'}
+              style={{
+                width: '500px',
+                height: '800px',
+                display: isWebchatOpen ? 'flex' : 'none',
+                position: 'fixed',
+                bottom: '90px',
+                right: '20px',
+              }}
+            >
+              // Your Webchat content goes here
+            </Container>
+          )
+        }
+        ```
+    </Tab>
+
+</Tabs>
+
+## Props
+
+<ResponseField name="connected" type="boolean">
+  Indicates whether the Webchat is currently connected. When `false`, a modal appears and prompts the user to retry by
+  reloading the page.
+</ResponseField>
+
+<ResponseField name="allowFileUpload" type="boolean">
+  Controls whether the container has a dropzone for uploading files. Doesn't affect whether the
+  [Composer](/webchat/react-library/components/composer) contains a file upload button.
+</ResponseField>

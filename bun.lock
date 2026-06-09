@@ -15,6 +15,7 @@
         "@fontsource-variable/geist": "^5.2.8",
         "@fontsource-variable/inter": "^5.2.8",
         "@iconify-json/lucide": "^1.2.110",
+        "@iconify-json/simple-icons": "^1.2.84",
         "@nanostores/react": "^1.1.0",
         "@pagefind/default-ui": "^1.4.0",
         "@shikijs/transformers": "^4.1.0",
@@ -295,6 +296,8 @@
     "@humanwhocodes/momoa": ["@humanwhocodes/momoa@2.0.4", "", {}, "sha512-RE815I4arJFtt+FVeU1Tgp9/Xvecacji8w/V6XtXsWWH/wz/eNkNbhb+ny/+PlVZjV0rxQpRSQKNKE3lcktHEA=="],
 
     "@iconify-json/lucide": ["@iconify-json/lucide@1.2.110", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-rLeHqnZZBxZbprbVwf6uY7HB5GkGVgvT9VujhjvaUEqFDLKZON6zR8K1f8uD1brBwf5TJ0TIvvW8mz5u2XJU+w=="],
+
+    "@iconify-json/simple-icons": ["@iconify-json/simple-icons@1.2.84", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-v4JVu6xIewGoETD4mm2k6UAdFAbTlY1duw5ZNSxYORfs2yFsHDhoU9Omn/BgrV0nR/ptWkF3ZIr/ZHoYXI/6Jw=="],
 
     "@iconify/tools": ["@iconify/tools@4.2.0", "", { "dependencies": { "@iconify/types": "^2.0.0", "@iconify/utils": "^2.3.0", "cheerio": "^1.1.2", "domhandler": "^5.0.3", "extract-zip": "^2.0.1", "local-pkg": "^1.1.2", "pathe": "^2.0.3", "svgo": "^3.3.2", "tar": "^7.5.2" } }, "sha512-WRxPva/ipxYkqZd1+CkEAQmd86dQmrwH0vwK89gmp2Kh2WyyVw57XbPng0NehP3x4V1LzLsXUneP1uMfTMZmUA=="],
 

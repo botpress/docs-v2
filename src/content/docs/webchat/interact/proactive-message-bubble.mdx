@@ -1,0 +1,133 @@
+---
+title: Display proactive bubble
+---
+
+import { Tip, Info, Note } from '@/components/callouts'
+
+export const lightContent = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.botpress.cloud/webchat/v3.3/inject.js"></script>
+  <style>
+  .bpWebchat { visibility: hidden !important; }
+  </style>
+</head>
+<body>
+  <script>
+    window.botpress.init({
+      "botId": "1291df10-9dfe-4583-8480-755c3cdbbdc8",
+      "configuration": {
+        "version": "v2",
+        "website": {},
+        "email": {},
+        "phone": {},
+        "termsOfService": {},
+        "privacyPolicy": {},
+        "color": "#3276EA",
+        "variant": "solid",
+        "headerVariant": "glass",
+        "themeMode": "light",
+        "fontFamily": "inter",
+        "radius": 4,
+        "feedbackEnabled": false,
+        "footer": "[⚡ by Botpress](https://botpress.com/?from=webchat)",
+        "soundEnabled": false,
+        "proactiveMessageEnabled": true,
+        "proactiveBubbleMessage": "Hi! 👋 Need help?",
+        "proactiveBubbleTriggerType": "afterDelay",
+        "proactiveBubbleDelayTime": 1
+      },
+      "clientId": "1a674b3a-fcb9-44c5-bd61-15c960fec528"
+    });
+  </script>
+</body>
+</html>`
+
+export const darkContent = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.botpress.cloud/webchat/v3.3/inject.js"></script>
+  <style>
+  body { background: #1a1a1a; }
+  .bpWebchat { visibility: hidden !important; }
+  </style>
+</head>
+<body>
+  <script>
+    window.botpress.init({
+      "botId": "1291df10-9dfe-4583-8480-755c3cdbbdc8",
+      "configuration": {
+        "version": "v2",
+        "website": {},
+        "email": {},
+        "phone": {},
+        "termsOfService": {},
+        "privacyPolicy": {},
+        "color": "#3276EA",
+        "variant": "solid",
+        "headerVariant": "glass",
+        "themeMode": "dark",
+        "fontFamily": "inter",
+        "radius": 4,
+        "feedbackEnabled": false,
+        "footer": "[⚡ by Botpress](https://botpress.com/?from=webchat)",
+        "soundEnabled": false,
+        "proactiveMessageEnabled": true,
+        "proactiveBubbleMessage": "Hi! 👋 Need help?",
+        "proactiveBubbleTriggerType": "afterDelay",
+        "proactiveBubbleDelayTime": 1
+      },
+      "clientId": "1a674b3a-fcb9-44c5-bd61-15c960fec528"
+    });
+  </script>
+</body>
+</html>`
+
+<iframe srcDoc={lightContent} title="Proactive bubble" class="w-full rounded-xl block dark:hidden" height="200px" />
+<iframe srcDoc={darkContent} title="Proactive bubble" class="w-full rounded-xl hidden dark:block" height="200px" />
+
+You can display a proactive message bubble that encourages users to open Webchat.
+
+<Tip>
+  The proactive bubble is just a Webchat UI element—it doesn't count towards any message quotas and isn't associated
+  with any conversation.
+</Tip>
+
+<Info>
+  You will need:
+
+- A [Plus plan](https://botpress.com/pricing) or higher
+- A bot that uses a toggle (either the default chat bubble or a [custom toggle](/webchat/interact/use-custom-toggle)). The proactive bubble won't work if you're [embedding Webchat in an element](/webchat/get-started/embedding-webchat)
+- A website with an [embedded bot](/webchat/get-started/quick-start)
+
+</Info>
+
+## Setup
+
+1. From your Dashboard, go to your bot's [Webchat configuration settings.](/webchat/get-started/configure-your-webchat)
+2. Under **Proactive Message Bubble**, select **Enable**.
+
+## Configuration
+
+After enabling the message bubble, you can configure it using the following settings:
+
+### Proactive message
+
+The proactive message to display to the user.
+
+Defaults to `Hi! 👋 Need help?`
+
+### Trigger type
+
+The event that triggers the proactive bubble:
+
+- **After Delay**: The message will appear after a fixed delay from page load
+- **After User Idle**: The message will appear after a fixed delay of user inactivity
+
+<Note>If the user interacts with the proactive bubble, it won't re-appear again after the same delay.</Note>
+
+### Delay time
+
+The time (in seconds) before the proactive bubble appears.

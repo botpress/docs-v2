@@ -1,0 +1,56 @@
+---
+title: Floating Action Button
+sidebarTitle: Fab
+---
+
+import { Tabs, Tab } from '@/components/tabs'
+import LazyIframe from '@/components/LazyIframe.astro'
+import ResponseField from '@/components/ResponseField.astro'
+
+You can use the `Fab` (Floating Action Button) component to toggle the visibility of the Webchat UI in your application.
+
+<Tabs>
+    <Tab title="Example">
+        <LazyIframe
+          src="https://botpress.github.io/docs-examples/iframe.html?args=&globals=&id=fab--primary"
+          title="Fab component"
+          height="600px"
+        />
+    </Tab>
+    <Tab title="Code">
+    ```jsx App.jsx wrap
+    import { Fab } from "@botpress/webchat";
+    import { useState } from "react";
+
+    function App() {
+      const [isWebchatOpen, setIsWebchatOpen] = useState(false);
+
+      return (
+        <Fab
+          onClick={() => setIsWebchatOpen(isWebchatOpen)}
+          style={{
+            position: "fixed",
+            bottom: "20px",
+            right: "20px",
+            width: "64px",
+            height: "64px",
+          }}
+        />
+      );
+    }
+
+    export default App;
+    ```
+    </Tab>
+
+</Tabs>
+
+## Props
+
+<ResponseField name="imgUrl" type="string">
+  URL to a custom icon image.
+</ResponseField>
+
+<ResponseField name="onClick" type="MouseEventHandler<HTMLButtonElement>">
+  A callback function triggered when the `Fab` is clicked. Commonly used to toggle the Webchat visibility.
+</ResponseField>
