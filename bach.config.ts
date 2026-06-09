@@ -314,7 +314,38 @@ export default defineConfig(collections, {
         ],
       },
       { tab: 'Botpress Desk', href: 'https://desk.support.channel', external: true },
-      { tab: 'Tutorial', pages: ['tutorial/index'] },
+      {
+        tab: 'Tutorial',
+        pages: [
+          'tutorial/index',
+          {
+            group: 'Basics of Botpress',
+            pages: [
+              {
+                group: 'First steps',
+                pages: ['tutorial/basics/first-steps/prompting', 'tutorial/basics/first-steps/adding-knowledge'],
+              },
+              {
+                group: 'Custom logic',
+                pages: [
+                  'tutorial/basics/custom-logic/workflows',
+                  'tutorial/basics/custom-logic/creating-nodes',
+                  'tutorial/basics/custom-logic/adding-cards',
+                  'tutorial/basics/custom-logic/using-custom-logic-with-ai',
+                ],
+              },
+              {
+                group: 'Storing information',
+                pages: [
+                  'tutorial/basics/storing-information/variables',
+                  'tutorial/basics/storing-information/assigning-a-value',
+                  'tutorial/basics/storing-information/scoping-variables',
+                ],
+              },
+            ],
+          },
+        ],
+      },
       {
         tab: 'API Reference',
         pages: [
