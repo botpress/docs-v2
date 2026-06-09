@@ -21,6 +21,7 @@ jobs:
       - run: bun install --frozen-lockfile
         env:
           NODE_AUTH_TOKEN: ${{ secrets.PRIVATE_NPM_TOKEN }}
+      - run: bunx dab sync
       - run: bun run check:type
 
   check-lint:
