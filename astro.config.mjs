@@ -9,6 +9,8 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 
 import sitemap from '@astrojs/sitemap'
 import icon from 'astro-icon'
+
+//TODO: suggestion (non-blocking): No need for a barrel import. This can just import directly from each transformer individually.
 import { transformerMetaHighlight } from '@shikijs/transformers'
 import { transformerFilename, transformerExpandable } from './src/shiki/transformers/index.js'
 

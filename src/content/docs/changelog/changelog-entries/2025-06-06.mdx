@@ -1,0 +1,48 @@
+---
+date: 2025-06-06
+label: June 6, 2025
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20250606NewWebchat from './assets/2025-06-06/new-webchat.png'
+import img20250606NewWebchatDark from './assets/2025-06-06/new-webchat-dark.png'
+import img20250606WebchatFeedback from './assets/2025-06-06/webchat-feedback.png'
+import img20250606WebchatFeedbackDark from './assets/2025-06-06/webchat-feedback-dark.png'
+
+### Features & enhancements
+
+    - Webchat style refresh:
+
+        <Frame>
+        <Picture alt="alt" class="block dark:hidden" src={img20250606NewWebchat} />
+        <Picture alt="alt" class="hidden dark:block" src={img20250606NewWebchatDark} />
+        </Frame>
+
+        - The new look also includes:
+            - Improved animations
+            - New typing indicator
+
+    - You can now leave message feedback in Webchat:
+
+        <Frame>
+        <Picture alt="Webchat message feedback" class="block dark:hidden" src={img20250606WebchatFeedback} />
+        <Picture alt="Webchat message feedback" class="hidden dark:block" src={img20250606WebchatFeedbackDark} />
+        </Frame>
+
+    - Added support for new models:
+        - Claude 4 Sonnet
+        - DeepSeek R1 and V3
+        - Llama 4
+
+### Bug fixes
+
+    - Fixed issue where users couldn’t leave the WhatsApp sandbox environment
+    - Fixed issue with accessing shared drives with the Google Drive integration
+
+### Miscellaneous
+
+    - Improved error for failed payments

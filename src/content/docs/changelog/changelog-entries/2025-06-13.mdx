@@ -1,0 +1,48 @@
+---
+date: 2025-06-13
+label: June 13, 2025
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20250613AiSpendDaily from './assets/2025-06-13/ai-spend-daily.png'
+import img20250613AiSpendDailyDark from './assets/2025-06-13/ai-spend-daily-dark.png'
+import img20250613AiSpendTotal from './assets/2025-06-13/ai-spend-total.png'
+import img20250613AiSpendTotalDark from './assets/2025-06-13/ai-spend-total-dark.png'
+
+### Features & enhancements
+
+    - Improved **AI Spend** section with a representation of each bot's usage:
+        <Tabs>
+            <Tab title="Total">
+                <Frame>
+                    <Picture alt="AI spend total" class="block dark:hidden" src={img20250613AiSpendTotal} />
+                    <Picture alt="AI spend total" class="hidden dark:block" src={img20250613AiSpendTotalDark} />
+                </Frame>
+            </Tab>
+            <Tab title="Daily Average">
+                <Frame>
+                  <Picture alt="AI spend daily" class="block dark:hidden" src={img20250613AiSpendDaily} />
+                  <Picture alt="AI spend daily" class="hidden dark:block" src={img20250613AiSpendDailyDark} />
+                </Frame>
+            </Tab>
+        </Tabs>
+
+    - Added a playground for the Instagram integration
+    - WhatsApp integration improvements:
+        - Improved formatting for text messages
+        - New dropdown label option for choice messages
+    - When an HITL agent joins the chat, their messages are now sent from a distinct user
+    - Added support for new models:
+        - Qwen3 32B
+        - Llama 4 Scout
+    - Visual improvements to **Files** section in the Dashboard
+    - LLMz responses now use citations
+    - General improvements to RAG efficiency
+
+### Bug fixes
+
+    - Fixed issue with improper formatting when pasting into a rich text Knowledge Base

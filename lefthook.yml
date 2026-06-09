@@ -3,6 +3,7 @@ pre-commit:
   commands:
     format:
       glob: '**/*.{ts,tsx,md,mdx,css,json,yml}'
+      exclude: 'src/content/**'
       run: bunx oxfmt --check {staged_files}
     format-astro:
       glob: '**/*.astro'

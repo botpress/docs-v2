@@ -1,0 +1,40 @@
+---
+date: 2025-08-08
+label: August 8, 2025
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20250808Gpt5Botpress from './assets/2025-08-08/gpt5-botpress.png'
+
+### Features & enhancements
+
+<Frame>
+
+<Picture alt="GPT-5 in Botpress" src={img20250808Gpt5Botpress} />
+
+</Frame>
+
+- GPT-5 is now available in Botpress Studio
+  - OpenAI's new GPT-OSS models are also available with Fireworks AI, Cerebras and Groq integrations
+- Various UI improvements in Studio:
+  - Improved UI for integration playgrounds
+  - Card tray now displays the Card type (based on the currently selected Node) and displays a message when a Card can’t be added to a Node
+- Webchat:
+  - Added a `conversationId` argument to the Webchat initialization script—this allows users to programmatically load Webchat with a specific conversation
+  - Improved handling of images that fail to load
+- Integrations:
+  - **Messenger**: Added a playground and made general improvements
+  - **Telegram:** Improved Markdown support, added support for captions on images, improved error handling
+  - **Freshchat:** General fixes and improvements
+  - **Zendesk:** Added the option to customize the Botpress system username in Zendesk
+  - **Email:** Minor fix
+
+### Bug fixes
+
+- Fixed an issue where conversation variables weren't usable in Capture Information Cards and Autonomous Nodes
+- Fixed an issue with searching for files based on tags in the Dashboard
+- Fixed a visual issue with filtering logs in Dashboard

@@ -1,0 +1,48 @@
+---
+date: 2026-04-10
+label: April 10, 2026
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20260410IntegrationsHub from './assets/2026-04-10/integrations-hub.png'
+import img20260410IntegrationsHubDark from './assets/2026-04-10/integrations-hub-dark.png'
+import img20260410NewKnowledgeSources from './assets/2026-04-10/new-knowledge-sources.png'
+import img20260410NewKnowledgeSourcesDark from './assets/2026-04-10/new-knowledge-sources-dark.png'
+
+### Redesigned integrations Hub
+
+Revamped the design of the integration Hub:
+
+<Frame>
+  <Picture alt="Integrations Hub" class="block dark:hidden" src={img20260410IntegrationsHub} />
+  <Picture alt="Integrations Hub" class="hidden dark:block" src={img20260410IntegrationsHubDark} />
+</Frame>
+
+### New knowledge source providers
+
+Added new knowledge source providers to Knowledge Bases:
+
+- Linear
+- GitHub
+- Confluence
+- Google Drive
+- Notion
+
+<Frame>
+  <Picture alt="New knowledge sources" class="block dark:hidden" src={img20260410NewKnowledgeSources} />
+  <Picture alt="New knowledge sources" class="hidden dark:block" src={img20260410NewKnowledgeSourcesDark} />
+</Frame>
+
+### Integrations
+
+- **Discord**: Added [Discord](/integrations/integration-guides/discord) integration
+- **Zoom**: Added a new Transcript Received Trigger that returns the raw content of a meeting's transcript
+
+### Bug fixes
+
+- Fixed an issue with editing two bots simultaneously in different browser tabs where saving one bot would corrupt the draft of the other
+- Fixed an issue in the [Human Handoff](/get-started/manage-your-agent/human-handoff) dashboard where long messages would overflow horizontally

@@ -30,6 +30,7 @@ const badgeVariants = cva(
           'rounded-md bg-orange-100 font-bold uppercase tracking-wide text-orange-800 dark:bg-orange-900/40 dark:text-orange-300',
         delete:
           'rounded-md bg-red-100 font-bold uppercase tracking-wide text-red-800 dark:bg-red-900/40 dark:text-red-300',
+        date: 'h-auto rounded-lg bg-primary/10 px-2 py-1 text-sm text-primary',
       },
     },
     defaultVariants: {

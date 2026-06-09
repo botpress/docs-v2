@@ -112,7 +112,10 @@ export function Messages({ messages, conversationId }: MessagesProps) {
   const scrollToBottom = useCallback((smooth = false) => {
     const el = scrollRef.current
     if (!el) return
-    el.scrollTo({ top: el.scrollHeight, behavior: smooth ? 'smooth' : 'instant' })
+    el.scrollTo({
+      top: el.scrollHeight,
+      behavior: smooth ? 'smooth' : 'instant',
+    })
     isNearBottomRef.current = true
   }, [])
 

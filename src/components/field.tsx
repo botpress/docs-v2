@@ -39,13 +39,17 @@ function Field({ name, type, required, default: defaultValue, deprecated, hidden
     <div className="not-prose border-b border-stone-100 py-6 last:border-b-0 dark:border-stone-800/50">
       <div className="flex flex-wrap items-center gap-2">
         <code className="text-sm font-semibold">
-          {parentPath && <span className="text-stone-500 dark:text-stone-400">{parentPath}.</span>}
+          {parentPath && <span className="dark:text-stone-400">{parentPath}.</span>}
           <span className="text-primary">{name}</span>
-          {!required && <span className="text-stone-600 dark:text-stone-400">?</span>}
         </code>
         {type && (
           <Badge variant="info">
-            <code className="font-semibold">{type}</code>
+            <span className="font-mono font-semibold">{type}</span>
+          </Badge>
+        )}
+        {required && (
+          <Badge variant="required">
+            <span className="font-mono">required</span>
           </Badge>
         )}
         {deprecated && <Badge variant="deprecated">deprecated</Badge>}

@@ -1,0 +1,54 @@
+---
+title: Zendesk
+description: Integrate your bot with Zendesk using the official integration.
+icon: 'headphones'
+---
+
+import Step from '@/components/Step.astro'
+import Steps from '@/components/Steps.astro'
+import { Check, Info, Note, Warning } from '@/components/callouts'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
+import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
+
+The official Zendesk integration allows you to create and manage support tickets directly from your bot. You can also assign a Zendesk agent to communicate directly with the user, all within the same conversation initially handled by the bot.
+
+<Warning>
+  Zendesk integration versions below v3.0.0 are **deprecated** and will be retired on January 12, 2026. To avoid
+  disruptions, upgrade to v3.0.0+ and reconnect using OAuth. If you’re already on v3.0.0+, no further action is
+  required.
+</Warning>
+
+## Setup
+
+<Info>
+  You will need:
+
+- A [published bot](/get-started/quick-start)
+- A [Zendesk account](https://www.zendesk.com/sign-up/)
+</Info>
+
+<Note>
+  We recommend that you **only link your Zendesk account with one bot**. Linking the same Zendesk account with multiple
+  bots will raise an error and cause unexpected behaviour.
+</Note>
+
+<Steps>
+  <Step>In Botpress Studio, select **Explore Hub** in the upper-right corner.</Step>
+  <Step>Search for the **Zendesk** integration, then select **Install Integration**.</Step>
+  <Step>In the **Configuration** menu, select **Authorize Zendesk**.</Step>
+  <Step>Follow the instructions to connect Botpress to your Zendesk account.</Step>
+</Steps>
+
+<Check>Done! You can now create and manage support tickets directly from your bot.</Check>
+
+---
+
+## Cards
+
+<IntegrationCards/>
+
+---
+
+## Triggers
+
+<IntegrationEvents/>

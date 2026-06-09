@@ -1,0 +1,28 @@
+---
+date: 2025-07-18
+label: July 18, 2025
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20250718Addons from './assets/2025-07-18/addons.png'
+import img20250718AddonsDark from './assets/2025-07-18/addons-dark.png'
+
+### Features & enhancements
+
+- New menu for updating add-ons in Dashboard:
+
+  <Frame>
+    <Picture alt="Add-ons" class="block dark:hidden" src={img20250718Addons} />
+    <Picture alt="Add-ons" class="hidden dark:block" src={img20250718AddonsDark} />
+  </Frame>
+
+- Updates to Dashboard Settings:
+  - New section for configuration variables
+  - Option to delete bot
+
+- Studio now displays the version of plugins
+- Improved labelling of LLMZ-appropriate models in Studio

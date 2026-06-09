@@ -1,0 +1,54 @@
+---
+date: 2026-05-01
+label: May 1, 2026
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20260501IntegrationsHubDashboard from './assets/2026-05-01/integrations-hub-dashboard.png'
+import img20260501IntegrationsHubDashboardDark from './assets/2026-05-01/integrations-hub-dashboard-dark.png'
+import img20260501RangeSlider from './assets/2026-05-01/range-slider.png'
+import img20260501RangeSliderDark from './assets/2026-05-01/range-slider-dark.png'
+
+### Features & enhancements
+
+- Added support for [Claude Opus 4.7](https://www.anthropic.com/news/claude-opus-4-7)
+- Added an integration hub to the dashboard:
+
+<Frame>
+  <Picture
+    alt="Integrations hub on the dashboard"
+    class="block dark:hidden"
+    src={img20260501IntegrationsHubDashboard}
+  />
+  <Picture
+    alt="Integrations hub on the dashboard"
+    class="hidden dark:block"
+    src={img20260501IntegrationsHubDashboardDark}
+  />
+</Frame>
+
+- Added a range slider for filtering conversations by number of messages in the [conversations menu](/get-started/manage-your-agent/monitor#conversations):
+
+<Frame>
+  <Picture alt="Conversation range slider" class="block dark:hidden" src={img20260501RangeSlider} />
+  <Picture alt="Conversation range slider" class="hidden dark:block" src={img20260501RangeSliderDark} />
+</Frame>
+
+### Bug fixes
+
+- Fixed an issue where Nodes could become corrupted or inconsistent when using multiplayer in Studio
+- Fixed an issue where multiplayer was causing some users to get stuck on the “Loading bot” screen or would receive a “Failed to load bot” error
+- Fixed an issue where formatting problems were adding unnecessary latency to the Translator Agent’s JSON response
+- Fixed an issue where the AI Generate Text Card was displaying an incorrect token limit under the **Prompt** field for certain models
+- Fixed an issue where refreshing the page after saving the Human-in-the-Loop (HITL) integration’s configuration would erase the values of the configuration fields
+- Fixed an issue where the Webchat delivery status indicator wasn’t translated to languages other than English
+
+### Integrations
+
+- **Slack**: Video and audio messages now appear as native media in Slack instead of plain text links
+- **Linear**: Webhooks for issues and comments now register automatically when you connect your account
+- **Airtable**: Added option to connect via OAuth

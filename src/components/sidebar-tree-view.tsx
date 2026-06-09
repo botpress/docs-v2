@@ -9,6 +9,16 @@ function TreeIcon({ name }: { name: string }) {
   return <ReactIcon icon={name} className="h-4 w-4 shrink-0 text-primary" />
 }
 
+function SidebarIcon({ node }: { node: { icon?: string; iconUrl?: string } }) {
+  if (node.iconUrl) {
+    return <img src={node.iconUrl} alt="" className="h-4 w-4 shrink-0 rounded-sm object-contain" />
+  }
+  if (node.icon) {
+    return <TreeIcon name={node.icon} />
+  }
+  return null
+}
+
 function SidebarMethodBadge({ method }: { method: string }) {
   return (
     <Badge
@@ -156,7 +166,7 @@ function ChildNode({
             : 'text-stone-600 hover:bg-black/5 hover:text-stone-900 dark:text-stone-400 dark:hover:bg-white/5 dark:hover:text-stone-100'
         }`}
       >
-        {node.icon && <TreeIcon name={node.icon} />}
+        <SidebarIcon node={node} />
         <span className="min-w-0 truncate">{node.sidebarTitle ?? node.title}</span>
         {node.method && <SidebarMethodBadge method={node.method} />}
       </a>

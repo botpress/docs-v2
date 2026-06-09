@@ -1,0 +1,29 @@
+---
+date: 2025-12-19
+label: December 19, 2025
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20251219AdkFlow from './assets/2025-12-19/adk-flow.png'
+
+### Create ADK agents from the dashboard
+
+- Added support for creating an ADK agent from the dashboard:
+
+<Frame>
+  <Picture alt="ADK flow" src={img20251219AdkFlow} />
+</Frame>
+
+### GPT-5.2
+
+- Added support for GPT-5.2 from OpenAI
+
+### Integrations
+
+- **Gmail**: Added [Cards](/integrations/integration-guides/gmail#cards) to the Gmail integration
+- **Zendesk**: Added OAuth configuration
+- **Messenger & Facebook**: Added [Start DM Conversation from Comment](integrations/integration-guides/messenger#start-dm-conversation-from-comment) Card
