@@ -367,11 +367,106 @@ export default defineConfig(collections, {
               },
             ],
           },
+          {
+            group: 'ADK',
+            pages: ['adk/index'],
+          },
+          {
+            group: 'Botpress Desk',
+            pages: ['desk/introduction'],
+          },
         ],
       },
-      { tab: 'ADK', pages: ['adk/quickstart'] },
+      {
+        tab: 'ADK',
+        pages: [
+          {
+            group: 'Get started',
+            pages: ['adk/introduction', 'adk/quickstart'],
+          },
+          {
+            group: 'Setting up your agent',
+            pages: ['adk/setup/configuration', 'adk/setup/environment', 'adk/setup/integrations'],
+          },
+          {
+            group: 'Handling conversations',
+            pages: [
+              'adk/conversations/setup',
+              'adk/conversations/ai-execution',
+              'adk/conversations/tools',
+              'adk/conversations/messages',
+              'adk/conversations/custom-components',
+              'adk/conversations/lifecycle',
+              'adk/conversations/state',
+            ],
+          },
+          {
+            group: 'Handling longform logic',
+            pages: ['adk/workflows/create', 'adk/workflows/steps', 'adk/workflows/request-notify'],
+          },
+          {
+            group: 'Actions and triggers',
+            pages: ['adk/external/actions', 'adk/external/triggers'],
+          },
+          {
+            group: 'Working with data',
+            pages: ['adk/data/tables', 'adk/data/knowledge'],
+          },
+          {
+            group: 'Testing and debugging',
+            pages: ['adk/testing/evals', 'adk/testing/agent-steps', 'adk/testing/debugging', 'adk/testing/scripts'],
+          },
+          {
+            group: 'LLM Utilities',
+            pages: ['adk/zai/overview', 'adk/zai/extract', 'adk/zai/generate', 'adk/zai/classify'],
+          },
+          {
+            group: 'AI-native development',
+            pages: ['adk/ai-native/skills'],
+          },
+          {
+            group: 'Advanced',
+            pages: ['adk/advanced/hitl', 'adk/advanced/desk-hitl'],
+          },
+          {
+            group: 'CLI',
+            pages: ['adk/cli-reference'],
+          },
+        ],
+      },
       { tab: 'Botpress Desk', href: 'https://desk.support.channel', external: true },
-      { tab: 'Tutorial', pages: ['tutorial/index'] },
+      {
+        tab: 'Tutorial',
+        pages: [
+          'tutorial/index',
+          {
+            group: 'Basics of Botpress',
+            pages: [
+              {
+                group: 'First steps',
+                pages: ['tutorial/basics/first-steps/prompting', 'tutorial/basics/first-steps/adding-knowledge'],
+              },
+              {
+                group: 'Custom logic',
+                pages: [
+                  'tutorial/basics/custom-logic/workflows',
+                  'tutorial/basics/custom-logic/creating-nodes',
+                  'tutorial/basics/custom-logic/adding-cards',
+                  'tutorial/basics/custom-logic/using-custom-logic-with-ai',
+                ],
+              },
+              {
+                group: 'Storing information',
+                pages: [
+                  'tutorial/basics/storing-information/variables',
+                  'tutorial/basics/storing-information/assigning-a-value',
+                  'tutorial/basics/storing-information/scoping-variables',
+                ],
+              },
+            ],
+          },
+        ],
+      },
       {
         tab: 'API Reference',
         pages: [

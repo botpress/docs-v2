@@ -1,0 +1,60 @@
+---
+title: Assigning a value
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import inspectorImg from './assets/inspector.png'
+import inspectorDarkImg from './assets/inspector-dark.png'
+import variableAccessImg from './assets/variable-access.png'
+import variableAccessDarkImg from './assets/variable-access-dark.png'
+import variableTestImg from './assets/variable-test.png'
+import variableTestDarkImg from './assets/variable-test-dark.png'
+import newValueImg from './assets/new-value.png'
+import newValueDarkImg from './assets/new-value-dark.png'
+
+A newly-created variable is like an empty box—you need put something inside it before you can use it. This is called _assigning a value_ to your variable.
+
+Let's use our `firstName` variable to remember the user's first name. Go back to the Main Workflow and select your Autonomous Node. This opens its inspector:
+
+<Frame>
+  <Picture alt="Autonomous Node inspector" class="block dark:hidden" src={inspectorImg} />
+  <Picture alt="Autonomous Node inspector" class="hidden dark:block" src={inspectorDarkImg} />
+</Frame>
+
+## Giving access to variables
+
+By default, the Autonomous Node can't check what's in a variable or assign it a different value.
+
+Let's give it access. Select **+ Add variable(s)**, then select `workflow.firstName`. Then, check **Allow write access**, so your bot has permission to modify the variable.
+
+<Frame>
+  <Picture alt="Variable access" class="block dark:hidden" src={variableAccessImg} />
+  <Picture alt="Variable access" class="hidden dark:block" src={variableAccessDarkImg} />
+</Frame>
+
+## Modifying your prompt
+
+Next, modify the prompt so your bot knows how to work with the variable. Erase everything in the **Instructions** field, then paste the following:
+
+```txt
+You are Teddy 🐶, the customer support bot for Teddy's Pet Shop.
+
+If the `firstName` variable has a value, use it to address the user by
+name. If not, prompt the user to enter their name, then assign it to
+`firstName`.
+```
+
+Now, switch back to the Emulator and start a conversation with your bot:
+
+<Frame>
+  <Picture alt="Variable test" class="block dark:hidden" src={variableTestImg} />
+  <Picture alt="Variable test" class="hidden dark:block" src={variableTestDarkImg} />
+</Frame>
+
+Nice! Our modified prompt worked. If you look back at the Variables section, you can see that the value updated:
+
+<Frame>
+  <Picture alt="New value" class="block dark:hidden" src={newValueImg} />
+  <Picture alt="New value" class="hidden dark:block" src={newValueDarkImg} />
+</Frame>

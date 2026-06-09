@@ -1,0 +1,49 @@
+---
+title: Adding Cards
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import cardImg from './assets/card.png'
+import cardDarkImg from './assets/card-dark.png'
+import cardInspectorImg from './assets/card-inspector.png'
+import cardInspectorDarkImg from './assets/card-inspector-dark.png'
+import customGreetingTestImg from './assets/custom-greeting-test.png'
+import customGreetingTestDarkImg from './assets/custom-greeting-test-dark.png'
+
+An empty Node isn't very interesting. To make it do something, we can add a _Card_—an individual task your bot performs within a Node.
+
+Since customers tend to ask about opening hours, let's add a Card that displays them as soon as the conversation starts:
+
+1. In the new Node, select **+ Add Card**.
+2. Under **Send Messages**, select **Text**.
+
+<Frame>
+  <Picture alt="Card" class="block dark:hidden" src={cardImg} />
+  <Picture alt="Card" class="hidden dark:block" src={cardDarkImg} />
+</Frame>
+
+Notice that adding a Card opens the **Inspector** on the right side of the Studio:
+
+<Frame>
+  <Picture alt="Card inspector" class="block dark:hidden" src={cardInspectorImg} />
+  <Picture alt="Card inspector" class="hidden dark:block" src={cardInspectorDarkImg} />
+</Frame>
+
+Let's add our greeting. In the **Message to send** field, paste the following:
+
+```txt
+Hello! I'm Teddy, 🐶 the customer support bot for Teddy's Pet Shop. Our opening hours are:
+
+Monday-Friday: 10:00 AM to 6:00 PM
+Saturday-Sunday: 11:00 AM to 3:00 PM
+```
+
+Now we can test it out. Switch back to the **Emulator** and select **Test your bot**:
+
+<Frame>
+  <Picture alt="Custom greeting test" class="block dark:hidden" src={customGreetingTestImg} />
+  <Picture alt="Custom greeting test" class="hidden dark:block" src={customGreetingTestDarkImg} />
+</Frame>
+
+Nice! The bot now displays a custom greeting with the opening hours.
