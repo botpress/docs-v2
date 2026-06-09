@@ -201,26 +201,49 @@ export default defineConfig(collections, {
       {
         tab: 'API Reference',
         pages: [
-          'api-reference/index',
           {
-            group: 'Admin API',
-            pages: [{ group: 'Endpoints', collection: 'adminApi' }],
+            group: 'Get Started',
+            pages: [
+              'api-reference/index',
+              'api-reference/authentication',
+              'api-reference/pagination',
+              'api-reference/ratelimiting',
+              'api-reference/errors',
+            ],
           },
           {
             group: 'Chat API',
-            pages: [{ group: 'Endpoints', collection: 'chatApi' }],
+            pages: ['api-reference/chat-api/introduction', { group: 'Endpoints', collection: 'chatApi' }],
+          },
+          {
+            group: 'Admin API',
+            pages: [
+              'api-reference/admin-api/getting-started',
+              'api-reference/admin-api/concepts',
+              { group: 'Endpoints', collection: 'adminApi' },
+            ],
           },
           {
             group: 'Files API',
-            pages: [{ group: 'Endpoints', collection: 'filesApi' }],
-          },
-          {
-            group: 'Runtime API',
-            pages: [{ group: 'Endpoints', collection: 'runtimeApi' }],
+            pages: [
+              'api-reference/files-api/getting-started',
+              'api-reference/files-api/how-tos/creating-files',
+              'api-reference/files-api/how-tos/index-and-search-files',
+              'api-reference/files-api/how-tos/manage-files',
+              { group: 'Endpoints', collection: 'filesApi' },
+            ],
           },
           {
             group: 'Tables API',
-            pages: [{ group: 'Endpoints', collection: 'tablesApi' }],
+            pages: ['api-reference/tables-api/getting-started', { group: 'Endpoints', collection: 'tablesApi' }],
+          },
+          {
+            group: 'Runtime API',
+            pages: [
+              'api-reference/runtime-api/getting-started',
+              'api-reference/runtime-api/concepts',
+              { group: 'Endpoints', collection: 'runtimeApi' },
+            ],
           },
         ],
       },
