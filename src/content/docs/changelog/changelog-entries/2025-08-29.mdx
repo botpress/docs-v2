@@ -1,0 +1,38 @@
+---
+date: 2025-08-29
+label: August 29, 2025
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20250829DashLayout from './assets/2025-08-29/dash-layout.png'
+import img20250829DashLayoutDark from './assets/2025-08-29/dash-layout-dark.png'
+
+### Features & enhancements
+
+- Fresh layout for Dashboard bot menu:
+
+  <Frame>
+    <Picture alt="Dashboard layout update" class="block dark:hidden" src={img20250829DashLayout} />
+    <Picture alt="Dashboard layout update" class="hidden dark:block" src={img20250829DashLayoutDark} />
+  </Frame>
+
+- Added ability to edit fields in Tables directly from the Dashboard
+- Added search option in dropdown menu to select a bot
+- Improved speed when creating new bots
+- Improvements to Studio UI:
+  - Moved the Schema editor to a modal
+  - Improved experience when testing a Trigger and viewing the event’s payload
+- Added [Cal.com](http://Cal.com) integration
+
+### Bug fixes
+
+- Fixed various visual bugs in Dashboard, including on mobile
+- Fixed visual bugs in Studio:
+  - UI issues with editing frozen tables
+  - Workflow variable values not displaying updates in Studio
+- Fixed an issue where the Conversation Started event was emitted multiple times
+- Fixed an issue with BigCommerce integration where syncing large datasets caused a timeout

@@ -155,7 +155,10 @@ export default new bp.Integration({
     // Exchange the code for an access token
     const tokenResponse: any = await fetch('https://github.com/login/oauth/access_token', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
       body: JSON.stringify({
         client_id: ctx.configuration.clientId,
         client_secret: ctx.configuration.clientSecret,

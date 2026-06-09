@@ -1,0 +1,29 @@
+---
+date: 2025-05-23
+label: May 23, 2025
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20250523CronTimezone from './assets/2025-05-23/cron-timezone.png'
+
+### Features & enhancements
+
+    - The [Fixed Schedule](/studio/concepts/triggers#fixed-schedule) Trigger now displays both the timezone and next run:
+
+        <Frame>
+        <Picture alt="Fixed Schedule timezone" src={img20250523CronTimezone} />
+        </Frame>
+
+    - Added [Monday.com](http://Monday.com) integration
+
+### Bug fixes
+
+    - Fixed issue where Workflows incorrectly timed out under certain conditions
+    - Fixed issue where proactive messages didn’t work properly for new conversations in Webchat 2.5
+    - Fixed issue where tables weren’t horizontally scrollable in Webchat
+    - Fixed issue where tables in Dashboard overflowed
+    - Fixed issue with missing parameter in `appendValues` call to Google Sheets API

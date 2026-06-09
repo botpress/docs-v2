@@ -30,7 +30,9 @@ function Tabs({ defaultIndex = 0, className, children }: TabsProps) {
   useEffect(() => {
     const container = panelsRef.current
     if (!container) return
-    const panels = Array.from(container.querySelectorAll<HTMLElement>(':scope > .bp-tab-panel'))
+    const panels = Array.from(
+      container.querySelectorAll<HTMLElement>(':scope > .bp-tab-panel, :scope > astro-slot > .bp-tab-panel')
+    )
     if (panels.length === 0) return
 
     panelEls.current = panels

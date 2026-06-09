@@ -1,0 +1,50 @@
+---
+title: Pagination
+---
+
+Our APIs return paginated results. Our paging is based on a cursor-based pagination system, which means that the API returns a set of results and a cursor (`nextToken`) that you can use to retrieve the next set of results. You can use this cursor in 2 ways:
+
+## 1. Pagination with API Query Parameters
+
+To retrieve paginated data, you can use the `nextToken` string value returned by the previous request in your next request query parameter.
+
+If your first API request returns the following response:
+
+```json
+{
+  "data": [...],
+  "meta": {
+    "nextToken": "wwNgQn6tWNR/IHhKGHv/sg9zcIAGsxOk0TfmM+DdmcWkBZrXYjVvcfSZIZSs4ppCr/g="
+  }
+}
+```
+
+The next request would look like this:
+
+```http
+GET https://api.botpress.cloud/v1/endpoint?nextToken=wwNgQn6tWNR/IHhKGHv/sg9zcIAGsxOk0TfmM+DdmcWkBZrXYjVvcfSZIZSs4ppCr/g=
+```
+
+This will return the next set of results. Repeat this process by passing the new `nextToken` until the response body no longer includes a `nextToken` value, indicating that there are no more results.
+
+## 2. Pagination with the Botpress Client
+
+### Using .collect() to Fetch Results
+
+You can also paginate results using the `.collect()` function provided by our client utilities. This is useful when you want to retrieve a specific number of items at once.
+
+```js
+const conversations = await client.list.conversations({}).collect({ limit: 1000 }) // Fetch 1000 conversations
+```
+
+The `.collect()` function will handle pagination for you automatically.
+
+### Using Async Generator with for await
+
+If you need to handle pagination in a more granular way, you can use an async generator with the for await syntax. This allows you to iterate over each page one by one.
+
+```js
+for await (const message of client.list.messages({ type: 'text' })) {
+  console.log(message.payload.text)
+}
+```

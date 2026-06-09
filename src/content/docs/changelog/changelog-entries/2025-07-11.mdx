@@ -1,0 +1,37 @@
+---
+date: 2025-07-11
+label: July 11, 2025
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20250711WebchatNotification from './assets/2025-07-11/webchat-notification.png'
+import img20250711WebchatNotificationDark from './assets/2025-07-11/webchat-notification-dark.png'
+
+### Features & enhancements
+
+- Added a notification indicator to Webchat:
+
+<Frame>
+  <Picture alt="Webchat notification" class="block dark:hidden" src={img20250711WebchatNotification} />
+  <Picture alt="Webchat notification" class="hidden dark:block" src={img20250711WebchatNotificationDark} />
+</Frame>
+
+- Improved timeout handling for integration API calls longer than 60 seconds
+- Added helpful messages to Webchat window when error occurs
+- Integration updates:
+  - **SendGrid**: added support for Markdown
+  - **Resend**: added CC and BCC fields to sendMail action
+  - **Messenger**: added support for sending media and files
+  - **Slack/WhatsApp**: improved Markdown handling
+
+- Added Gemini 2.5
+
+### Bug fixes
+
+    - Fixed aggregation issues for Tables API
+    - Fixed an issue with renaming bots
+    - Fixed an issue with Slack reply threading

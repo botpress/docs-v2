@@ -63,3 +63,5 @@ gitignored
 stdout
 helpdesk
 Kommo
+IntelliSense
+[Ss]ourcemaps?

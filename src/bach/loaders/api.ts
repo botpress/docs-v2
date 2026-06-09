@@ -32,7 +32,10 @@ interface OpenApiPathItem {
 
 interface OpenApiSpec {
   paths: Record<string, OpenApiPathItem>
-  servers?: { url: string; variables?: Record<string, { default?: string; description?: string }> }[]
+  servers?: {
+    url: string
+    variables?: Record<string, { default?: string; description?: string }>
+  }[]
   security?: Record<string, string[]>[]
   components?: { securitySchemes?: Record<string, unknown> }
 }
@@ -119,7 +122,11 @@ function extractEndpoint(
   const rawUrl = server?.url
   const rawVars = server?.variables
   const serverVariables = rawVars
-    ? Object.entries(rawVars).map(([name, v]) => ({ name, default: v.default || '', description: v.description }))
+    ? Object.entries(rawVars).map(([name, v]) => ({
+        name,
+        default: v.default || '',
+        description: v.description,
+      }))
     : undefined
 
   const baseUrl = rawUrl?.replace(/\/?\{[^}]+\}/g, '').replace(/\/+$/, '') || undefined
@@ -159,7 +166,10 @@ export type ApiSpecOptions = { file: string } | { api: { exportOpenapi: (dir: st
 
 export type ApiLoaderOptions = ApiSpecOptions & ApiSource
 
-function loadSpec(options: ApiSpecOptions): { spec: OpenApiSpec; cleanup: () => void } {
+function loadSpec(options: ApiSpecOptions): {
+  spec: OpenApiSpec
+  cleanup: () => void
+} {
   if ('file' in options) {
     const specPath = path.join(STATIC_SPECS_DIR, options.file)
     const raw = JSON.parse(fs.readFileSync(specPath, 'utf-8'))

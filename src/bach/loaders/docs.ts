@@ -1,7 +1,7 @@
 import { glob, type Loader } from 'astro/loaders'
 
 export type DocsLoaderOptions = {
-  pattern: string
+  pattern: string | string[]
   base: string
 }
 

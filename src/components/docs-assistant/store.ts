@@ -64,7 +64,9 @@ export const pendingMessage = atom<string | null>(null)
 
 export const pendingContext = atom<ContextItem | null>(null)
 
-export const composerRef: { current: HTMLTextAreaElement | null } = { current: null }
+export const composerRef: { current: HTMLTextAreaElement | null } = {
+  current: null,
+}
 
 export const focusComposer = () => {
   setTimeout(() => composerRef.current?.focus(), 50)
