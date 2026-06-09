@@ -9,6 +9,9 @@ jobs:
   check-type:
     name: Check Type
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v4
