@@ -1,0 +1,71 @@
+---
+title: Introduction to the ADK
+description: TypeScript framework for building AI agents on Botpress.
+---
+
+import { Picture } from 'astro:assets'
+import introNewImg from './assets/intro-new.png'
+import introNewDarkImg from './assets/intro-new-dark.png'
+
+import Frame from '@/components/Frame.astro'
+import CardGroup from '@/components/CardGroup.astro'
+import LinkCard from '@/components/LinkCard.astro'
+
+The Agent Development Kit (ADK) is a **CLI tool and development framework for building AI agents on Botpress**. It provides a streamlined development experience with TypeScript support, hot reloading, and type-safe APIs for creating AI applications.
+
+You write conversations, workflows, tools, and actions as code. Botpress handles hosting, scaling, and channel delivery.
+
+<Frame>
+  <Picture alt="Botpress ADK" class="block dark:hidden" src={introNewImg} />
+  <Picture alt="Botpress ADK" class="hidden dark:block" src={introNewDarkImg} />
+</Frame>
+
+## What you can build
+
+- **Customer support agents** that resolve tickets, look up orders, and escalate to humans
+- **Internal tools** that automate workflows across Slack, email, and databases
+- **Sales assistants** that qualify leads, book meetings, and sync with your CRM
+- **Multi-channel bots** that work across webchat, WhatsApp, Telegram, and more
+
+## How it works
+
+You write TypeScript. The ADK CLI handles the rest.
+
+```bash
+adk init my-agent     # Scaffold a project
+adk dev               # Run locally with hot reload
+adk deploy            # Ship to Botpress Cloud
+```
+
+Your agent is organized around a few core primitives:
+
+| Primitive             | What it does                            |
+| --------------------- | --------------------------------------- |
+| **Conversations**     | Handle user messages on a channel       |
+| **Workflows**         | Run multi-step background processes     |
+| **Tools**             | Give the AI model functions it can call |
+| **Actions**           | Reusable logic callable from anywhere   |
+| **Tables**            | Structured data storage                 |
+| **Knowledge**         | RAG-powered document retrieval          |
+| **Triggers**          | React to external events                |
+| **Custom components** | Render custom React UI in webchat       |
+| **Evals**             | Automated conversation tests            |
+
+Each primitive lives in its own file. The ADK discovers them automatically, no manual registration.
+
+## Start here
+
+<CardGroup cols={2}>
+  <LinkCard
+    href="/adk/quickstart"
+    title="Quickstart"
+    description="Install the ADK and deploy your first agent in minutes."
+    icon="rocket"
+  />
+  <LinkCard
+    href="/changelog"
+    title="What's new"
+    description="Latest features, improvements, and breaking changes."
+    icon="newspaper"
+  />
+</CardGroup>
