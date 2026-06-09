@@ -1,0 +1,36 @@
+---
+date: 2026-01-09
+label: January 9, 2026
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20260109CreatedBy from './assets/2026-01-09/created-by.png'
+import img20260109CreatedByDark from './assets/2026-01-09/created-by-dark.png'
+
+### Dashboard displays bot creator
+
+The dashboard now displays which member of your workspace created a bot:
+
+<Frame>
+  <Picture alt="Bot creator" class="block dark:hidden" src={img20260109CreatedBy} />
+  <Picture alt="Bot creator" class="hidden dark:block" src={img20260109CreatedByDark} />
+</Frame>
+
+### Integrations
+
+- **Hub**: Botpress Hub now has callouts clearly showing when an integration version is deprecated
+- **Chatwoot**: [Added Chatwoot integration](/integrations/integration-guides/chatwoot)
+- **Slack**: Fixed an issue where messages containing percentage symbols were causing errors
+- **Sunshine Conversations**: Added `origin` conversation tag for tracking what channel a conversation originated from
+- **Zendesk**: Added information about the requester when creating a ticket in Zendesk from the Start HITL Card
+
+### Bug fixes
+
+- Fixed an issue where Autonomous Node responses were incorrectly exceeding the maximum payload size
+- Fixed visual issues with CLI authentication
+- Fixed a visual bug with scrolling to the **Copy to bot** option in the Dashboard
+- Fixed an issue where user data wasn't properly persisted when injecting Webchat

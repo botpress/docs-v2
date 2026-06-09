@@ -1,0 +1,49 @@
+---
+date: 2025-07-04
+label: July 4, 2025
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20250704Category from './assets/2025-07-04/category.png'
+import img20250704CategoryDark from './assets/2025-07-04/category-dark.png'
+import img20250704Knowledge from './assets/2025-07-04/knowledge.png'
+import img20250704KnowledgeDark from './assets/2025-07-04/knowledge-dark.png'
+import img20250704NewAgent from './assets/2025-07-04/new-agent.png'
+
+### Features & enhancements
+
+    - **New onboarding flow**:
+
+        When you create a new bot, Studio now has an onboarding flow that automatically builds a production-ready AI agent, styled and tailored to your brand.
+
+        <Tabs>
+            <Tab title="1. Choose a use case">
+                <Frame>
+                  <Picture alt="Category" class="block dark:hidden" src={img20250704Category} />
+                  <Picture alt="Category" class="hidden dark:block" src={img20250704CategoryDark} />
+                </Frame>
+            </Tab>
+            <Tab title="2. Provide knowledge sources">
+                <Frame>
+                  <Picture alt="Knowledge" class="block dark:hidden" src={img20250704Knowledge} />
+                  <Picture alt="Knowledge" class="hidden dark:block" src={img20250704KnowledgeDark} />
+                </Frame>
+            </Tab>
+            <Tab title="3. Try out your AI agent">
+                <Frame>
+                    <Picture alt="New agent" class="block dark:hidden" src={img20250704NewAgent} />
+                    <Picture alt="new agent" class="hidden dark:block" src={img20250704NewAgent} />
+                </Frame>
+            </Tab>
+        </Tabs>
+
+    - Screenshot Card now takes fully-styled webpage screenshots
+    - Teams integration: added a Start DM Card
+
+### Bug fixes
+
+    - Fixed issue where changes to rich text Knowledge Bases weren't properly reflected

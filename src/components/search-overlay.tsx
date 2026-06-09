@@ -109,7 +109,9 @@ export default function SearchOverlay() {
         overlayRef.current.style.display = 'none'
       }
     }
-    overlayRef.current.addEventListener('transitionend', handler, { once: true })
+    overlayRef.current.addEventListener('transitionend', handler, {
+      once: true,
+    })
     setTimeout(handler, 250)
     reset()
   }, [reset])

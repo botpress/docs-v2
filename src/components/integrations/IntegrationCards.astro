@@ -1,0 +1,26 @@
+---
+import { getEntry } from "astro:content";
+import { IntegrationCards as IntegrationCardsReact } from "./IntegrationCards";
+
+interface Props {
+  integration?: string;
+}
+
+const { integration } = Astro.props;
+const slug = Astro.params.slug as string | undefined;
+const integrationSlug =
+  integration ?? slug?.split("integration-guides/")[1]?.split("/")[0];
+const entry = integrationSlug
+  ? await getEntry("integrations", integrationSlug)
+  : undefined;
+const actions = (entry?.data.actions ?? {}) as Record<
+  string,
+  Record<string, unknown>
+>;
+---
+
+{
+  Object.keys(actions).length > 0 && (
+    <IntegrationCardsReact actions={actions} client:load />
+  )
+}

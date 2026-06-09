@@ -10,6 +10,13 @@ export const siteConfig = {
   logo: '/logo/light.svg',
   logoDark: '/logo/dark.svg',
   navbar: {
-    links: [{ label: 'Dashboard', href: 'https://app.botpress.cloud', type: 'button', external: true }] as NavbarLink[],
+    links: [
+      {
+        label: 'Dashboard',
+        href: 'https://app.botpress.cloud',
+        type: 'button',
+        external: true,
+      },
+    ] as NavbarLink[],
   },
 } as const

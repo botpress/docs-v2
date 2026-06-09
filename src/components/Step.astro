@@ -1,21 +1,13 @@
 ---
+import { Icon } from "astro-icon/components";
+import { slugify } from "@/lib/icon-utils";
+
 interface Props {
   title?: string;
   class?: string;
 }
 
 const { title, class: className } = Astro.props;
-
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/[\s_]+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
-}
-
 const stepId = title ? slugify(title) : undefined;
 ---
 
@@ -33,7 +25,7 @@ const stepId = title ? slugify(title) : undefined;
   <a
     href={stepId ? `#${stepId}` : undefined}
     class="group/stepnum absolute ml-[-13px] py-2 step-anchor no-underline"
-    aria-hidden="true"
+    aria-label={title ? `Step: ${title}` : undefined}
     tabindex="-1"
   >
     <div
@@ -43,27 +35,14 @@ const stepId = title ? slugify(title) : undefined;
         class:list={[
           "text-xs leading-none before:content-[counter(step)] transition-opacity duration-100",
           stepId && "group-hover/stepnum:opacity-0",
-        ]}
-      ></span>
-      {stepId && (
-        <span
-          class="absolute inset-0 flex items-center justify-center opacity-0 group-hover/stepnum:opacity-100 transition-opacity duration-100 text-stone-500 dark:text-stone-400"
-        >
-          <svg
-            class="size-3"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-          </svg>
-        </span>
-      )}
+        ]}></span>
+      {
+        stepId && (
+          <span class="absolute inset-0 flex items-center justify-center opacity-0 group-hover/stepnum:opacity-100 transition-opacity duration-100 text-stone-500 dark:text-stone-400">
+            <Icon name="lucide:link" class="size-3" />
+          </span>
+        )
+      }
     </div>
   </a>
   <div class="w-full overflow-hidden pr-px pl-8">

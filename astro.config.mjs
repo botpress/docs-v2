@@ -10,31 +10,7 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import sitemap from '@astrojs/sitemap'
 import icon from 'astro-icon'
 import { transformerMetaHighlight } from '@shikijs/transformers'
-
-function transformerFilename() {
-  return {
-    name: 'transformer:filename',
-    pre(node) {
-      const meta = this.options?.meta?.__raw ?? ''
-      const match = meta.trim().match(/^([^\s{[\]]+)/)
-      if (match?.[1]) {
-        node.properties['data-title'] = match[1]
-      }
-    },
-  }
-}
-
-function transformerExpandable() {
-  return {
-    name: 'transformer:expandable',
-    pre(node) {
-      const meta = this.options?.meta?.__raw ?? ''
-      if (/\bexpandable\b/.test(meta)) {
-        node.properties['data-expandable'] = 'true'
-      }
-    },
-  }
-}
+import { transformerFilename, transformerExpandable } from './src/shiki/transformers/index.js'
 
 export default defineConfig({
   site: 'https://botpress.com/docs',
@@ -50,7 +26,22 @@ export default defineConfig({
       dedupe: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
     },
     optimizeDeps: {
-      include: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime', '@botpress/webchat'],
+      include: [
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        'react/jsx-dev-runtime',
+        '@botpress/webchat',
+        '@base-ui/react',
+        '@nanostores/react',
+        'nanostores',
+        'lucide-react',
+        'react-resizable-panels',
+        'vaul',
+        'class-variance-authority',
+        'clsx',
+        'tailwind-merge',
+      ],
     },
   },
   markdown: {

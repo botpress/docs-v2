@@ -14,7 +14,7 @@
   --card-foreground: oklch(0.147 0.004 49.25);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.147 0.004 49.25);
-  --primary: #0090ff;
+  --primary: oklch(0.649 0.193 251.8);
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.97 0.001 106.424);
   --secondary-foreground: oklch(0.216 0.006 56.043);
@@ -48,7 +48,7 @@
   --card-foreground: oklch(0.985 0.001 106.423);
   --popover: oklch(0.216 0.006 56.043);
   --popover-foreground: oklch(0.985 0.001 106.423);
-  --primary: #0090ff;
+  --primary: oklch(0.649 0.193 251.8);
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.268 0.007 34.298);
   --secondary-foreground: oklch(0.985 0.001 106.423);
@@ -189,9 +189,9 @@
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   font-size: 0.75rem;
   font-weight: 500;
-  color: oklch(0.553 0.013 58.07);
-  background-color: oklch(0.97 0.001 106.424);
-  border-bottom: 1px solid oklch(0.923 0.003 48.717);
+  color: var(--muted-foreground);
+  background-color: var(--secondary);
+  border-bottom: 1px solid var(--border);
   border-radius: 0.75rem 0.75rem 0 0;
   margin: -1rem -1rem 0.75rem -1rem;
   padding: 0.5rem 1rem;
@@ -220,8 +220,8 @@
 .prose pre.astro-code .line.highlighted {
   display: inline-block;
   width: calc(100% + 2rem);
-  background-color: rgb(0 144 255 / 0.1);
-  border-left: 2px solid #0090ff;
+  background-color: color-mix(in oklch, var(--primary) 10%, transparent);
+  border-left: 2px solid var(--primary);
   margin-left: -1rem;
   padding-left: calc(1rem - 2px);
   margin-right: -1rem;
@@ -230,7 +230,7 @@
 
 /* CodeGroup — multi-file tabbed code block */
 .code-group {
-  border: 1px solid oklch(0.923 0.003 48.717);
+  border: 1px solid var(--border);
   border-radius: 0.875rem;
   margin: 1rem 0;
   overflow: hidden;
@@ -243,22 +243,17 @@
 .code-group-tabs {
   display: flex;
   align-items: center;
-  background-color: oklch(0.97 0.001 106.424);
-  border-bottom: 1px solid oklch(0.923 0.003 48.717);
+  background-color: var(--secondary);
+  border-bottom: 1px solid var(--border);
   padding: 0 0.5rem;
   overflow-x: auto;
-}
-
-.dark .code-group-tabs {
-  background-color: oklch(0.268 0.007 34.298);
-  border-bottom-color: oklch(1 0 0 / 10%);
 }
 
 .code-group-tab {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   font-size: 0.75rem;
   font-weight: 500;
-  color: oklch(0.553 0.013 58.07);
+  color: var(--muted-foreground);
   padding: 0.5rem 0.75rem;
   border: none;
   border-bottom: 2px solid transparent;
@@ -270,16 +265,8 @@
 }
 
 .code-group-tab[data-active='true'] {
-  color: oklch(0.147 0.004 49.25);
-  border-bottom-color: #0090ff;
-}
-
-.dark .code-group-tab {
-  color: oklch(0.709 0.01 56.259);
-}
-
-.dark .code-group-tab[data-active='true'] {
-  color: oklch(0.985 0.001 106.423);
+  color: var(--foreground);
+  border-bottom-color: var(--primary);
 }
 
 .code-group-copy {
@@ -291,9 +278,9 @@
   margin-left: auto;
   flex-shrink: 0;
   border-radius: 0.375rem;
-  border: 1px solid oklch(0.923 0.003 48.717);
-  background-color: white;
-  color: oklch(0.553 0.013 58.07);
+  border: 1px solid var(--border);
+  background-color: var(--card);
+  color: var(--muted-foreground);
   cursor: pointer;
   opacity: 0;
   transition:
@@ -306,29 +293,28 @@
 }
 
 .code-group-copy:hover {
-  color: oklch(0.216 0.006 56.043);
+  color: var(--secondary-foreground);
 }
 
 .dark .code-group-copy {
-  border-color: oklch(1 0 0 / 10%);
-  background-color: oklch(0.268 0.007 34.298);
-  color: oklch(0.709 0.01 56.259);
+  background-color: var(--secondary);
+  color: var(--muted-foreground);
 }
 
 .dark .code-group-copy:hover {
-  color: oklch(0.985 0.001 106.423);
+  color: var(--foreground);
 }
 
 /* Strip code block's own border/radius/margin when inside a code group */
-.code-group > pre.astro-code {
-  border: none !important;
-  border-radius: 0 !important;
-  margin: 0 !important;
+.prose .code-group > pre.astro-code {
+  border: none;
+  border-radius: 0;
+  margin: 0;
 }
 
 /* Suppress the filename header pseudo-element inside code groups (tab bar handles it) */
-.code-group > pre.astro-code[data-title]::before {
-  display: none !important;
+.prose .code-group > pre.astro-code[data-title]::before {
+  display: none;
 }
 
 /* Copy button */
@@ -355,9 +341,9 @@
   font-size: 0.7rem;
   font-weight: 500;
   font-family: var(--font-sans);
-  color: oklch(0.553 0.013 58.07);
-  background-color: oklch(0.97 0.001 106.424);
-  border: 1px solid oklch(0.923 0.003 48.717);
+  color: var(--muted-foreground);
+  background-color: var(--secondary);
+  border: 1px solid var(--border);
   border-top: none;
   border-radius: 0 0 0.875rem 0.875rem;
   cursor: pointer;
@@ -367,19 +353,13 @@
 }
 
 .code-expand-btn:hover {
-  color: oklch(0.216 0.006 56.043);
-  background-color: oklch(0.94 0.001 106.424);
-}
-
-.dark .code-expand-btn {
-  color: oklch(0.709 0.01 56.259);
-  background-color: oklch(0.268 0.007 34.298);
-  border-color: oklch(1 0 0 / 10%);
+  color: var(--secondary-foreground);
+  background-color: color-mix(in oklch, var(--secondary) 80%, var(--foreground));
 }
 
 .dark .code-expand-btn:hover {
-  color: oklch(0.985 0.001 106.423);
-  background-color: oklch(0.29 0.007 34.298);
+  color: var(--foreground);
+  background-color: color-mix(in oklch, var(--secondary) 80%, var(--foreground));
 }
 
 .code-block-wrapper.is-collapsible.is-expanded > pre.astro-code {
@@ -402,9 +382,9 @@
   width: 1.75rem;
   height: 1.75rem;
   border-radius: 0.375rem;
-  border: 1px solid oklch(0.923 0.003 48.717);
-  background-color: white;
-  color: oklch(0.553 0.013 58.07);
+  border: 1px solid var(--border);
+  background-color: var(--card);
+  color: var(--muted-foreground);
   cursor: pointer;
   opacity: 0;
   transition:
@@ -419,7 +399,7 @@
   bottom: calc(100% + 0.375rem);
   transform: translateX(-50%);
   background-color: var(--primary);
-  color: white;
+  color: var(--primary-foreground);
   font-size: 0.6875rem;
   font-weight: 600;
   line-height: 1;
@@ -432,7 +412,7 @@
 }
 
 .code-copy-btn:hover {
-  color: oklch(0.216 0.006 56.043);
+  color: var(--secondary-foreground);
 }
 
 .code-copy-btn:hover::after {
@@ -444,13 +424,12 @@
 }
 
 .dark .code-copy-btn {
-  border-color: oklch(1 0 0 / 10%);
-  background-color: oklch(0.268 0.007 34.298);
-  color: oklch(0.709 0.01 56.259);
+  background-color: var(--secondary);
+  color: var(--muted-foreground);
 }
 
 .dark .code-copy-btn:hover {
-  color: oklch(0.985 0.001 106.423);
+  color: var(--foreground);
 }
 
 .dark .astro-code,
@@ -520,7 +499,7 @@
 }
 
 /* Parameter names (bold code at the start of a param line) — primary blue, no background */
-.expandable-content p > strong:first-child > code {
+.field-description p > strong:first-child > code {
   color: var(--primary);
   background-color: transparent;
   padding-inline: 0;
@@ -544,7 +523,6 @@
   justify-content: center;
   width: 1.75rem;
   height: 1.75rem;
-  border-radius: 0.25rem;
   border-radius: 0.375rem;
   border: 1px solid var(--color-stone-300);
   background-color: var(--color-stone-50);
@@ -594,6 +572,11 @@ a.step-anchor {
     text-decoration: underline;
     text-underline-offset: 4px;
     text-decoration-color: var(--color-primary);
+    text-decoration-thickness: 1px !important;
+    transition: text-decoration-thickness 0.15s ease;
+  }
+  .prose a:hover:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+    text-decoration-thickness: 2px !important;
   }
   .dark .prose a:not(:where([class~='not-prose'], [class~='not-prose'] *)) {
     text-decoration-color: var(--color-primary);
@@ -696,10 +679,10 @@ a.step-anchor {
   flex-shrink: 0;
   width: 9px;
   height: 9px;
-  background-color: #d97757;
+  background-color: oklch(0.672 0.131 38.8);
   box-shadow:
-    0 0 0 1px rgba(217, 119, 87, 0.18),
-    0 0 14px -4px rgba(217, 119, 87, 0.55);
+    0 0 0 1px oklch(0.672 0.131 38.8 / 0.18),
+    0 0 14px -4px oklch(0.672 0.131 38.8 / 0.55);
   animation: morph-spin 3.2s ease-in-out infinite;
 }
 

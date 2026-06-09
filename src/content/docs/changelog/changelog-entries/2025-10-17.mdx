@@ -1,0 +1,32 @@
+---
+date: 2025-10-17
+label: October 17, 2025
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20251017Publish from './assets/2025-10-17/publish.png'
+import img20251017PublishDark from './assets/2025-10-17/publish-dark.png'
+
+### Features & enhancements
+
+- Improved the UI for the Studio's **Publish** button:
+
+<Frame>
+  <Picture alt="Publish button" class="block dark:hidden" src={img20251017Publish} />
+  <Picture alt="Publish button" class="hidden dark:block" src={img20251017PublishDark} />
+</Frame>
+
+- Added support for [Claude Haiku 4.5](https://www.anthropic.com/news/claude-haiku-4-5) via the Anthropic integration
+
+### Bug fixes
+
+- Fixed an issue where clicking Tools in your bot's home screen would cause a crash if your bot only contained standard Nodes
+- Fixed an issue where duplicating a Workflow would incorrectly display "Integration not installed or disabled" even though the integration was installed
+- Fixed an issue where imported bots would display ghost Knowledge Bases
+- Fixed an issue where previously-created variables were unavailable to select in certain Cards' output
+- Fixed an issue where the `event` object's state was inaccessible in Actions
+- Fixed an issue where URLs with backslashes weren’t crawling properly

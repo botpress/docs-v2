@@ -1,15 +1,19 @@
 ---
 import { Icon as AstroIcon } from "astro-icon/components";
 import clsx from "clsx";
+import type { IconName } from "@/types/icons";
 
 interface Props {
-  icon: string;
+  icon: IconName;
   class?: string;
 }
 
 const { icon, class: className } = Astro.props;
 
-// Plain names (no prefix) are Lucide icons — prefix them for iconify
+// Unknown icon names are caught at compile time: IconName is derived from
+// @iconify-json/lucide/icons.json, so TypeScript will reject any invalid name.
+// astro-icon renders nothing silently at runtime, but that path is unreachable
+// with a valid build.
 const resolved = icon.includes(":") ? icon : `lucide:${icon}`;
 ---
 

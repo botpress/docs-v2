@@ -1,4 +1,6 @@
 ---
+import { LazyIframe as LazyIframeReact } from "./LazyIframe";
+
 interface Props {
   src: string;
   title: string;
@@ -6,49 +8,13 @@ interface Props {
   class?: string;
 }
 
-const { src, title, height = "500px", class: className } = Astro.props;
+const { src, title, height, class: className } = Astro.props;
 ---
 
-<div class="lazy-iframe-container" data-src={src} style={`height: ${height}`}>
-  <iframe
-    title={title}
-    class:list={['w-full rounded-xl h-full', className]}
-    style="border: none;"
-  ></iframe>
-</div>
-
-<script>
-  const loadIframe = (wrapper: HTMLElement) => {
-    const iframe = wrapper.querySelector('iframe');
-    const src = wrapper.dataset.src;
-    if (iframe && src && !iframe.src) {
-      iframe.src = src;
-    }
-  };
-
-  const initLazyIframes = () => {
-    const wrappers = document.querySelectorAll<HTMLElement>('.lazy-iframe-container');
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            loadIframe(entry.target as HTMLElement);
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { rootMargin: '200px' }
-    );
-
-    wrappers.forEach((wrapper) => {
-      const iframe = wrapper.querySelector('iframe');
-      if (iframe && !iframe.src) {
-        observer.observe(wrapper);
-      }
-    });
-  };
-
-  initLazyIframes();
-  document.addEventListener('astro:page-load', initLazyIframes);
-</script>
+<LazyIframeReact
+  src={src}
+  title={title}
+  height={height}
+  className={className}
+  client:load
+/>

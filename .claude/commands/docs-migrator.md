@@ -36,7 +36,7 @@ export default defineConfig(collections, {
         pages: [
           {
             group: 'Get started',
-            icon: 'Rocket', // optional Lucide icon name
+            icon: 'rocket', // optional Lucide icon name (kebab-case)
             pages: ['index', 'get-started/quick-start'],
           },
         ],
@@ -65,7 +65,7 @@ The `tabs` array accepts only `TabItem` objects. A `TabItem` must have `tab: str
 { group: 'Webchat', pages: [...] } // ✗ wrong — causes TS error
 
 // GroupItem — used inside a tab's pages array
-{ group: 'Get started', icon: 'Rocket', pages: [...] } // ✓ correct
+{ group: 'Get started', icon: 'rocket', pages: [...] } // ✓ correct
 ```
 
 `TabItem` does **not** support an `icon` field — icons are only valid on `GroupItem` (nested groups inside a tab).
@@ -125,45 +125,125 @@ All callout components accept children as body content — usage syntax is uncha
 
 ### Layout & structure
 
-| Mintlify           | Astro import                                                     | Notes      |
-| ------------------ | ---------------------------------------------------------------- | ---------- |
-| `<Card>`           | `import Card from '@/components/Card.astro'`                     | Same props |
-| `<CardGroup>`      | `import CardGroup from '@/components/CardGroup.astro'`           | Same props |
-| `<Columns>`        | `import Columns from '@/components/Columns.astro'`               | Same props |
-| `<Steps>`          | `import Steps from '@/components/Steps.astro'`                   |            |
-| `<Step>`           | `import Step from '@/components/Step.astro'`                     |            |
-| `<Accordion>`      | `import Accordion from '@/components/Accordion.astro'`           |            |
-| `<AccordionGroup>` | `import AccordionGroup from '@/components/AccordionGroup.astro'` |            |
-| `<Frame>`          | `import Frame from '@/components/Frame.astro'`                   |            |
-| `<Tooltip>`        | `import Tooltip from '@/components/Tooltip.astro'`               |            |
+| Mintlify            | Astro import                                                     | Notes           |
+| ------------------- | ---------------------------------------------------------------- | --------------- |
+| `<Card>`            | `import Card from '@/components/Card.astro'`                     | Same props      |
+| `<CardGroup>`       | `import CardGroup from '@/components/CardGroup.astro'`           | Same props      |
+| `<Card href="...">` | `import LinkCard from '@/components/LinkCard.astro'`             | See props below |
+| `<Columns>`         | `import Columns from '@/components/Columns.astro'`               | Same props      |
+| `<Steps>`           | `import Steps from '@/components/Steps.astro'`                   |                 |
+| `<Step>`            | `import Step from '@/components/Step.astro'`                     |                 |
+| `<Accordion>`       | `import Accordion from '@/components/Accordion.astro'`           |                 |
+| `<AccordionGroup>`  | `import AccordionGroup from '@/components/AccordionGroup.astro'` |                 |
+| `<Expandable>`      | `import Expandable from '@/components/Expandable.astro'`         | See props below |
+| `<Frame>`           | `import Frame from '@/components/Frame.astro'`                   |                 |
+| `<Tooltip>`         | `import Tooltip from '@/components/Tooltip.astro'`               |                 |
+
+**LinkCard** (`@/components/LinkCard.astro`) — a navigation card with a chevron arrow. All props required except none optional:
+
+```mdx
+import LinkCard from '@/components/LinkCard.astro'
+
+<LinkCard
+  href="/some/path"
+  title="Card Title"
+  description="Short description shown below the title."
+  icon="message-square"
+/>
+```
+
+Props: `href` (string), `title` (string), `description` (string), `icon` (Lucide kebab-case icon name — required).
+
+**Expandable** (`@/components/Expandable.astro`) — collapsible section, typically used to wrap nested `<Field>` items inside a parent `<Field>`. Default label is "Show/Hide child attributes":
+
+```mdx
+import Expandable from '@/components/Expandable.astro'
+
+<Expandable title="child attributes" defaultOpen={false}>
+  ...nested content...
+</Expandable>
+```
+
+Props: `title` (string, default `"child attributes"`), `defaultOpen` (boolean, default `false`).
+
+### API / field documentation
+
+Mintlify uses `<ResponseField>` and `<ParamField>` as globally available components. In Astro, these are provided by `@/components/field.tsx` as React components.
+
+| Mintlify (no import)  | Astro import                                              |
+| --------------------- | --------------------------------------------------------- |
+| `<ResponseField ...>` | `import { Field } from '@/components/field'`              |
+| `<ParamField ...>`    | `import { Field } from '@/components/field'` (same alias) |
+
+`Field` props:
+
+| Prop         | Type    | Notes                                             |
+| ------------ | ------- | ------------------------------------------------- |
+| `name`       | string  | Required. The field name, rendered in monospace.  |
+| `type`       | string  | Optional. Type label shown as a badge.            |
+| `required`   | boolean | Optional. Shows a "required" badge.               |
+| `deprecated` | boolean | Optional. Shows a "deprecated" badge.             |
+| `default`    | unknown | Optional. Shows a "default: ..." badge.           |
+| `hidden`     | boolean | Optional. Renders nothing when `true`.            |
+| `parentPath` | string  | Optional. Prefixes the field name in the display. |
+
+`ResponseField` and `ParamField` are exported as aliases for `Field` — use whichever matches the source:
+
+```mdx
+import { Field } from '@/components/field'
+import Expandable from '@/components/Expandable.astro'
+
+<Field name="payload" type="object" required>
+  The payload for the current event.
+
+  <Expandable>
+    <Field name="type" type="string" required>
+      The type of the event.
+    </Field>
+  </Expandable>
+</Field>
+```
 
 ### Icons
 
-Mintlify accepts kebab-case icon names (e.g. `icon="message-square"`). The Bach framework uses `Icon.astro`, which requires **PascalCase Lucide icon names** (e.g. `icon="MessageSquare"`). Passing a kebab-case name throws a runtime error.
+Icon names use **kebab-case** (e.g. `message-square`), which is what `astro-icon` with the Lucide icon set expects. The `IconName` type in `@/types/icons` is derived directly from the iconify JSON keys and enforces this format — use it to typecheck icon props in Astro components.
 
-**Conversion rule:** kebab-case → PascalCase. Examples:
+In Astro components, render icons via the `Icon.astro` wrapper:
 
-- `message-square` → `MessageSquare`
-- `arrow-right` → `ArrowRight`
-- `chevron-down` → `ChevronDown`
+```astro
+---
+import Icon from '@/components/Icon.astro'
+import type { IconName } from '@/types/icons'
 
-**Brand icons** (e.g. `react`, `wordpress`, `wix`, `webflow`, `github`) are **not in lucide-react**. Substitute with a semantically close Lucide icon:
+interface Props {
+  icon: IconName
+}
+---
 
-| Mintlify icon                                              | Lucide substitute     |
-| ---------------------------------------------------------- | --------------------- |
-| `react`                                                    | `Atom`                |
-| `wordpress`, `wix`, `webflow`, or any CMS/website platform | `Globe`               |
-| `github`, `gitlab`                                         | `GitBranch` or `Code` |
-| `slack`, `discord`                                         | `MessageSquare`       |
-| `database`, `supabase`, `mongo`                            | `Database`            |
+<Icon icon={icon} class="size-4" />
+```
+
+In MDX files, pass kebab-case strings to any `icon` prop (e.g. `icon="message-square"`).
+
+**Mintlify icons are already kebab-case** — keep them as-is when migrating. No conversion needed.
+
+**Brand icons** (e.g. `react`, `wordpress`, `wix`, `webflow`, `github`) are **not in the Lucide set**. Substitute with a semantically close Lucide icon, or use the `simple-icons:` prefix when available (`icon="simple-icons:react"`):
+
+| Mintlify icon                                              | Lucide substitute      |
+| ---------------------------------------------------------- | ---------------------- |
+| `react`                                                    | `atom`                 |
+| `wordpress`, `wix`, `webflow`, or any CMS/website platform | `globe`                |
+| `github`, `gitlab`                                         | `git-branch` or `code` |
+| `slack`, `discord`                                         | `message-square`       |
+| `database`, `supabase`, `mongo`                            | `database`             |
 
 When in doubt, verify an icon exists before using it:
 
 ```bash
-node -e "const { icons } = require('lucide-react'); console.log(!!icons['IconName'])"
+node -e "const icons = require('@iconify-json/lucide/icons.json').icons; console.log('icon-name' in icons)"
 ```
 
-This applies to `icon=` props on `<Card>`, `<Tab>`, and group-level `icon:` in `bach.config.ts`.
+This applies to `icon=` props on `<Card>`, `<LinkCard>`, `<Tab>`, and group-level `icon:` in `bach.config.ts`.
 
 ### Tabs
 
@@ -180,7 +260,7 @@ import Tab from '@/components/tabs/Tab.astro'
 
 <Tabs>
   <Tab title="TypeScript">...</Tab>
-  <Tab title="Python" icon="Code">
+  <Tab title="Python" icon="code">
     ...
   </Tab>
 </Tabs>
@@ -188,9 +268,11 @@ import Tab from '@/components/tabs/Tab.astro'
 
 ---
 
-## 5. Images
+## 5. Images and media
 
-### Mintlify pattern
+### Images
+
+#### Mintlify pattern
 
 ```mdx
 <Frame>
@@ -199,7 +281,7 @@ import Tab from '@/components/tabs/Tab.astro'
 </Frame>
 ```
 
-### Astro pattern
+#### Astro pattern
 
 ```mdx
 import Frame from '@/components/Frame.astro'
@@ -223,7 +305,7 @@ Always wrap `<Picture>` elements in `<Frame>`. This gives images rounded corners
 - Asset files live alongside the MDX in `src/content/docs/<section>/assets/`
 - Copy image files from `docs/<section>/assets/` → `docs-v2/src/content/docs/<section>/assets/`
 
-### Custom Image snippet (Mintlify)
+#### Custom Image snippet (Mintlify)
 
 ```mdx
 import { Image } from '/snippets/image.mdx'
@@ -231,6 +313,18 @@ import { Image } from '/snippets/image.mdx'
 ```
 
 → Replace with the Astro `<Picture>` pattern above.
+
+### Lazy-loaded iframes
+
+No Mintlify equivalent. Use `LazyIframe` to embed interactive demos, videos, or external content. Iframes load only when scrolled into view.
+
+```mdx
+import LazyIframe from '@/components/LazyIframe.astro'
+
+<LazyIframe src="https://example.com/embed" title="Demo title" height="500px" />
+```
+
+Props: `src` (string, required), `title` (string, required — used for accessibility), `height` (string, default `"500px"`), `class` (string, optional).
 
 ---
 
@@ -243,13 +337,14 @@ Snippets live in `/snippets/` and are imported by absolute path:
 ```mdx
 import { YouTube } from '/snippets/youtube.mdx'
 import IncomingEvent from '/snippets/incoming-event.mdx'
+import { AiIcon } from '/snippets/ai-icon.jsx'
 ```
 
 ### Astro
 
 No global snippets folder. Options:
 
-1. For **component-like snippets** (YouTube, Image): equivalent Astro components exist in `src/components/` — use those instead.
+1. For **component-like snippets** (YouTube, Image, AiIcon): equivalent Astro components exist in `src/components/` — use those instead.
 2. For **text/prose snippets**: move the content into `src/content/docs/` and use Astro's content collection partials, or inline the content.
 3. Check `src/components/` for an Astro equivalent before creating a new one.
 
@@ -281,13 +376,70 @@ import IncomingEvent from '@/components/IncomingEvent.astro'
 <IncomingEvent />
 ```
 
+**OutgoingEvent:** No `OutgoingEvent.astro` exists yet. When migrating content that uses `outgoing-event.mdx`, inline the `<Field>` + `<Expandable>` structure directly in the page using `@/components/field` and `@/components/Expandable.astro`.
+
+**AiIcon** (inline magic/sparkle icon):
+
+```mdx
+// Mintlify
+import { AiIcon } from '/snippets/ai-icon.jsx'
+
+<AiIcon />
+
+// Astro
+import AiIcon from '@/components/AiIcon.astro'
+
+<AiIcon />
+```
+
+No props. Renders a small blue sparkle SVG inline (16×16).
+
 ---
 
 ## 7. CodeGroup / code blocks
 
-Mintlify uses `<CodeGroup>` for multi-language tabs. Astro does not have a built-in equivalent — check `src/components/` for a `CodeGroup` component. If absent, render separate fenced code blocks or ask whether one should be created.
+Mintlify uses `<CodeGroup>` for multi-language tabs, with tab names derived from the word after the language identifier in the fenced code block:
 
-Standard fenced code blocks work identically in both systems.
+````mdx
+// Mintlify
+
+<CodeGroup>
+
+```bash npm
+npm install @botpress/client
+```
+````
+
+```bash pnpm
+pnpm install @botpress/client
+```
+
+</CodeGroup>
+```
+
+In Astro, `CodeGroup.astro` exists at `@/components/CodeGroup.astro`. Tab names come from the `title` metastring on each fenced code block:
+
+````mdx
+// Astro
+import CodeGroup from '@/components/CodeGroup.astro'
+
+<CodeGroup>
+
+```bash title="npm"
+npm install @botpress/client
+```
+````
+
+```bash title="pnpm"
+pnpm install @botpress/client
+```
+
+</CodeGroup>
+```
+
+**Key difference:** Mintlify uses ` ```lang TabName ` (space-separated); Astro uses ` ```lang title="TabName" ` (metastring).
+
+Standard fenced code blocks (without `CodeGroup`) work identically in both systems.
 
 ---
 
@@ -303,7 +455,16 @@ Mintlify uses `openapi:` frontmatter to auto-generate pages from OpenAPI specs. 
 2. **Update frontmatter**: remove `mode:`, `openapi:` fields; add `prose: false` only for full-custom layout pages; do not generate a `description` if the source doesn't have one
 3. **Add component imports** — every Mintlify component used needs an explicit import (see §4)
 4. **Fix image tags** — replace raw `<img>` / `<Image snippet>` with `<Picture>` imports (see §5)
-5. **Replace snippet imports** — map to `@/components/` equivalents (see §6)
+5. **Replace snippet imports** — map to `@/components/` equivalents (see §6); replace `<ResponseField>`/`<ParamField>` with `Field` from `@/components/field`; replace `<CodeGroup>` with `CodeGroup.astro` and update tab title syntax (see §7)
 6. **Copy assets** — copy `./assets/*` from source section to equivalent path in `src/content/docs/`
 7. **Register the page in `bach.config.ts`** — add the slug to the correct tab/group (see §1)
-8. **Run `npm run check`** in `docs-v2/` to catch broken imports, type errors, and lint issues
+8. **Verify in `docs-v2/`** — run the checks below. The pre-commit hook runs all of these automatically, but run them manually to catch issues before committing.
+
+   | Command                  | What it checks                                                     | Auto-fix                               |
+   | ------------------------ | ------------------------------------------------------------------ | -------------------------------------- |
+   | `bun run check`          | Runs all checks below in parallel                                  | —                                      |
+   | `bunx oxfmt --check .`   | Formatting (`.ts`, `.tsx`, `.md`, `.mdx`, `.css`, `.json`, `.yml`) | `bunx oxfmt .`                         |
+   | `bun check:format:biome` | Formatting (`.astro` files)                                        | `bunx @biomejs/biome format --write .` |
+   | `bun check:lint`         | oxlint + Biome lint (`.ts`, `.tsx`)                                | —                                      |
+   | `bun check:type`         | TypeScript / Astro type errors                                     | —                                      |
+   | `bun check:link`         | Broken internal links (informational — does not block commits)     | —                                      |

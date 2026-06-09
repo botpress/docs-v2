@@ -1,6 +1,6 @@
 ---
 title: Tables
-icon: Table
+icon: table
 ---
 
 import { Picture } from 'astro:assets'
@@ -584,7 +584,9 @@ const { table } = await client.renameTableColumn({
 To retrieve a table's schema, use the `getTable` function. This will return the table definition, along with the total number of rows, number of stale rows and number of indexing rows.
 
 ```javascript
-const { table, indexing, rows, stale } = await client.getTable({ table: 'Data1Table' })
+const { table, indexing, rows, stale } = await client.getTable({
+  table: 'Data1Table',
+})
 ```
 
 ### Delete Table
@@ -686,7 +688,9 @@ You can apply a similar approach to determine if there are previous pages as wel
 To perform a traditional search, use the search parameter when calling the DataTable1.findRecords() function in Botpress. Here is an example:
 
 ```javascript
-workflow.records = await DataTable1.findRecords({ search: 'red velvet chairs' })
+workflow.records = await DataTable1.findRecords({
+  search: 'red velvet chairs',
+})
 ```
 
 You can pass variables like event.preview to the search parameter to search for user input or any other variable. This allows you to pre-process the user's input before performing the search.

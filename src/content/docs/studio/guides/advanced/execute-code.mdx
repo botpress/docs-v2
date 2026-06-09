@@ -93,7 +93,9 @@ const headers = {
 }
 
 // make the request to Jira API to get all issues that aren't done
-const response = await axios.get(`${jiraUrl}/rest/api/2/search?jql=${jql}`, { headers })
+const response = await axios.get(`${jiraUrl}/rest/api/2/search?jql=${jql}`, {
+  headers,
+})
 
 // filter the response to only keep the issues that aren't done
 const issues = _.filter(response.data.issues, (issue) => issue.fields.status.name !== 'Done')

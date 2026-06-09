@@ -34,7 +34,7 @@ export default function Header({ tabs, activeTab, siteName, siteLogo, siteLogoDa
           className="text-sm font-semibold text-stone-900 dark:text-stone-100"
           style={hasLogo ? { display: 'none' } : undefined}
         >
-          {siteName || 'Docs'}w
+          {siteName || 'Docs'}
         </span>
       </a>
 
@@ -43,10 +43,12 @@ export default function Header({ tabs, activeTab, siteName, siteLogo, siteLogoDa
           <nav className="flex items-center gap-x-6">
             {tabs.map((tab) => {
               const isActive = tab.slug === activeTab
+              const externalProps = tab.external ? { target: '_blank' as const, rel: 'noreferrer' } : {}
               return (
                 <a
                   key={tab.slug}
                   href={tab.href}
+                  {...externalProps}
                   className={`flex items-center self-stretch border-b-2 text-sm transition-colors ${
                     isActive
                       ? 'border-primary font-bold text-stone-900 dark:text-stone-100'

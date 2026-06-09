@@ -1,0 +1,28 @@
+---
+date: 2025-05-16
+label: May 16, 2025
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20250516DashboardNotifications from './assets/2025-05-16/dashboard-notifications.png'
+
+### Features & enhancements
+
+    - Fixed links to documentation in Botpress Studio
+    - Added option to filter logs by message content
+    - Added notifications menu in Dashboard:
+
+        <Frame>
+        <Picture alt="Dashboard notifications" src={img20250516DashboardNotifications} />
+        </Frame>
+
+### Bug fixes
+
+    - Fixed issue where Studio wouldn’t load under certain conditions
+    - Fixed issue where you couldn’t reset FAB/avatar images to default
+    - Fixed an issue where the [Conversation Started](/studio/concepts/triggers#conversation-started) Trigger didn’t work within the shareable Webchat window
+    - Improved rendering of Markdown in Webchat

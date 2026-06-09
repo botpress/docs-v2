@@ -1,0 +1,32 @@
+---
+date: 2025-05-30
+label: May 30, 2025
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20250530InactivityTimeout from './assets/2025-05-30/inactivity-timeout.png'
+import img20250530InactivityTimeoutDark from './assets/2025-05-30/inactivity-timeout-dark.png'
+
+### Features & enhancements
+
+    - Added new Card to set a custom inactivity timeout:
+
+        <Frame>
+            <Picture alt="Inactivity timeout" class="block dark:hidden" src={img20250530InactivityTimeout} />
+            <Picture alt="Inactivity timeout" class="hidden dark:block" src={img20250530InactivityTimeoutDark} />
+        </Frame>
+
+    - Bumped LLM timeout from 30 seconds to 90 seconds
+    - Bots using the BigCommerce integration can now recommend best-selling products without hallucinating
+
+### Bug fixes
+
+    - Fixed issue where variables assigned in the last Card in a Workflow weren’t stored
+    - Various WhatsApp integration fixes:
+        - Fixed error with OAuth flow when the user had more than 50 WhatsApp business accounts
+        - Fixed an error when receiving [Contact](https://developers.facebook.com/docs/whatsapp/cloud-api/messages/contacts-messages) messages from WhatsApp
+    - Fixed issue with Intercom integration
