@@ -99,7 +99,11 @@ export default function PageOptions({ markdownUrl }: PageOptionsProps) {
               <DropdownMenuItem
                 key={action.key}
                 onSelect={action.onSelect}
-                {...(action.href ? { render: <a href={action.href} target="_blank" rel="noreferrer" /> } : {})}
+                {...(action.href
+                  ? {
+                      render: <a href={action.href} target="_blank" rel="noreferrer" />,
+                    }
+                  : {})}
               >
                 {action.icon}
                 <div>

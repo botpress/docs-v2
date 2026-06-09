@@ -64,7 +64,9 @@ function AssistantInner() {
         // Citations come from message metadata (knowledge-base sources)
         let citations: { title: string; url: string }[] | undefined
         if (direction === 'incoming' && m.metadata?.citations) {
-          type RawCitation = { citation: { source: { title: string; url: string } } }
+          type RawCitation = {
+            citation: { source: { title: string; url: string } }
+          }
           const rawCitations = (m.metadata.citations as RawCitation[]).map((c) => ({
             title: c.citation.source.title?.replace(' - Botpress', '') || 'Title not found',
             url: c.citation.source.url,

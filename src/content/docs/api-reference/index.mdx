@@ -1,4 +1,38 @@
 ---
 title: Introduction
-description: Overview of the Botpress API reference.
 ---
+
+At Botpress, we love APIs. Every API we develop—whether public or private—is carefully designed with a strong focus on coherence and consistency. API design is at the core of our development process.
+
+Botpress is also a very big and complex system, and there isn't a single API that does everything. Instead, we provide multiple APIs, each tailored to specific functionalities. Below is a comprehensive list of all publicly available APIs in Botpress. Each API has dedicated documentation section.
+
+Except for the Chat API, all APIs mentioned below are located at the following URL: `https://api.botpress.cloud`.
+
+## Chat API
+
+{/* TODO update the hub link to the new one */}
+The Chat API is built on top of the [Chat Integration](https://studio.botpress.cloud/home?exploreHub=1&hubItemId=intver_01JVYWESY3BVAM5FR3XT9X813H&search=Chat+integration) to give you a simple way to interact with your deployed bots via HTTP requests. To use the Chat API in your bot, you first need to install the Chat Integration. The chat API URL is `https://chat.botpress.cloud`. For more details, refer to the [Chat API documentation](./chat-api).
+
+## Admin API
+
+The Admin API allows you to manage your workspace and provides a broad set of functionalities, covering everything from bot creation to monitoring and analytics. Key capabilities include:
+
+- Manage your Bots
+- Manage your own private and public integrations
+- Fetch Logs, Issues and Analytics
+- Update your Workspace Collaborators and Roles
+- Manage Workspace Collaborators and Roles
+
+As a general rule, if a feature is available in the Botpress Dashboard, it's likely accessible via the Admin API. For more details, refer to the [Admin API documentation](./admin-api).
+
+## Files API
+
+The Files API allows you to manage any file you or your user uploaded to Botpress. It can be used to upload files used in knowledge bases, to host media files, such as images, videos, and documents, to store files used by your bot, or to store files used by your integration. For more details, refer to the [Files API documentation](./files-api).
+
+## Tables API
+
+The Tables API allows you to manage your tables, which store structured data and offer various features. You can use tables to store user data, automatically label data, and extract information from content. For more details, refer to the [Tables API documentation](./tables-api).
+
+## Runtime API
+
+The Runtime API is for bots and integrations to handle messages, events, and requests. Each request is authenticated as a bot or integration (you can use your [PAT](/api-reference/authentication#1-personal-access-token-pat) to act as either a bot or an integration). For more details, refer to the [Runtime API documentation](./runtime-api).

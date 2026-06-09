@@ -12,6 +12,13 @@ export const siteConfig = {
   logo: withBase('/logo/light.svg'),
   logoDark: withBase('/logo/dark.svg'),
   navbar: {
-    links: [{ label: 'Dashboard', href: 'https://app.botpress.cloud', type: 'button', external: true }] as NavbarLink[],
+    links: [
+      {
+        label: 'Dashboard',
+        href: 'https://app.botpress.cloud',
+        type: 'button',
+        external: true,
+      },
+    ] as NavbarLink[],
   },
 } as const

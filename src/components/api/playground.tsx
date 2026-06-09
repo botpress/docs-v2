@@ -184,7 +184,12 @@ export default function ApiPlayground({ endpoint, state, onStateChange, open, on
         formatted = text
       }
 
-      setResponse({ status: res.status, statusText: res.statusText, body: formatted, time })
+      setResponse({
+        status: res.status,
+        statusText: res.statusText,
+        body: formatted,
+        time,
+      })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Request failed')
     } finally {
@@ -265,7 +270,11 @@ export default function ApiPlayground({ endpoint, state, onStateChange, open, on
                       <Label className="text-sm font-medium text-stone-700 dark:text-stone-300">Bearer token</Label>
                       <Input
                         value={state.token}
-                        onChange={(e) => updateState({ token: (e.target as HTMLInputElement).value })}
+                        onChange={(e) =>
+                          updateState({
+                            token: (e.target as HTMLInputElement).value,
+                          })
+                        }
                         placeholder="enter bearer token"
                         className="h-9 text-sm"
                       />
@@ -274,7 +283,11 @@ export default function ApiPlayground({ endpoint, state, onStateChange, open, on
                       <Label className="text-sm font-medium text-stone-700 dark:text-stone-300">Base URL</Label>
                       <Input
                         value={state.baseUrl}
-                        onChange={(e) => updateState({ baseUrl: (e.target as HTMLInputElement).value })}
+                        onChange={(e) =>
+                          updateState({
+                            baseUrl: (e.target as HTMLInputElement).value,
+                          })
+                        }
                         placeholder="enter base URL"
                         className="h-9 text-sm"
                       />
@@ -298,7 +311,10 @@ export default function ApiPlayground({ endpoint, state, onStateChange, open, on
                             value={state.serverVars[v.name] || ''}
                             onChange={(e) =>
                               updateState({
-                                serverVars: { ...state.serverVars, [v.name]: (e.target as HTMLInputElement).value },
+                                serverVars: {
+                                  ...state.serverVars,
+                                  [v.name]: (e.target as HTMLInputElement).value,
+                                },
                               })
                             }
                             placeholder={`enter ${v.name}`}
