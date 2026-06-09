@@ -1,0 +1,20 @@
+---
+date: 2025-06-27
+label: June 27, 2025
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+
+### Features & enhancements
+
+    - Increased timeout for crawling websites containing many pages, preventing missing pages in the Knowledge Base
+    - Slack integration: Added the ability to pass a Slack `userId` to an external service
+
+### Bug fixes
+
+    - Fixed an issue where the Conversation Started Trigger wasn't firing
+    - Fixed an issue with Zendesk integration where Zendesk wasn’t receiving user email addresses from the Start HITL Card

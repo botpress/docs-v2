@@ -1,0 +1,32 @@
+---
+date: 2025-12-05
+label: December 5, 2025
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20251205Filters from './assets/2025-12-05/filters.png'
+import img20251205FiltersDark from './assets/2025-12-05/filters-dark.png'
+
+### Dashboard improvements
+
+- Added menu to manage website Knowledge Base crawling
+- Improved UX for filtering conversations:
+
+<Frame>
+  <Picture alt="Conversation filters" class="block dark:hidden" src={img20251205Filters} />
+  <Picture alt="Conversation filters" class="hidden dark:block" src={img20251205FiltersDark} />
+</Frame>
+
+### Integrations
+
+- **Linear**: Fixed an issue where bots would reply to their own comments in an endless loop
+- **Notion**: Improved error handling
+
+### Bug fixes
+
+- Fixed an issue where code editors in the Studio became unresponsive after switching to new tab
+- Fixed and issue where leaving the optional subtitle field empty in Carousel Cards would result in an error

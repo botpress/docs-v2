@@ -54,8 +54,17 @@ function parseHeadings(body: string): ParsedHeading[] {
   return out
 }
 
-export const cleanupHeadings = (body: string, headings: MarkdownHeading[]): MarkdownHeading[] => {
+export interface CleanupHeadingsOptions {
+  hideSlugs?: Set<string>
+}
+
+export const cleanupHeadings = (
+  body: string,
+  headings: MarkdownHeading[],
+  options: CleanupHeadingsOptions = {}
+): MarkdownHeading[] => {
   const parsed = parseHeadings(body ?? '')
+  const hideSlugs = options.hideSlugs
 
   return headings
     .filter((h) => h.depth >= 2 && h.depth <= 3)
@@ -66,5 +75,6 @@ export const cleanupHeadings = (body: string, headings: MarkdownHeading[]): Mark
       insideTabs: parsed[index]?.insideTabs ?? false,
     }))
     .filter((h) => !h.insideTabs)
+    .filter((h) => !hideSlugs?.has(h.slug))
     .map(({ depth, slug, text }) => ({ depth, slug, text }))
 }

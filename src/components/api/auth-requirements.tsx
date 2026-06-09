@@ -41,9 +41,17 @@ export default function AuthRequirements({ security, securitySchemes }: AuthRequ
           if (!scheme) return null
           return { name: schemeName, scheme, scopes }
         })
-        .filter(Boolean) as { name: string; scheme: SecurityScheme; scopes: string[] }[]
+        .filter(Boolean) as {
+        name: string
+        scheme: SecurityScheme
+        scopes: string[]
+      }[]
     })
-    .filter((opt) => opt && opt.length > 0) as { name: string; scheme: SecurityScheme; scopes: string[] }[][]
+    .filter((opt) => opt && opt.length > 0) as {
+    name: string
+    scheme: SecurityScheme
+    scopes: string[]
+  }[][]
 
   if (resolvedOptions.length === 0) return null
 

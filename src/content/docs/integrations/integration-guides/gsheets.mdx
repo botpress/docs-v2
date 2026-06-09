@@ -1,0 +1,230 @@
+---
+title: Google Sheets
+description: Add a bot to Google Sheets using the official integration.
+icon: 'table-2'
+---
+
+import Accordion from '@/components/Accordion.astro'
+import AccordionGroup from '@/components/AccordionGroup.astro'
+import Step from '@/components/Step.astro'
+import Steps from '@/components/Steps.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import Tabs from '@/components/tabs/Tabs.astro'
+import { Check, Info, Note } from '@/components/callouts'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
+import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
+
+The Google Sheets integration allows your bot to access and update Google Sheets data in real-time, automating tasks like CRM updates, inventory management, and survey tracking directly within chat.
+
+## Setup
+
+<Tabs>
+  <Tab title="Basic configuration">
+    <Info>
+      You will need:
+
+      - A [published bot](/get-started/quick-start)
+      - A [Google account](https://accounts.google.com/)
+    </Info>
+
+    <Steps>
+      <Step>
+        In Botpress Studio, select **Explore Hub** in the upper-right corner.
+      </Step>
+      <Step>
+        Search for the **Google Sheets** integration, then select **Install Integration**.
+      </Step>
+      <Step>
+        In the **Configuration** menu, select **Authorize Google Sheets**.
+      </Step>
+      <Step>
+        Follow the instructions to connect Botpress to your Google account.
+      </Step>
+    </Steps>
+
+  </Tab>
+  <Tab title="Manual configuration">
+    For more advanced use cases, you can manually configure the integration using a service account.
+
+    <Info>
+      You will need:
+
+      - A [published bot](/get-started/quick-start)
+      - A [Google account](https://accounts.google.com/)
+      - Access to [Google Cloud Console](https://console.developers.google.com/)
+    </Info>
+
+    ### Step 1: Create a Google Cloud project
+
+    <Steps>
+      <Step>
+        Go to the [Google Cloud Console](https://console.developers.google.com/) and sign in with your Google account.
+      </Step>
+      <Step>
+        Open the project picker dropdown in the top navigation. Then, select **New Project**.
+
+      </Step>
+      <Step>
+        Enter your project details:
+        - **Project name**: Choose a descriptive name for your project.
+        - **Organization**: Select your organization (if applicable).
+        - **Location**: Choose the appropriate location.
+
+      </Step>
+      <Step>
+        Select **Create** and wait for the project to be created.
+      </Step>
+      <Step>
+        Verify you're in the correct project by checking the project name next to the Google logo.
+
+      </Step>
+    </Steps>
+
+    ### Step 2: Enable the Google Sheets API
+
+    <Steps>
+      <Step>
+        In the Google Cloud Console, open the left sidebar and go to **API & Services > Credentials**.
+
+      </Step>
+      <Step>
+        Select **+ Create Credentials > API Key** to create an API key.
+
+      </Step>
+      <Step>
+        Go to **Library**, search for "Google Sheets API", and select **Enable**.
+
+      </Step>
+    </Steps>
+
+    ### Step 3: Create a service account
+
+    <Steps>
+      <Step>
+        Open the left sidebar and go to **API & Services > Credentials**.
+
+      </Step>
+      <Step>
+        Select **+ Create Credentials > Service Account**.
+      </Step>
+      <Step>
+        Enter a **Service account name**. The Service Account ID will be automatically generated.
+
+      </Step>
+      <Step>
+        The remaining fields are optional. Select **Done** to create the service account.
+      </Step>
+      <Step>
+        Select your newly created service account, then go to the **Keys** tab.
+
+      </Step>
+      <Step>
+        Select **Add Key > Create new key**, choose **JSON** as the key type, then select **Create**.
+
+        A JSON file will be downloaded to your machine. Keep this file secure—you'll need it to configure the integration.
+      </Step>
+    </Steps>
+
+    <Note>
+      The downloaded JSON file contains sensitive credentials. Store it securely and never share it publicly. The file structure looks like this:
+
+      ```json
+      {
+        "type": "service_account",
+        "project_id": "your-project-id",
+        "private_key_id": "...",
+        "private_key": "...",
+        "client_email": "your-service-account@your-project.iam.gserviceaccount.com",
+        "client_id": "...",
+        "auth_uri": "...",
+        "token_uri": "...",
+        "auth_provider_x509_cert_url": "...",
+        "client_x509_cert_url": "...",
+        "universe_domain": "googleapis.com"
+      }
+      ```
+    </Note>
+
+    ### Step 4: Grant spreadsheet access to the service account
+
+    <Steps>
+      <Step>
+        Open your Google Sheets spreadsheet in your browser.
+      </Step>
+      <Step>
+        Select the **Share** button in the upper-right corner.
+
+      </Step>
+      <Step>
+        Open the JSON file you downloaded and copy the `client_email` value.
+      </Step>
+      <Step>
+        Paste the `client_email` into the **Add people and groups** field, as if you were inviting someone to access your spreadsheet.
+      </Step>
+      <Step>
+        Set the permission to **Editor** so the bot can read and write to the spreadsheet. Then select **Send**.
+
+      </Step>
+    </Steps>
+
+    ### Step 5: Configure the integration in Botpress
+
+    <Steps>
+      <Step>
+        In Botpress Studio, select **Explore Hub** in the upper-right corner.
+
+      </Step>
+      <Step>
+        Search for the **Google Sheets** integration, then select **Install Integration**.
+      </Step>
+      <Step>
+        In the **Configuration** menu, select the drop-down and choose **Configure manually with a Service Account Key**.
+
+      </Step>
+    </Steps>
+
+    Fill in the integration's configuration fields:
+
+    <AccordionGroup>
+      <Accordion title="Spreadsheet ID">
+        1. Open your Google Sheets spreadsheet in your browser.
+        2. Copy the ID from the URL. The ID is the string between `/d/` and `/edit` in the URL.
+
+        For example, if your URL is `https://docs.google.com/spreadsheets/d/1AbCdEfGhIjKlMnOpQrStUvWxYz/edit`, the Spreadsheet ID is `1AbCdEfGhIjKlMnOpQrStUvWxYz`.
+      </Accordion>
+      <Accordion title="Client Email">
+        Open the JSON file you downloaded in [Step 3](#step-3-create-a-service-account) and copy the `client_email` value.
+      </Accordion>
+      <Accordion title="Private Key">
+        Open the JSON file you downloaded in [Step 3](#step-3-create-a-service-account) and copy the entire `private_key` value, including the `-----BEGIN PRIVATE KEY-----` and `-----END PRIVATE KEY-----` markers.
+      </Accordion>
+    </AccordionGroup>
+
+    When you've filled in all the fields, select **Save Configuration**.
+
+    <Check>
+      You've successfully configured the Google Sheets integration!
+    </Check>
+
+  </Tab>
+</Tabs>
+
+---
+
+## Cards
+
+<IntegrationCards/>
+
+## Triggers
+
+<IntegrationEvents/>
+
+<Note>
+  For Cards that take [named ranges](https://support.google.com/docs/answer/63175?hl=en&co=GENIE.Platform%3DDesktop) as input, Google's standard restrictions for range names apply. Range names:
+
+- Can contain only letters, numbers, and underscores
+- Can't start with a number, or the words "true" or "false"
+- Can't contain any spaces or punctuation
+- Must be 1–250 characters
+- Can't be in either A1 or R1C1 syntax. For example, you might get an error if you give your range a name like `A1:B2` or `R1C1:R2C2`
+</Note>

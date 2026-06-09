@@ -1,0 +1,39 @@
+---
+date: 2025-11-28
+label: November 28, 2025
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20251128NewModelPicker from './assets/2025-11-28/new-model-picker.png'
+import img20251128NewModelPickerDark from './assets/2025-11-28/new-model-picker-dark.png'
+
+### Features & enhancements
+
+- Improved UI for the model picker in the Studio:
+
+<Frame>
+  <Picture alt="New model picker" class="block dark:hidden" src={img20251128NewModelPicker} />
+  <Picture alt="New model picker" class="hidden dark:block" src={img20251128NewModelPickerDark} />
+</Frame>
+
+- Added option to automatically recharge your bot's add-ons using **Auto-Recharge**
+
+### Integrations
+
+- **WhatsApp**:
+  - Added support for captions in images
+  - Improved handling for long messages (4096+ characters)
+- **Messenger**: Improved error handling
+- **Intercom**: Fixed images and text being sent out of order
+- **Email notifier**: Added support for line breaks
+
+### Bug fixes
+
+- Fixed a visual issue with file upload in the Emulator
+- Fixed an issue where Knowledge Base entries were disappearing after indexing under certain circumstances
+- Fixed an issue where variables were being overwritten when opening Bot Settings.
+- Fixed an issue where toggling the bottom pane was not working

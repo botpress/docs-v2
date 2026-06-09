@@ -1,0 +1,53 @@
+---
+date: 2026-03-13
+label: March 13, 2026
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20260313AdkChat from './assets/2026-03-13/adk_chat.png'
+import img20260313AdkChatDark from './assets/2026-03-13/adk_chat_dark.png'
+
+### Studio
+
+### Features & enhancements
+
+- Webchat can now recover messages if user's connection is interrupted
+
+### Integrations
+
+- **Zendesk**: Improved HITL support
+- **HITL**: Added support to pass additional information through tags
+- **Google Calendar** and **Google Sheets**: OAuth is now available
+
+### Bug fixes
+
+- Fixed an issue where Bot Identity and Styling changes were not saving
+- Fixed an issue where default boolean columns in the **Insert Record** card did not default to false
+- Fixed an issue in Webchat where text messages appeared as code blocks
+
+---
+
+### ADK
+
+### Control Panel
+
+- Added a visual Chat view to test conversations and traces (requires Webchat installation):
+
+<Frame>
+  <Picture alt="Chat view with Timeline and Bot conversation" class="block dark:hidden" src={img20260313AdkChat} />
+  <Picture alt="Chat view with Timeline and Bot conversation" class="hidden dark:block" src={img20260313AdkChatDark} />
+</Frame>
+
+- Updated the UI for the **Tables** and **Traces** pages
+- Added variable validation for **Configuration Variables**
+- Improved the type system for workflow events in conversation handlers
+
+### CLI
+
+- Improved support for Windows
+- MCP port can now be assigned using `adk mcp --port <port>`
+- The Control Panel no longer opens automatically on `adk dev`

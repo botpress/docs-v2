@@ -7,5 +7,6 @@ if ! command -v vale >/dev/null 2>&1; then
   exit 0
 fi
 
-# Only lint markdown/mdx files
-vale --glob='*.{md,mdx}' "$@"
+# Only lint markdown/mdx files, ignore changelog entries since there are too many
+# integration names that are flagged as spelling errors
+vale --glob='*.{md,mdx},!**/changelog-entries/**' "$@"

@@ -12,6 +12,40 @@ import { buildBreadcrumbs } from './breadcrumbs'
 import { resolveActiveSidebarTree, getAdjacentPages } from './nav'
 import { normalizeEntryId } from './utils'
 
+const INTEGRATION_GUIDES_PREFIX = 'integrations/integration-guides/'
+
+async function buildIntegrationIconUrlMap(
+  allEntries: Map<string, DynamicCollectionEntry[]>,
+  defaultCollection: string
+): Promise<Map<string, string>> {
+  const iconUrlMap = new Map<string, string>()
+
+  let integrationEntries: DynamicCollectionEntry[] = []
+  try {
+    integrationEntries = await fetchCollectionEntries('integrations')
+  } catch {
+    return iconUrlMap
+  }
+
+  const integrationIconUrls = new Map<string, string>()
+  for (const entry of integrationEntries) {
+    const iconUrl = 'iconUrl' in entry.data && typeof entry.data.iconUrl === 'string' ? entry.data.iconUrl : undefined
+    if (iconUrl) integrationIconUrls.set(entry.id, iconUrl)
+  }
+
+  for (const entry of allEntries.get(defaultCollection) ?? []) {
+    if (!entry.id.startsWith(INTEGRATION_GUIDES_PREFIX)) continue
+    const integrationSlug = entry.id.slice(INTEGRATION_GUIDES_PREFIX.length).split('/')[0]
+    const iconUrl = integrationIconUrls.get(integrationSlug)
+    if (!iconUrl) continue
+    const normalized = normalizeEntryId(entry.id)
+    iconUrlMap.set(normalized, iconUrl)
+    iconUrlMap.set(entry.id, iconUrl)
+  }
+
+  return iconUrlMap
+}
+
 export interface SiteContext {
   config: DocsConfig
   defaultCollection: string
@@ -53,7 +87,16 @@ export class BachSite<TCollection extends string = string> {
     const allEntries = await loadCollections(this._config)
     const { titleMap, methodMap, sidebarTitleMap, iconMap, articles } = buildCollectionsSidebarData(allEntries)
     const collectionsMap = buildSidebarEntryMap(allEntries)
-    const sidebar = await buildSidebarTree(this._config, titleMap, methodMap, sidebarTitleMap, iconMap, collectionsMap)
+    const iconUrlMap = await buildIntegrationIconUrlMap(allEntries, defaultCollection)
+    const sidebar = await buildSidebarTree(
+      this._config,
+      titleMap,
+      methodMap,
+      sidebarTitleMap,
+      iconMap,
+      collectionsMap,
+      iconUrlMap
+    )
 
     const defaultEntriesBySlug = new Map<string, DynamicCollectionEntry>()
     for (const entry of allEntries.get(defaultCollection) ?? []) {

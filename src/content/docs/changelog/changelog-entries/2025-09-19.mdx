@@ -1,0 +1,46 @@
+---
+date: 2025-09-19
+label: September 19, 2025
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20250919ConfirmDelete from './assets/2025-09-19/confirm-delete.png'
+import img20250919ConfirmDeleteDark from './assets/2025-09-19/confirm-delete-dark.png'
+
+### Features & enhancements
+
+- Added option to rename rich text Knowledge Bases
+- Improved UI for array input fields in Cards
+- Added a safer check when deleting bots:
+
+  <Frame>
+    <Picture alt="Confirm delete" class="block dark:hidden" src={img20250919ConfirmDelete} />
+    <Picture alt="Confirm delete" class="hidden dark:block" src={img20250919ConfirmDeleteDark} />
+  </Frame>
+
+- Added a search tab to workspace/bot selection dropdown
+
+### Integrations
+
+- **Klaviyo**: Added [Klaviyo integration](/integrations/integration-guides/klaviyo)
+- **Pipedrive**: Added [Pipedrive integration](/integrations/integration-guides/pipedrive)
+- **MailerLite**: Added [MailerLite integration](/integrations/integration-guides/mailerlite)
+- **Slack**: Added support for incoming Slack messages containing images, audio, files, and multiple files
+- **Loops**: Added attachment support to the **Send Transactional Email** Card
+- **SendGrid**: Fixed an issue with CC and BCC emails not being received
+- **Linear**: Fixed an issue with the integration's event handling
+- **WhatsApp**: Improved handling when the integration is rate limited by WhatsApp
+
+### Bug fixes
+
+- **UI fixes**:
+  - Fixed issue with Dashboard sidebar on mobile
+  - Fixed issue where the **Copy Share Link** wasn't clickable when viewing a Workflow in the Hub
+
+- Fixed issue where the Capture Information Card wasn't working properly for files
+- Fixed issue where shareable Webchat link would show error screen when error hadn’t occurred
+- Fixed issue where negative feedback from Webchat wasn’t being displayed in Conversations tab

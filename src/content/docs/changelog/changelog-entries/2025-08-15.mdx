@@ -1,0 +1,38 @@
+---
+date: 2025-08-15
+label: August 15, 2025
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20250815AnalyticsTabs from './assets/2025-08-15/analytics-tabs.png'
+import img20250815AnalyticsTabsDark from './assets/2025-08-15/analytics-tabs-dark.png'
+import img20250815SearchFonts from './assets/2025-08-15/search-fonts.gif'
+import img20250815SearchFontsDark from './assets/2025-08-15/search-fonts-dark.gif'
+
+### Features & enhancements
+
+- You can now choose any Google Font when styling Webchat:
+
+  <Frame>
+    <Picture alt="Search fonts" class="block dark:hidden" src={img20250815SearchFonts} />
+    <Picture alt="Search fonts" class="hidden dark:block" src={img20250815SearchFontsDark} />
+  </Frame>
+
+- You can now view analytics for either the current bot or the entire Workspace:
+
+  <Frame>
+    <Picture alt="Analytics tabs" class="block dark:hidden" src={img20250815AnalyticsTabs} />
+    <Picture alt="Analytics tabs" class="hidden dark:block" src={img20250815AnalyticsTabsDark} />
+  </Frame>
+
+- Improved syntax highlighting for logs in emulator
+
+### Bug fixes
+
+- Fixed an issue where focusing the Webchat composer on mobile zoomed in unintentionally
+- Fixed a visual bug where multi-line inputs for integration Cards were cut off
+- Fixed a visual bug with Usage tab popovers

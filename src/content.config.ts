@@ -1,11 +1,19 @@
 import { defineCollection } from 'astro:content'
-import { apiLoader, docsLoader } from '@/bach/loaders'
-import { docsSchema, apiCollectionSchema } from '@/bach/schemas'
+import { apiLoader, docsLoader, integrationsLoader } from '@/bach/loaders'
+import { docsSchema, apiCollectionSchema, integrationSchema } from '@/bach/schemas'
 import { adminApiConfig, chatApiConfig, filesApiConfig, runtimeApiConfig, tablesApiConfig } from './api-collections'
 
 const docs = defineCollection({
-  loader: docsLoader({ pattern: '**/*.{md,mdx}', base: './src/content/docs' }),
+  loader: docsLoader({
+    pattern: ['**/*.{md,mdx}', '!changelog/changelog-entries/**'],
+    base: './src/content/docs',
+  }),
   schema: docsSchema,
+})
+
+const integrations = defineCollection({
+  loader: integrationsLoader(),
+  schema: integrationSchema,
 })
 
 const adminApiCollection = defineCollection({
@@ -35,6 +43,7 @@ const tablesApiCollection = defineCollection({
 
 export const collections = {
   docs,
+  integrations,
   adminApi: adminApiCollection,
   chatApi: chatApiCollection,
   filesApi: filesApiCollection,

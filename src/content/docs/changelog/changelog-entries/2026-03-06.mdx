@@ -1,0 +1,111 @@
+---
+date: 2026-03-06
+label: March 6, 2026
+---
+
+import { Picture } from 'astro:assets'
+import Frame from '@/components/Frame.astro'
+import { Warning } from '@/components/callouts'
+import Tabs from '@/components/tabs/Tabs.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import img20260306AdkAction from './assets/2026-03-06/adk-action.png'
+import img20260306AdkActionDark from './assets/2026-03-06/adk-action-dark.png'
+import img20260306AdkConfigVar from './assets/2026-03-06/adk-config-var.png'
+import img20260306AdkConfigVarDark from './assets/2026-03-06/adk-config-var-dark.png'
+import img20260306AdkControlPanel from './assets/2026-03-06/adk-control-panel.png'
+import img20260306AdkControlPanelDark from './assets/2026-03-06/adk-control-panel-dark.png'
+import img20260306AdkEvals from './assets/2026-03-06/adk-evals.png'
+import img20260306AdkEvalsDark from './assets/2026-03-06/adk-evals-dark.png'
+import img20260306AdkTrigger from './assets/2026-03-06/adk-trigger.png'
+import img20260306AdkTriggerDark from './assets/2026-03-06/adk-trigger-dark.png'
+
+### Studio
+
+### Features & enhancements
+
+- Improved breakdown UI for **AI Spend by Source** dashboard
+- Improved logging for Integrations in **Audits** page
+
+### Integrations
+
+- **Dropbox**: Added OAuth configuration
+- **HubSpot**: Added new cards
+  - [Get Company](/integrations/integration-guides/hubspot#get-company)
+  - [Update Company](/integrations/integration-guides/hubspot#update-company)
+
+---
+
+### ADK
+
+### Control Panel
+
+- The dev console has been replaced by the **Control Panel**
+- Dark (default) and light themes with toggle in the top bar
+- New **Overview** page with panels for Agent summary, Component inventory, and Runtime and Integrations:
+
+<Frame>
+  <Picture
+    alt="ADK Control Panel with sidebar and main view"
+    class="block dark:hidden"
+    src={img20260306AdkControlPanel}
+  />
+  <Picture
+    alt="ADK Control Panel with sidebar and main view"
+    class="hidden dark:block"
+    src={img20260306AdkControlPanelDark}
+  />
+</Frame>
+
+- Restructured sidebar into **Connect**, **Build**, **Data**, and **Observe** sections
+- Improved UI across **Workflow**, **Logs** and **Traces** pages
+- Added ability to test Integration and Bot Actions in one place on the **Actions** page:
+
+<Frame>
+  <Picture alt="Actions page with Integration and Bot Actions" class="block dark:hidden" src={img20260306AdkAction} />
+  <Picture
+    alt="Actions page with Integration and Bot Actions"
+    class="hidden dark:block"
+    src={img20260306AdkActionDark}
+  />
+</Frame>
+
+- Added a **Triggers** page for managing triggers in your ADK agents:
+
+<Frame>
+  <Picture alt="Triggers page in Control Panel" class="block dark:hidden" src={img20260306AdkTrigger} />
+  <Picture alt="Triggers page in Control Panel" class="hidden dark:block" src={img20260306AdkTriggerDark} />
+</Frame>
+
+- Added an **Evals** page for running declarative conversation tests on your ADK agents:
+
+<Frame>
+  <Picture alt="Evals page for declarative conversation tests" class="block dark:hidden" src={img20260306AdkEvals} />
+  <Picture
+    alt="Evals page for declarative conversation tests"
+    class="hidden dark:block"
+    src={img20260306AdkEvalsDark}
+  />
+</Frame>
+
+- Added Configuration Variable management in the **Settings** page:
+
+<Frame>
+  <Picture
+    alt="Configuration Variable management in Settings"
+    class="block dark:hidden"
+    src={img20260306AdkConfigVar}
+  />
+  <Picture
+    alt="Configuration Variable management in Settings"
+    class="hidden dark:block"
+    src={img20260306AdkConfigVarDark}
+  />
+</Frame>
+
+- Testing page removed
+
+### CLI
+
+- Added support to create a new agent without prompts by use `adk init --yes` or `adk init --defaults`
+- Use `adk init --skip-link` to skip the interactive bot-linking step
+- You can set the Control Panel theme (dark or light) using `adk theme`
