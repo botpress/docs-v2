@@ -21,6 +21,11 @@ jobs:
       - run: bun install --frozen-lockfile
         env:
           NODE_AUTH_TOKEN: ${{ secrets.PRIVATE_NPM_TOKEN }}
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::236194216641:role/dab-test-infra-update
+          aws-region: us-east-1
       - run: bunx dab sync
       - run: bun run check:type
 
