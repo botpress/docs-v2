@@ -2,8 +2,11 @@ import type { Loader } from 'astro/loaders'
 import { Client } from '@botpress/client'
 import type { IntegrationSchema } from '../schemas'
 
-type MdxFileName = string
-type ApiName = string
+// We use the "opaque display" Typescript trick so intellisense in other areas
+// preserves the names of the types, so e.g. Record<MdxFileName, ApiName> will
+// remain as such rather than being normalized to Record<string, string>.
+type MdxFileName = string & {}
+type ApiName = string & {}
 
 const getLatestIntegrationData = async (client: Client, name: string): Promise<IntegrationSchema> => {
   const { integration } = await client.getPublicIntegration({
@@ -19,12 +22,19 @@ const getLatestIntegrationData = async (client: Client, name: string): Promise<I
   }
 }
 
+/**
+ * Performs a simple API call to verify that the client is properly
+ * authenticated.
+ *
+ * Throws an error if the API returns a 401 or if the client throws an
+ * unexpected error.
+ */
 const ensureClientAuthenticated = async (client: Client): Promise<void> => {
   try {
-    const w = await client.listPublicWorkspaces({
-      pageSize: 0,
+    // We perform a useless API call to test auth
+    await client.listWorkspaces({
+      handle: ' ',
     })
-    console.log(JSON.stringify(w, null, 2))
   } catch (err) {
     if ((err as { code?: unknown } | undefined)?.code === 401) {
       throw new Error(
