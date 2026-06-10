@@ -57,14 +57,16 @@ export const integrationsLoader = (options: IntegrationLoaderOptions): Loader =>
     const { client, integrations } = options
     await ensureClientAuthenticated(client)
 
-    for (const slug in integrations) {
-      const name = integrations[slug]
-      try {
-        const data = await getLatestIntegrationData(client, name)
-        store.set({ id: slug, data })
-      } catch (err) {
-        logger.warn(`Failed to fetch integration "${name}" (slug: "${slug}"): ${err}`)
-      }
-    }
+    await Promise.all(
+      Object.entries(integrations).map(async ([slug, name]) =>
+        getLatestIntegrationData(client, name)
+          .then((data) => {
+            store.set({ id: slug, data })
+          })
+          .catch((err) => {
+            logger.warn(`Failed to fetch integration "${name}" (slug: "${slug}"): ${err}`)
+          })
+      )
+    )
   },
 })
