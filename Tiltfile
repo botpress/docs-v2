@@ -1,5 +1,7 @@
 # Docs-v2 Development Environment
 
+allow_k8s_contexts("development")
+
 # --- Guard: vale required for writing check ---
 _vale_installed = str(local("which vale 2>/dev/null || echo ''", quiet=True)).strip() != ""
 
