@@ -6,7 +6,7 @@ import { Client } from '@botpress/client'
 
 const token = import.meta.env.BOTPRESS_API_TOKEN
 if (!token) {
-  console.warn('BOTPRESS_API_TOKEN is not set - integration metadata will be empty')
+  throw new Error('Missing BOTPRESS_API_TOKEN')
 }
 
 const client = new Client({ token })
