@@ -23,6 +23,34 @@ import type { Endpoint, Parameter } from '@/bach/schemas'
 import type { RequestState } from '@/components/api/types'
 import { badgeVariantForMethod } from '@/lib/utils'
 
+const pathParamColors: Record<string, string> = {
+  get: 'border-emerald-300 bg-emerald-100 text-emerald-800 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300',
+  post: 'border-blue-300 bg-blue-100 text-blue-800 dark:border-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
+  put: 'border-amber-300 bg-amber-100 text-amber-800 dark:border-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
+  patch:
+    'border-purple-300 bg-purple-100 text-purple-800 dark:border-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
+  delete: 'border-red-300 bg-red-100 text-red-800 dark:border-red-700 dark:bg-red-900/40 dark:text-red-300',
+}
+
+function EndpointPath({ path, method }: { path: string; method: string }) {
+  const paramClass = pathParamColors[method.toLowerCase()] ?? ''
+  const segments = path.split(/(\{[^}]+\})/)
+
+  return (
+    <code className="min-w-0 flex-1 truncate text-sm font-medium text-stone-600 dark:text-stone-400">
+      {segments.map((seg, i) =>
+        seg.startsWith('{') ? (
+          <span key={i} className={`rounded-md px-1 py-0.5 font-medium ${paramClass}`}>
+            {seg}
+          </span>
+        ) : (
+          seg
+        )
+      )}
+    </code>
+  )
+}
+
 function EndpointBar({
   method,
   path,
@@ -44,7 +72,7 @@ function EndpointBar({
   return (
     <div className="flex items-center gap-2 rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 dark:border-stone-700 dark:bg-stone-800/50">
       <Badge variant={badgeVariantForMethod(method)}>{method}</Badge>
-      <code className="min-w-0 flex-1 truncate text-sm font-medium text-stone-600 dark:text-stone-400">{path}</code>
+      <EndpointPath path={path} method={method} />
       <Button variant="ghost" size="icon-sm" onClick={() => copy(fullUrl)} className="shrink-0" title="Copy URL">
         {copied ? <Check /> : <Copy />}
       </Button>
