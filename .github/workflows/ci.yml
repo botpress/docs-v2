@@ -30,6 +30,9 @@ jobs:
           role-to-assume: arn:aws:iam::236194216641:role/actions/dab/docs
           aws-region: us-east-1
       - run: bunx dab sync
+        env:
+          INFISICAL_CLIENT_ID: ${{ secrets.INFISICAL_CLIENT_ID }}
+          INFISICAL_CLIENT_SECRET: ${{ secrets.INFISICAL_CLIENT_SECRET }}
       - run: bun run check:type
 
   check-lint:
@@ -105,7 +108,7 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.PRIVATE_NPM_TOKEN }}
+          INFISICAL_CLIENT_ID: ${{ secrets.PRIVATE_NPM_TOKEN }}
       - run: bun run check:link
 
   build:
