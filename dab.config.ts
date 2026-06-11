@@ -1,6 +1,6 @@
 import { defineProject } from './.dab'
 
-export const name = 'docs-v2'
+export const name = 'docs'
 
 export default defineProject((ctx) => ({
   distDir: './dist',
