@@ -27,7 +27,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::236194216641:role/docs-v2
+          role-to-assume: arn:aws:iam::236194216641:role/actions/dab/docs
           aws-region: us-east-1
       - run: bunx dab sync
       - run: bun run check:type
