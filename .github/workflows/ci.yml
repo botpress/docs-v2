@@ -108,7 +108,7 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
         env:
-          INFISICAL_CLIENT_ID: ${{ secrets.PRIVATE_NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.PRIVATE_NPM_TOKEN }}
       - run: bun run check:link
 
   build:
