@@ -17,6 +17,9 @@ import { transformerFilename, transformerExpandable } from './src/shiki/transfor
 export default defineConfig({
   site: 'https://botpress.com/docs',
   output: 'static',
+  redirects: {
+    '/tutorial': '/tutorial/introduction',
+  },
   prefetch: {
     prefetchAll: true,
     defaultStrategy: 'hover',
