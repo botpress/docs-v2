@@ -12,10 +12,16 @@ function CodeGroup({ children }: { children: ReactNode }) {
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
-    const pres = Array.from(container.querySelectorAll<HTMLElement>(':scope > pre.astro-code'))
+    const pres = Array.from(container.querySelectorAll<HTMLElement>('pre.astro-code'))
     if (pres.length === 0) return
     presRef.current = pres
-    setTabs(pres.map((pre, i) => pre.getAttribute('data-title') || `File ${i + 1}`))
+    setTabs(
+      pres.map((pre, i) => {
+        const raw = pre.getAttribute('data-title') || `File ${i + 1}`
+        const match = raw.match(/^title=["']([^"']+)["']$/)
+        return match?.[1] ?? raw
+      })
+    )
     pres.forEach((pre, i) => {
       pre.hidden = i !== 0
     })
