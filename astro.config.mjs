@@ -19,6 +19,7 @@ import { transformerFilename, transformerExpandable } from './src/shiki/transfor
 export default defineConfig({
   site: 'https://botpress.com',
   base: baseUrl,
+  outDir: `./dist${baseUrl}`,
   output: 'static',
   prefetch: {
     prefetchAll: true,
