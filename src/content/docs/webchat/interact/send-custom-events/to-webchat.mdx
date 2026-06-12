@@ -8,6 +8,7 @@ import Steps from '@/components/Steps.astro'
 import Step from '@/components/Step.astro'
 import Frame from '@/components/Frame.astro'
 import Icon from '@/components/Icon.astro'
+import CodeGroup from '@/components/CodeGroup.astro'
 import { Picture } from 'astro:assets'
 import customTriggerImg from './assets/custom-trigger.png'
 import customTriggerDarkImg from './assets/custom-trigger-dark.png'
@@ -123,11 +124,69 @@ If you're using the [Webchat React library](/webchat/react-library/get-started),
 
     Then, send the event using `client.sendEvent(customPayload)`. For example, in a button:
 
-    ```jsx
+    <CodeGroup>
+
+    ```jsx title="Send event button"
     <button onClick={() => client.sendEvent(customPayload)}>
       Send custom event
     </button>
     ```
+
+    ```jsx title="Example in a full React app" expandable {17-19,23-25}
+    import { Fab, Webchat, useWebchat } from '@botpress/webchat'
+    import { useState } from 'react'
+
+    function App() {
+      const clientId = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+      // Replace with your actual client ID
+      const [isWebchatOpen, setIsWebchatOpen] = useState(false)
+      const toggleWebchat = () => {
+        setIsWebchatOpen((prevState) => !prevState)
+      }
+
+      const { client } =
+        useWebchat({
+          clientId: clientId
+      })
+
+      const customPayload = {
+        "test": "test"
+      }
+
+      return (
+        <>
+          <button onClick={() => client.sendEvent(customPayload)}>
+            Send custom event
+          </button>
+          <Webchat
+            clientId={clientId}
+            style={{
+              width: '400px',
+              height: '600px',
+              display: isWebchatOpen ? 'flex' : 'none',
+              position: 'fixed',
+              bottom: '90px',
+              right: '20px',
+            }}
+          />
+          <Fab
+            onClick={() => toggleWebchat()}
+            style={{
+              position: 'fixed',
+              bottom: '20px',
+              right: '20px',
+              width: '64px',
+              height: '64px'
+            }}
+          />
+        </>
+      )
+    }
+
+    export default App
+    ```
+
+    </CodeGroup>
 
   </Step>
   <Step title="Add a Custom Trigger">

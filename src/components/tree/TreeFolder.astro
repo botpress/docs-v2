@@ -1,0 +1,42 @@
+---
+import Icon from "@/components/Icon.astro";
+
+interface Props {
+  name: string;
+  defaultOpen?: boolean;
+  class?: string;
+}
+
+const { name, defaultOpen = false, class: className } = Astro.props;
+---
+
+<details class:list={["tree-folder", className]} open={defaultOpen}>
+  <summary
+    class="flex cursor-pointer list-none items-center gap-2 py-1 select-none [&::-webkit-details-marker]:hidden"
+  >
+    <Icon
+      icon="folder"
+      class="tree-folder-closed text-stone-500 dark:text-stone-400"
+    />
+    <Icon
+      icon="folder-open"
+      class="tree-folder-open text-stone-500 dark:text-stone-400"
+    />
+    <span>{name}</span>
+  </summary>
+  <div class="ml-2 border-l border-stone-200 pl-4 dark:border-white/10">
+    <slot />
+  </div>
+</details>
+
+<style is:global>
+  .tree-folder > summary > .tree-folder-open {
+    display: none;
+  }
+  .tree-folder[open] > summary > .tree-folder-closed {
+    display: none;
+  }
+  .tree-folder[open] > summary > .tree-folder-open {
+    display: inline-block;
+  }
+</style>

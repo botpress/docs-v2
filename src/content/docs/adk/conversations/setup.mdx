@@ -10,6 +10,9 @@ import agentStepsDarkImg from '../assets/agent-steps-dark.png'
 import { Info, Tip } from '@/components/callouts'
 import Frame from '@/components/Frame.astro'
 import CodeGroup from '@/components/CodeGroup.astro'
+import Tree from '@/components/tree/Tree.astro'
+import TreeFolder from '@/components/tree/TreeFolder.astro'
+import TreeFile from '@/components/tree/TreeFile.astro'
 
 Conversations are how your agent receives and responds to user messages. Each conversation file defines a handler that runs when a message arrives on a matching channel.
 
@@ -103,12 +106,13 @@ handler: async ({ message }) => {
 
 You can create separate conversation files for different channels or use cases:
 
-```
-src/conversations/
-├── webchat.ts        # Webchat messages
-├── slack.ts          # Slack messages
-└── support.ts        # Support channel
-```
+<Tree>
+  <TreeFolder name="src/conversations" defaultOpen>
+    <TreeFile name="webchat.ts" comment="Webchat messages" />
+    <TreeFile name="slack.ts" comment="Slack messages" />
+    <TreeFile name="support.ts" comment="Support channel" />
+  </TreeFolder>
+</Tree>
 
 Each file exports a `Conversation` with its own channel, handler, and configuration. The ADK discovers them all automatically.
 

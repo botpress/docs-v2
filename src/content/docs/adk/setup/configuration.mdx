@@ -4,34 +4,45 @@ description: Understand your project structure and how to configure your agent.
 ---
 
 import { Tip } from '@/components/callouts'
+import Tree from '@/components/tree/Tree.astro'
+import TreeFolder from '@/components/tree/TreeFolder.astro'
+import TreeFile from '@/components/tree/TreeFile.astro'
 
 ## Project structure
 
 Here's a breakdown of the key files in your project after running `adk init`:
 
-```
-src/
-├── actions/
-│   └── index.ts
-├── conversations/
-│   └── index.ts
-├── knowledge/
-│   └── index.ts
-├── tables/
-│   └── index.ts
-├── triggers/
-│   └── index.ts
-└── workflows/
-    └── index.ts
-evals/
-└── index.ts
-.mcp.json
-agent.config.ts
-agent.json
-agent.local.json
-AGENTS.md
-CLAUDE.md
-```
+<Tree>
+  <TreeFolder name="src" defaultOpen>
+    <TreeFolder name="actions">
+      <TreeFile name="index.ts" />
+    </TreeFolder>
+    <TreeFolder name="conversations">
+      <TreeFile name="index.ts" />
+    </TreeFolder>
+    <TreeFolder name="knowledge">
+      <TreeFile name="index.ts" />
+    </TreeFolder>
+    <TreeFolder name="tables">
+      <TreeFile name="index.ts" />
+    </TreeFolder>
+    <TreeFolder name="triggers">
+      <TreeFile name="index.ts" />
+    </TreeFolder>
+    <TreeFolder name="workflows">
+      <TreeFile name="index.ts" />
+    </TreeFolder>
+  </TreeFolder>
+  <TreeFolder name="evals">
+    <TreeFile name="index.ts" />
+  </TreeFolder>
+  <TreeFile name=".mcp.json" />
+  <TreeFile name="agent.config.ts" />
+  <TreeFile name="agent.json" />
+  <TreeFile name="agent.local.json" />
+  <TreeFile name="AGENTS.md" />
+  <TreeFile name="CLAUDE.md" />
+</Tree>
 
 The ADK scans `src/` and discovers primitives automatically. Each file exports a primitive (a `Conversation`, `Workflow`, `Action`, etc.) and the framework registers it at build time.
 
