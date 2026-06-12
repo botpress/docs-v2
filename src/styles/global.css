@@ -296,14 +296,14 @@
 }
 
 /* Strip code block's own border/radius/margin when inside a code group */
-.prose .code-group > pre.astro-code {
+.prose .code-group pre.astro-code {
   border: none;
   border-radius: 0;
   margin: 0;
 }
 
 /* Suppress the filename header pseudo-element inside code groups (tab bar handles it) */
-.prose .code-group > pre.astro-code[data-title]::before {
+.prose .code-group pre.astro-code[data-title]::before {
   display: none;
 }
 

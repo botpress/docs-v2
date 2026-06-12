@@ -12,7 +12,9 @@ function CodeGroup({ children }: { children: ReactNode }) {
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
-    const pres = Array.from(container.querySelectorAll<HTMLElement>(':scope > pre.astro-code'))
+    const pres = Array.from(
+      container.querySelectorAll<HTMLElement>(':scope > pre.astro-code, :scope > astro-slot > pre.astro-code')
+    )
     if (pres.length === 0) return
     presRef.current = pres
     setTabs(pres.map((pre, i) => pre.getAttribute('data-title') || `File ${i + 1}`))
