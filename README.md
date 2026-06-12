@@ -40,7 +40,7 @@ All commands are run from the root of the project, from a terminal:
 
 ## Deploying the site from local machine
 
-1. To deploy the site using dab (manually, until the CI is ready), run 'bun run build' to generate `./dist/`.
+1. To deploy the site using dab (manually, until the CI is ready), run 'bun run build' to generate `./dist/docs`.
 2. Then run `bun dab sync` and `bun dab deploy`.
 
 ## 👀 Want to learn more?
