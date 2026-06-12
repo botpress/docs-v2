@@ -87,8 +87,9 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.PRIVATE_NPM_TOKEN }}
       - run: bun install -g mdx2vast
-      - uses: vale-cli/vale-action@v2.1.1
+      - uses: errata-ai/vale-action@v2.1.1
         with:
+          version: 3.14.2
           files: src/content/docs/
           fail_on_error: true
           filter_mode: nofilter
