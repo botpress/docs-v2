@@ -1,3 +1,5 @@
+import { withBase } from '@/bach/utils'
+
 export interface NavbarLink {
   label: string
   href: string
@@ -7,8 +9,8 @@ export interface NavbarLink {
 
 export const siteConfig = {
   name: 'Docs',
-  logo: '/logo/light.svg',
-  logoDark: '/logo/dark.svg',
+  logo: withBase('/logo/light.svg'),
+  logoDark: withBase('/logo/dark.svg'),
   navbar: {
     links: [
       {

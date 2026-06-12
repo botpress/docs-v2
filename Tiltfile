@@ -1,4 +1,6 @@
 # Docs-v2 Development Environment
+allow_k8s_contexts('foundation-cloud-staging')
+allow_k8s_contexts("development")
 
 allow_k8s_contexts("development")
 
@@ -17,7 +19,7 @@ local_resource(
     serve_cmd="bun dev",
     serve_dir=".",
     resource_deps=["install"],
-    links=["http://localhost:4321"],
+    links=["http://localhost:4321/docs"],
     labels=["services"],
 )
 
@@ -28,7 +30,7 @@ local_resource(
     serve_dir=".",
     resource_deps=["install"],
     auto_init=False,
-    links=["http://localhost:4322"],
+    links=["http://localhost:4322/docs"],
     labels=["services"],
 )
 
