@@ -55,6 +55,10 @@ export function lastSegment(pagePath: string): string {
   return parts[parts.length - 1]!
 }
 
+// TODO (non-blocking): bach shouldn't read from the environment.
+// BASE_URL is set by astro, we should pass the BASE_URL through some input to bach.
+// We use the bach Site class to pass input from astro to bach. We should move these utils
+// onto the site and pass in the BASE_URL to the Site constructor.
 /** URL prefix derived from Astro's `base` config (e.g. `/docs`). Empty when base is `/`. */
 export const BASE_PREFIX = import.meta.env.BASE_URL.replace(/\/$/, '')
 
