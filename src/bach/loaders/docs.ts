@@ -47,12 +47,9 @@ export const docsLoader = (opts: DocsLoaderOptions): Loader => {
 }
 
 async function getLastModifiedDate(filePath: string): Promise<string | null> {
-  const repoRoot = process.cwd()
-  const relativePath = path.relative(repoRoot, filePath)
-
   try {
-    const { stdout } = await execFileAsync('git', ['log', '-1', '--follow', '--format=%aI', '--', relativePath], {
-      cwd: repoRoot,
+    const { stdout } = await execFileAsync('git', ['log', '-1', '--follow', '--format=%aI', '--', filePath], {
+      cwd: path.dirname(filePath),
     })
 
     return stdout.trim() || null
