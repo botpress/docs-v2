@@ -1,20 +1,16 @@
 ---
 title: HubSpot
 description: Add a bot to HubSpot using the official integration.
-icon: '/integrations/integration-guides/assets/icons/hubspot.svg'
+icon: 'building-2'
 ---
 
-
-
-import integrationVersions from '/snippets/integrations/versions.mdx'
-import { OpenInHub } from '/snippets/integrations/open-in-hub.jsx'
-import Cards from '/snippets/integrations/cards/botpress/hubspot.mdx'
-import Triggers from '/snippets/integrations/triggers/botpress/hubspot.mdx'
-
-
-
-<OpenInHub integration={integrationVersions.hubspot}/>
-
+import Step from '@/components/Step.astro'
+import Steps from '@/components/Steps.astro'
+import Tab from '@/components/tabs/Tab.astro'
+import Tabs from '@/components/tabs/Tabs.astro'
+import { Check, Info } from '@/components/callouts'
+import IntegrationCards from '@/components/integrations/IntegrationCards.astro'
+import IntegrationEvents from '@/components/integrations/IntegrationEvents.astro'
 
 The official HubSpot integration allows your bot to interact with your HubSpot account.
 
