@@ -166,14 +166,13 @@ function ResponseSection({ responses }: { responses: NonNullable<Endpoint['respo
         <p className="mb-3 text-sm text-stone-600 dark:text-stone-400">
           The response is of type{' '}
           {schema.title && (
-            <>
-              <code className="rounded bg-stone-100 px-1 py-0.5 text-xs text-stone-900 dark:bg-stone-800 dark:text-stone-100">
-                {schema.title}
-              </code>
+            <code className="rounded bg-stone-100 px-1 py-0.5 text-xs text-stone-900 dark:bg-stone-800 dark:text-stone-100 font-semibold">
+              {schema.title}
               {' · '}
-            </>
+              {schemaTypeLabel(schema)}
+            </code>
           )}
-          {schemaTypeLabel(schema)}.
+          .
         </p>
       )}
       {schema && <SchemaExplorer schema={schema} required={schema.required} />}
