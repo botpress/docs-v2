@@ -5,7 +5,11 @@ description: Add your bot in any React Native or Expo app using react-native-web
 
 import { Note, Info, Check } from '@/components/callouts'
 import Frame from '@/components/Frame.astro'
+import Tree from '@/components/tree/Tree.astro'
+import TreeFolder from '@/components/tree/TreeFolder.astro'
+import TreeFile from '@/components/tree/TreeFile.astro'
 import { Picture } from 'astro:assets'
+import CodeGroup from '@/components/CodeGroup.astro'
 import embedCodeDashboardImg from './assets/embed-code-dashboard.png'
 import embedCodeDashboardDarkImg from './assets/embed-code-dashboard-dark.png'
 
@@ -44,15 +48,18 @@ Before you write any app code, grab the same embed snippet you would use on a we
 
 Create a **`src`** folder at your project root if you do not already have one. A typical layout:
 
-```
-src/
-├── botpress/
-│   ├── getBotpressWebchat.js
-│   ├── BpWidget.js
-│   └── BpWidget.d.ts
-└── config/
-    └── botpressConfig.js
-```
+<Tree>
+  <TreeFolder name="src" defaultOpen>
+    <TreeFolder name="botpress" defaultOpen>
+      <TreeFile name="getBotpressWebchat.js" />
+      <TreeFile name="BpWidget.js" />
+      <TreeFile name="BpWidget.d.ts" />
+    </TreeFolder>
+    <TreeFolder name="config" defaultOpen>
+      <TreeFile name="botpressConfig.js" />
+    </TreeFolder>
+  </TreeFolder>
+</Tree>
 
 | Path                                     | Purpose                                                                                                       |
 | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
@@ -81,6 +88,8 @@ Then imports like `import BpWidget from '@/botpress/BpWidget'` resolve. If you s
 
 From your project root:
 
+<CodeGroup>
+
 ```bash Expo
 npx expo install react-native-webview
 ```
@@ -96,6 +105,8 @@ yarn add react-native-webview
 ```bash pnpm
 pnpm add react-native-webview
 ```
+
+</CodeGroup>
 
 <Note>
   For bare React Native, follow [react-native-webview

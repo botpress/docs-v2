@@ -82,7 +82,7 @@ First, you need to find:
 2. Select **Create Hook** and set its type to [Before LLMz Execution](/studio/concepts/hooks#before-llmz-execution).
 3. Paste the following code into the Hook:
 
-```js highlight={6-7, 15}
+```js {6-7,15}
 // Get the current Workflow and Node IDs
 const flowID = event?.state?.context?.currentFlow ?? ''
 const nodeID = event?.state?.context?.currentNode ?? ''

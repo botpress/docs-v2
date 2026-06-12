@@ -237,6 +237,11 @@
   border-bottom: 1px solid var(--border);
   padding: 0 0.5rem;
   overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.code-group-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .code-group-tab {
@@ -296,14 +301,14 @@
 }
 
 /* Strip code block's own border/radius/margin when inside a code group */
-.prose .code-group > pre.astro-code {
+.prose .code-group pre.astro-code {
   border: none;
   border-radius: 0;
   margin: 0;
 }
 
 /* Suppress the filename header pseudo-element inside code groups (tab bar handles it) */
-.prose .code-group > pre.astro-code[data-title]::before {
+.prose .code-group pre.astro-code[data-title]::before {
   display: none;
 }
 
@@ -320,6 +325,18 @@
   overflow-y: hidden;
   border-radius: 0.875rem 0.875rem 0 0;
   border-bottom: none;
+}
+
+/* Expandable code blocks inside a CodeGroup */
+.code-group pre.astro-code.is-collapsible:not(.is-expanded) {
+  max-height: 320px;
+  overflow-y: hidden;
+}
+
+.code-group .code-expand-btn {
+  border: none;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
 }
 
 .code-expand-btn {
