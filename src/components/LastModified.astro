@@ -1,0 +1,23 @@
+---
+interface Props {
+  date?: string | null;
+}
+
+const { date } = Astro.props;
+
+const formattedDate =
+  date &&
+  new Intl.DateTimeFormat("en", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(new Date(date));
+---
+
+{
+  formattedDate && (
+    <p class="mt-10 text-sm text-stone-500 dark:text-stone-400" data-pagefind-ignore>
+      Last modified on {formattedDate}
+    </p>
+  )
+}
