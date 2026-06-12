@@ -156,8 +156,10 @@ function ResponseSection({ responses }: { responses: NonNullable<Endpoint['respo
         ) : (
           <code className="text-sm font-medium text-stone-600 dark:text-stone-400">{activeStatus}</code>
         )}
-        {contentTypes.length > 1 && (
+        {contentTypes.length > 1 ? (
           <ContentTypeSwitcher types={contentTypes} value={activeType} onChange={setActiveType} />
+        ) : (
+          activeType && <code className="text-sm font-medium text-stone-600 dark:text-stone-400">{activeType}</code>
         )}
       </div>
       <Separator className="my-3" />
