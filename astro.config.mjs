@@ -21,6 +21,9 @@ export default defineConfig({
   base: baseUrl,
   outDir: `./dist${baseUrl}`,
   output: 'static',
+  redirects: {
+    '/tutorial': '/tutorial/introduction',
+  },
   prefetch: {
     prefetchAll: true,
     defaultStrategy: 'hover',

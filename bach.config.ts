@@ -438,7 +438,7 @@ export default defineConfig(collections, {
       {
         tab: 'Tutorial',
         pages: [
-          'tutorial/index',
+          'tutorial/introduction',
           {
             group: 'Basics of Botpress',
             pages: [
