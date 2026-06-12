@@ -1,5 +1,5 @@
 # Docs-v2 Development Environment
-
+allow_k8s_contexts('foundation-cloud-staging')
 allow_k8s_contexts("development")
 
 # --- Guard: vale required for writing check ---
