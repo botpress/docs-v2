@@ -16,7 +16,7 @@ import PageOptions from '@/components/page-options'
 import CodeExamples, { resolveServerUrl } from '@/components/api/code-examples'
 import ResponseExamples from '@/components/api/response-examples'
 import ApiPlayground, { generateDefaultBody, DEFAULT_BASE_URL } from '@/components/api/playground'
-import SchemaExplorer from '@/components/api/schema-explorer'
+import SchemaExplorer, { schemaTypeLabel } from '@/components/api/schema-explorer'
 import AuthRequirements from '@/components/api/auth-requirements'
 import ContentTypeSwitcher from '@/components/api/content-type-switcher'
 import type { Endpoint, Parameter } from '@/bach/schemas'
@@ -162,6 +162,20 @@ function ResponseSection({ responses }: { responses: NonNullable<Endpoint['respo
       </div>
       <Separator className="my-3" />
       {resp?.description && <p className="mb-3 text-sm text-stone-600 dark:text-stone-400">{resp.description}</p>}
+      {schema && (schema.title || schema.type) && (
+        <p className="mb-3 text-sm text-stone-600 dark:text-stone-400">
+          The response is of type{' '}
+          {schema.title && (
+            <>
+              <code className="rounded bg-stone-100 px-1 py-0.5 text-xs text-stone-900 dark:bg-stone-800 dark:text-stone-100">
+                {schema.title}
+              </code>
+              {' · '}
+            </>
+          )}
+          {schemaTypeLabel(schema)}.
+        </p>
+      )}
       {schema && <SchemaExplorer schema={schema} required={schema.required} />}
     </div>
   )
