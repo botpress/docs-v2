@@ -6,17 +6,24 @@ import tailwindcss from '@tailwindcss/vite'
 import remarkGfm from 'remark-gfm'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import remarkRewriteLinks from './src/remark/plugins/rewrite-links.js'
 
 import sitemap from '@astrojs/sitemap'
 import icon from 'astro-icon'
 
 //TODO: suggestion (non-blocking): No need for a barrel import. This can just import directly from each transformer individually.
 import { transformerMetaHighlight } from '@shikijs/transformers'
+import { baseUrl } from './src/const.js'
 import { transformerFilename, transformerExpandable } from './src/shiki/transformers/index.js'
 
 export default defineConfig({
-  site: 'https://botpress.com/docs',
+  site: 'https://botpress.com',
+  base: baseUrl,
+  outDir: `./dist${baseUrl}`,
   output: 'static',
+  redirects: {
+    '/tutorial': '/tutorial/introduction',
+  },
   prefetch: {
     prefetchAll: true,
     defaultStrategy: 'hover',
@@ -52,7 +59,7 @@ export default defineConfig({
     },
   },
   markdown: {
-    remarkPlugins: [remarkGfm],
+    remarkPlugins: [remarkGfm, remarkRewriteLinks],
     rehypePlugins: [
       rehypeSlug,
       [

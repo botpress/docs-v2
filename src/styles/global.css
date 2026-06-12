@@ -327,6 +327,18 @@
   border-bottom: none;
 }
 
+/* Expandable code blocks inside a CodeGroup */
+.code-group pre.astro-code.is-collapsible:not(.is-expanded) {
+  max-height: 320px;
+  overflow-y: hidden;
+}
+
+.code-group .code-expand-btn {
+  border: none;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+}
+
 .code-expand-btn {
   display: flex;
   align-items: center;

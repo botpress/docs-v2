@@ -2,6 +2,7 @@
 import PageOptions from "./page-options";
 import PageNavigation from "./page-navigation";
 import Footer from "./Footer.astro";
+import LastModified from "./LastModified.astro";
 import { ClerkTOC } from "./clerk-toc";
 import {
   Breadcrumb,
@@ -39,6 +40,8 @@ const useProse = "prose" in entry.data && entry.data.prose !== false;
 const title = entry.data.title;
 const description =
   "description" in entry.data ? entry.data.description : undefined;
+const lastModified =
+  "lastModified" in entry.data ? entry.data.lastModified : undefined;
 ---
 
 {
@@ -48,6 +51,7 @@ const description =
       data-pagefind-body
     >
       <Content />
+      <LastModified date={lastModified} />
       <Footer />
     </div>
   ) : (
@@ -103,6 +107,7 @@ const description =
           </div>
 
           <div class="not-prose">
+            <LastModified date={lastModified} />
             <PageNavigation prev={prev} next={next} />
           </div>
         </article>

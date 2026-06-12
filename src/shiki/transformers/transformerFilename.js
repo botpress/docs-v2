@@ -4,14 +4,14 @@ export function transformerFilename() {
     name: 'transformer:filename',
     pre(node) {
       const meta = this.options?.meta?.__raw ?? ''
-      const titleAttr = meta.match(/\btitle=["']([^"']+)["']/)
-      if (titleAttr?.[1]) {
-        node.properties['data-title'] = titleAttr[1]
+      const titleMatch = meta.match(/title=(?:"([^"]+)"|'([^']+)')/)
+      if (titleMatch) {
+        node.properties['data-title'] = titleMatch[1] ?? titleMatch[2]
         return
       }
-      const bare = meta.trim().match(/^([^\s{[\]]+)/)
-      if (bare?.[1]) {
-        node.properties['data-title'] = bare[1]
+      const match = meta.trim().match(/^([^\s{[\]]+)/)
+      if (match?.[1]) {
+        node.properties['data-title'] = match[1]
       }
     },
   }

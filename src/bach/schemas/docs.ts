@@ -6,6 +6,7 @@ export const docsSchema = z.object({
   description: z.string().optional(),
   icon: z.string().optional(),
   prose: z.boolean().default(true),
+  lastModified: z.string().nullable().optional(),
 })
 
 export type DocsSchema = z.infer<typeof docsSchema>

@@ -9,10 +9,30 @@ jobs:
   check-type:
     name: Check Type
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com
+          scope: '@botpress-private'
+      - run: cp "${{ env.NPM_CONFIG_USERCONFIG }}" .npmrc
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PRIVATE_NPM_TOKEN }}
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::236194216641:role/actions/dab/docs
+          aws-region: us-east-1
+      - run: bunx dab sync
+        env:
+          INFISICAL_CLIENT_ID: ${{ secrets.INFISICAL_CLIENT_ID }}
+          INFISICAL_CLIENT_SECRET: ${{ secrets.INFISICAL_CLIENT_SECRET }}
       - run: bun run check:type
         env:
           BOTPRESS_API_TOKEN: ${{ secrets.BOTPRESS_API_TOKEN }}
@@ -22,8 +42,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com
+          scope: '@botpress-private'
+      - run: cp "${{ env.NPM_CONFIG_USERCONFIG }}" .npmrc
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PRIVATE_NPM_TOKEN }}
       - run: bun run check:lint
 
   check-format:
@@ -31,8 +59,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com
+          scope: '@botpress-private'
+      - run: cp "${{ env.NPM_CONFIG_USERCONFIG }}" .npmrc
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PRIVATE_NPM_TOKEN }}
       - run: bun run check:format
 
   check-writing:
@@ -40,8 +76,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com
+          scope: '@botpress-private'
+      - run: cp "${{ env.NPM_CONFIG_USERCONFIG }}" .npmrc
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PRIVATE_NPM_TOKEN }}
       - run: bun install -g mdx2vast
       - uses: vale-cli/vale-action@v2.1.1
         with:
@@ -57,8 +101,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com
+          scope: '@botpress-private'
+      - run: cp "${{ env.NPM_CONFIG_USERCONFIG }}" .npmrc
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PRIVATE_NPM_TOKEN }}
       - run: bun run check:link
 
   build:
@@ -67,8 +119,16 @@ jobs:
     needs: [check-type, check-lint, check-format, check-writing, check-link]
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com
+          scope: '@botpress-private'
+      - run: cp "${{ env.NPM_CONFIG_USERCONFIG }}" .npmrc
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PRIVATE_NPM_TOKEN }}
       - run: bun run build
         env:
           BOTPRESS_API_TOKEN: ${{ secrets.BOTPRESS_API_TOKEN }}

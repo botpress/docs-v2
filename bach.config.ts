@@ -187,70 +187,6 @@ export default defineConfig(collections, {
             ],
           },
           {
-            group: 'Webchat',
-            pages: [
-              'webchat/get-started/introduction',
-              'webchat/get-started/quick-start',
-              'webchat/get-started/embed-in-element',
-              'webchat/get-started/configure-your-webchat',
-              {
-                group: 'Interact with Webchat',
-                pages: [
-                  'webchat/interact/open-close-webchat',
-                  'webchat/interact/use-custom-toggle',
-                  'webchat/interact/proactive-message-bubble',
-                  'webchat/interact/open-webchat-on-page-load',
-                  'webchat/interact/send-user-data',
-                  'webchat/interact/listen-to-events',
-                  'webchat/interact/start-trigger',
-                  'webchat/interact/webchat-notification',
-                  'webchat/interact/send-message',
-                  {
-                    group: 'Send custom events',
-                    pages: [
-                      'webchat/interact/send-custom-events/from-webchat',
-                      'webchat/interact/send-custom-events/to-webchat',
-                    ],
-                  },
-                  'webchat/interact/update-config',
-                  'webchat/interact/error-handling',
-                  'webchat/interact/reference',
-                ],
-              },
-              {
-                group: 'Integrations',
-                pages: [
-                  'webchat/integrations/wordpress',
-                  'webchat/integrations/wix',
-                  'webchat/integrations/webflow',
-                  'webchat/integrations/react-native',
-                ],
-              },
-              {
-                group: 'React library',
-                pages: [
-                  'webchat/react-library/get-started',
-                  {
-                    group: 'Components',
-                    pages: [
-                      'webchat/react-library/components/webchat',
-                      'webchat/react-library/components/fab',
-                      'webchat/react-library/components/container',
-                      'webchat/react-library/components/header',
-                      'webchat/react-library/components/message-list',
-                      'webchat/react-library/components/composer',
-                      'webchat/react-library/components/stylesheet-provider',
-                    ],
-                  },
-                  {
-                    group: 'Hooks',
-                    pages: ['webchat/react-library/hooks/use-webchat-client'],
-                  },
-                ],
-              },
-            ],
-          },
-          {
             group: 'Integrations',
             pages: [
               'integrations/get-started/introduction',
@@ -368,6 +304,70 @@ export default defineConfig(collections, {
             ],
           },
           {
+            group: 'Webchat',
+            pages: [
+              'webchat/get-started/introduction',
+              'webchat/get-started/quick-start',
+              'webchat/get-started/embed-in-element',
+              'webchat/get-started/configure-your-webchat',
+              {
+                group: 'Interact with Webchat',
+                pages: [
+                  'webchat/interact/open-close-webchat',
+                  'webchat/interact/use-custom-toggle',
+                  'webchat/interact/proactive-message-bubble',
+                  'webchat/interact/open-webchat-on-page-load',
+                  'webchat/interact/send-user-data',
+                  'webchat/interact/listen-to-events',
+                  'webchat/interact/start-trigger',
+                  'webchat/interact/webchat-notification',
+                  'webchat/interact/send-message',
+                  {
+                    group: 'Send custom events',
+                    pages: [
+                      'webchat/interact/send-custom-events/from-webchat',
+                      'webchat/interact/send-custom-events/to-webchat',
+                    ],
+                  },
+                  'webchat/interact/update-config',
+                  'webchat/interact/error-handling',
+                  'webchat/interact/reference',
+                ],
+              },
+              {
+                group: 'Integrations',
+                pages: [
+                  'webchat/integrations/wordpress',
+                  'webchat/integrations/wix',
+                  'webchat/integrations/webflow',
+                  'webchat/integrations/react-native',
+                ],
+              },
+              {
+                group: 'React library',
+                pages: [
+                  'webchat/react-library/get-started',
+                  {
+                    group: 'Components',
+                    pages: [
+                      'webchat/react-library/components/webchat',
+                      'webchat/react-library/components/fab',
+                      'webchat/react-library/components/container',
+                      'webchat/react-library/components/header',
+                      'webchat/react-library/components/message-list',
+                      'webchat/react-library/components/composer',
+                      'webchat/react-library/components/stylesheet-provider',
+                    ],
+                  },
+                  {
+                    group: 'Hooks',
+                    pages: ['webchat/react-library/hooks/use-webchat-client'],
+                  },
+                ],
+              },
+            ],
+          },
+          {
             group: 'ADK',
             pages: ['adk/index'],
           },
@@ -438,7 +438,7 @@ export default defineConfig(collections, {
       {
         tab: 'Tutorial',
         pages: [
-          'tutorial/index',
+          'tutorial/introduction',
           {
             group: 'Basics of Botpress',
             pages: [

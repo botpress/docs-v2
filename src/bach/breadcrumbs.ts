@@ -1,5 +1,5 @@
 import type { DocsConfig, PageItem } from './types'
-import { normalizePagePath, normalizeEntryId, titleFromSlug, lastSegment } from './utils'
+import { normalizePagePath, normalizeEntryId, titleFromSlug, lastSegment, withBase } from './utils'
 import { buildPages, findFirstHref } from './tree'
 
 /**
@@ -20,14 +20,8 @@ export async function searchPagesForBreadcrumbs<TCollection extends string>(
   for (const item of pages) {
     if (typeof item === 'string') {
       if (normalizePagePath(item) === normalizedTarget) {
-        const href = normalizedTarget === 'index' ? '/' : `/${normalizedTarget}`
-        return [
-          ...prefix,
-          {
-            label: titleMap.get(normalizedTarget) ?? titleFromSlug(lastSegment(item)),
-            href,
-          },
-        ]
+        const href = normalizedTarget === 'index' ? withBase('/') : withBase(`/${normalizedTarget}`)
+        return [...prefix, { label: titleMap.get(normalizedTarget) ?? titleFromSlug(lastSegment(item)), href }]
       }
     } else {
       // Check if this is a collection group and the target matches a collection entry
@@ -42,7 +36,7 @@ export async function searchPagesForBreadcrumbs<TCollection extends string>(
         const rootNormalized = normalizePagePath(item.root)
         groupPrefix.push({
           label: item.group,
-          href: rootNormalized === 'index' ? '/' : `/${rootNormalized}`,
+          href: rootNormalized === 'index' ? withBase('/') : withBase(`/${rootNormalized}`),
         })
         if (rootNormalized === normalizedTarget) {
           return groupPrefix
@@ -51,7 +45,7 @@ export async function searchPagesForBreadcrumbs<TCollection extends string>(
         const firstChildHref = findFirstHref(
           buildPages(item.pages, 0, '', titleMap, new Map(), sidebarTitleMap, iconMap)
         )
-        groupPrefix.push({ label: item.group, href: firstChildHref ?? '/' })
+        groupPrefix.push({ label: item.group, href: firstChildHref ?? withBase('/') })
       }
 
       const result = await searchPagesForBreadcrumbs(
@@ -95,5 +89,5 @@ export async function buildBreadcrumbs<TCollection extends string>(
     }
   }
 
-  return [{ label: pageTitle, href: '/' }]
+  return [{ label: pageTitle, href: withBase('/') }]
 }
