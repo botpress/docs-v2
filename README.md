@@ -33,10 +33,14 @@ All commands are run from the root of the project, from a terminal:
 | :-------------------- | :----------------------------------------------- |
 | `bun install`         | Installs dependencies                            |
 | `bun dev`             | Starts local dev server at `localhost:4321`      |
-| `bun build`           | Build your production site to `./dist/`          |
+| `bun run build`       | Build your production site to `./dist/`          |
 | `bun preview`         | Preview your build locally, before deploying     |
 | `bun astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `bun astro -- --help` | Get help using the Astro CLI                     |
+
+## Deploying the site from local machine
+1. To deploy the site using dab (manually, until the CI is ready), run 'bun run build' to generate `./dist/`. 
+2. Then run `bun dab sync` and `bun dab deploy`. 
 
 ## 👀 Want to learn more?
 

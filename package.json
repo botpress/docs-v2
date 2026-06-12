@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "bunx --bun astro dev",
-    "build": "bunx --bun astro build && npx pagefind --site dist",
+    "build": "bunx --bun astro build && npx pagefind --site dist/docs",
     "preview": "bunx --bun astro preview --port 4322",
     "astro": "bunx --bun astro",
     "check": "bun run --parallel check:format check:lint check:type check:writing check:link",
