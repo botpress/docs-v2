@@ -24,12 +24,11 @@ import type { RequestState } from '@/components/api/types'
 import { badgeVariantForMethod } from '@/lib/utils'
 
 const pathParamColors: Record<string, string> = {
-  get: 'border-emerald-300 bg-emerald-100 text-emerald-800 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300',
-  post: 'border-blue-300 bg-blue-100 text-blue-800 dark:border-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
-  put: 'border-amber-300 bg-amber-100 text-amber-800 dark:border-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
-  patch:
-    'border-purple-300 bg-purple-100 text-purple-800 dark:border-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
-  delete: 'border-red-300 bg-red-100 text-red-800 dark:border-red-700 dark:bg-red-900/40 dark:text-red-300',
+  get: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300',
+  post: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
+  put: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
+  patch: 'bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300',
+  delete: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
 }
 
 function EndpointPath({ path, method }: { path: string; method: string }) {

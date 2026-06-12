@@ -17,9 +17,7 @@ function CodeGroup({ children }: { children: ReactNode }) {
     presRef.current = pres
     setTabs(
       pres.map((pre, i) => {
-        const raw = pre.getAttribute('data-title') || `File ${i + 1}`
-        const match = raw.match(/^title=["']([^"']+)["']$/)
-        return match?.[1] ?? raw
+        return pre.getAttribute('data-title') || `File ${i + 1}`
       })
     )
     pres.forEach((pre, i) => {
