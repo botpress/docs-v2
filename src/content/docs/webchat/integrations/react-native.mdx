@@ -9,6 +9,7 @@ import Tree from '@/components/tree/Tree.astro'
 import TreeFolder from '@/components/tree/TreeFolder.astro'
 import TreeFile from '@/components/tree/TreeFile.astro'
 import { Picture } from 'astro:assets'
+import CodeGroup from '@/components/CodeGroup.astro'
 import embedCodeDashboardImg from './assets/embed-code-dashboard.png'
 import embedCodeDashboardDarkImg from './assets/embed-code-dashboard-dark.png'
 
@@ -87,6 +88,8 @@ Then imports like `import BpWidget from '@/botpress/BpWidget'` resolve. If you s
 
 From your project root:
 
+<CodeGroup>
+
 ```bash Expo
 npx expo install react-native-webview
 ```
@@ -102,6 +105,8 @@ yarn add react-native-webview
 ```bash pnpm
 pnpm add react-native-webview
 ```
+
+</CodeGroup>
 
 <Note>
   For bare React Native, follow [react-native-webview
