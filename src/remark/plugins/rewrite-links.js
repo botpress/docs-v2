@@ -1,5 +1,6 @@
 import { baseUrl } from '../../const.js'
 
+//TODO: Use this to clean up broken links in markdown files
 function rewriteHref(href) {
   if (!href.startsWith('/')) return href
   if (href.startsWith(baseUrl)) return href
