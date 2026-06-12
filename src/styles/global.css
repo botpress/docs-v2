@@ -237,6 +237,11 @@
   border-bottom: 1px solid var(--border);
   padding: 0 0.5rem;
   overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.code-group-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .code-group-tab {
